@@ -1,0 +1,24 @@
+<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="navbar-brand" href="<?php echo $this->url('default/index')?>">
+                <span>管理系统</span>
+            </a>
+            <ul class="nav pull-right">
+                <li>
+                    <a href="#" title="个人资料">
+                        <span>
+                            <i class="icon-user"></i>
+                        </span>
+                        <span><?php echo $this->locator->get('Profile')['member_name']?></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="<?php echo $this->url('account/logout')?>">
+                        <i class="fa fa-sign-out"></i> 安全注销
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

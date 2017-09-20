@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+        <title>登录</title>
+        <?php echo $this->css('default.css')->wrap(); ?>
+        <?php echo $this->js('jquery-2.1.1.min.js')->wrap(); ?>
+        <?php echo $this->js('core.ajaxauto.js')->wrap(); ?>
+        <?php echo $this->js('core.popup.js')->wrap(); ?>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-18 col-x-16 hide">left</div>
+                <div class="col-12 col-x-16">
+                    <div class="logo">白领登录</div>
+                    <form action="<?php echo $this->url('account/login'); ?>" method="post" id="login-form">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="member_name" placeholder="用户名" required>
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="password" name="member_passwd" placeholder="密码" required>
+                        </div>
+                        <input class="form-control" type="hidden" name="redirect" value="<?php echo $this->funcs->getReferer(); ?>">
+                        <button type="submit">登录</button>
+                    </form>
+                </div>
+                <div class="col-18 col-x-16 hide">right</div>
+            </div>
+        </div>
+        <script>
+            $('#login-form').submit(function() {
+                $(this).ajaxAuto();
+                return false;
+            });
+        </script>
+    </body>
+</html>

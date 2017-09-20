@@ -1,0 +1,81 @@
+@font-face {
+    font-family: 'icomoon';
+    src:    url('fonts/icomoon.eot?vdgpvn');
+    src:    url('fonts/icomoon.eot?vdgpvn#iefix') format('embedded-opentype'),
+        url('fonts/icomoon.ttf?vdgpvn') format('truetype'),
+        url('fonts/icomoon.woff?vdgpvn') format('woff'),
+        url('fonts/icomoon.svg?vdgpvn#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'icomoon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-minus:before {
+    content: "\e907";
+}
+.icon-plus:before {
+    content: "\e908";
+}
+.icon-camera:before {
+    content: "\e557";
+}
+.icon-arrow-left-strong:before {
+    content: "\e5cb";
+}
+.icon-arrow-right-strong:before {
+    content: "\e5cc";
+}
+.icon-arrow-left:before {
+    content: "\e5cd";
+}
+.icon-arrow-right:before {
+    content: "\e5d2";
+}
+.icon-arrow-up-strong:before {
+    content: "\e5d0";
+}
+.icon-arrow-down-strong:before {
+    content: "\e5d1";
+}
+.icon-arrow-up:before {
+    content: "\e5ce";
+}
+.icon-arrow-down:before {
+    content: "\e5cf";
+}
+.icon-house:before {
+    content: "\e900";
+}
+.icon-application:before {
+    content: "\e901";
+}
+.icon-report:before {
+    content: "\e902";
+}
+.icon-employee:before {
+    content: "\e903";
+}
+.icon-contract:before {
+    content: "\e904";
+}
+.icon-user:before {
+    content: "\e905";
+}
+.icon-attendance:before {
+    content: "\e906";
+}
+

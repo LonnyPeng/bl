@@ -1,0 +1,16 @@
+<div class="bread">
+    <strong>
+        <?php if($this->controller() == 'admin') : ?>
+            <a href="<?php echo $this->url('admin/member-list')?>">后台管理</a> /
+            <?php if($this->action() == 'member-list') :?>
+                用户列表
+            <?php elseif ($this->action() == 'member-edit') : ?>
+                <?php if ($this->param('id')) :?>
+                    编辑
+                <?php else :?>
+                    添加
+                <?php endif;?>
+            <?php endif;?>
+        <?php endif;?>
+    </strong>
+</div>

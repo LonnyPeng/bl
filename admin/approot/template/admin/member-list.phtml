@@ -1,0 +1,93 @@
+<?= $this->render('includes/bread')?>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input class="form-control" type="text" name="member_name" size="20" value="<?= $this->param('member_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>用户状态</label>
+                    <select class="form-control" name="member_status">
+                        <option value="">全部</option>
+                        <option value="1" <?php echo $this->param('member_status') === '1' ? 'selected' : ''?>>有效</option>
+                        <option value="0" <?php echo $this->param('member_status') === '0' ? 'selected' : ''?>>禁用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('admin/member-edit')?>">
+            <i class="fa fa-plus"></i> 添加新用户
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">用户名</th>
+                <th class="text-center">用户登录次数</th>
+                <th class="text-center">用户最后登录时间</th>
+                <th class="text-center">注册日期</th>
+                <th class="text-center">用户状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($memberList as $key => $row) :?>
+                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['member_name']?></td>
+                    <td class="text-center"><?= $row['member_lognum']?></td>
+                    <td class="text-center"><?= $row['member_logtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_logtime'])) : ''?></td>
+                    <td class="text-center"><?= $row['member_regtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_regtime'])) : ''?></td>
+                    <td class="text-center"><?= $row['member_status'] ? '有效' : '禁用';?></td>
+                    <td class="text-center action">
+                        <a class="btn btn-xs edit" href="<?= $this->url('admin/member-edit', array('id' => $row['member_id']))?>" title="编辑">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <span class="btn btn-xs del" data-href="<?= $this->url('admin/member-del', array('id' => $row['member_id']))?>" title="删除">
+                            <i class="fa fa-trash"></i>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
+<script>
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

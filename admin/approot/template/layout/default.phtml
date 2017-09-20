@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>
+        <?php if ($this->title) : ?>
+            <?php echo $this->escape($this->title);?>
+        <?php else : ?>
+            CMS 后台管理系统
+        <?php endif;?>
+    </title>
+    <?php echo $this->css('default.css')->wrap();?>
+    <?php echo $this->css('font-awesome.css')->wrap();?>
+    <?php echo $this->css('fonts.css')->wrap();?>
+    <?php echo $this->css('simplemde.min.css')->wrap();?>
+
+    <?php echo $this->css($this->controller() . '.css', true)->wrap();?>
+    <?php echo $this->css($this->pageId() . '.css', true)->wrap();?>
+
+    <?php echo $this->js('jquery-2.1.1.min.js')->wrap();?>
+    <?php echo $this->js('jqDrag.js')->wrap();?>
+    <?php echo $this->js('core.ajaxauto.js')->wrap();?>
+    <?php echo $this->js('core.popup.js')->wrap();?>
+    <?php echo $this->js('core.extend.js')->wrap();?>
+    <?php echo $this->js('zebra_datepicker.js')->wrap();?>
+    <?php echo $this->js('jquery.MultiFile.js')->wrap();?>
+    <?php echo $this->js('simplemde.min.js')->wrap();?>
+</head>
+<body>
+    <div id="wrapper-container">
+        <?php echo $this->__header; ?>
+
+        <div class="container">
+            <div class="sidebar">
+                <?php echo $this->__sidebar; ?>
+            </div>
+            <div id="main" class="main">
+                <?php //echo $this->breadcrumb(); ?>
+                <?php echo $this->__content; ?>
+                <?php echo $this->__footer; ?>
+            </div>
+        </div>
+
+        
+        <?php echo $this->js('public.js')->wrap();?>
+    </div>
+    <?php echo $this->js('application.js')->wrap();?>
+</body>
+</html>

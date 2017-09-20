@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>
+        <?php if ($this->title) : ?>
+            <?php echo $this->escape($this->title);?>
+        <?php else : ?>
+            白领
+        <?php endif;?>
+    </title>
+</head>
+<body class="<?php echo $this->class ?: ''?>">
+    <?php echo $this->__header; ?>
+
+    <?php echo $this->__content; ?>
+
+    <?php echo $this->__footer; ?>
+</body>
+</html>

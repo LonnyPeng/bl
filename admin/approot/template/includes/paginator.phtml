@@ -1,0 +1,42 @@
+<div class="col-48">
+    <div class="pagination">
+        <select class="pagesize">
+            <option>5</option>
+            <option>10</option>
+            <option>20</option>
+            <option>50</option>
+            <option>100</option>
+        </select>
+        <span class="pages">
+            <?php if ($this->paginator->getPreviousPageNumber()):?>
+                <a class="previous btn white" href="<?php echo $this->url->addParams(array("page" => $this->paginator->getPreviousPageNumber()))?>"><i class="fa fa-angle-double-left"></i></a>
+            <?php endif;?>
+            <?php foreach ($this->paginator->getPageRange(7) as $page):?>
+                <?php if ($page == $this->paginator->getCurrentPageNumber()):?>
+                    <span class="current btn"><?php echo $page; ?></span>
+                <?php elseif(is_numeric($page)): ?>
+                    <a class="btn white" href="<?php echo ($page == 1) ? $this->url->removeParams(array("page")) : $this->url->addParams(array("page" => $page))?>"><?php echo $page; ?></a>
+                <?php else: ?>
+                    <span class="separator">...</span>
+                <?php endif; ?>
+            <?php endforeach;?>
+
+            <?php if ($this->paginator->getNextPageNumber()):?>
+                <a class="next btn white" href="<?php echo $this->url->addParams(array("page" => $this->paginator->getNextPageNumber()))?>"><i class="fa fa-angle-double-right"></i></a>
+            <?php endif;?>
+        </span>
+        <span class="records">Total: <em><?php echo $this->paginator->getTotalItemCount()?></em></span>
+    </div>
+</div>
+<script>
+    $(".pagesize").val(<?php echo $this->paginator->getItemCountPerPage()?>);
+    $(".pagesize").change(function() {
+        var url = '<?=$this->url->removeParams('pagesize')?>';
+        var pageSize = $(this).val();
+        connector = "&";
+        if (url.indexOf('?') == -1) {
+            connector = "?";
+        }
+        window.location = url + connector + "pagesize=" + parseInt(pageSize);
+    })
+</script>

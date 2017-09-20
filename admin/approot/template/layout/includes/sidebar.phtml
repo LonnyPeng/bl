@@ -1,0 +1,49 @@
+<div class="nav">
+    <ul class="nav-wrap">
+        <li class="<?php echo $this->controller() =='default' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('default/index')?>">
+                <span class="icon-wrap"><i class="icon-house"></i></span>
+                <span class="text-wrap">首页</span>
+            </a>
+        </li>
+        <li class="<?php echo $this->controller() == 'admin' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('admin/member-list')?>">
+                <span class="icon-wrap"><i class="icon-report"></i></span>
+                <span class="text-wrap">后台设置</span>
+            </a>
+            <ul class="<?php echo $this->controller() != 'admin' ? 'none' : ''?>">
+                <li class="<?php echo in_array($this->action(), array('member-list', 'member-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('admin/member-list');?>">
+                        <span class="hidden-sm">人员管理</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('password-forget')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('admin/password-forget');?>">
+                        <span class="hidden-sm">修改密码</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<span id="short-sidebar" class="short-menu-bar clearfix">
+    <i class="icon-arrow-left-strong short-right"></i>
+</span>
+
+<script type="text/javascript">
+    $(function() {
+        $('#short-sidebar').click(function() {
+            var iObj = $(this).children('i');
+            if (iObj.hasClass('icon-arrow-left-strong')) {
+                iObj.attr('class', 'icon-arrow-right-strong');
+                $('#main').toggleClass('to-left');
+                $(this).prev('.nav').toggleClass('short-menu');
+            } else {
+                iObj.attr('class', 'icon-arrow-left-strong short-right');
+                $('#main').removeClass('to-left');
+                $(this).prev('.nav').removeClass('short-menu');
+            }
+        });
+    });
+</script>
