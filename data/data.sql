@@ -1,5 +1,5 @@
 -- ----------------------------
--- Table structure for t_member
+-- 后台管理人员 t_member
 -- ----------------------------
 DROP TABLE IF EXISTS `t_member`;
 CREATE TABLE `t_member` (
@@ -16,4 +16,346 @@ CREATE TABLE `t_member` (
 
 -- admin@123456
 INSERT INTO `t_member`(`member_perms`, `member_name`, `member_password`) VALUES ('product_read,product_export,product_import,product_create,product_update,product_delete', 'admin', '5f0bcb3a8f4a5b4381a25acb90168d74:30');
+
+-- ----------------------------
+-- Table structure for t_district
+-- ----------------------------
+DROP TABLE IF EXISTS `t_district`;
+CREATE TABLE `t_district` (
+  `district_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `district_name` varchar(255) NOT NULL UNIQUE KEY ,
+  `district_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=525 DEFAULT CHARSET=utf8 COMMENT='中国省市数据表';
+
+-- ----------------------------
+-- Records of t_district
+-- ----------------------------
+INSERT INTO `t_district` VALUES ('1', '北京市', '0');
+INSERT INTO `t_district` VALUES ('2', '天津市', '0');
+INSERT INTO `t_district` VALUES ('9', '上海市', '0');
+INSERT INTO `t_district` VALUES ('22', '重庆市', '0');
+INSERT INTO `t_district` VALUES ('35', '海外', '0');
+INSERT INTO `t_district` VALUES ('73', '石家庄市', '0');
+INSERT INTO `t_district` VALUES ('74', '唐山市', '0');
+INSERT INTO `t_district` VALUES ('75', '秦皇岛市', '0');
+INSERT INTO `t_district` VALUES ('76', '邯郸市', '0');
+INSERT INTO `t_district` VALUES ('77', '邢台市', '0');
+INSERT INTO `t_district` VALUES ('78', '保定市', '0');
+INSERT INTO `t_district` VALUES ('79', '张家口市', '0');
+INSERT INTO `t_district` VALUES ('80', '承德市', '0');
+INSERT INTO `t_district` VALUES ('81', '衡水市', '0');
+INSERT INTO `t_district` VALUES ('82', '廊坊市', '0');
+INSERT INTO `t_district` VALUES ('83', '沧州市', '0');
+INSERT INTO `t_district` VALUES ('84', '太原市', '0');
+INSERT INTO `t_district` VALUES ('85', '大同市', '0');
+INSERT INTO `t_district` VALUES ('86', '阳泉市', '0');
+INSERT INTO `t_district` VALUES ('87', '长治市', '0');
+INSERT INTO `t_district` VALUES ('88', '晋城市', '0');
+INSERT INTO `t_district` VALUES ('89', '朔州市', '0');
+INSERT INTO `t_district` VALUES ('90', '晋中市', '0');
+INSERT INTO `t_district` VALUES ('91', '运城市', '0');
+INSERT INTO `t_district` VALUES ('92', '忻州市', '0');
+INSERT INTO `t_district` VALUES ('93', '临汾市', '0');
+INSERT INTO `t_district` VALUES ('94', '吕梁市', '0');
+INSERT INTO `t_district` VALUES ('95', '呼和浩特市', '0');
+INSERT INTO `t_district` VALUES ('96', '包头市', '0');
+INSERT INTO `t_district` VALUES ('97', '乌海市', '0');
+INSERT INTO `t_district` VALUES ('98', '赤峰市', '0');
+INSERT INTO `t_district` VALUES ('99', '通辽市', '0');
+INSERT INTO `t_district` VALUES ('100', '鄂尔多斯市', '0');
+INSERT INTO `t_district` VALUES ('101', '呼伦贝尔市', '0');
+INSERT INTO `t_district` VALUES ('102', '巴彦淖尔市', '0');
+INSERT INTO `t_district` VALUES ('103', '乌兰察布市', '0');
+INSERT INTO `t_district` VALUES ('107', '沈阳市', '0');
+INSERT INTO `t_district` VALUES ('108', '大连市', '0');
+INSERT INTO `t_district` VALUES ('109', '鞍山市', '0');
+INSERT INTO `t_district` VALUES ('110', '抚顺市', '0');
+INSERT INTO `t_district` VALUES ('111', '本溪市', '0');
+INSERT INTO `t_district` VALUES ('112', '丹东市', '0');
+INSERT INTO `t_district` VALUES ('113', '锦州市', '0');
+INSERT INTO `t_district` VALUES ('114', '营口市', '0');
+INSERT INTO `t_district` VALUES ('115', '阜新市', '0');
+INSERT INTO `t_district` VALUES ('116', '辽阳市', '0');
+INSERT INTO `t_district` VALUES ('117', '盘锦市', '0');
+INSERT INTO `t_district` VALUES ('118', '铁岭市', '0');
+INSERT INTO `t_district` VALUES ('119', '朝阳市', '0');
+INSERT INTO `t_district` VALUES ('120', '葫芦岛市', '0');
+INSERT INTO `t_district` VALUES ('121', '长春市', '0');
+INSERT INTO `t_district` VALUES ('122', '吉林市', '0');
+INSERT INTO `t_district` VALUES ('123', '四平市', '0');
+INSERT INTO `t_district` VALUES ('124', '辽源市', '0');
+INSERT INTO `t_district` VALUES ('125', '通化市', '0');
+INSERT INTO `t_district` VALUES ('126', '白山市', '0');
+INSERT INTO `t_district` VALUES ('127', '松原市', '0');
+INSERT INTO `t_district` VALUES ('128', '白城市', '0');
+INSERT INTO `t_district` VALUES ('130', '哈尔滨市', '0');
+INSERT INTO `t_district` VALUES ('131', '齐齐哈尔市', '0');
+INSERT INTO `t_district` VALUES ('132', '鸡西市', '0');
+INSERT INTO `t_district` VALUES ('133', '鹤岗市', '0');
+INSERT INTO `t_district` VALUES ('134', '双鸭山市', '0');
+INSERT INTO `t_district` VALUES ('135', '大庆市', '0');
+INSERT INTO `t_district` VALUES ('136', '伊春市', '0');
+INSERT INTO `t_district` VALUES ('137', '佳木斯市', '0');
+INSERT INTO `t_district` VALUES ('138', '七台河市', '0');
+INSERT INTO `t_district` VALUES ('139', '牡丹江市', '0');
+INSERT INTO `t_district` VALUES ('140', '黑河市', '0');
+INSERT INTO `t_district` VALUES ('141', '绥化市', '0');
+INSERT INTO `t_district` VALUES ('162', '南京市', '0');
+INSERT INTO `t_district` VALUES ('163', '无锡市', '0');
+INSERT INTO `t_district` VALUES ('164', '徐州市', '0');
+INSERT INTO `t_district` VALUES ('165', '常州市', '0');
+INSERT INTO `t_district` VALUES ('166', '苏州市', '0');
+INSERT INTO `t_district` VALUES ('167', '南通市', '0');
+INSERT INTO `t_district` VALUES ('168', '连云港市', '0');
+INSERT INTO `t_district` VALUES ('169', '淮安市', '0');
+INSERT INTO `t_district` VALUES ('170', '盐城市', '0');
+INSERT INTO `t_district` VALUES ('171', '扬州市', '0');
+INSERT INTO `t_district` VALUES ('172', '镇江市', '0');
+INSERT INTO `t_district` VALUES ('173', '泰州市', '0');
+INSERT INTO `t_district` VALUES ('174', '宿迁市', '0');
+INSERT INTO `t_district` VALUES ('175', '杭州市', '0');
+INSERT INTO `t_district` VALUES ('176', '宁波市', '0');
+INSERT INTO `t_district` VALUES ('177', '温州市', '0');
+INSERT INTO `t_district` VALUES ('178', '嘉兴市', '0');
+INSERT INTO `t_district` VALUES ('179', '湖州市', '0');
+INSERT INTO `t_district` VALUES ('180', '绍兴市', '0');
+INSERT INTO `t_district` VALUES ('181', '舟山市', '0');
+INSERT INTO `t_district` VALUES ('182', '衢州市', '0');
+INSERT INTO `t_district` VALUES ('183', '金华市', '0');
+INSERT INTO `t_district` VALUES ('184', '台州市', '0');
+INSERT INTO `t_district` VALUES ('185', '丽水市', '0');
+INSERT INTO `t_district` VALUES ('186', '合肥市', '0');
+INSERT INTO `t_district` VALUES ('187', '芜湖市', '0');
+INSERT INTO `t_district` VALUES ('188', '蚌埠市', '0');
+INSERT INTO `t_district` VALUES ('189', '淮南市', '0');
+INSERT INTO `t_district` VALUES ('190', '马鞍山市', '0');
+INSERT INTO `t_district` VALUES ('191', '淮北市', '0');
+INSERT INTO `t_district` VALUES ('192', '铜陵市', '0');
+INSERT INTO `t_district` VALUES ('194', '黄山市', '0');
+INSERT INTO `t_district` VALUES ('195', '滁州市', '0');
+INSERT INTO `t_district` VALUES ('196', '阜阳市', '0');
+INSERT INTO `t_district` VALUES ('197', '宿州市', '0');
+INSERT INTO `t_district` VALUES ('198', '巢湖市', '0');
+INSERT INTO `t_district` VALUES ('199', '六安市', '0');
+INSERT INTO `t_district` VALUES ('200', '亳州市', '0');
+INSERT INTO `t_district` VALUES ('201', '池州市', '0');
+INSERT INTO `t_district` VALUES ('202', '宣城市', '0');
+INSERT INTO `t_district` VALUES ('203', '福州市', '0');
+INSERT INTO `t_district` VALUES ('204', '厦门市', '0');
+INSERT INTO `t_district` VALUES ('205', '莆田市', '0');
+INSERT INTO `t_district` VALUES ('206', '三明市', '0');
+INSERT INTO `t_district` VALUES ('207', '泉州市', '0');
+INSERT INTO `t_district` VALUES ('208', '漳州市', '0');
+INSERT INTO `t_district` VALUES ('209', '南平市', '0');
+INSERT INTO `t_district` VALUES ('210', '龙岩市', '0');
+INSERT INTO `t_district` VALUES ('211', '宁德市', '0');
+INSERT INTO `t_district` VALUES ('212', '南昌市', '0');
+INSERT INTO `t_district` VALUES ('213', '景德镇市', '0');
+INSERT INTO `t_district` VALUES ('214', '萍乡市', '0');
+INSERT INTO `t_district` VALUES ('215', '九江市', '0');
+INSERT INTO `t_district` VALUES ('216', '新余市', '0');
+INSERT INTO `t_district` VALUES ('217', '鹰潭市', '0');
+INSERT INTO `t_district` VALUES ('218', '赣州市', '0');
+INSERT INTO `t_district` VALUES ('219', '吉安市', '0');
+INSERT INTO `t_district` VALUES ('220', '宜春市', '0');
+INSERT INTO `t_district` VALUES ('221', '抚州市', '0');
+INSERT INTO `t_district` VALUES ('222', '上饶市', '0');
+INSERT INTO `t_district` VALUES ('223', '济南市', '0');
+INSERT INTO `t_district` VALUES ('224', '青岛市', '0');
+INSERT INTO `t_district` VALUES ('225', '淄博市', '0');
+INSERT INTO `t_district` VALUES ('226', '枣庄市', '0');
+INSERT INTO `t_district` VALUES ('227', '东营市', '0');
+INSERT INTO `t_district` VALUES ('228', '烟台市', '0');
+INSERT INTO `t_district` VALUES ('229', '潍坊市', '0');
+INSERT INTO `t_district` VALUES ('230', '济宁市', '0');
+INSERT INTO `t_district` VALUES ('231', '泰安市', '0');
+INSERT INTO `t_district` VALUES ('232', '威海市', '0');
+INSERT INTO `t_district` VALUES ('233', '日照市', '0');
+INSERT INTO `t_district` VALUES ('234', '莱芜市', '0');
+INSERT INTO `t_district` VALUES ('235', '临沂市', '0');
+INSERT INTO `t_district` VALUES ('236', '德州市', '0');
+INSERT INTO `t_district` VALUES ('237', '聊城市', '0');
+INSERT INTO `t_district` VALUES ('238', '滨州市', '0');
+INSERT INTO `t_district` VALUES ('239', '菏泽市', '0');
+INSERT INTO `t_district` VALUES ('240', '郑州市', '0');
+INSERT INTO `t_district` VALUES ('241', '开封市', '0');
+INSERT INTO `t_district` VALUES ('242', '洛阳市', '0');
+INSERT INTO `t_district` VALUES ('243', '平顶山市', '0');
+INSERT INTO `t_district` VALUES ('244', '安阳市', '0');
+INSERT INTO `t_district` VALUES ('245', '鹤壁市', '0');
+INSERT INTO `t_district` VALUES ('246', '新乡市', '0');
+INSERT INTO `t_district` VALUES ('247', '焦作市', '0');
+INSERT INTO `t_district` VALUES ('248', '濮阳市', '0');
+INSERT INTO `t_district` VALUES ('249', '许昌市', '0');
+INSERT INTO `t_district` VALUES ('250', '漯河市', '0');
+INSERT INTO `t_district` VALUES ('251', '三门峡市', '0');
+INSERT INTO `t_district` VALUES ('252', '南阳市', '0');
+INSERT INTO `t_district` VALUES ('253', '商丘市', '0');
+INSERT INTO `t_district` VALUES ('254', '信阳市', '0');
+INSERT INTO `t_district` VALUES ('255', '周口市', '0');
+INSERT INTO `t_district` VALUES ('256', '驻马店市', '0');
+INSERT INTO `t_district` VALUES ('257', '济源市', '0');
+INSERT INTO `t_district` VALUES ('258', '武汉市', '0');
+INSERT INTO `t_district` VALUES ('259', '黄石市', '0');
+INSERT INTO `t_district` VALUES ('260', '十堰市', '0');
+INSERT INTO `t_district` VALUES ('261', '宜昌市', '0');
+INSERT INTO `t_district` VALUES ('262', '襄樊市', '0');
+INSERT INTO `t_district` VALUES ('263', '鄂州市', '0');
+INSERT INTO `t_district` VALUES ('264', '荆门市', '0');
+INSERT INTO `t_district` VALUES ('265', '孝感市', '0');
+INSERT INTO `t_district` VALUES ('266', '荆州市', '0');
+INSERT INTO `t_district` VALUES ('267', '黄冈市', '0');
+INSERT INTO `t_district` VALUES ('268', '咸宁市', '0');
+INSERT INTO `t_district` VALUES ('269', '随州市', '0');
+INSERT INTO `t_district` VALUES ('271', '仙桃市', '0');
+INSERT INTO `t_district` VALUES ('272', '潜江市', '0');
+INSERT INTO `t_district` VALUES ('273', '天门市', '0');
+INSERT INTO `t_district` VALUES ('275', '长沙市', '0');
+INSERT INTO `t_district` VALUES ('276', '株洲市', '0');
+INSERT INTO `t_district` VALUES ('277', '湘潭市', '0');
+INSERT INTO `t_district` VALUES ('278', '衡阳市', '0');
+INSERT INTO `t_district` VALUES ('279', '邵阳市', '0');
+INSERT INTO `t_district` VALUES ('280', '岳阳市', '0');
+INSERT INTO `t_district` VALUES ('281', '常德市', '0');
+INSERT INTO `t_district` VALUES ('282', '张家界市', '0');
+INSERT INTO `t_district` VALUES ('283', '益阳市', '0');
+INSERT INTO `t_district` VALUES ('284', '郴州市', '0');
+INSERT INTO `t_district` VALUES ('285', '永州市', '0');
+INSERT INTO `t_district` VALUES ('286', '怀化市', '0');
+INSERT INTO `t_district` VALUES ('287', '娄底市', '0');
+INSERT INTO `t_district` VALUES ('289', '广州市', '0');
+INSERT INTO `t_district` VALUES ('290', '韶关市', '0');
+INSERT INTO `t_district` VALUES ('291', '深圳市', '0');
+INSERT INTO `t_district` VALUES ('292', '珠海市', '0');
+INSERT INTO `t_district` VALUES ('293', '汕头市', '0');
+INSERT INTO `t_district` VALUES ('294', '佛山市', '0');
+INSERT INTO `t_district` VALUES ('295', '江门市', '0');
+INSERT INTO `t_district` VALUES ('296', '湛江市', '0');
+INSERT INTO `t_district` VALUES ('297', '茂名市', '0');
+INSERT INTO `t_district` VALUES ('298', '肇庆市', '0');
+INSERT INTO `t_district` VALUES ('299', '惠州市', '0');
+INSERT INTO `t_district` VALUES ('300', '梅州市', '0');
+INSERT INTO `t_district` VALUES ('301', '汕尾市', '0');
+INSERT INTO `t_district` VALUES ('302', '河源市', '0');
+INSERT INTO `t_district` VALUES ('303', '阳江市', '0');
+INSERT INTO `t_district` VALUES ('304', '清远市', '0');
+INSERT INTO `t_district` VALUES ('305', '东莞市', '0');
+INSERT INTO `t_district` VALUES ('306', '中山市', '0');
+INSERT INTO `t_district` VALUES ('307', '潮州市', '0');
+INSERT INTO `t_district` VALUES ('308', '揭阳市', '0');
+INSERT INTO `t_district` VALUES ('309', '云浮市', '0');
+INSERT INTO `t_district` VALUES ('310', '南宁市', '0');
+INSERT INTO `t_district` VALUES ('311', '柳州市', '0');
+INSERT INTO `t_district` VALUES ('312', '桂林市', '0');
+INSERT INTO `t_district` VALUES ('313', '梧州市', '0');
+INSERT INTO `t_district` VALUES ('314', '北海市', '0');
+INSERT INTO `t_district` VALUES ('315', '防城港市', '0');
+INSERT INTO `t_district` VALUES ('316', '钦州市', '0');
+INSERT INTO `t_district` VALUES ('317', '贵港市', '0');
+INSERT INTO `t_district` VALUES ('318', '玉林市', '0');
+INSERT INTO `t_district` VALUES ('319', '百色市', '0');
+INSERT INTO `t_district` VALUES ('320', '贺州市', '0');
+INSERT INTO `t_district` VALUES ('321', '河池市', '0');
+INSERT INTO `t_district` VALUES ('322', '来宾市', '0');
+INSERT INTO `t_district` VALUES ('323', '崇左市', '0');
+INSERT INTO `t_district` VALUES ('324', '海口市', '0');
+INSERT INTO `t_district` VALUES ('325', '三亚市', '0');
+INSERT INTO `t_district` VALUES ('326', '五指山市', '0');
+INSERT INTO `t_district` VALUES ('327', '琼海市', '0');
+INSERT INTO `t_district` VALUES ('328', '儋州市', '0');
+INSERT INTO `t_district` VALUES ('329', '文昌市', '0');
+INSERT INTO `t_district` VALUES ('330', '万宁市', '0');
+INSERT INTO `t_district` VALUES ('331', '东方市', '0');
+INSERT INTO `t_district` VALUES ('381', '江津市', '0');
+INSERT INTO `t_district` VALUES ('382', '合川市', '0');
+INSERT INTO `t_district` VALUES ('383', '永川市', '0');
+INSERT INTO `t_district` VALUES ('384', '南川市', '0');
+INSERT INTO `t_district` VALUES ('385', '成都市', '0');
+INSERT INTO `t_district` VALUES ('386', '自贡市', '0');
+INSERT INTO `t_district` VALUES ('387', '攀枝花市', '0');
+INSERT INTO `t_district` VALUES ('388', '泸州市', '0');
+INSERT INTO `t_district` VALUES ('389', '德阳市', '0');
+INSERT INTO `t_district` VALUES ('390', '绵阳市', '0');
+INSERT INTO `t_district` VALUES ('391', '广元市', '0');
+INSERT INTO `t_district` VALUES ('392', '遂宁市', '0');
+INSERT INTO `t_district` VALUES ('393', '内江市', '0');
+INSERT INTO `t_district` VALUES ('394', '乐山市', '0');
+INSERT INTO `t_district` VALUES ('395', '南充市', '0');
+INSERT INTO `t_district` VALUES ('396', '眉山市', '0');
+INSERT INTO `t_district` VALUES ('397', '宜宾市', '0');
+INSERT INTO `t_district` VALUES ('398', '广安市', '0');
+INSERT INTO `t_district` VALUES ('399', '达州市', '0');
+INSERT INTO `t_district` VALUES ('400', '雅安市', '0');
+INSERT INTO `t_district` VALUES ('401', '巴中市', '0');
+INSERT INTO `t_district` VALUES ('402', '资阳市', '0');
+INSERT INTO `t_district` VALUES ('406', '贵阳市', '0');
+INSERT INTO `t_district` VALUES ('407', '六盘水市', '0');
+INSERT INTO `t_district` VALUES ('408', '遵义市', '0');
+INSERT INTO `t_district` VALUES ('415', '昆明市', '0');
+INSERT INTO `t_district` VALUES ('416', '曲靖市', '0');
+INSERT INTO `t_district` VALUES ('417', '玉溪市', '0');
+INSERT INTO `t_district` VALUES ('418', '保山市', '0');
+INSERT INTO `t_district` VALUES ('419', '昭通市', '0');
+INSERT INTO `t_district` VALUES ('420', '丽江市', '0');
+INSERT INTO `t_district` VALUES ('421', '思茅市', '0');
+INSERT INTO `t_district` VALUES ('422', '临沧市', '0');
+INSERT INTO `t_district` VALUES ('431', '拉萨市', '0');
+INSERT INTO `t_district` VALUES ('438', '西安市', '0');
+INSERT INTO `t_district` VALUES ('439', '铜川市', '0');
+INSERT INTO `t_district` VALUES ('440', '宝鸡市', '0');
+INSERT INTO `t_district` VALUES ('441', '咸阳市', '0');
+INSERT INTO `t_district` VALUES ('442', '渭南市', '0');
+INSERT INTO `t_district` VALUES ('443', '延安市', '0');
+INSERT INTO `t_district` VALUES ('444', '汉中市', '0');
+INSERT INTO `t_district` VALUES ('445', '榆林市', '0');
+INSERT INTO `t_district` VALUES ('447', '商洛市', '0');
+INSERT INTO `t_district` VALUES ('448', '兰州市', '0');
+INSERT INTO `t_district` VALUES ('449', '嘉峪关市', '0');
+INSERT INTO `t_district` VALUES ('450', '金昌市', '0');
+INSERT INTO `t_district` VALUES ('451', '白银市', '0');
+INSERT INTO `t_district` VALUES ('452', '天水市', '0');
+INSERT INTO `t_district` VALUES ('453', '武威市', '0');
+INSERT INTO `t_district` VALUES ('454', '张掖市', '0');
+INSERT INTO `t_district` VALUES ('455', '平凉市', '0');
+INSERT INTO `t_district` VALUES ('456', '酒泉市', '0');
+INSERT INTO `t_district` VALUES ('457', '庆阳市', '0');
+INSERT INTO `t_district` VALUES ('458', '定西市', '0');
+INSERT INTO `t_district` VALUES ('459', '陇南市', '0');
+INSERT INTO `t_district` VALUES ('462', '西宁市', '0');
+INSERT INTO `t_district` VALUES ('470', '银川市', '0');
+INSERT INTO `t_district` VALUES ('471', '石嘴山市', '0');
+INSERT INTO `t_district` VALUES ('472', '吴忠市', '0');
+INSERT INTO `t_district` VALUES ('473', '固原市', '0');
+INSERT INTO `t_district` VALUES ('474', '中卫市', '0');
+INSERT INTO `t_district` VALUES ('475', '乌鲁木齐市', '0');
+INSERT INTO `t_district` VALUES ('476', '克拉玛依市', '0');
+INSERT INTO `t_district` VALUES ('489', '石河子市', '0');
+INSERT INTO `t_district` VALUES ('491', '图木舒克市', '0');
+INSERT INTO `t_district` VALUES ('492', '五家渠市', '0');
+INSERT INTO `t_district` VALUES ('493', '台北市', '0');
+INSERT INTO `t_district` VALUES ('494', '高雄市', '0');
+INSERT INTO `t_district` VALUES ('495', '基隆市', '0');
+INSERT INTO `t_district` VALUES ('496', '台中市', '0');
+INSERT INTO `t_district` VALUES ('497', '台南市', '0');
+INSERT INTO `t_district` VALUES ('498', '新竹市', '0');
+INSERT INTO `t_district` VALUES ('499', '嘉义市', '0');
+
+-- ----------------------------
+-- 会员表 t_customers
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customers`;
+CREATE TABLE `t_customers` (
+  `customer_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `customer_openid` varchar(100) NOT NULL DEFAULT '' COMMENT '微信ID',
+  `customer_gender` varchar(6) COMMENT '性别',
+  `customer_age` varchar(10) COMMENT '年龄段',
+  `customer_name` char(16) NOT NULL DEFAULT '' COMMENT '名字',
+  `customer_headimg` varchar(45) COMMENT '头像',
+  `customer_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  `customer_city` tinyint(4) NOT NULL DEFAULT '0' COMMENT '常住城市ID',
+  `customer_default_address_id` int(5) NOT NULL DEFAULT '0' COMMENT '默认收货地址',
+  `customer_tel` varchar(32) COMMENT '电话',
+  `customer_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '积分',
+  `customer_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='会员表';
 

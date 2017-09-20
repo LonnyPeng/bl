@@ -1,0 +1,30 @@
+<div class="row">
+    <div class="col-12">
+        <form method="post">
+            <div class="form-group">
+                <label>城市名<sup>*</sup></label>
+                <input class="form-control" type="text" name="district_name" value="<?= isset($districtInfo['district_name']) ? $districtInfo['district_name'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>开通状态<sup>*</sup></label>
+                <select class="form-control" name="district_status">
+                    <option value="1" <?= (isset($districtInfo['district_status']) && $districtInfo['district_status'] == 1) ? 'selected' : '' ?>>已开通</option>
+                    <option value="0" <?= (isset($districtInfo['district_status']) && $districtInfo['district_status'] == 0) ? 'selected' : '' ?>>未开通</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $("form").submit(function() {
+        $.check(!this.district_name.value, '请输入城市名', this.district_name) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>
+
+
