@@ -13,22 +13,24 @@
 </div>
 <div class="row">
     <?php if ($imageList) : ?>
-        <?php foreach($imageList as $key => $row):?>
-        	<div class="col-8 col-x-12 col-xs-16 col-m-48 js-image">
-                <div class="album-list">
-                    <div class="pic-wrap">
-                        <img src="<?php echo $this->uploadUrl($row['image_path'], 'sys');?>">
+        <ul class="sortable">
+            <?php foreach($imageList as $key => $row):?>
+                <li class="col-8 col-x-12 col-xs-16 col-m-48 js-image" data-id="<?php echo $row['image_id']?>", data-sort="<?php echo $row['image_sort']?>">
+                    <div class="album-list">
+                        <div class="pic-wrap">
+                            <img src="<?php echo $this->uploadUrl($row['image_path'], 'sys');?>">
+                        </div>
+                        <div class="action">
+                            <span class="time"><?php echo date('Y-m-d',strtotime($row['image_time']))?></span>
+                            <span data-href="<?php echo $this->url('basic/del-image', array('id' => $row['image_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
+                        </div>
+                        <div>
+                            <input type="text" value="<?php echo $row['image_src']?>" style="width: 100%;">
+                        </div>
                     </div>
-                    <div class="action">
-                        <span class="time"><?php echo date('Y-m-d',strtotime($row['image_time']))?></span>
-                        <span data-href="<?php echo $this->url('basic/del-image', array('id' => $row['image_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
-                    </div>
-                    <div>
-                        <input type="text" value="<?php echo $row['image_src']?>" style="width: 100%;">
-                    </div>
-                </div>
-        	</div>
-        <?php endforeach;?>
+                </li>
+            <?php endforeach;?>
+        </ul>
     <?php endif;?>
 </div>
 
@@ -52,7 +54,7 @@
     $('.sortable').each(function () {
         $(this).sortImg({
             axis: false,
-            url: '<?= $this->url('product/set-image-sort')?>',
+            url: '<?= $this->url('basic/set-image-sort')?>',
         });
     });
 

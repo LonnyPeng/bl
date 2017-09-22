@@ -221,7 +221,7 @@ class BasicController extends AbstractActionController
 
 	public function homeImageAction()
 	{
-		$sql = "SELECT * FROM t_images ORDER BY image_id DESC";
+		$sql = "SELECT * FROM t_images ORDER BY image_sort DESC, image_id DESC";
 		$imageList = $this->locator->db->getAll($sql);
 		if ($imageList) {
 			foreach ($imageList as $key => $row) {
@@ -471,5 +471,22 @@ class BasicController extends AbstractActionController
 		} else {
 			return new JsonModel('error', '删除失败');
 		}
+	}
+
+	public function setImageSortAction()
+	{
+	    if (!$this->funcs->isAjax()) {
+	        $this->funcs->redirect($this->helpers->url('default/index'));
+	    }
+
+	    $data = $_POST['data'];
+	    $sql = "UPDATE t_images 
+	            SET image_sort = :sort 
+	            WHERE image_id = :id";
+	    foreach ($data as $row) {
+	        $this->locator->db->exec($sql, $row);
+	    }
+
+	    return JsonModel::init('ok', '')->setRedirect('reload');
 	}
 }
