@@ -46,7 +46,16 @@
     </form>
 </div>
 
+<?= $this->js('jquery-ui.js')->wrap();?>
+<?= $this->js('sortable.js')->wrap();?>
 <script type="text/javascript">
+    $('.sortable').each(function () {
+        $(this).sortImg({
+            axis: false,
+            url: '<?= $this->url('product/set-image-sort')?>',
+        });
+    });
+
     $("#js-add-button").click(function(){
         $.popup(
             "#js-upload-pic", 
