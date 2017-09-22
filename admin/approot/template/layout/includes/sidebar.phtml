@@ -56,12 +56,12 @@
                         <span class="hidden-sm">积分级别设置</span>
                     </a>
                 </li>
-                <li class="<?php echo in_array($this->action(), array('image')) ? 'active' : ''?>">
-                    <a href="<?php echo $this->url('basic/image');?>">
-                        <span class="hidden-sm">图片素材</span>
+                <li class="<?php echo in_array($this->action(), array('home-image')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('basic/home-image');?>">
+                        <span class="hidden-sm">首页图片</span>
                     </a>
                 </li>
-                <li class="<?php echo in_array($this->action(), array('video')) ? 'active' : ''?>">
+                <li class="<?php echo in_array($this->action(), array('video')) ? 'active' : ''?> none">
                     <a href="<?php echo $this->url('basic/video');?>">
                         <span class="hidden-sm">视频素材</span>
                     </a>

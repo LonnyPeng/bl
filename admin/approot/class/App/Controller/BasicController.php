@@ -219,7 +219,7 @@ class BasicController extends AbstractActionController
 		}
 	}
 
-	public function imageAction()
+	public function homeImageAction()
 	{
 		$sql = "SELECT * FROM t_images ORDER BY image_id DESC";
 		$imageList = $this->locator->db->getAll($sql);
@@ -273,7 +273,7 @@ class BasicController extends AbstractActionController
 			$this->locator->db->exec($sql, $uploadFile);
 		}
 
-		$this->funcs->redirect($this->helpers->url('basic/image'));
+		$this->funcs->redirect($this->helpers->url('basic/home-image'));
 	}
 
 	public function delImageAction()

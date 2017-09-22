@@ -436,15 +436,17 @@ CREATE TABLE `t_configs` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='系统配置';
 
 -- ----------------------------
--- 素材图片表 t_images
+-- 首页图片表 t_images
 -- ----------------------------
 DROP TABLE IF EXISTS `t_images`;
 CREATE TABLE `t_images` (
   `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
   `image_path` varchar(45) NOT NULL COMMENT '图片路径',
+  `image_href` varchar(200) COMMENT '图片链接',
+  `image_sort` int(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `image_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
   `image_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='素材图片';
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='首页图片';
 
 -- ----------------------------
 -- 素材视频表 t_videos
