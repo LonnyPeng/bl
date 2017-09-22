@@ -13,6 +13,7 @@ define('ROOT_DIR',      dirname(__DIR__)  . '/');
 define('WWW_DIR',       ROOT_DIR . 'wwwroot/');
 define('APP_DIR',       ROOT_DIR . 'approot/');
 define('CONFIG_DIR',    APP_DIR  . 'config/');
+define('INC_DIR',   APP_DIR  . 'include/');
 define('TPL_DIR',       APP_DIR  . 'template/');
 define('JS_DIR',        WWW_DIR . 'js/');
 define('CSS_DIR',       WWW_DIR . 'css/');
