@@ -22,7 +22,9 @@
             </div>
             <div class="form-group">
                 <label>内容<sup>*</sup></label>
-                <textarea class="form-control js-simplemde" name="read_text"><?= isset($info['read_text']) ? $info['read_text'] : '';?></textarea>
+                <script type="text/plain" id="myEditor" style="width:100%;height:100%;" name="read_text">
+                    <?= isset($info['read_text']) ? $info['read_text'] : '';?>
+                </script>
             </div>
             <div class="form-group">
                 <label>每天阅读次数<sup>*</sup></label>
@@ -48,22 +50,11 @@
 </div>
 
 <script type="text/javascript">
-    $(".js-simplemde").each(function(){
-        var $$ = $(this)[0];
-
-        if (!$(this).hasClass('js-mark-down')) {
-            new SimpleMDE({
-                element: $$,
-                spellChecker: false,
-                forceSync: true,
-            });
-            $(this).addClass('js-mark-down');
-        }
-    });
+    //实例化编辑器
+    UM.getEditor('myEditor');
 
     $("form").submit(function() {
         $.check(!this.read_title.value, '请输入标题', this.read_title) &&
-        $.check(!this.read_text.value, '请输入内容', this.read_text) &&
         $.check(!this.read_num.value, '请输入每天阅读次数', this.read_num) &&
         $.check(!this.read_score.value, '请输入阅读奖励积分', this.read_score) &&
         $(this).ajaxAuto();
