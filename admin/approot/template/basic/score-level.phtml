@@ -1,0 +1,108 @@
+<form method="post">
+    <div class="widget-header">
+        <h2 class="title-theme-2">积分级别设置</h2>
+        <button type="button" id="jq-contract-add"><i class="fa fa-plus"></i> 添加</button>
+    </div>
+    <div id="jq-contract-box">
+        <?php if ($list) : ?>
+            <?php foreach ($list as $row) : ?>
+                <div class="row jq-item">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div>
+                                <label>级别名称</label>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="level_name[]" class="form-control" value="<?php echo $row['level_name']?>">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="level_id[]" value="<?php echo $row['level_id']?>">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>所需积分</label>
+                            <input type="number" name="level_score[]" class="form-control" value="<?php echo $row['level_score']?>">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>操作 </label>
+                            <div>
+                                <button type="button" class="js-button"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+
+    <div class="employee-detail-submit">
+        <button type="submit" id="jq-submit" class="btn">保存</button>
+        <a href="javascript:history.back();" class="btn">返回 »</a>
+    </div>
+</form>
+
+<div id="jq-contract-template" class="none">
+    <div class="row jq-item">
+        <div class="col-12">
+            <div class="form-inline">
+                <div>
+                    <label>级别名称</label>
+                </div>
+                <input type="text" name="level_name[]" class="form-control" value="">
+            </div>
+        </div>
+        <input type="hidden" name="level_id[]" value="">
+        <div class="col-12">
+            <div class="form-group">
+                <label>所需积分</label>
+                <input type="number" name="level_score[]" class="form-control" value="">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>操作 </label>
+                <div>
+                    <button type="button" class="js-button"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#jq-contract-add").on('click', function() {
+        $("#jq-contract-box").append($("#jq-contract-template").clone().html());
+        datepicker();
+        removeAction();
+    });
+
+    var removeAction = function() {
+        $("#jq-contract-box").find(".js-button").on('click', function() {
+            var row = $(this).parents('.row');
+            var id = row.find('input[name="level_id[]"]').val();
+
+            if (id) {
+                $(this).ajaxAuto({
+                    url: '<?php echo $this->url('basic/score-level-del')?>',
+                    data: {id: id},
+                    success: function (re) {
+                        if (re.status == 'ok') {
+                            row.remove();
+                        }
+                    }
+                });
+            } else {
+                row.remove();
+            }
+        });
+    };
+
+    removeAction();
+
+    // submit
+    $("form").submit(function() {
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>

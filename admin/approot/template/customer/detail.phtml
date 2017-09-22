@@ -1,0 +1,182 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('customer/list')?>">会员列表</a> / 详情
+    </strong>
+</div>
+
+<div class="person-head clearfix">
+    <div class="portrait">
+        <img src="<?= $this->uploadUrl($info['customer_headimg'], 'user')?>" alt="Portrait">
+    </div>
+    <div class="name-job">
+        <div class="name">
+            <?php echo $info['customer_name']?>
+        </div>
+        <div class="contract-type">
+            <?php echo $info['level_name']?>
+        </div>
+        <div class="contract-type">
+            <?php echo $info['customer_tel']?>
+        </div>
+    </div>
+    <div class="info">
+        <div class="job-status">
+            <?php if ($info['customer_status'] == 1) : ?>
+                <i class="fa fa-smile-o"></i> 有效
+            <?php else : ?>
+                <i class="fa fa-frown-o"></i> 禁用
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+<div class="js-tab tab-head">
+    <ul class="tab clearfix">
+        <li data-current="3">
+            <span>收货地址</span>
+        </li>
+        <li data-current="2">
+            <span>历史搜索</span>
+        </li>
+        <li data-current="1">
+            <span>最近登录</span>
+        </li>
+        <li data-current="0" class="active">
+            <span>用户信息</span>
+        </li>
+    </ul>
+</div>
+<div class="tab-content">
+    <div class="js-content">
+        <div class="table-responsive employee-detail">
+            <table class="table">
+                <tbody>
+                    <tr class="odd">
+                        <td class="info-left">用户名:</td>
+                        <td class="info-right"><?php echo $info['customer_name']?></td>
+                        <td class="info-left">性别:</td>
+                        <td class="info-right"><?php echo $info['customer_gender']?></td>
+                    </tr>
+                    <tr>
+                        <td class="info-left">常住城市:</td>
+                        <td class="info-right"><?php echo $info['district_name']?></td>
+                        <td class="info-left">电话:</td>
+                        <td class="info-right"><?php echo $info['customer_tel']?></td>
+                    </tr>
+                    <tr class="odd">
+                        <td class="info-left">年龄段:</td>
+                        <td class="info-right"><?php echo $info['customer_age']?></td>
+                        <td class="info-left">注册时间:</td>
+                        <td class="info-right"><?php echo $info['customer_regtime']?></td>
+                    </tr>
+                    <tr>
+                        <td class="info-left">当前积分:</td>
+                        <td class="info-right"><?php echo $info['customer_score']?></td>
+                        <td class="info-left">历史积分:</td>
+                        <td class="info-right"><?php echo $info['history_score']?></td>
+                    </tr>
+                    <tr class="odd">
+                        <td class="info-left">微信号:</td>
+                        <td class="info-right"><?php echo $info['customer_openid']?></td>
+                        <td class="info-left">级别:</td>
+                        <td class="info-right"><?php echo $info['level_name']?></td>
+                    </tr>
+                    <tr>
+                        <td class="info-left">状态:</td>
+                        <td class="info-right"><?php echo $info['customer_status'] ? '有效' : '禁用'?></td>
+                        <td class="info-left"></td>
+                        <td class="info-right"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="js-content none">
+        <div class="table-responsive employee-detail">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">登录城市</th>
+                        <th class="text-center">登录时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($cityList) : ?>
+                        <?php foreach($cityList as $key => $row) : ?>
+                            <tr class="<?php if (($key + 1) % 2 == 0) : ?>odd<?php endif;?>">
+                                <td class="text-center"><?php echo $row['district_name']?></td>
+                                <td class="text-center"><?php echo $row['log_time']?></td>
+                            </tr>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="js-content none">
+        <div class="table-responsive employee-detail">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">搜索内容</th>
+                        <th class="text-center">搜索时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($searchList) : ?>
+                        <?php foreach($searchList as $key => $row) : ?>
+                            <tr class="<?php if (($key + 1) % 2 == 0) : ?>odd<?php endif;?>">
+                                <td class="text-center"><?php echo $row['log_name']?></td>
+                                <td class="text-center"><?php echo $row['log_time']?></td>
+                            </tr>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="js-content none">
+        <div class="table-responsive employee-detail">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">收货人</th>
+                        <th class="text-center">联系电话</th>
+                        <th class="text-center">收货城市</th>
+                        <th class="text-center">收货地址</th>
+                        <th class="text-center">特殊说明</th>
+                        <th class="text-center">状态</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($addressList) : ?>
+                        <?php foreach($addressList as $key => $row) : ?>
+                            <tr class="<?php if (($key + 1) % 2 == 0) : ?>odd<?php endif;?>">
+                                <td class="text-center"><?php echo $row['user_name']?></td>
+                                <td class="text-center"><?php echo $row['user_tel']?></td>
+                                <td class="text-center"><?php echo $row['district_name']?></td>
+                                <td class="text-center"><?php echo $row['user_address']?></td>
+                                <td class="text-center" title="<?php echo $row['user_des']?>">
+                                    <?php echo $this->funcs->mbSubString($row['user_des'], 0, 15)?>
+                                </td>
+                                <td class="text-center">
+                                    <?php echo $info['customer_default_address_id'] == $row['address_id'] ? '默认地址' : ''?>
+                                </td>
+                            </tr>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="table-tool">
+    <a href="javascript:history.back();" class="btn">返&nbsp;回 »</a>
+</div>
+
+<script type="text/javascript">
+    $(".js-tab li").click(function(){
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.js-content').eq($(this).data('current')).removeClass('none').siblings().addClass('none');
+    });
+</script>

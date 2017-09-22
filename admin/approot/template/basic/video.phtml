@@ -1,0 +1,101 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('basic/video')?>">视频素材</a> / 列表
+    </strong>
+</div>
+
+<div class="row top-tool">
+    <div class="col-48">
+        <span  class="btn" id="js-add-button">
+                <i class="fa fa-plus"></i> 上传视频
+        </span>
+    </div>
+</div>
+<div class="row">
+    <?php if ($videoList) : ?>
+        <?php foreach($videoList as $key => $row):?>
+        	<div class="col-8 col-x-12 col-xs-16 col-m-48 js-video">
+                <div class="album-list">
+                    <div class="pic-wrap js-video">
+                    	<video loop="loop" poster="" style="width: 100%;">
+                    	    <source itemprop="contentUrl" type="video/mp4" src="<?php echo $this->uploadUrl($row['video_path'], 'video');?>">
+                    	</video>
+                    </div>
+                    <div class="action">
+                        <span class="time"><?php echo date('Y-m-d',strtotime($row['video_time']))?></span>
+                        <span data-href="<?php echo $this->url('basic/del-video', array('id' => $row['video_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
+                    </div>
+                    <div>
+                        <input type="text" value="<?php echo $row['video_src']?>" style="width: 100%;">
+                    </div>
+                </div>
+        	</div>
+        <?php endforeach;?>
+    <?php endif;?>
+</div>
+
+<div id="js-upload-pic" class="none">
+    <form id="upload-form" enctype="multipart/form-data" method="post" action="<?php echo $this->url('basic/video-update')?>">
+        <input type="hidden" name="album_id" value="<?php echo $this->param('id')?>">
+        <div class="album-pic-load" id="js-pic-load">
+            <input type="file" multiple="multiple" name="file[]" class="multi with-preview choose-flie" accept="mp4" value="" />
+            <button id="js-choose-photo"><i class="icon-camera"></i> 选择视频</button>
+            <p class="tip">( 视频类型: mp4 )</p>
+        </div>
+        <div class="clearfix">
+        	<button class="pull-right" type="submit">提交</button>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    $("#js-add-button").click(function(){
+        $.popup(
+            "#js-upload-pic", 
+            {overlay:{opacity: 0.4},title: '上传视频', dragable: true}, 
+            function () {
+            	//only one file
+            	$("#js-pic-load").bind('change', function () {
+            	    $('input[type="file"], #js-choose-photo').addClass('none');
+            	    $(this).find('.MultiFile-preview').remove();
+            	    $(this).find('.MultiFile-label').append('<img class="MultiFile-preview" style="height: 100px; width: 100px; display: block;" src="<?php echo $this->image('file_bg.jpg');?>" />');
+            	});
+            },
+            function () {
+                $('#MultiFile1_list .MultiFile-remove').each(function(){
+                    $(this).trigger('click');
+                });
+
+                $('input[type="file"]').val('');
+                $('#js-choose-photo').removeClass('none');
+            }
+        ); 
+    });
+
+    $('.js-ajax').click(function(){
+         $$ = $(this);
+         if ($$.hasClass('delete')) {
+             $.confirm('请确认是否要删除？', function() {
+                 $$.ajaxAuto({
+                    success: function (re) {
+                        if (re.status == 'ok') {
+                            $$.parents('.js-video').remove();
+                        }
+                    }
+                 });
+             });
+         } else {
+             $$.ajaxAuto();
+         }
+    });
+
+    $('.js-video input').focus(function() {
+        $(this).select();
+    });
+
+    $('.js-video').mouseover(function () {
+    	$(this).find('video').trigger('play');
+    }).mouseout(function () {
+    	$(this).find('video').trigger('pause');
+    });
+</script>

@@ -1,4 +1,8 @@
-<?= $this->render('includes/bread')?>
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('admin/member-list')?>">后台设置</a> / 人员列表
+    </strong>
+</div>
 
 <div id="search">
     <form>
@@ -50,23 +54,25 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($memberList as $key => $row) :?>
-                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
-                    <td class="text-center"><?= $row['member_name']?></td>
-                    <td class="text-center"><?= $row['member_lognum']?></td>
-                    <td class="text-center"><?= $row['member_logtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_logtime'])) : ''?></td>
-                    <td class="text-center"><?= $row['member_regtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_regtime'])) : ''?></td>
-                    <td class="text-center"><?= $row['member_status'] ? '有效' : '禁用';?></td>
-                    <td class="text-center action">
-                        <a class="btn btn-xs edit" href="<?= $this->url('admin/member-edit', array('id' => $row['member_id']))?>" title="编辑">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <span class="btn btn-xs del" data-href="<?= $this->url('admin/member-del', array('id' => $row['member_id']))?>" title="删除">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach;?>
+            <?php if ($memberList) : ?>
+                <?php foreach ($memberList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['member_name']?></td>
+                        <td class="text-center"><?= $row['member_lognum']?></td>
+                        <td class="text-center"><?= $row['member_logtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_logtime'])) : ''?></td>
+                        <td class="text-center"><?= $row['member_regtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_regtime'])) : ''?></td>
+                        <td class="text-center"><?= $row['member_status'] ? '有效' : '禁用';?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('admin/member-edit', array('id' => $row['member_id']))?>" title="编辑">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <span class="btn btn-xs del" data-href="<?= $this->url('admin/member-del', array('id' => $row['member_id']))?>" title="删除">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
         </tbody>
     </table>
 </div>

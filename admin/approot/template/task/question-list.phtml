@@ -1,0 +1,121 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('task/read-list')?>">任务中心</a> / 答题任务
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>问题描述</label>
+                    <input class="form-control" type="text" name="question_title" value="<?= $this->param('question_title')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>问题类型</label>
+                    <select class="form-control" name="question_type">
+                        <option value="">全部</option>
+                        <option value="1" <?php echo $this->param('question_type') === '1' ? 'selected' : ''?>>单选</option>
+                        <option value="2" <?php echo $this->param('question_type') === '2' ? 'selected' : ''?>>多选</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" name="question_status">
+                        <option value="">全部</option>
+                        <option value="1" <?php echo $this->param('question_status') === '1' ? 'selected' : ''?>>上线</option>
+                        <option value="0" <?php echo $this->param('question_status') === '0' ? 'selected' : ''?>>下线</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('task/question-edit')?>">
+            <i class="fa fa-plus"></i> 添加
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">问题描述</th>
+                <th class="text-center">缩略图</th>
+                <th class="text-center">问题选项</th>
+                <th class="text-center">问题答案</th>
+                <th class="text-center">阅读奖励积分</th>
+                <th class="text-center">问题类型</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($questionList) : ?>
+                <?php foreach ($questionList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['question_title']?></td>
+                        <td class="text-center">
+                            <img src="<?php echo $this->uploadUrl($row['question_banner'], 'sys')?>" style="border: 1px solid #ddd; padding: 2px; width: 200px;">
+                        </td>
+                        <td class="text-center">
+                            <?php foreach($row['question'] as $ke => $value) : ?>
+                                <div><?php echo sprintf("%s: %s", strtoupper($ke), $value)?></div>
+                            <?php endforeach;?>
+                        </td>
+                        <td class="text-center"><?= strtoupper($row['question_answer'])?></td>
+                        <td class="text-center"><?= $row['question_score']?></td>
+                        <td class="text-center"><?= $row['question_answer_num'] > 1 ? '多选' : '单选'?></td>
+                        <td class="text-center"><?= $row['question_status'] ? '上线' : '下线'?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('task/question-edit', array('id' => $row['question_id']))?>" title="编辑">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <span class="btn btn-xs del" data-href="<?= $this->url('task/question-del', array('id' => $row['question_id']))?>" title="删除">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
+
+<script type="text/javascript">
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

@@ -1,0 +1,89 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('task/read-list')?>">阅读任务列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-24">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>标题<sup>*</sup></label>
+                <input class="form-control" type="text" name="read_title" value="<?= isset($info['read_title']) ? $info['read_title'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>缩略图<sup>*</sup></label>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <div style="display: <?php echo !isset($info['read_banner']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['read_banner']) && $info['read_banner'] ? $this->uploadUrl($info['read_banner'], 'sys') : ''?>">
+                </div>
+                
+                <input class="form-control" type="file" name="file" value="">
+            </div>
+            <div class="form-group">
+                <label>内容<sup>*</sup></label>
+                <textarea class="form-control js-simplemde" name="read_text"><?= isset($info['read_text']) ? $info['read_text'] : '';?></textarea>
+            </div>
+            <div class="form-group">
+                <label>每天阅读次数<sup>*</sup></label>
+                <input class="form-control" type="number" name="read_num" value="<?= isset($info['read_num']) ? $info['read_num'] : '1';?>">
+            </div>
+            <div class="form-group">
+                <label>阅读奖励积分<sup>*</sup></label>
+                <input class="form-control" type="number" name="read_score" value="<?= isset($info['read_score']) ? $info['read_score'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>状态<sup>*</sup></label>
+                <select class="form-control" name="read_status">
+                    <option value="1" <?= (isset($info['read_status']) && $info['read_status'] == 1) ? 'selected' : '' ?>>上线</option>
+                    <option value="0" <?= (isset($info['read_status']) && $info['read_status'] == 0) ? 'selected' : '' ?>>下线</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".js-simplemde").each(function(){
+        var $$ = $(this)[0];
+
+        if (!$(this).hasClass('js-mark-down')) {
+            new SimpleMDE({
+                element: $$,
+                spellChecker: false,
+                forceSync: true,
+            });
+            $(this).addClass('js-mark-down');
+        }
+    });
+
+    $("form").submit(function() {
+        $.check(!this.read_title.value, '请输入标题', this.read_title) &&
+        $.check(!this.read_text.value, '请输入内容', this.read_text) &&
+        $.check(!this.read_num.value, '请输入每天阅读次数', this.read_num) &&
+        $.check(!this.read_score.value, '请输入阅读奖励积分', this.read_score) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+
+    $("input:file").unbind('change').on('change', function() {
+        var imageHolder = $(this).parents('.form-group').find('.js-image');
+        if (typeof (FileReader) != "undefined") {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+               var result = e.target.result;
+               imageHolder.attr('src', result);
+           }
+           var upFile = $(this)[0].files[0];
+           reader.readAsDataURL(upFile);
+
+           imageHolder.parent().show();
+        }
+    });
+</script>
+
+

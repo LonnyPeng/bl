@@ -199,11 +199,11 @@ class Funcs implements ServiceLocatorAwareInterface
         return $str;
     }
 
-    public function setImage($path = null, $dir = '')
+    public function setImage($path = null, $dir = '', $width = 750, $height = 380)
     {
         $insInit = array(
-            'width' => 750,
-            'height' => 380,
+            'width' => $width,
+            'height' => $height,
         );
         $data = array(
             'dir' => '', 'src' => '',

@@ -1,3 +1,9 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('basic/district-list')?>">城市列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
 <div class="row">
     <div class="col-12">
         <form method="post">
@@ -8,8 +14,8 @@
             <div class="form-group">
                 <label>开通状态<sup>*</sup></label>
                 <select class="form-control" name="district_status">
-                    <option value="1" <?= (isset($districtInfo['district_status']) && $districtInfo['district_status'] == 1) ? 'selected' : '' ?>>已开通</option>
-                    <option value="0" <?= (isset($districtInfo['district_status']) && $districtInfo['district_status'] == 0) ? 'selected' : '' ?>>未开通</option>
+                    <option value="1" <?= (isset($districtInfo['district_status']) && $districtInfo['district_status'] == 1) ? 'selected' : '' ?>>开通</option>
+                    <option value="0" <?= (isset($districtInfo['district_status']) && $districtInfo['district_status'] == 0) ? 'selected' : '' ?>>关闭</option>
                 </select>
             </div>
             <div>

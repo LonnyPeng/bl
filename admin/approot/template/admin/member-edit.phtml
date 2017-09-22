@@ -1,4 +1,8 @@
-<?= $this->render('includes/bread')?>
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('admin/member-list')?>">人员列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
 
 <div class="row">
     <div class="col-12">

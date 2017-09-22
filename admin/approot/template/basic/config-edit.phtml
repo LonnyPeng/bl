@@ -1,0 +1,60 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('basic/config-list')?>">网站配置列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-24">
+        <form method="post">
+            <div class="form-group">
+                <label>页面<sup>*</sup></label>
+                <select name="config_page" class="form-control">
+                    <option value="">- 请选择 -</option>
+                    <?php foreach($configPage as $key => $value) : ?>
+                        <option value="<?php echo $key?>" <?php echo isset($info['config_page']) && $info['config_page'] == $key ? 'selected' : ''?>>
+                            <?php echo $value?>
+                        </option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>标题<sup>*</sup></label>
+                <input class="form-control" type="text" name="config_title" value="<?= isset($info['config_title']) ? $info['config_title'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>内容<sup>*</sup></label>
+                <textarea class="form-control js-simplemde" name="config_text"><?= isset($info['config_text']) ? $info['config_text'] : '';?></textarea>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".js-simplemde").each(function(){
+        var $$ = $(this)[0];
+
+        if (!$(this).hasClass('js-mark-down')) {
+            new SimpleMDE({
+                element: $$,
+                spellChecker: false,
+                forceSync: true,
+            });
+            $(this).addClass('js-mark-down');
+        }
+    });
+
+    $("form").submit(function() {
+        $.check(!this.config_page.value, '请选择页面', this.config_page) &&
+        $.check(!this.config_title.value, '请输入标题', this.config_title) &&
+        $.check(!this.config_text.value, '请输入内容', this.config_text) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>
+
+

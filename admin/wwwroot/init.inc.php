@@ -19,6 +19,14 @@ define('CSS_DIR',       WWW_DIR . 'css/');
 define('IMG_DIR',       WWW_DIR . 'images/');
 
 /**
+ * upload director
+ */
+define('UPLOAD_DIR',    ROOT_DIR  . '../upload/');
+define('SYS_DIR', UPLOAD_DIR . 'sys/');
+define('USER_DIR', UPLOAD_DIR . 'user/');
+define('VIO_DIR', UPLOAD_DIR . 'video/');
+
+/**
  * load the private configure
  */
 if (file_exists(CONFIG_DIR . 'config.private.php')) {

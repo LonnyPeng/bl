@@ -1,0 +1,116 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('task/question-list')?>">答题任务列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-24">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>缩略图<sup>*</sup></label>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <div style="display: <?php echo !isset($info['question_banner']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['question_banner']) && $info['question_banner'] ? $this->uploadUrl($info['question_banner'], 'sys') : ''?>">
+                </div>
+                
+                <input class="form-control" type="file" name="file" value="">
+            </div>
+            <div class="form-group">
+                <label>问题描述<sup>*</sup></label>
+                <input class="form-control" type="text" name="question_title" value="<?= isset($info['question_title']) ? $info['question_title'] : '';?>" placeholder="你的性别是？">
+            </div>
+            <div class="form-group">
+                <label>选项A<sup>*</sup></label>
+                <input class="form-control" type="text" name="question_a" value="<?= isset($info['question_a']) ? $info['question_a'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>选项B<sup>*</sup></label>
+                <input class="form-control" type="text" name="question_b" value="<?= isset($info['question_b']) ? $info['question_b'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>选项C</label>
+                <input class="form-control" type="text" name="question_c" value="<?= isset($info['question_c']) ? $info['question_c'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>选项D</label>
+                <input class="form-control" type="text" name="question_d" value="<?= isset($info['question_d']) ? $info['question_d'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>选项E</label>
+                <input class="form-control" type="text" name="question_e" value="<?= isset($info['question_e']) ? $info['question_e'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>选项F</label>
+                <input class="form-control" type="text" name="question_f" value="<?= isset($info['question_f']) ? $info['question_f'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>正确答案<sup>*</sup></label>
+                <div class="form-control">
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="a" <?= isset($info['question_answer']) && in_array('a', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> A</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="b" <?= isset($info['question_answer']) && in_array('b', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> B</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="c" <?= isset($info['question_answer']) && in_array('c', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> C</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="d" <?= isset($info['question_answer']) && in_array('d', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> D</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="e" <?= isset($info['question_answer']) && in_array('e', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> E</span>
+                    <span class="radio-check"><input class="radio" type="checkbox" name="question_answer[]" value="f" <?= isset($info['question_answer']) && in_array('f', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> F</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>答题奖励积分<sup>*</sup></label>
+                <input class="form-control" type="number" name="question_score" value="<?= isset($info['question_score']) ? $info['question_score'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>状态<sup>*</sup></label>
+                <select class="form-control" name="question_status">
+                    <option value="1" <?= (isset($info['question_status']) && $info['question_status'] == 1) ? 'selected' : '' ?>>上线</option>
+                    <option value="0" <?= (isset($info['question_status']) && $info['question_status'] == 0) ? 'selected' : '' ?>>下线</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(".js-simplemde").each(function(){
+        var $$ = $(this)[0];
+
+        if (!$(this).hasClass('js-mark-down')) {
+            new SimpleMDE({
+                element: $$,
+                spellChecker: false,
+                forceSync: true,
+            });
+            $(this).addClass('js-mark-down');
+        }
+    });
+
+    $("form").submit(function() {
+        $.check(!this.question_title.value, '请输入问题描述', this.question_title) &&
+        $.check(!this.question_a.value, '请输入选项A', this.question_a) &&
+        $.check(!this.question_b.value, '请输入选项B', this.question_b) &&
+        $.check(!this.question_score.value, '请输入答题奖励积分', this.question_score) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+
+    $("input:file").unbind('change').on('change', function() {
+        var imageHolder = $(this).parents('.form-group').find('.js-image');
+        if (typeof (FileReader) != "undefined") {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+               var result = e.target.result;
+               imageHolder.attr('src', result);
+           }
+           var upFile = $(this)[0].files[0];
+           reader.readAsDataURL(upFile);
+
+           imageHolder.parent().show();
+        }
+    });
+</script>
+
+

@@ -6,6 +6,35 @@
                 <span class="text-wrap">首页</span>
             </a>
         </li>
+        <li class="<?php echo $this->controller() =='customer' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('customer/list')?>">
+                <span class="icon-wrap"><i class="icon-house"></i></span>
+                <span class="text-wrap">会员列表</span>
+            </a>
+        </li>
+        <li class="<?php echo $this->controller() == 'task' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('task/read-list')?>">
+                <span class="icon-wrap"><i class="icon-report"></i></span>
+                <span class="text-wrap">任务中心</span>
+            </a>
+            <ul class="<?php echo $this->controller() != 'task' ? 'none' : ''?>">
+                <li class="<?php echo in_array($this->action(), array('read-list', 'read-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('task/read-list');?>">
+                        <span class="hidden-sm">阅读任务</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('question-list', 'question-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('task/question-list');?>">
+                        <span class="hidden-sm">答题任务</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('turntable-list', 'turntable-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('task/turntable-list');?>">
+                        <span class="hidden-sm">转盘设置</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <li class="<?php echo $this->controller() == 'basic' ? 'active' : ''?>">
             <a href="<?php echo $this->url('basic/district-list')?>">
                 <span class="icon-wrap"><i class="icon-report"></i></span>
@@ -15,6 +44,26 @@
                 <li class="<?php echo in_array($this->action(), array('district-list', 'district-edit')) ? 'active' : ''?>">
                     <a href="<?php echo $this->url('basic/district-list');?>">
                         <span class="hidden-sm">城市设置</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('config-list', 'config-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('basic/config-list');?>">
+                        <span class="hidden-sm">网站配置</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('score-level')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('basic/score-level');?>">
+                        <span class="hidden-sm">积分级别设置</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('image')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('basic/image');?>">
+                        <span class="hidden-sm">图片素材</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('video')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('basic/video');?>">
+                        <span class="hidden-sm">视频素材</span>
                     </a>
                 </li>
             </ul>

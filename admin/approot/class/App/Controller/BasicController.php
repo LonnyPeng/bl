@@ -8,6 +8,18 @@ use Framework\View\Model\ViewModel;
 
 class BasicController extends AbstractActionController
 {
+	protected $configPage = array(
+		'qdgz' => '签到规则',
+		'fwxy' => '服务协议',
+		'jfsm' => '积分说明',
+		'yxgz' => '游戏规则',
+	);
+
+	protected $imgType = array('image/gif', 'image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png');
+	protected $imgMaxSize = 1024 * 1024 * 4; //4M
+	protected $videoType = array('video/mp4');
+	protected $vioMaxSize = 1024 * 1024 * 10; //10M
+
 	public function init()
 	{
 	    parent::init();
@@ -31,7 +43,7 @@ class BasicController extends AbstractActionController
 		$sqlInfo = array(
 			'setWhere' => $where,
 			'setLimit' => $limit,
-			'setOrderBy' => 'CONVERT(d.district_name USING GBK) ASC',
+			'setOrderBy' => 'district_status DESC, CONVERT(d.district_name USING GBK) ASC',
 		);
 
 		$districtList = $this->models->district->getDistrict($files, $sqlInfo);
@@ -117,5 +129,347 @@ class BasicController extends AbstractActionController
 				LIMIT 0, 20";
 		$result = $this->locator->db->getColumn($sql);
 		return JsonModel::init('ok', '', $result);
+	}
+
+	public function configListAction()
+	{
+		$sql = "SELECT * FROM t_configs ORDER BY config_id DESC";
+		$configList = (array) $this->locator->db->getAll($sql);
+
+		// print_r($configList);die;
+	    return array(
+	    	'configList' => $configList,
+	    	'configPage' => $this->configPage,
+	    );
+	}
+
+	public function configEditAction()
+	{
+		$id = $this->param('id');
+		$sql = "SELECT * FROM t_configs WHERE config_id = ?";
+		$info = $this->locator->db->getRow($sql, $id);
+		if ($id && !$info) {
+			$this->funcs->redirect($this->helpers->url('basic/config-list'));
+		}
+
+		if ($this->funcs->isAjax()) {
+			$page = trim($_POST['config_page']);
+			if (!$page) {
+				return new JsonModel('error', '请选择页面');
+			}
+
+			if (!$id) {
+				$sql = "SELECT COUNT(*) FROM t_configs WHERE config_page = ?";
+				if ($this->locator->db->getOne($sql, $page)) {
+					return new JsonModel('error', '该页面已存在');
+				}
+			}
+
+			if (!$_POST['config_title']) {
+				return new JsonModel('error', '请输入标题');
+			}
+			if (!$_POST['config_text']) {
+				return new JsonModel('error', '请输入内容');
+			}
+
+			$map = array(
+				'config_page' => $page,
+				'config_title' => trim($_POST['config_title']),
+				'config_text' => trim($_POST['config_text']),
+			);
+			$set = "config_page = :config_page,
+					config_title = :config_title,
+					config_text = :config_text";
+
+			if (!$id) {
+				$sql = "INSERT INTO t_configs SET $set";
+			} else {
+				$map['config_id'] = $id;
+				$sql = "UPDATE t_configs SET $set
+						WHERE config_id = :config_id";
+			}
+
+			$status = $this->locator->db->exec($sql, $map);
+			if ($status) {
+				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('basic/config-list'));
+			} else {
+				return new JsonModel('error', '失败');
+			}
+		}
+		return array(
+			'info' => $info,
+			'configPage' => $this->configPage,
+		);
+	}
+
+	public function configDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		
+		$sql = "DELETE FROM t_configs WHERE config_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
+
+	public function imageAction()
+	{
+		$sql = "SELECT * FROM t_images ORDER BY image_id DESC";
+		$imageList = $this->locator->db->getAll($sql);
+		if ($imageList) {
+			foreach ($imageList as $key => $row) {
+				$imageList[$key]['image_src'] = "http://" . $_SERVER['HTTP_HOST'] . '/image/sys/' . $row['image_path'];
+			}
+		}
+
+		return array(
+			'imageList' => $imageList,
+		);
+	}
+
+	public function imageUpdateAction()
+	{
+		if (!$this->funcs->isPost()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+		if (!isset($_FILES['file'])) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$files = $_FILES['file'];
+		$dir = SYS_DIR;
+		foreach ($files['name'] as $key => $value) {
+			if ($files['error'][$key] 
+				|| !in_array($files['type'][$key], $this->imgType)
+				|| $files['type'][$key] > $this->imgMaxSize) {
+				continue;
+			}
+
+			$upFileName = date('Ymd') . '/';
+			$this->funcs->makeFile($dir . $upFileName);
+
+			$ext = pathinfo($value, PATHINFO_EXTENSION);
+			$fileName = md5($value . $this->funcs->rand());
+			for($i=0;; $i++) {
+				if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
+					$fileName = md5($value . $this->funcs->rand());
+				} else {
+					break;
+				}
+			}
+
+			$uploadFile = $upFileName . $fileName . '.' . $ext;
+			$uploadFilePath = $dir . $uploadFile;
+			move_uploaded_file($files['tmp_name'][$key], $uploadFilePath);
+
+			$sql = "INSERT INTO t_images SET image_path = ?";
+			$this->locator->db->exec($sql, $uploadFile);
+		}
+
+		$this->funcs->redirect($this->helpers->url('basic/image'));
+	}
+
+	public function delImageAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "SELECT image_path FROM t_images WHERE image_id = ?";
+		$path = $this->locator->db->getOne($sql, $id);
+		
+		$sql = "DELETE FROM t_images WHERE image_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			$filename = SYS_DIR . $path;
+			if (file_exists($filename)) {
+				@unlink($filename);
+			}
+
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
+
+	public function videoAction()
+	{
+		$sql = "SELECT * FROM t_videos ORDER BY video_id DESC";
+		$videoList = $this->locator->db->getAll($sql);
+		if ($videoList) {
+			foreach ($videoList as $key => $row) {
+				$videoList[$key]['video_src'] = "http://" . $_SERVER['HTTP_HOST'] . '/video/video/' . $row['video_path'];
+			}
+		}
+
+		return array(
+			'videoList' => $videoList,
+		);
+	}
+
+	public function videoUpdateAction()
+	{
+		if (!$this->funcs->isPost()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+		if (!isset($_FILES['file'])) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$files = $_FILES['file'];
+		$dir = VIO_DIR;
+		foreach ($files['name'] as $key => $value) {
+			if ($files['error'][$key] 
+				|| !in_array($files['type'][$key], $this->videoType)
+				|| $files['type'][$key] > $this->vioMaxSize) {
+				continue;
+			}
+
+			$upFileName = date('Ymd') . '/';
+			$this->funcs->makeFile($dir . $upFileName);
+
+			$ext = pathinfo($value, PATHINFO_EXTENSION);
+			$fileName = md5($value . $this->funcs->rand());
+			for($i=0;; $i++) {
+				if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
+					$fileName = md5($value . $this->funcs->rand());
+				} else {
+					break;
+				}
+			}
+
+			$uploadFile = $upFileName . $fileName . '.' . $ext;
+			$uploadFilePath = $dir . $uploadFile;
+			move_uploaded_file($files['tmp_name'][$key], $uploadFilePath);
+
+			$sql = "INSERT INTO t_videos SET video_path = ?";
+			$this->locator->db->exec($sql, $uploadFile);
+		}
+
+		$this->funcs->redirect($this->helpers->url('basic/video'));
+	}
+
+	public function delVideoAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "SELECT video_path FROM t_videos WHERE video_id = ?";
+		$path = $this->locator->db->getOne($sql, $id);
+		
+		$sql = "DELETE FROM t_videos WHERE video_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			$filename = VIO_DIR . $path;
+			if (file_exists($filename)) {
+				@unlink($filename);
+			}
+
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
+
+	public function scoreLevelAction()
+	{
+		$sql = "SELECT * FROM t_customer_score_level 
+				WHERE level_status = 1 
+				ORDER BY level_score ASC";
+		$list = $this->locator->db->getAll($sql);
+
+		if ($this->funcs->isAjax()) {
+			if (!$_POST) {
+				return new JsonModel('error', '请添加积分级别');
+			}
+
+
+			$sqlInsert = "INSERT INTO t_customer_score_level 
+					SET level_name = :level_name, 
+					level_score = :level_score";
+
+			$sqlUpdate = "UPDATE t_customer_score_level 
+					SET level_name = :level_name, 
+					level_score = :level_score
+					WHERE level_id = :level_id";
+			
+			foreach ($_POST['level_name'] as $key => $value) {
+				if (!trim($value)) {
+					return new JsonModel('error', '请输入级别名称');
+				}
+
+				$score = (int) $_POST['level_score'][$key];
+				if (!$score) {
+					return new JsonModel('error', '请输入所需积分');
+				}
+
+				$sql = "SELECT COUNT(*) FROM t_customer_score_level WHERE level_name = ?";
+				$nameNum = $this->locator->db->getOne($sql, $value);
+
+				$sql = "SELECT COUNT(*) FROM t_customer_score_level WHERE level_score = ?";
+				$scoreNum = $this->locator->db->getOne($sql, $score);
+
+				if ($_POST['level_id'][$key]) {
+					if ($nameNum > 1) {
+						return new JsonModel('error', '级别名称已存在');
+					}
+					if ($scoreNum > 1) {
+						return new JsonModel('error', '所需积分段已存在');
+					}
+				} else {
+					if ($nameNum > 0) {
+						return new JsonModel('error', '级别名称已存在');
+					}
+					if ($scoreNum > 0) {
+						return new JsonModel('error', '所需积分段已存在');
+					}
+				}
+
+				if ($_POST['level_id'][$key]) {
+					$this->locator->db->exec($sqlUpdate, array(
+						'level_name' => trim($value),
+						'level_score' => (int) $_POST['level_score'][$key] ? : 0,
+						'level_id' => $_POST['level_id'][$key],
+					));
+				} else {
+					$this->locator->db->exec($sqlInsert, array(
+						'level_name' => trim($value),
+						'level_score' => (int) $_POST['level_score'][$key] ?: 0,
+					));
+				}
+			}
+			
+			return JsonModel::init('ok', '保存成功')->setRedirect('reload');
+		}
+		
+		return array(
+			'list' => $list,
+		);
+	}
+
+	public function scoreLevelDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "DELETE FROM t_customer_score_level WHERE level_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
 	}
 }

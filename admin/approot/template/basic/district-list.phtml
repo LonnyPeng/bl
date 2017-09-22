@@ -1,3 +1,9 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('basic/district-list')?>">基本信息设置</a> / 城市列表
+    </strong>
+</div>
+
 <div id="search">
     <form>
         <div class="row">
@@ -45,20 +51,22 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($districtList as $key => $row) :?>
-                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
-                    <td class="text-center"><?= $row['district_name']?></td>
-                    <td class="text-center"><?= $row['district_status'] ? '已开通' : '未开通';?></td>
-                    <td class="text-center action">
-                        <a class="btn btn-xs edit" href="<?= $this->url('basic/district-edit', array('id' => $row['district_id']))?>" title="编辑">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <span class="btn btn-xs del" data-href="<?= $this->url('basic/district-del', array('id' => $row['district_id']))?>" title="删除">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                    </td>
-                </tr>
-            <?php endforeach;?>
+            <?php if ($districtList) : ?>
+                <?php foreach ($districtList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['district_name']?></td>
+                        <td class="text-center"><?= $row['district_status'] ? '已开通' : '未开通';?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('basic/district-edit', array('id' => $row['district_id']))?>" title="编辑">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <span class="btn btn-xs del" data-href="<?= $this->url('basic/district-del', array('id' => $row['district_id']))?>" title="删除">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
         </tbody>
     </table>
 </div>

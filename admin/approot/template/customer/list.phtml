@@ -1,0 +1,93 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('customer/list')?>">会员列表</a> / 列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input class="form-control" type="text" name="customer_name" value="<?= $this->param('customer_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">用户名</th>
+                <th class="text-center">用户头像</th>
+                <th class="text-center">用户级别</th>
+                <th class="text-center">电话</th>
+                <th class="text-center">微信号</th>
+                <th class="text-center">性别</th>
+                <th class="text-center">年龄段</th>
+                <th class="text-center">常住城市</th>
+                <th class="text-center">积分</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">注册时间</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($customerList) : ?>
+                <?php foreach ($customerList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['customer_name']?></td>
+                        <td class="text-center"><img width="30" src="<?= $this->uploadUrl($row['customer_headimg'], 'user')?>"></td>
+                        <td class="text-center"><?= $row['level_name']?></td>
+                        <td class="text-center"><?= $row['customer_tel']?></td>
+                        <td class="text-center"><?= $row['customer_openid']?></td>
+                        <td class="text-center"><?= $row['customer_gender']?></td>
+                        <td class="text-center"><?= $row['customer_age']?></td>
+                        <td class="text-center"><?= $row['district_name']?></td>
+                        <td class="text-center"><?= $row['customer_score']?></td>
+                        <td class="text-center js-toggle">
+                            <?php if ($row['customer_status']) : ?>
+                                <span style="color: #007DC6; font-size: 18px; cursor: pointer;" title="禁用" data-href="<?=$this->url('customer/edit', array('id' => $row['customer_id'], 'type' => 'off'))?>"><i class="fa fa-toggle-on"></i></span>
+                            <?php else : ?>
+                                <span style="color: #007DC6; font-size: 18px; cursor: pointer;" title="启用" data-href="<?=$this->url('customer/edit', array('id' => $row['customer_id'], 'type' => 'on'))?>"><i class="fa fa-toggle-off"></i></span>
+                            <?php endif;?>
+                        </td>
+                        <td class="text-center"><?= date("Y-m-d", strtotime($row['customer_regtime']))?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('customer/detail', array('id' => $row['customer_id']))?>" title="详情">
+                                <i class="fa fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
+
+<script type="text/javascript">
+    $('.js-toggle span').click(function() {
+        var $$ = $(this);
+
+        $.confirm('确认更改会员状态？', function() {
+            $$.ajaxAuto();
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

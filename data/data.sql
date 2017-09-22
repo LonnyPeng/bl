@@ -345,17 +345,168 @@ INSERT INTO `t_district` VALUES ('499', '嘉义市', '0');
 -- ----------------------------
 DROP TABLE IF EXISTS `t_customers`;
 CREATE TABLE `t_customers` (
-  `customer_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `customer_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
   `customer_openid` varchar(100) NOT NULL DEFAULT '' COMMENT '微信ID',
   `customer_gender` varchar(6) COMMENT '性别',
   `customer_age` varchar(10) COMMENT '年龄段',
   `customer_name` char(16) NOT NULL DEFAULT '' COMMENT '名字',
   `customer_headimg` varchar(45) COMMENT '头像',
   `customer_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-  `customer_city` tinyint(4) NOT NULL DEFAULT '0' COMMENT '常住城市ID',
+  `district_id` int(11) COMMENT '常住城市ID',
   `customer_default_address_id` int(5) NOT NULL DEFAULT '0' COMMENT '默认收货地址',
   `customer_tel` varchar(32) COMMENT '电话',
   `customer_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '积分',
   `customer_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
-) ENGINE=MyISAM AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8 COMMENT='会员表';
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
+-- ----------------------------
+-- 会员收货地址表 t_customer_address
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_address`;
+CREATE TABLE `t_customer_address` (
+  `address_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `district_id` int(11) COMMENT '城市ID',
+  `user_address` varchar(200) NOT NULL COMMENT '收货地址',
+  `user_name` varchar(32) NOT NULL COMMENT '收货人',
+  `user_tel` varchar(32) NOT NULL COMMENT '联系电话',
+  `user_des` varchar(200) COMMENT '特殊说明',
+  `address_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '添加时间',
+  `address_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员收货地址';
+
+-- ----------------------------
+-- 会员积分日志表 t_customer_score_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_score_log`;
+CREATE TABLE `t_customer_score_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `score_type` enum('have', 'buy') NOT NULL COMMENT '积分行为：buy购买商品；have获得积分',
+  `score_des` varchar(20) COMMENT '积分说明',
+  `score_quantity` int(8) NOT NULL DEFAULT 0 COMMENT '积分数',
+  `log_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员积分日志';
+
+-- ----------------------------
+-- 会员积分级别表 t_customer_score_level
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_score_level`;
+CREATE TABLE `t_customer_score_level` (
+  `level_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `level_name` varchar(32) NOT NULL UNIQUE KEY COMMENT '级别名称',
+  `level_score` mediumint(8) NOT NULL UNIQUE KEY COMMENT '所需积分',
+  `level_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员积分级别';
+
+-- ----------------------------
+-- 会员登录日志表 t_customer_login_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_login_log`;
+CREATE TABLE `t_customer_login_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `district_id` int(11) COMMENT '城市ID',
+  `log_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '登录时间',
+  `log_ip` char(15) NOT NULL DEFAULT '' COMMENT '登录IP'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员登录日志';
+
+-- ----------------------------
+-- 会员搜索日志表 t_customer_search_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_search_log`;
+CREATE TABLE `t_customer_search_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `log_name` varchar(60) NOT NULL COMMENT '搜索名字',
+  `log_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员搜索日志';
+
+-- ----------------------------
+-- 系统配置表 t_configs
+-- ----------------------------
+DROP TABLE IF EXISTS `t_configs`;
+CREATE TABLE `t_configs` (
+  `config_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `config_page` varchar(32) NOT NULL COMMENT '页面',
+  `config_title` varchar(32) NOT NULL COMMENT '标题',
+  `config_text` text COMMENT '内容',
+  `config_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `config_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='系统配置';
+
+-- ----------------------------
+-- 素材图片表 t_images
+-- ----------------------------
+DROP TABLE IF EXISTS `t_images`;
+CREATE TABLE `t_images` (
+  `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `image_path` varchar(45) NOT NULL COMMENT '图片路径',
+  `image_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `image_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='素材图片';
+
+-- ----------------------------
+-- 素材视频表 t_videos
+-- ----------------------------
+DROP TABLE IF EXISTS `t_videos`;
+CREATE TABLE `t_videos` (
+  `video_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `video_path` varchar(45) NOT NULL COMMENT '视频路径',
+  `video_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `video_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='素材视频';
+
+-- ----------------------------
+-- 阅读任务表 t_task_reads
+-- ----------------------------
+DROP TABLE IF EXISTS `t_task_reads`;
+CREATE TABLE `t_task_reads` (
+  `read_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `read_title` varchar(32) NOT NULL COMMENT '标题',
+  `read_banner` varchar(45) NOT NULL COMMENT '缩略图路径',
+  `read_text` text COMMENT '内容',
+  `read_num` tinyint(4) NOT NULL DEFAULT '1' COMMENT '每天阅读次数',
+  `read_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '阅读积分',
+  `read_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `read_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='阅读任务';
+
+-- ----------------------------
+-- 答题任务表 t_task_questions
+-- ----------------------------
+DROP TABLE IF EXISTS `t_task_questions`;
+CREATE TABLE `t_task_questions` (
+  `question_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `question_title` varchar(200) NOT NULL COMMENT '问题描述',
+  `question_banner` varchar(45) NOT NULL COMMENT '缩略图路径',
+  `question_a` varchar(200) NOT NULL COMMENT '选项A',
+  `question_b` varchar(200) NOT NULL COMMENT '选项B',
+  `question_c` varchar(200) NOT NULL COMMENT '选项C',
+  `question_d` varchar(200) NOT NULL COMMENT '选项D',
+  `question_e` varchar(200) NOT NULL COMMENT '选项E',
+  `question_f` varchar(200) NOT NULL COMMENT '选项F',
+  `question_answer` varchar(20) NOT NULL COMMENT '答案',
+  `question_answer_num` tinyint(1) NOT NULL DEFAULT '1' COMMENT '答案个数',
+  `question_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '答题积分',
+  `question_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `question_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='答题任务';
+
+
+-- ----------------------------
+-- 转盘表 t_task_turntables
+-- ----------------------------
+DROP TABLE IF EXISTS `t_task_turntables`;
+CREATE TABLE `t_task_turntables` (
+  `turntable_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `turntable_title` varchar(200) NOT NULL COMMENT '奖品名称',
+  `turntable_attr` enum('product','score','thank') NOT NULL COMMENT '类型',
+  `turntable_image` varchar(45) NOT NULL COMMENT '商品图片',
+  `turntable_num` varchar(200) NOT NULL COMMENT '每天次数',
+  `turntable_probability` int(3) NOT NULL COMMENT '概率',
+  `turntable_sort` int(3) NOT NULL DEFAULT '0' COMMENT '排序',
+  `turntable_use_score` mediumint(8) NOT NULL DEFAULT '10' COMMENT '兑换一次消耗积分',
+  `turntable_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `turntable_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='答题任务';

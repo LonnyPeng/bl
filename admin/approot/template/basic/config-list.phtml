@@ -1,0 +1,61 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('basic/config-list')?>">网站配置</a> / 列表
+    </strong>
+</div>
+
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('basic/config-edit')?>">
+            <i class="fa fa-plus"></i> 添加
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">标题</th>
+                <th class="text-center">页面</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($configList) : ?>
+                <?php foreach ($configList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['config_title']?></td>
+                        <td class="text-center"><?= $configPage[$row['config_page']]?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('basic/config-edit', array('id' => $row['config_id']))?>" title="编辑">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <span class="btn btn-xs del" data-href="<?= $this->url('basic/config-del', array('id' => $row['config_id']))?>" title="删除">
+                                <i class="fa fa-trash"></i>
+                            </span>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>
