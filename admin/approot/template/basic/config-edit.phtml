@@ -24,7 +24,9 @@
             </div>
             <div class="form-group">
                 <label>内容<sup>*</sup></label>
-                <textarea class="form-control js-simplemde" name="config_text"><?= isset($info['config_text']) ? $info['config_text'] : '';?></textarea>
+                <script type="text/plain" id="myEditor" style="width:100%;height:100%;" name="config_text">
+                    <?= isset($info['config_text']) ? $info['config_text'] : '';?>
+                </script>
             </div>
             <div>
                 <button type="submit">提交</button>
@@ -35,23 +37,12 @@
 </div>
 
 <script type="text/javascript">
-    $(".js-simplemde").each(function(){
-        var $$ = $(this)[0];
-
-        if (!$(this).hasClass('js-mark-down')) {
-            new SimpleMDE({
-                element: $$,
-                spellChecker: false,
-                forceSync: true,
-            });
-            $(this).addClass('js-mark-down');
-        }
-    });
+    //实例化编辑器
+    UM.getEditor('myEditor');
 
     $("form").submit(function() {
         $.check(!this.config_page.value, '请选择页面', this.config_page) &&
         $.check(!this.config_title.value, '请输入标题', this.config_title) &&
-        $.check(!this.config_text.value, '请输入内容', this.config_text) &&
         $(this).ajaxAuto();
         return false;
     });
