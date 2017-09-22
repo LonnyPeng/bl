@@ -27,10 +27,17 @@
     <?php echo $this->js('jquery.MultiFile.js')->wrap();?>
     <?php echo $this->js('simplemde.min.js')->wrap();?>
 
+    <!-- umeditor start-->
     <script type="text/javascript">
         window.UMEDITOR_IMAGE_UP_URL = '<?php echo "http://" . $_SERVER['HTTP_HOST'] . BASE_PATH?>';
         window.UMEDITOR_IMAGE_SHOW_URL = '<?php echo "http://" . $_SERVER['HTTP_HOST'] . '/'?>';
     </script>
+    <?php echo $this->css('umeditor/default/css/umeditor.css')->wrap();?>
+    <?php echo $this->js('umeditor/third-party/template.min.js')->wrap();?>
+    <?php echo $this->js('umeditor/umeditor.config.js')->wrap();?>
+    <?php echo $this->js('umeditor/umeditor.js')->wrap();?>
+    <?php echo $this->js('umeditor/lang/zh-cn/zh-cn.js')->wrap();?>
+    <!-- umeditor end-->
 </head>
 <body>
     <div id="wrapper-container">
