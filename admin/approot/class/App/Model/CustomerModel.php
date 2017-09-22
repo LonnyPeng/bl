@@ -56,4 +56,12 @@ class CustomerModel extends CommonModel
                     AND score_type = 'have'";
         return $this->locator->db->getOne($sql, $id);
     }
+
+    public function getScoreLevel()
+    {
+        $sql = "SELECT level_id, level_name FROM t_customer_score_level 
+                WHERE level_status = 1 
+                ORDER BY level_score ASC";
+        return $this->locator->db->getPairs($sql);
+    }
 }

@@ -495,18 +495,27 @@ CREATE TABLE `t_task_questions` (
 
 
 -- ----------------------------
--- 转盘表 t_task_turntables
+-- 转盘表 t_turntable
 -- ----------------------------
-DROP TABLE IF EXISTS `t_task_turntables`;
-CREATE TABLE `t_task_turntables` (
+DROP TABLE IF EXISTS `t_turntable`;
+CREATE TABLE `t_turntable` (
   `turntable_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
-  `turntable_title` varchar(200) NOT NULL COMMENT '奖品名称',
-  `turntable_attr` enum('product','score','thank') NOT NULL COMMENT '类型',
-  `turntable_image` varchar(45) NOT NULL COMMENT '商品图片',
   `turntable_num` varchar(200) NOT NULL COMMENT '每天次数',
-  `turntable_probability` int(3) NOT NULL COMMENT '概率',
-  `turntable_sort` int(3) NOT NULL DEFAULT '0' COMMENT '排序',
-  `turntable_use_score` mediumint(8) NOT NULL DEFAULT '10' COMMENT '兑换一次消耗积分',
-  `turntable_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
-  `turntable_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='答题任务';
+  `turntable_use_score` mediumint(8) NOT NULL DEFAULT '10' COMMENT '兑换一次消耗积分'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='转盘';
+
+-- ----------------------------
+-- 转盘奖品表 t_turntable_products
+-- ----------------------------
+DROP TABLE IF EXISTS `t_turntable_products`;
+CREATE TABLE `t_turntable_products` (
+  `turntablep_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `turntablep_title` varchar(200) NOT NULL COMMENT '奖品名称',
+  `turntablep_attr` enum('product','score','thank') NOT NULL COMMENT '类型',
+  `turntablep_image` varchar(45) COMMENT '商品图片',
+  `turntablep_score` varchar(45) COMMENT '积分数量',
+  `turntablep_probability` int(3) NOT NULL COMMENT '概率',
+  `turntablep_sort` int(3) NOT NULL DEFAULT '0' COMMENT '排序',
+  `turntablep_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `turntablep_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='转盘奖品';

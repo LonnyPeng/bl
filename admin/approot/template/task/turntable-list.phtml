@@ -1,74 +1,81 @@
-<div class="bread">
-    <strong>
-        <a href="<?php echo $this->url('task/read-list')?>">任务中心</a> / 装盘列表
-    </strong>
-</div>
-
-<div id="search">
-    <form>
-        <div class="row">
-            <div class="col-8">
-                <div class="form-group">
-                    <label>名称</label>
-                    <input class="form-control" type="text" name="read_title" value="<?= $this->param('read_title')?>">
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="form-group">
-                    <label>状态</label>
-                    <select class="form-control" name="read_status">
-                        <option value="">全部</option>
-                        <option value="1" <?php echo $this->param('read_status') === '1' ? 'selected' : ''?>>上线</option>
-                        <option value="0" <?php echo $this->param('read_status') === '0' ? 'selected' : ''?>>下线</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="form-group">
-                    <label class="hide"></label>
-                    <div>
-                        <button type="submit">搜索</button>
+<form method="post">
+    <div class="widget-header">
+        <h2 class="title-theme-2">每日次数</h2>
+    </div>
+    <div>
+        <?php if ($scoreLeave) : ?>
+            <div class="row">
+                <?php foreach($scoreLeave as $key => $value) : ?>
+                    <div class="form-group col-12">
+                        <label><?php echo $value?><sup>*</sup></label>
+                        <input class="form-control" type="num" name="turntable_num[<?php echo $key?>]" value="<?= isset($config['turntable_num'][$key]) ? $config['turntable_num'][$key] : '';?>">
                     </div>
-                </div>
+                <?php endforeach;?>
+            </div>
+        <?php endif;?>
+    </div>
+
+    <div class="widget-header">
+        <h2 class="title-theme-2">兑换一次</h2>
+    </div>
+    <div>
+        <div class="row">
+            <div class="form-group col-12">
+                <label>消耗积分<sup>*</sup></label>
+                <input class="form-control" type="number" name="turntable_use_score" value="<?= isset($config['turntable_use_score']) ? $config['turntable_use_score'] : '';?>">
             </div>
         </div>
-    </form>
-</div>
-<div class="table-tool">
-    <span id="fields-wrapper">
-        <a class="btn" href="<?= $this->url('task/read-edit')?>">
-            <i class="fa fa-plus"></i> 添加
+        <input type="hidden" name="turntable_id" value="<?= isset($config['turntable_id']) ? $config['turntable_id'] : '';?>">
+    </div>
+
+    <div class="employee-detail-submit">
+        <button type="submit" id="jq-submit" class="btn">保存</button>
+    </div>
+</form>
+<div class="widget-header">
+    <h2 class="title-theme-2">转盘奖品</h2>
+    <div style="text-align: right;">
+        <a href="<?php echo $this->url('task/turntable-edit')?>">
+            <button type="button"><i class="fa fa-plus"></i> 添加</button>
         </a>
-    </span>
+    </div>
 </div>
-<div class="table-responsive">
-    <table class="table" id="data-list">
+
+<div style="margin-top: 10px;">
+    <table class="table">
         <thead>
             <tr>
-                <th class="text-center">名称</th>
-                <th class="text-center">缩略图</th>
-                <th class="text-center">每天阅读次数</th>
-                <th class="text-center">阅读奖励积分</th>
+                <th class="text-center">奖品名称</th>
+                <th class="text-center">类型</th>
+                <th class="text-center">内容</th>
+                <th class="text-center">概率</th>
+                <th class="text-center">排序</th>
                 <th class="text-center">状态</th>
                 <th class="text-center">操作</th>
             </tr>
         </thead>
         <tbody>
-            <?php if ($readList) : ?>
-                <?php foreach ($readList as $key => $row) :?>
+            <?php if ($list) : ?>
+                <?php foreach ($list as $key => $row) :?>
                     <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
-                        <td class="text-center"><?= $row['read_title']?></td>
+                        <td class="text-center"><?= $row['turntablep_title']?></td>
+                        <td class="text-center"><?= $filed['turntablep_attr'][$row['turntablep_attr']]?></td>
                         <td class="text-center">
-                            <img src="<?php echo $this->uploadUrl($row['read_banner'], 'sys')?>" style="border: 1px solid #ddd; padding: 2px; width: 200px;">
+                            <?php if ($row['turntablep_attr'] == 'product') : ?>
+                            <img src="<?php echo $this->uploadUrl($row['turntablep_image'], 'sys')?>" style="border: 1px solid #ddd; padding: 2px; width: 200px;">
+                            <?php elseif ($row['turntablep_attr'] == 'score') : ?>
+                                <?php echo sprintf("%d积分", $row['turntablep_score'])?>
+                            <?php else : ?>
+                            <?php endif;?>
                         </td>
-                        <td class="text-center"><?= $row['read_num']?></td>
-                        <td class="text-center"><?= $row['read_score']?></td>
-                        <td class="text-center"><?= $row['read_status'] ? '上线' : '下线'?></td>
+                        <td class="text-center"><?= sprintf("%d%%", $row['turntablep_probability'])?></td>
+                        <td class="text-center"><?= $row['turntablep_sort']?></td>
+                        <td class="text-center"><?= $row['turntablep_status'] ? '上线' : '下线'?></td>
                         <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('task/read-edit', array('id' => $row['read_id']))?>" title="编辑">
+                            <a class="btn btn-xs edit" href="<?= $this->url('task/turntable-edit', array('id' => $row['turntablep_id']))?>" title="编辑">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <span class="btn btn-xs del" data-href="<?= $this->url('task/read-del', array('id' => $row['read_id']))?>" title="删除">
+                            <span class="btn btn-xs del" data-href="<?= $this->url('task/turntable-del', array('id' => $row['turntablep_id']))?>" title="删除">
                                 <i class="fa fa-trash"></i>
                             </span>
                         </td>
@@ -78,12 +85,13 @@
         </tbody>
     </table>
 </div>
-
-<div id="paginator" class="row">
-    <?= $this->render("includes/paginator"); ?>
-</div>
-
 <script type="text/javascript">
+    // submit
+    $("form").submit(function() {
+        $(this).ajaxAuto();
+        return false;
+    });
+
     $('.action .del').click(function() {
         var $$ = $(this);
 

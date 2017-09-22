@@ -49,7 +49,7 @@ class TaskController extends AbstractActionController
 		$id = $this->param('id');
 		$info = array();
 		if ($id) {
-			$info = $this->models->read->getreadById($id);
+			$info = $this->models->read->getReadById($id);
 		}
 
 		if ($this->funcs->isAjax()) {
@@ -366,6 +366,26 @@ class TaskController extends AbstractActionController
 		);
 	}
 
+	public function questionDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "SELECT question_banner FROM t_task_questions WHERE question_id = ?";
+		$path = $this->locator->db->getOne($sql, $id);
+		
+		$sql = "DELETE FROM t_task_questions WHERE question_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			$this->delImage(SYS_DIR . $path);
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
+
 	protected function saveReadImg($row = array())
 	{
 		$filename = $row['tmp_name'];
@@ -401,30 +421,226 @@ class TaskController extends AbstractActionController
 
 	public function turntableListAction()
 	{
-		$where = array();
-		if ($this->param('turntable_title')) {
-			$where[] = sprintf("turntable_title LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('turntable_title'))) . '%'));
-		}
-		if ($this->param('turntable_status') === '0' || $this->param('turntable_status') === '1') {
-			$where[] = sprintf("turntable_status = %d", $this->param('turntable_status'));
-		}
-
-		$count = $this->models->turntable->getCount(array('setWhere' => $where));
-		$this->helpers->paginator($count, 10);
-		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
-
-		$files = '*';
-		$sqlInfo = array(
-			'setWhere' => $where,
-			'setLimit' => $limit,
-			'setOrderBy' => 'turntable_status DESC, turntable_id DESC',
+		$filed = array(
+			'turntablep_attr' => array('product' => '商品', 'score' => '积分', 'thank' => '谢谢'),
 		);
 
-		$turntableList = $this->models->turntable->getTurntable($files, $sqlInfo);
+		$scoreLeave = (array) $this->models->customer->getScoreLevel();
 
-		// print_r($turntableList);die;
+		//转盘配置
+		$sql = "SELECT * FROM t_turntable WHERE turntable_id = 1";
+		$config = $this->locator->db->getRow($sql);
+		if ($config) {
+			$config['turntable_num'] = unserialize($config['turntable_num']);
+		}
+
+		//奖品
+		$sql = "SELECT * FROM t_turntable_products 
+				ORDER BY turntablep_sort DESC, turntablep_id DESC";
+		$list = $this->locator->db->getAll($sql);
+
+		if ($this->funcs->isAjax()) {
+			foreach ($scoreLeave as $key => $value) {
+				if (!$_POST['turntable_num'][$key]) {
+					return new JsonModel('error', sprintf("%s次数不能为空", $value));
+				}
+			}
+
+			if (!$_POST['turntable_use_score']) {
+				return new JsonModel('error', "请输入兑换一次消耗的积分");
+			}
+
+			$map = array(
+				'turntable_num' => serialize($_POST['turntable_num']),
+				'turntable_use_score' => trim($_POST['turntable_use_score']),
+			);
+			if ($_POST['turntable_id']) {
+				$map['turntable_id'] = $_POST['turntable_id'];
+				$sql = "UPDATE t_turntable 
+						SET turntable_num = :turntable_num, 
+						turntable_use_score = :turntable_use_score 
+						WHERE turntable_id = :turntable_id";
+			} else {
+				$sql = "INSERT INTO t_turntable 
+						SET turntable_num = :turntable_num, 
+						turntable_use_score = :turntable_use_score";
+			}
+			$status = $this->locator->db->exec($sql, $map);
+			if ($status) {
+				return JsonModel::init('ok', '成功');
+			} else {
+				return new JsonModel('error', '失败');
+			}
+		}
+
+		// print_r($list);die;
 	    return array(
-	    	'turntableList' => $turntableList,
+	    	'config' => $config,
+	    	'list' => $list,
+	    	'scoreLeave' => $scoreLeave,
+	    	'filed' => $filed,
 	    );
+	}
+
+	public function turntableEditAction()
+	{
+		$filed = array(
+			'turntablep_attr' => array('product' => '商品', 'score' => '积分', 'thank' => '谢谢'),
+		);
+
+		$id = $this->param('id');
+		$info = array();
+		if ($id) {
+			$sql = "SELECT * FROM t_turntable_products WHERE turntablep_id = ?";
+			$info = $this->locator->db->getRow($sql, $id);
+		}
+
+		if ($this->funcs->isAjax()) {
+			if (!$_POST['turntablep_title']) {
+				return new JsonModel('error', '请输入奖品名称');
+			}
+
+			if (!$_POST['turntablep_attr']) {
+				return new JsonModel('error', '请输入奖品类型');
+			} elseif ($_POST['turntablep_attr'] == 'product') {
+				if (!$id) {
+					if (!isset($_FILES['file'])) {
+						return new JsonModel('error', '请上传缩略图');
+					} elseif (!in_array($_FILES['file']['type'], $this->imgType)) {
+						return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
+					} elseif ($_FILES['file']['size'] > $this->imgMaxSize) {
+						return new JsonModel('error', '请选择小于4M的图片');
+					}
+				} else {
+					if (isset($_FILES['file'])) {
+						if (!in_array($_FILES['file']['type'], $this->imgType)) {
+							return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
+						} elseif ($_FILES['file']['size'] > $this->imgMaxSize) {
+							return new JsonModel('error', '请选择小于4M的图片');
+						}
+					}
+				}
+			} elseif ($_POST['turntablep_attr'] == 'score') {
+				if (!$_POST['turntablep_score']) {
+					return new JsonModel('error', '请输入积分数量');
+				}
+			}
+
+			if (!$_POST['turntablep_probability']) {
+				return new JsonModel('error', '请输入概率');
+			}
+
+			if ($_POST['turntablep_attr'] == 'product') {
+				if (!$id) {
+					$path = $this->saveReadImg($_FILES['file']);
+					if (!$path) {
+						return new JsonModel('error', '缩略图保存失败');
+					} else {
+						//处理图片
+						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+						if (!$result['status']) {
+							return new JsonModel('error', $result['content']);
+						} else {
+							$path = $result['content'];
+						}
+					}
+				} else {
+					if (isset($_FILES['file'])) {
+						$path = $this->saveReadImg($_FILES['file']);
+						if (!$path) {
+							return new JsonModel('error', '缩略图保存失败');
+						} else {
+							//处理图片
+							$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+							if (!$result['status']) {
+								return new JsonModel('error', $result['content']);
+							} else {
+								$path = $result['content'];
+							}
+						}
+					}
+				}
+			}
+
+			$map = array(
+				'turntablep_title' => trim($_POST['turntablep_title']),
+				'turntablep_attr' => trim($_POST['turntablep_attr']),
+				'turntablep_probability' => trim($_POST['turntablep_probability']),
+				'turntablep_sort' => trim($_POST['turntablep_sort']),
+				'turntablep_status' => !$_POST['turntablep_status'] ? 1 : 0,
+			);
+			$set = "turntablep_title = :turntablep_title,
+					turntablep_attr = :turntablep_attr,
+					turntablep_probability = :turntablep_probability,
+					turntablep_sort = :turntablep_sort,
+					turntablep_status = :turntablep_status";
+
+			if (!$id) {
+				if ($_POST['turntablep_attr'] == 'product') {
+					$map['turntablep_image'] = $path;
+					$set .= ",turntablep_image = :turntablep_image";
+				} elseif ($_POST['turntablep_attr'] == 'score') {
+					$map['turntablep_score'] = trim($_POST['turntablep_score']);
+					$set .= ",turntablep_score = :turntablep_score";
+				}
+				
+				$sql = "INSERT INTO t_turntable_products SET $set";
+			} else {
+				$map['turntablep_id'] = $id;
+				$sql = "SELECT turntablep_attr, turntablep_image FROM t_turntable_products WHERE turntablep_id = ?";
+				$oldInfo = $this->locator->db->getRow($sql, $id);
+
+				if ($_POST['turntablep_attr'] == 'product') {
+					if (isset($_FILES['file'])) {
+						$map['turntablep_image'] = $path;
+						$set .= ",turntablep_image = :turntablep_image";
+					}
+				} elseif ($_POST['turntablep_attr'] == 'score') {
+					$map['turntablep_score'] = trim($_POST['turntablep_score']);
+					$set .= ",turntablep_score = :turntablep_score";
+				}
+				
+				$sql = "UPDATE t_turntable_products SET $set
+						WHERE turntablep_id = :turntablep_id";
+			}
+
+			$status = $this->locator->db->exec($sql, $map);
+			if ($status) {
+				if ($id) {
+					if (isset($_FILES['file'])) {
+						$this->delImage(SYS_DIR . $oldInfo['turntablep_image']);
+					} elseif ($oldInfo['turntablep_attr'] == 'product' && $map['turntablep_attr'] != 'product') {
+						$this->delImage(SYS_DIR . $oldInfo['turntablep_image']);
+					}
+				}
+				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('task/turntable-list'));
+			} else {
+				return new JsonModel('error', '失败');
+			}
+		}
+		return array(
+			'info' => $info,
+			'filed' => $filed,
+		);
+	}
+
+	public function turntableDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "SELECT turntablep_image FROM t_turntable_products WHERE turntablep_id = ?";
+		$path = $this->locator->db->getOne($sql, $id);
+		
+		$sql = "DELETE FROM t_turntable_products WHERE turntablep_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			$this->delImage(SYS_DIR . $path);
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
 	}
 }
