@@ -1,0 +1,309 @@
+<form method="post" enctype="multipart/form-data">
+    <div class="widget-header">
+        <h2 class="title-theme-2">上传图片</h2>
+    </div>
+    <div class="row">
+        <div class="col-24">
+            <div class="form-group">
+                <label>商品缩略图<sup>*</sup></label>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <div style="display: <?php echo !isset($info['images']['home'][0]['image_path']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['images']['home'][0]['image_path'])? $this->uploadUrl($info['images']['home'][0]['image_path'], 'product') : ''?>">
+                </div>
+                
+                <input class="form-control" type="file" name="image[home][]" value="">
+                <input type="hidden" name="image[home][]" value="<?php echo isset($info['images']['home'][0]['image_id']) ? $info['images']['home'][0]['image_id'] : ''?>">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-24">
+            <div class="form-group">
+                <label>商品图片<sup>*</sup></label>
+                <div class="row">
+                    <?php if(isset($info['images']['banner'])):?>
+                        <ul class="sortable">
+                            <?php foreach($info['images']['banner'] as $key => $row):?>
+                                <li class="col-12 album-list" data-id="<?php echo $row['image_id']?>", data-sort="<?php echo $row['image_sort']?>">
+                                    <div class="pic-wrap">
+                                        <img src="<?php echo $this->uploadUrl($row['image_path'], 'product'); ?>" >
+                                    </div>
+                                    <div class="action">
+                                        <input type="hidden" name="image[banner][]" value="<?php echo $row['image_id']?>">
+                                        <span data-href="<?php echo $this->url('product/delete-img', array('id' => $row['image_id']))?>" class="delete"><i class="fa fa-trash"></i></span>
+                                    </div>
+                                </li>
+                            <?php endforeach;?>
+                        </ul>
+                    <?php endif;?>
+                </div>
+                <div class="album-pic-load">
+                    <input type="file" multiple="multiple" name="image[banner][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
+                    <button><i class="icon-camera"></i> 上传图片</button>
+                    <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-24">
+            <div class="form-group">
+                <label>图文详情<sup>*</sup></label>
+                <div class="row">
+                    <?php if(isset($info['images']['detail'])):?>
+                        <ul class="sortable">
+                            <?php foreach($info['images']['detail'] as $key => $row):?>
+                                <li class="col-12 album-list" data-id="<?php echo $row['image_id']?>", data-sort="<?php echo $row['image_sort']?>">
+                                    <div class="pic-wrap">
+                                        <img src="<?php echo $this->uploadUrl($row['image_path'], 'product'); ?>" >
+                                    </div>
+                                    <div class="action">
+                                        <input type="hidden" name="image[detail][]" value="<?php echo $row['image_id']?>">
+                                        <span data-href="<?php echo $this->url('product/delete-img', array('id' => $row['image_id']))?>" class="delete"><i class="fa fa-trash"></i></span>
+                                    </div>
+                                </li>
+                            <?php endforeach;?>
+                        </ul>
+                    <?php endif;?>
+                </div>
+                <div class="album-pic-load">
+                    <input type="file" multiple="multiple" name="image[detail][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
+                    <button><i class="icon-camera"></i> 上传图片</button>
+                    <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="widget-header">
+        <h2 class="title-theme-2">商品详情</h2>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label>商品名称<sup>*</sup></label>
+                <input class="form-control" type="text" placeholder="商品名称" name="product_name" value="<?= isset($info['product_name']) ? $info['product_name'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>商品CODE</label>
+                <input class="form-control" type="text" placeholder="CODE" name="product_code" value="<?php echo isset($info['product_code']) ? $info['product_code'] : ''?>" disabled>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>库存数量<sup>*</sup></label>
+                <input class="form-control" type="text" placeholder="库存数量" name="product_quantity" value="<?php echo isset($info['product_quantity']) ? $info['product_quantity'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>所在城市<sup>*</sup></label>
+                <select class="form-control" name="district_id">
+                    <option value="">全部</option>
+                    <?php foreach($districtList as $key => $value) : ?>
+                        <option value="<?php echo $key?>" <?php echo isset($info['district_id']) && $info['district_id'] == $key ? 'selected' : ''?>><?php echo $value?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label>商品现价<sup>*</sup></label>
+                <input class="form-control" type="text" placeholder="商品现价" name="product_price" value="<?php echo isset($info['product_price']) ? $info['product_price'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>商品原价<sup>*</sup></label>
+                <input class="form-control" type="" placeholder="商品原价" name="product_virtual_price" value="<?php echo isset($info['product_virtual_price']) ? $info['product_virtual_price'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>商品类别<sup>*</sup></label>
+                <select name="attr_id" class="form-control">
+                    <option value="">全部</option>
+                    <?php foreach($attrList as $key => $value) : ?>
+                        <option value="<?php echo $key?>" <?php echo isset($info['attr_id']) && $info['attr_id'] == $key ? 'selected' : ''?>><?php echo $value?></option>
+                    <?php endforeach;?>
+                </select>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>商品状态<sup>*</sup></label>
+                <select class="form-control" name="product_status">
+                    <option value="1" <?php echo isset($info['product_status']) && $info['product_status'] === '1' ? 'selected' : ''?>>有效</option>
+                    <option value="0" <?php echo isset($info['product_status']) && $info['product_status'] === '0' ? 'selected' : ''?>>禁用</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label>开始时间</label>
+                <input type="text" value="<?= isset($info['product_start']) ? $info['product_start'] : date('Y-m-d')?>" class="form-control" disabled>
+                <input type="hidden" name="product_start" value="<?= isset($info['product_start']) ? $info['product_start'] : date('Y-m-d')?>"></input>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>结束时间<sup>*</sup></label>
+                <input type="text" name="product_end"  value="<?= isset($info['product_end']) ? $info['product_end'] : ''?>" class="form-control datepicker" readonly="readonly" placeholder="结束时间">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>领取二维码有效时长（天）<sup>*</sup></label>
+                <input class="form-control" type="text" placeholder="天" name="product_qr_code_day" value="<?php echo isset($info['product_qr_code_day']) ? $info['product_qr_code_day'] : '2'?>">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-24">
+            <div class="form-group">
+                <label>推荐说明<sup>*</sup></label>
+                <textarea class="form-control" placeholder="请填写商品推荐理由" name="product_desc"><?php echo isset($info['product_desc']) ? $info['product_desc'] : ''?></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="widget-header">
+        <h2 class="title-theme-2">分配库存</h2>
+        <button type="button" id="jq-contract-add"><i class="fa fa-plus"></i> 添加</button>
+    </div>
+    <div id="jq-contract-box">
+        <?php if (isset($info['shop_quantity'])) : ?>
+            <?php foreach ($info['shop_quantity'] as $row) : ?>
+                <div class="row jq-item">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <div>
+                                <label>商家名称</label>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="shop_id[]">
+                                    <?php foreach($shopPair[$info['district_id']] as $ro) : ?>
+                                        <option value="<?php echo $ro['shop_id']?>" <?php echo $ro['shop_id'] == $row['shop_id'] ? 'selected' : ''?>><?php echo $ro['shop_name']?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="quantity_id[]" value="<?php echo $row['quantity_id']?>">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>分配数量</label>
+                            <input type="text" name="quantity_num[]" class="form-control" value="<?php echo $row['quantity_num']?>">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>操作 </label>
+                            <div>
+                                <button type="button" class="js-button"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+
+    <div class="employee-detail-submit">
+        <button type="submit" id="jq-submit" class="btn">保存</button>
+        <a href="javascript:history.back();" class="btn">返回 »</a>
+    </div>
+</form>
+
+<div id="jq-contract-template" class="none">
+    <div class="row jq-item">
+        <div class="col-12">
+            <div class="form-group">
+                <div>
+                    <label>商家名称</label>
+                </div>
+                <select class="form-control" name="shop_id[]"></select>
+            </div>
+        </div>
+        <input type="hidden" name="quantity_id[]">
+        <div class="col-12">
+            <div class="form-group">
+                <label>分配数量</label>
+                <input type="text" name="quantity_num[]" class="form-control" value="">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>操作 </label>
+                <div>
+                    <button type="button" class="js-button"><i class="fa fa-times"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?= $this->js('jquery-ui.js')->wrap();?>
+<?= $this->js('sortable.js')->wrap();?>
+<script type="text/javascript">
+    $("input:file").unbind('change').on('change', function() {
+        var imageHolder = $(this).parents('.form-group').find('.js-image');
+        if (typeof (FileReader) != "undefined") {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+               var result = e.target.result;
+               imageHolder.attr('src', result);
+           }
+           var upFile = $(this)[0].files[0];
+           reader.readAsDataURL(upFile);
+
+           imageHolder.parent().show();
+        }
+    });
+
+    $("#jq-contract-add").on('click', function() {
+        var districtId = $('select[name="district_id"]').val();
+        var shopPair = <?php echo json_encode($shopPair)?>;
+        if (!districtId) {
+            $.warning('选择所在城市');
+            return false;
+        }
+
+        var str = '';
+        $(shopPair[districtId]).each(function (key, row) {
+            str += '<option value="' + row.shop_id + '">' + row.shop_name + '</option>';
+        });
+        $("#jq-contract-template").find('select[name="shop_id[]"]').html(str);
+        $("#jq-contract-box").append($("#jq-contract-template").clone().html());
+        datepicker();
+        removeAction();
+    });
+    var removeAction = function() {
+        $("#jq-contract-box").find(".js-button").on('click', function() {
+            var $$ = $(this);
+            var row = $$.parents('')
+            $(this).parents('.jq-item').remove();
+        });
+    };
+    removeAction();
+
+    $('.album-list .delete').click(function() {
+        var $$ = $(this);
+        $$.ajaxAuto({
+            success: function (re) {
+                if (re.status == 'ok') {
+                    $$.parents('li').remove();
+                }
+            }
+        });
+    });
+
+    $('.sortable').each(function () {
+        $(this).sortImg({
+            axis: false,
+            url: '<?= $this->url('product/set-image-sort')?>',
+        });
+    });
+</script>

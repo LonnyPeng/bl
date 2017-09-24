@@ -1,0 +1,94 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/list')?>">商品设置</a> / 商品类别列表
+    </strong>
+</div>
+
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('product/attr-edit')?>">
+            <i class="fa fa-plus"></i> 添加商品类别
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">类别名称</th>
+                <th class="text-center">排序</th>
+                <th class="text-center">类别状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($attrList as $key => $row) :?>
+                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['attr_name']?></td>
+                    <td class="text-center js-sort" title="双击编辑" data-id="<?php echo $row['attr_id']?>"><?= $row['attr_sort']?></td>
+                    <td class="text-center"><?= $row['attr_status'] ? '有效' : '禁用'?></td>
+                    <td class="text-center action">
+                        <a class="btn btn-xs edit" href="<?= $this->url('product/attr-edit', array('id' => $row['attr_id']))?>" title="编辑">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <span class="btn btn-xs del" data-href="<?= $this->url('product/attr-del', array('id' => $row['attr_id']))?>" title="删除">
+                            <i class="fa fa-trash"></i>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<script>
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+
+    $('.js-sort').dblclick(function(event) {
+        /* Act on the event */
+        var $$ = $(this);
+        var oldSort = $$.text();
+
+        var input = document.createElement('input');
+        input.style.borderColor = '#007DC6';
+        input.type = 'text';
+        input.value = oldSort;
+
+        $$.html(input);
+        $(input).focus();
+
+        $(input).blur(function () {
+            var newSort = $(this).val();
+            if ((/^(\+|-)?\d+$/.test(newSort)) && newSort >= 0) {
+                $$.ajaxAuto({
+                    url: '<?php echo $this->url('product/attr-edit-sort')?>',
+                    data: {'id': $$.data('id'), 'sort': newSort},
+                    success: function (re) {
+                        if (re.status != 'ok') {
+                            $$.html(oldSort);
+                        }
+                    }
+                });
+            } else {
+                $.warning('请输入正整数');
+                $$.html(oldSort);
+            }
+        });
+
+        console.log(oldSort);
+    });
+</script>

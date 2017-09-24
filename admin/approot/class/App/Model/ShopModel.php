@@ -36,4 +36,22 @@ class ShopModel extends CommonModel
 	    $sql = "SELECT * FROM $this->name WHERE shop_id = ?";
 	    return $this->locator->db->getRow($sql, $id);
 	}
+
+	public function getShopGoupByDistrict()
+	{
+		$data = array();
+		$sql = "SELECT * FROM $this->name WHERE shop_status = 1";
+		$shops = $this->locator->db->getAll($sql);
+		if ($shops) {
+			foreach ($shops as $key => $row) {
+				if (isset($data[$row['district_id']])) {
+					$data[$row['district_id']][] = $row;
+				} else {
+					$data[$row['district_id']] = array($row);
+				}
+			}
+		}
+
+		return $data;
+	}
 }

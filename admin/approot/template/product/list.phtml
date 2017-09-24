@@ -1,0 +1,171 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/list')?>">商品设置</a> / 商品列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品名称</label>
+                    <input class="form-control" type="text" name="product_name" value="<?= $this->param('product_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>所在城市</label>
+                    <select class="form-control" name="district_id">
+                        <option value="">全部</option>
+                        <?php foreach($districtList as $key => $value) : ?>
+                            <option value="<?php echo $key?>" <?php echo $this->param('district_id') == $key ? 'selected' : ''?>><?php echo $value?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品类别</label>
+                    <select class="form-control" name="product_attr_id">
+                        <option value="">全部</option>
+                        <?php foreach($attrList as $key => $value) : ?>
+                            <option value="<?php echo $key?>" <?php echo $this->param('product_attr_id') == $key ? 'selected' : ''?>><?php echo $value?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>库存</label>
+                        <input class="form-control" type="text" name="product_quantity_min" size="20" value="<?= $this->param('product_quantity_min')?>" placeholder="最低库存">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <input class="form-control" type="text" name="product_quantity_max" size="20" value="<?= $this->param('product_quantity_max')?>" placeholder="最高库存">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>商品现价</label>
+                        <input class="form-control" type="text" name="product_price_min" size="20" value="<?= $this->param('product_price_min')?>" placeholder="最低价格">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <input class="form-control" type="text" name="product_price_max" size="20" value="<?= $this->param('product_price_max')?>" placeholder="最高价格">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>日期</label>
+                        <input type="text" name="product_start"  value="<?= $this->param('product_start')?>" class="form-control datepicker" readonly="readonly" placeholder="开始时间">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <input type="text" name="product_end"  value="<?= $this->param('product_end')?>" class="form-control datepicker" readonly="readonly" placeholder="结束时间">
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品状态</label>
+                    <select class="form-control" name="product_status">
+                        <option value="">全部</option>
+                        <option value="1" <?php echo $this->param('product_status') === '1' ? 'selected' : ''?>>上线</option>
+                        <option value="0" <?php echo $this->param('product_status') === '0' ? 'selected' : ''?>>下线</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('product/edit')?>">
+            <i class="fa fa-plus"></i> 添加商品
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">商品名称</th>
+                <th class="text-center">商品CODE</th>
+                <th class="text-center">所在城市</th>
+                <th class="text-center">商品类别</th>
+                <th class="text-center">商品库存</th>
+                <th class="text-center">商品现价</th>
+                <th class="text-center">商品原价</th>
+                <th class="text-center">开始时间</th>
+                <th class="text-center">结束时间</th>
+                <th class="text-center">推荐说明</th>
+                <th class="text-center">领取二维码有效时间</th>
+                <th class="text-center">商品状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($productList as $key => $row) :?>
+                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['product_name']?></td>
+                    <td class="text-center"><?= $row['product_code']?></td>
+                    <td class="text-center"><?= $row['district_name']?></td>
+                    <td class="text-center"><?= $row['attr_name']?></td>
+                    <td class="text-center"><?= $row['product_quantity']?></td>
+                    <td class="text-center"><?= sprintf("%d", $row['product_price'])?></td>
+                    <td class="text-center" style="text-decoration: line-through;"><?= sprintf("%d", $row['product_virtual_price'])?></td>
+                    <td class="text-center"><?= date("Y-m-d", strtotime($row['product_start']))?></td>
+                    <td class="text-center"><?= date("Y-m-d", strtotime($row['product_end']))?></td>
+                    <td class="text-center" title="<?= $row['product_desc']?>"><?= $this->funcs->mbSubString($row['product_desc'], 0, 10)?></td>
+                    <td class="text-center"><?= sprintf("%d天", $row['product_qr_code_day'])?></td>
+                    <td class="text-center"><?= $row['product_status'] ? '有效' : '禁用';?></td>
+                    <td class="text-center action">
+                        <a class="btn btn-xs edit" href="<?= $this->url('product/edit', array('id' => $row['product_id']))?>" title="编辑">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <span class="btn btn-xs del" data-href="<?= $this->url('product/del', array('id' => $row['product_id']))?>" title="删除">
+                            <i class="fa fa-trash"></i>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
+<script>
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

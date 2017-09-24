@@ -539,3 +539,58 @@ CREATE TABLE `t_shops` (
   `shop_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
   `shop_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商家';
+
+-- ----------------------------
+-- Table structure for t_products
+-- ----------------------------
+DROP TABLE IF EXISTS `t_products`;
+CREATE TABLE `t_products` (
+  `product_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '商品ID',
+  `district_id` tinyint(4) NOT NULL COMMENT '城市ID',
+  `product_code` char(12) NOT NULL UNIQUE KEY COMMENT '商品CODE',
+  `product_name` varchar(150) NOT NULL COMMENT '商品名称',
+  `product_quantity` smallint(6) NOT NULL DEFAULT '0' COMMENT '库存数量',
+  `product_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+  `product_virtual_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品虚拟价格',
+  `attr_id` int(11) NOT NULL COMMENT '商品类别',
+  `product_desc` varchar(225) NOT NULL DEFAULT '' COMMENT '商品推荐说明',
+  `product_start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品添加时间',
+  `product_end` timestamp NOT NULL COMMENT '商品下架时间',
+  `product_qr_code_day` int(3) NOT NULL COMMENT '领取二维码有效时长(天)',
+  `product_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商品状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
+
+-- ----------------------------
+-- Table structure for t_product_attr
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product_attr`;
+CREATE TABLE `t_product_attr` (
+  `attr_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `attr_name` varchar(32) NOT NULL COMMENT '类别名字',
+  `attr_sort` int(3) DEFAULT 0 COMMENT '类别排序',
+  `attr_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品类别表';
+
+-- ----------------------------
+-- Table structure for t_product_images
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product_images`;
+CREATE TABLE `t_product_images` (
+  `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `product_id` int(11) NOT NULL COMMENT '商品ID',
+  `image_path` varchar(45) NOT NULL COMMENT '商品图片',
+  `image_type` enum('home','banner','detail') NOT NULL COMMENT '图片类型：home首页图片；banner详情顶部图片；detail详情底部图片',
+  `image_sort` int(3) DEFAULT 0 COMMENT '排序',
+  `image_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
+
+-- ----------------------------
+-- Table structure for t_product_quantity
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product_quantity`;
+CREATE TABLE `t_product_quantity` (
+  `quantity_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `product_id` int(11) NOT NULL COMMENT '商品ID',
+  `shop_id` int(11) NOT NULL COMMENT '商家ID',
+  `quantity_num` smallint(6) NOT NULL DEFAULT '0' COMMENT '商家库存数量'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品库存分配表';

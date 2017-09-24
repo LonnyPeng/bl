@@ -1,0 +1,41 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/attr-list')?>">商品类别列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>类别名称<sup>*</sup></label>
+                <input class="form-control" type="text" name="attr_name" value="<?= isset($info['attr_name']) ? $info['attr_name'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>排序</label>
+                <input class="form-control" type="text" name="attr_sort" value="<?= isset($info['attr_sort']) ? $info['attr_sort'] : '0';?>">
+            </div>
+            <div class="form-group">
+                <label>状态<sup>*</sup></label>
+                <select class="form-control" name="attr_status">
+                    <option value="1" <?= (isset($info['attr_status']) && $info['attr_status'] == 1) ? 'selected' : '' ?>>有效</option>
+                    <option value="0" <?= (isset($info['attr_status']) && $info['attr_status'] == 0) ? 'selected' : '' ?>>禁用</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("form").submit(function(){
+        $.check(!this.attr_name.value, '请输入类别名称', this.attr_name) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>
+
+
