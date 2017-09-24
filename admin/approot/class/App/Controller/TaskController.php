@@ -120,7 +120,7 @@ class TaskController extends AbstractActionController
 				'read_text' => trim($_POST['read_text']),
 				'read_num' => trim($_POST['read_num']),
 				'read_score' => trim($_POST['read_score']),
-				'read_status' => !$_POST['read_status'] ? 1 : 0,
+				'read_status' => $_POST['read_status'] ? 1 : 0,
 			);
 			$set = "read_title = :read_title,
 					read_text = :read_text,
@@ -318,7 +318,7 @@ class TaskController extends AbstractActionController
 				'question_answer' => implode(",", $_POST['question_answer']),
 				'question_answer_num' => count($_POST['question_answer']),
 				'question_score' => trim($_POST['question_score']),
-				'question_status' => !$_POST['question_status'] ? 1 : 0,
+				'question_status' => $_POST['question_status'] ? 1 : 0,
 			);
 			$set = "question_title = :question_title,
 					question_a = :question_a,
@@ -567,7 +567,7 @@ class TaskController extends AbstractActionController
 				'turntablep_attr' => trim($_POST['turntablep_attr']),
 				'turntablep_probability' => trim($_POST['turntablep_probability']),
 				'turntablep_sort' => trim($_POST['turntablep_sort']),
-				'turntablep_status' => !$_POST['turntablep_status'] ? 1 : 0,
+				'turntablep_status' => $_POST['turntablep_status'] ? 1 : 0,
 			);
 			$set = "turntablep_title = :turntablep_title,
 					turntablep_attr = :turntablep_attr,

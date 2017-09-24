@@ -6,9 +6,15 @@
                 <span class="text-wrap">首页</span>
             </a>
         </li>
+        <li class="<?php echo $this->controller() =='shop' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('shop/list')?>">
+                <span class="icon-wrap"><i class="icon-report"></i></span>
+                <span class="text-wrap">商家列表</span>
+            </a>
+        </li>
         <li class="<?php echo $this->controller() =='customer' ? 'active' : ''?>">
             <a href="<?php echo $this->url('customer/list')?>">
-                <span class="icon-wrap"><i class="icon-house"></i></span>
+                <span class="icon-wrap"><i class="icon-report"></i></span>
                 <span class="text-wrap">会员列表</span>
             </a>
         </li>

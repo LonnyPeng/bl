@@ -36,4 +36,13 @@ class DistrictModel extends CommonModel
 	    $sql = "SELECT * FROM $this->name WHERE district_id = ?";
 	    return $this->locator->db->getRow($sql, $districtId);
 	}
+
+	public function getDistrictPair($where = array())
+	{
+		$sql = "SELECT district_id, district_name FROM $this->name";
+		$sql = $this->setWhere($sql, $where);
+		$sql .= " ORDER BY CONVERT(district_name USING GBK) ASC";
+
+		return $this->locator->db->getPairs($sql);
+	}
 }

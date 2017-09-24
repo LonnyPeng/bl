@@ -223,15 +223,43 @@ class BasicController extends AbstractActionController
 	{
 		$sql = "SELECT * FROM t_images ORDER BY image_sort DESC, image_id DESC";
 		$imageList = $this->locator->db->getAll($sql);
-		if ($imageList) {
-			foreach ($imageList as $key => $row) {
-				$imageList[$key]['image_src'] = "http://" . $_SERVER['HTTP_HOST'] . '/image/sys/' . $row['image_path'];
-			}
-		}
 
 		return array(
 			'imageList' => $imageList,
 		);
+	}
+
+	public function homeImageEditAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = trim($this->param('id'));
+		$key = trim($this->param('key'));
+		$imageHref = '';
+		if (preg_match("/^((http)|(www\.))/i", $key)) {
+			//链接
+			$imageHref = $key;
+		} elseif (preg_match("/[\d]{1,}/i", $key)) {
+			//产品id
+			$imageHref = (string) $this->helpers->url('product/list', array('id' => $key), true);
+		} elseif ($key) {
+			return new JsonModel('error', '链接错误');
+		}
+		
+		$sql = "UPDATE t_images 
+				SET image_href = :image_href 
+				WHERE image_id = :image_id";
+		$status = $this->locator->db->exec($sql, array(
+			'image_href' => $imageHref,
+			'image_id' => $id,
+		));
+		if ($status) {
+			return JsonModel::init('ok', '成功')->setRedirect('reload');
+		} else {
+			return new JsonModel('error', '失败');
+		}
 	}
 
 	public function imageUpdateAction()

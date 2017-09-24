@@ -521,3 +521,21 @@ CREATE TABLE `t_turntable_products` (
   `turntablep_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
   `turntablep_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='转盘奖品';
+
+-- ----------------------------
+-- 商家表 t_shops
+-- ----------------------------
+DROP TABLE IF EXISTS `t_shops`;
+CREATE TABLE `t_shops` (
+  `shop_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `shop_name` varchar(255) NOT NULL UNIQUE KEY COMMENT '名字',
+  `shop_headimg` varchar(60) NOT NULL COMMENT '商家头像',
+  `shop_tel` varchar(32) NOT NULL DEFAULT '' COMMENT '电话',
+  `shop_address` varchar(200) NOT NULL DEFAULT '0' COMMENT '地址',
+  `shop_lat` decimal(20,17) NOT NULL COMMENT '纬度',
+  `shop_lng` decimal(20,17) NOT NULL COMMENT '经度',
+  `district_id` int(11) NOT NULL COMMENT '城市ID',
+  `shop_dec` text COMMENT '特殊说明',
+  `shop_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `shop_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商家';

@@ -1,0 +1,116 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('shop/list')?>">商家</a> / 列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商家名称</label>
+                    <input class="form-control" type="text" name="shop_name" size="20" value="<?= $this->param('shop_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>所在城市</label>
+                    <select class="form-control" name="district_id">
+                        <option value="">全部</option>
+                        <?php foreach($districtList as $key => $value) : ?>
+                            <option value="<?php echo $key?>" <?php echo $this->param('district_id') == $key ? 'selected' : ''?>><?php echo $value?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" name="shop_status">
+                        <option value="">全部</option>
+                        <option value="1" <?php echo $this->param('shop_status') === '1' ? 'selected' : ''?>>上线</option>
+                        <option value="0" <?php echo $this->param('shop_status') === '0' ? 'selected' : ''?>>下线</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('shop/edit')?>">
+            <i class="fa fa-plus"></i> 添加新商家
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">商家名称</th>
+                <th class="text-center">商家头像</th>
+                <th class="text-center">所在城市</th>
+                <th class="text-center">联系电话</th>
+                <th class="text-center">地址</th>
+                <th class="text-center">特殊说明</th>
+                <th class="text-center">入住时间</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($shopList as $key => $row) :?>
+                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['shop_name']?></td>
+                    <td class="text-center">
+                        <img src="<?php echo $this->uploadUrl($row['shop_headimg'], 'shop')?>" style="border: 1px solid #ddd; padding: 2px; width: 200px;">
+                    </td>
+                    <td class="text-center"><?= $row['district_name']?></td>
+                    <td class="text-center"><?= $row['shop_tel']?></td>
+                    <td class="text-center"><?= $row['shop_address']?></td>
+                    <td class="text-center"><?= $row['shop_dec']?></td>
+                    <td class="text-center"><?= $row['shop_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['shop_time'])) : ''?></td>
+                    <td class="text-center"><?= $row['shop_status'] ? '上线' : '下线'?></td>
+                    <td class="text-center action">
+                        <a class="btn btn-xs edit" href="<?= $this->url('shop/edit', array('id' => $row['shop_id']))?>" title="编辑">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <span class="btn btn-xs del" data-href="<?= $this->url('shop/del', array('id' => $row['shop_id']))?>" title="删除">
+                            <i class="fa fa-trash"></i>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
+<script>
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

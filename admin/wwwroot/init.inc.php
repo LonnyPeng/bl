@@ -24,6 +24,7 @@ define('IMG_DIR',       WWW_DIR . 'images/');
  */
 define('UPLOAD_DIR',    ROOT_DIR  . '../upload/');
 define('SYS_DIR', UPLOAD_DIR . 'sys/');
+define('SHOP_DIR', UPLOAD_DIR . 'shop/');
 define('USER_DIR', UPLOAD_DIR . 'user/');
 define('VIO_DIR', UPLOAD_DIR . 'video/');
 
