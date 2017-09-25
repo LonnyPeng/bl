@@ -45,7 +45,17 @@ class CustomerModel extends CommonModel
                 )
                 ORDER BY level_score DESC
                 LIMIT 0, 1";
-        return $this->locator->db->getOne($sql, $id);
+        $levelName = $this->locator->db->getOne($sql, $id);
+        if (!$levelName) {
+            $sql = "SELECT level_name 
+                    FROM t_customer_score_level 
+                    WHERE level_status = 1 
+                    ORDER BY level_score ASC 
+                    LIMIT 0, 1";
+            $levelName = $this->locator->db->getOne($sql);
+        }
+        
+        return $levelName;
     }
 
     public function getHistoryScore($id)

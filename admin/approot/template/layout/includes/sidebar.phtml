@@ -36,6 +36,12 @@
                 <span class="text-wrap">会员列表</span>
             </a>
         </li>
+        <li class="<?php echo $this->controller() =='review' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('review/list')?>">
+                <span class="icon-wrap"><i class="icon-report"></i></span>
+                <span class="text-wrap">商品评价</span>
+            </a>
+        </li>
         <li class="<?php echo $this->controller() == 'task' ? 'active' : ''?>">
             <a href="<?php echo $this->url('task/read-list')?>">
                 <span class="icon-wrap"><i class="icon-report"></i></span>

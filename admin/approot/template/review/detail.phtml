@@ -1,0 +1,97 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('review/list')?>">商品评价</a> / 详情
+    </strong>
+</div>
+
+<div class="widget-header">
+    <h2 class="title-2"></h2>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>用户名<sup>*</sup></label>
+            <span class="form-control"><?= $info['customer_name']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>商户名称<sup>*</sup></label>
+            <span class="form-control"><?= $info['product_name']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>评论得分<sup>*</sup></label>
+            <span class="form-control" title="<?php echo $info['review_score'];?>">
+                <i class="stars <?php echo "star-" . str_replace('.', '-', $info['review_score']);?>"></i>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>获赞数量<sup>*</sup></label>
+            <span class="form-control">
+                <i class="fa fa-thumbs-o-up" style="color: #079dd4;"></i> <?= $info['review_vote_up'];?>
+            </span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>评论时间<sup>*</sup></label>
+            <span class="form-control"><?= $info['review_time'];?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>评论状态<sup>*</sup></label>
+            <span class="form-control"><?= $fileConfig['review_attr'][$info['review_attr']];?></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-24">
+        <div class="form-group">
+            <label>评论内容</label>
+            <textarea class="form-control"><?= $info['review_content'];?></textarea>
+        </div>
+    </div>
+</div>
+<?php if ($info['images']) : ?>
+    <div class="row">
+        <div class="form-group">
+            <ul>
+                <?php foreach ($info['images'] as $row): ?>
+                    <li class="col-8 col-x-12 col-xs-16 col-m-48">
+                        <div class="album-list">
+                            <div class="pic-wrap">
+                                <img src="<?php echo $this->uploadUrl($row['image_path'], 'review');?>">
+                            </div>
+                        </div>
+                    </li>
+                <?php endforeach;?>
+            </ul>
+        </div>
+    </div>
+<?php endif;?>
+    <?php if ($info['review_attr'] != 'published') : ?>
+        <button data-href="<?= $this->url("review/detail", array("id" => $this->param('id'), 'status' => 'published'))?>">通过审核</button>
+    <?php elseif ($info['review_attr'] == 'published') : ?>
+        <button data-href="<?= $this->url("review/detail", array("id" => $this->param('id'), 'status' => 'unread'))?>">评论下线</button>
+    <?php endif;?>
+    <a href="javascript:history.back();" class="btn">返回 »</a>
+</div>
+<script>
+    $('button').click(function () {
+        var $$ = $(this);
+
+        $.confirm('请确再次确认？', function() {
+            $$.ajaxAuto();
+        }, {
+            title: '确认信息'
+        });
+        return false;
+    });
+</script>

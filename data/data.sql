@@ -594,3 +594,30 @@ CREATE TABLE `t_product_quantity` (
   `shop_id` int(11) NOT NULL COMMENT '商家ID',
   `quantity_num` smallint(6) NOT NULL DEFAULT '0' COMMENT '商家库存数量'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品库存分配表';
+
+-- ----------------------------
+-- Table structure for t_reviews
+-- ----------------------------
+DROP TABLE IF EXISTS `t_reviews`;
+CREATE TABLE `t_reviews` (
+  `review_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '顾客ID',
+  `product_id` int(10) NOT NULL COMMENT '商品ID',
+  `review_content` text NOT NULL COMMENT '评论内容',
+  `review_score` decimal(2,1) NOT NULL DEFAULT '0' COMMENT '评论得分',
+  `review_vote_up` int(5) NOT NULL DEFAULT '0' COMMENT '评论获赞数量',
+  `review_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '评论时间',
+  `review_attr` enum('unread','pending','published') NOT NULL COMMENT '评论状态：unread不可读；pending审核中；published发布',
+  `review_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品评论表';
+
+-- ----------------------------
+-- Table structure for t_review_images
+-- ----------------------------
+DROP TABLE IF EXISTS `t_review_images`;
+CREATE TABLE `t_review_images` (
+  `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `review_id` int(11) NOT NULL COMMENT '商品ID',
+  `image_path` varchar(45) NOT NULL COMMENT '评论图片',
+  `image_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='评论图片表';
