@@ -99,7 +99,12 @@
                 </li>
                 <li class="<?php echo in_array($this->action(), array('home-image', 'home-image-edit')) ? 'active' : ''?>">
                     <a href="<?php echo $this->url('basic/home-image');?>">
-                        <span class="hidden-sm">首页图片</span>
+                        <span class="hidden-sm">首页焦点图</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('home-recommend', 'home-recommend-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('basic/home-recommend');?>">
+                        <span class="hidden-sm">首页推荐</span>
                     </a>
                 </li>
                 <li class="<?php echo in_array($this->action(), array('video')) ? 'active' : ''?> none">

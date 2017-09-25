@@ -1,6 +1,6 @@
 <div class="bread">
     <strong>
-        <a href="<?php echo $this->url('basic/district-list')?>">基本信息设置</a> / 首页焦点图
+        <a href="<?php echo $this->url('basic/district-list')?>">基本信息设置</a> / 首页推荐
     </strong>
 </div>
 
@@ -31,8 +31,8 @@
 
 <div class="row top-tool">
     <div class="col-48" style="text-align: right;">
-        <a class="btn" href="<?php echo $this->url('basic/home-image-edit', array('district_id' => $this->param('district_id')))?>">
-            <i class="fa fa-plus"></i> 上传图片
+        <a class="btn" href="<?php echo $this->url('basic/home-recommend-edit', array('district_id' => $this->param('district_id')))?>">
+            <i class="fa fa-plus"></i> 添加
         </a>
     </div>
 </div>
@@ -43,14 +43,17 @@
                 <li class="col-8 col-x-12 col-xs-16 col-m-48 js-image" data-id="<?php echo $row['image_id']?>", data-sort="<?php echo $row['image_sort']?>">
                     <div class="album-list">
                         <div class="pic-wrap">
-                            <img src="<?php echo $this->uploadUrl($row['image_path'], 'sys');?>">
+                            <img src="<?php echo $this->uploadUrl($row['recommend_path'], 'sys');?>">
                         </div>
                         <div class="action">
-                            <span class="time"><?php echo date('Y-m-d',strtotime($row['image_time']))?></span>
-                            <a class="edit" href="<?php echo $this->url('basic/home-image-edit', array('id' => $row['image_id']))?>">
+                            <span class="time"><?php echo date('Y-m-d',strtotime($row['recommend_time']))?></span>
+                            <a class="edit" href="<?php echo $this->url('basic/home-recommend-edit', array('id' => $row['recommend_id']))?>">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <span data-href="<?php echo $this->url('basic/del-image', array('id' => $row['image_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
+                            <span data-href="<?php echo $this->url('basic/del-recommend', array('id' => $row['recommend_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
+                        </div>
+                        <div style="text-align: center;">
+                            <?php echo $row['recommend_title']?>
                         </div>
                     </div>
                 </li>

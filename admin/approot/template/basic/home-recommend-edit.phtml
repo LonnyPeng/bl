@@ -1,6 +1,6 @@
 <div class="bread">
     <strong>
-        <a href="<?php echo $this->url('basic/home-image')?>">首页焦点图</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+        <a href="<?php echo $this->url('basic/home-recommend')?>">首页推荐</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
     </strong>
 </div>
 
@@ -8,17 +8,26 @@
     <div class="col-24">
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label>标题</label>
-                <input class="form-control" type="text" name="image_title" value="<?= isset($info['image_title']) ? $info['image_title'] : '';?>">
+                <label>标题<sup>*</sup></label>
+                <input class="form-control" type="text" name="recommend_title" value="<?= isset($info['recommend_title']) ? $info['recommend_title'] : '';?>">
             </div>
             <div class="form-group">
                 <label>图片<sup>*</sup></label>
                 <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
-                <div style="display: <?php echo !isset($info['image_path']) ? 'none' : ''?>; text-align: center;">
-                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['image_path']) && $info['image_path'] ? $this->uploadUrl($info['image_path'], 'sys') : ''?>">
+                <div style="display: <?php echo !isset($info['recommend_path']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['recommend_path']) && $info['recommend_path'] ? $this->uploadUrl($info['recommend_path'], 'sys') : ''?>">
                 </div>
                 
-                <input class="form-control" type="file" name="file" value="">
+                <input class="form-control" type="file" name="recommend_path" value="">
+            </div>
+            <div class="form-group">
+                <label>品牌Logo</label>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <div style="display: <?php echo !isset($info['recommend_logo']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['recommend_logo']) && $info['recommend_logo'] ? $this->uploadUrl($info['recommend_logo'], 'sys') : ''?>">
+                </div>
+                
+                <input class="form-control" type="file" name="recommend_logo" value="">
             </div>
             <div class="form-group">
                 <label>城市<sup>*</sup></label>
@@ -29,12 +38,12 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>图片链接或商品CODE</label>
-                <input class="form-control" type="text" name="image_href" value="<?= isset($info['image_href']) ? $info['image_href'] : '';?>">
+                <label>商品CODE</label>
+                <input class="form-control" type="text" name="product_code" value="<?= isset($info['product_code']) ? $info['product_code'] : '';?>">
             </div>
             <div class="form-group">
                 <label>排序</label>
-                <input class="form-control" type="number" name="image_sort" value="<?= isset($info['image_sort']) ? $info['image_sort'] : '';?>">
+                <input class="form-control" type="number" name="recommend_sort" value="<?= isset($info['recommend_sort']) ? $info['recommend_sort'] : '';?>">
             </div>
             <div>
                 <button type="submit">提交</button>
@@ -46,6 +55,7 @@
 
 <script type="text/javascript">
     $("form").submit(function() {
+        $.check(!this.recommend_title.value, '请输入标题', this.recommend_title) &&
         $.check(!this.district_id.value, '请选择城市', this.district_id) &&
         $(this).ajaxAuto();
         return false;
