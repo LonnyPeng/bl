@@ -580,16 +580,22 @@ CREATE TABLE `t_products` (
   `product_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '商品ID',
   `district_id` tinyint(4) NOT NULL COMMENT '城市ID',
   `product_code` char(12) NOT NULL UNIQUE KEY COMMENT '商品CODE',
+  `product_logo_name` varchar(150) NOT NULL COMMENT 'logo名称',
   `product_name` varchar(150) NOT NULL COMMENT '商品名称',
   `product_quantity` smallint(6) NOT NULL DEFAULT '0' COMMENT '库存数量',
   `product_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
   `product_virtual_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品虚拟价格',
+  `product_score` int(5) NOT NULL DEFAULT '0' COMMENT '所需积分',
   `attr_id` int(11) NOT NULL COMMENT '商品类别',
+  `product_type` enum('1', '2') NOT NULL COMMENT '领取方式：1:白领；2:组团领',
+  `product_group_num` int(3) COMMENT '组团人数',
+  `product_group_time` int(3) COMMENT '组团过期时间（天）',
   `product_desc` varchar(225) NOT NULL DEFAULT '' COMMENT '商品推荐说明',
   `product_start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品添加时间',
   `product_end` timestamp NOT NULL COMMENT '商品下架时间',
   `product_qr_code_day` int(3) NOT NULL COMMENT '领取二维码有效时长(天)',
   `product_sort` int(3) DEFAULT 0 COMMENT '商品排序',
+  `product_shaping_status` tinyint(1) NOT NULL COMMENT '是否支持配送',
   `product_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商品状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
 
@@ -612,7 +618,7 @@ CREATE TABLE `t_product_images` (
   `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
   `product_id` int(11) NOT NULL COMMENT '商品ID',
   `image_path` varchar(45) NOT NULL COMMENT '商品图片',
-  `image_type` enum('home','banner','detail') NOT NULL COMMENT '图片类型：home首页图片；banner详情顶部图片；detail详情底部图片',
+  `image_type` enum('logo', 'home','banner','detail') NOT NULL COMMENT '图片类型：logo品牌；home缩略图；banner详情顶部图片；detail详情底部图片',
   `image_sort` int(3) DEFAULT 0 COMMENT '排序',
   `image_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品图片表';
