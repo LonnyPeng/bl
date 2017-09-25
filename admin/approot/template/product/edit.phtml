@@ -38,7 +38,7 @@
                     <?php endif;?>
                 </div>
                 <div class="album-pic-load">
-                    <input type="file" multiple="multiple" name="image[banner][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
+                    <input type="file" name="image[banner][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
                     <button><i class="icon-camera"></i> 上传图片</button>
                     <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
                 </div>
@@ -65,7 +65,7 @@
                     <?php endif;?>
                 </div>
                 <div class="album-pic-load">
-                    <input type="file" multiple="multiple" name="image[detail][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
+                    <input type="file" name="image[detail][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
                     <button><i class="icon-camera"></i> 上传图片</button>
                     <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
                 </div>
@@ -305,5 +305,10 @@
             axis: false,
             url: '<?= $this->url('product/set-image-sort')?>',
         });
+    });
+
+    $('form').submit(function() {
+        $(this).ajaxAuto();
+        return false;
     });
 </script>

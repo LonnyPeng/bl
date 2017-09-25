@@ -96,7 +96,7 @@ class ProductController extends AbstractActionController
 			$info['product_code'] = $newCode;
 		}
 
-		if ($this->funcs->isPost()) {
+		if ($this->funcs->isAjax()) {
 			$delImage = array();
 			if (isset($_FILES['image'])) {
 				foreach ($_FILES['image']['name'] as $key => $row) {

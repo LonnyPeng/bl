@@ -266,7 +266,7 @@ class BasicController extends AbstractActionController
 
 	public function imageUpdateAction()
 	{
-		if (!$this->funcs->isPost()) {
+		if (!$this->funcs->isAjax()) {
 			$this->funcs->redirect($this->helpers->url('default/index'));
 		}
 		if (!isset($_FILES['file'])) {
@@ -303,7 +303,7 @@ class BasicController extends AbstractActionController
 			$this->locator->db->exec($sql, $uploadFile);
 		}
 
-		$this->funcs->redirect($this->helpers->url('basic/home-image'));
+		return JsonModel::init('ok', '')->setRedirect($this->helpers->url('basic/home-image'));
 	}
 
 	public function delImageAction()
