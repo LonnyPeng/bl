@@ -63,6 +63,11 @@
                         <span class="hidden-sm">转盘设置</span>
                     </a>
                 </li>
+                <li class="<?php echo in_array($this->action(), array('prize-list', 'prize-detail')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('task/prize-list');?>">
+                        <span class="hidden-sm">会员奖品</span>
+                    </a>
+                </li>
             </ul>
         </li>
         <li class="<?php echo $this->controller() == 'basic' ? 'active' : ''?>">

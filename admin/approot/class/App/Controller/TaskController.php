@@ -643,4 +643,90 @@ class TaskController extends AbstractActionController
 			return new JsonModel('error', '删除失败');
 		}
 	}
+
+	public function prizeListAction()
+	{
+		$filed = array(
+			'turntablep_attr' => array('product' => '商品', 'score' => '积分', 'thank' => '谢谢'),
+			'prize_attr' => array('pending' => '未发货', 'shipped' => '已发货', 'received' => '已到货'),
+		);
+
+		$where = array("t.turntablep_attr != 'thank'");
+		if ($this->param('customer_name')) {
+			$where[] = sprintf("customer_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('customer_name'))) . '%'));
+		}
+
+		$join = array(
+			"LEFT JOIN t_customers c ON c.customer_id = p.customer_id", 
+			"LEFT JOIN t_turntable_products t ON t.turntablep_id = p.turntablep_id"
+		);
+
+		$count = $this->models->prize->getCount(array('setWhere' => $where, 'setJoin' => $join));
+		$this->helpers->paginator($count, 10);
+		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
+
+		$files = 'p.*, c.customer_name, t.turntablep_title, t.turntablep_attr';
+		$sqlInfo = array(
+			'setJoin' => $join,
+			'setWhere' => $where,
+			'setLimit' => $limit,
+			'setOrderBy' => 'prize_attr ASC, prize_id DESC',
+		);
+
+		$prizeList = $this->models->prize->getPrize($files, $sqlInfo);
+
+		// print_r($prizeList);die;
+	    return array(
+	    	'prizeList' => $prizeList,
+	    	'filed' => $filed,
+	    );
+	}
+
+	public function prizeDetailAction()
+	{
+		$filed = array(
+			'turntablep_attr' => array('product' => '商品', 'score' => '积分', 'thank' => '谢谢'),
+			'prize_attr' => array('pending' => '未发货', 'shipped' => '已发货', 'received' => '已到货'),
+		);
+
+		$id = $this->param('id');
+		$info = $this->models->prize->getPrizeById($id);
+		if (!$info) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		if ($this->funcs->isAjax()) {
+			$sql = "UPDATE t_prizes SET prize_attr = 'shipped' WHERE prize_id = ?";
+			$status = $this->locator->db->exec($sql, $id);
+			if ($status) {
+				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('task/prize-list'));
+			} else {
+				return new JsonModel('error', '失败');
+			} 
+		}
+
+		$info['prize_address'] = unserialize($info['prize_address']);
+
+		// print_r($info);die;
+		return array(
+			'info' => $info,
+			'filed' => $filed,
+		);
+	}
+
+	public function prizeDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+		
+		$id = $this->param('id');
+		$sql = "DELETE FROM t_prizes WHERE prize_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
 }

@@ -1,0 +1,102 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('task/prize-list')?>">会员奖品列表</a> / 详情
+    </strong>
+</div>
+
+<div class="widget-header">
+    <h2 class="title-2"></h2>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>用户名<sup>*</sup></label>
+            <span class="form-control"><?= $info['customer_name']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>奖品名称<sup>*</sup></label>
+            <span class="form-control"><?= $info['turntablep_title']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>奖品类型<sup>*</sup></label>
+            <span class="form-control"><?= $filed['turntablep_attr'][$info['turntablep_attr']]?></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>获奖时间<sup>*</sup></label>
+            <span class="form-control"><?= $info['prize_time'];?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>状态<sup>*</sup></label>
+            <span class="form-control"><?= $filed['prize_attr'][$info['prize_attr']];?></span>
+        </div>
+    </div>
+</div>
+<?php if ($info['turntablep_attr'] == 'product') : ?>
+    <?php if ($info['prize_address']) : ?>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>收货人姓名<sup>*</sup></label>
+                    <span class="form-control"><?= $info['prize_address']['name'];?></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label>电话<sup>*</sup></label>
+                    <span class="form-control"><?= $info['prize_address']['tel'];?></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>城市<sup>*</sup></label>
+                    <span class="form-control"><?= $info['prize_address']['city'];?></span>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <label>详细地址<sup>*</sup></label>
+                    <span class="form-control"><?= $info['prize_address']['address'];?></span>
+                </div>
+            </div>
+        </div>
+        <?php if ($info['prize_attr'] == 'pending') : ?>
+            <button data-href="<?= $this->url("task/prize-detail", array("id" => $this->param('id')))?>">发货</button>
+        <?php endif;?>
+    <?php else : ?>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label>&nbsp;</label>
+                    <span class="form-control">用户暂未填写收货信息</span>
+                </div>
+            </div>
+        </div>
+    <?php endif;?>
+<?php endif;?>
+
+    <a href="javascript:history.back();" class="btn">返回 »</a>
+</div>
+<script>
+    $('button').click(function () {
+        var $$ = $(this);
+
+        $.confirm('发货给用户？', function() {
+            $$.ajaxAuto();
+        }, {
+            title: '确认信息'
+        });
+        return false;
+    });
+</script>

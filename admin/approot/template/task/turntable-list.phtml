@@ -41,7 +41,7 @@
     </div>
 </div>
 
-<div style="margin-top: 10px;">
+<div class="table-responsive" style="margin-top: 10px;">
     <table class="table">
         <thead>
             <tr>
@@ -57,7 +57,7 @@
         <tbody>
             <?php if ($list) : ?>
                 <?php foreach ($list as $key => $row) :?>
-                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <tr class="<?php if (($key + 1) % 2 == 0) : ?>odd<?php endif;?>">
                         <td class="text-center"><?= $row['turntablep_title']?></td>
                         <td class="text-center"><?= $filed['turntablep_attr'][$row['turntablep_attr']]?></td>
                         <td class="text-center">

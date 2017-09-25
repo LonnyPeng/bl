@@ -523,6 +523,20 @@ CREATE TABLE `t_turntable_products` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='转盘奖品';
 
 -- ----------------------------
+-- 会员奖品表 t_prizes
+-- ----------------------------
+DROP TABLE IF EXISTS `t_prizes`;
+CREATE TABLE `t_prizes` (
+  `prize_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `turntablep_id` int(11) NOT NULL COMMENT '奖品ID',
+  `prize_address` text COMMENT '收货地址',
+  `prize_attr` enum('pending','shipped','received') NOT NULL DEFAULT 'pending' COMMENT '订单状态：pending正在发货；shipped已发货；received已收货',
+  `prize_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `prize_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员奖品';
+
+-- ----------------------------
 -- 商家表 t_shops
 -- ----------------------------
 DROP TABLE IF EXISTS `t_shops`;
