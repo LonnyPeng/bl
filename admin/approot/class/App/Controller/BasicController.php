@@ -241,9 +241,11 @@ class BasicController extends AbstractActionController
 		if (preg_match("/^((http)|(www\.))/i", $key)) {
 			//链接
 			$imageHref = $key;
-		} elseif (preg_match("/[\d]{1,}/i", $key)) {
-			//产品id
-			$imageHref = (string) $this->helpers->url('product/list', array('id' => $key), true);
+		} elseif (preg_match("/^sp[\d]{6}/i", $key)) {
+			//产品code
+			$sql = "SELECT product_id FROM t_products WHERE product_code = ?";
+			$productId = $this->locator->db->getOne($sql, $key);
+			$imageHref = (string) $this->helpers->url('product/list', array('id' => $productId), true);
 		} elseif ($key) {
 			return new JsonModel('error', '链接错误');
 		}
