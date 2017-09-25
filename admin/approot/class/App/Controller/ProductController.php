@@ -60,7 +60,7 @@ class ProductController extends AbstractActionController
 			'setJoin' => $join,
 			'setWhere' => $where,
 			'setLimit' => $limit,
-			'setOrderBy' => 'product_id DESC',
+			'setOrderBy' => 'district_id ASC, attr_id ASC, product_sort DESC, product_id DESC',
 		);
 
 		$productList = $this->models->product->getProduct($files, $sqlInfo);
@@ -289,6 +289,29 @@ class ProductController extends AbstractActionController
 		);
 	}
 
+	public function productEditSortAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sort = $this->param('sort');
+
+		$sql = "UPDATE t_products 
+				SET product_sort = :product_sort 
+				WHERE product_id = :product_id";
+		$status = $this->locator->db->exec($sql, array(
+			'product_sort' => $sort,
+			'product_id' => $id,
+		));
+		if ($status) {
+			return JsonModel::init('ok', '成功')->setRedirect('reload');
+		} else {
+			return new JsonModel('error', '失败');
+		}
+	}
+
 	public function deleteImgAction()
 	{
 		if (!$this->funcs->isAjax()) {
@@ -298,7 +321,7 @@ class ProductController extends AbstractActionController
 		$id = $this->param('id');
 		
 		$sql = "UPDATE t_product_images 
-				SET image_status = 1 
+				SET image_status = 0 
 				WHERE image_id = ?";
 		$status = $this->locator->db->exec($sql, $id);
 		if ($status) {

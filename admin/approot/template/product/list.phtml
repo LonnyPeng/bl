@@ -117,6 +117,7 @@
                 <th class="text-center">推荐说明</th>
                 <th class="text-center">领取二维码有效时间</th>
                 <th class="text-center">商品状态</th>
+                <th class="text-center">排序</th>
                 <th class="text-center">操作</th>
             </tr>
         </thead>
@@ -135,6 +136,7 @@
                     <td class="text-center" title="<?= $row['product_desc']?>"><?= $this->funcs->mbSubString($row['product_desc'], 0, 10)?></td>
                     <td class="text-center"><?= sprintf("%d天", $row['product_qr_code_day'])?></td>
                     <td class="text-center"><?= $row['product_status'] ? '有效' : '禁用';?></td>
+                    <td class="text-center js-sort" title="双击编辑" data-id="<?php echo $row['product_id']?>"><?= $row['product_sort']?></td>
                     <td class="text-center action">
                         <a class="btn btn-xs edit" href="<?= $this->url('product/edit', array('id' => $row['product_id']))?>" title="编辑">
                             <i class="fa fa-edit"></i>
@@ -166,6 +168,37 @@
             return false;
         }, {
             title: '信息确认'
+        });
+    });
+
+    $('.js-sort').dblclick(function() {
+        var $$ = $(this);
+        var oldSort = $$.text();
+
+        var input = document.createElement('input');
+        input.style.borderColor = '#007DC6';
+        input.type = 'text';
+        input.value = oldSort;
+
+        $$.html(input);
+        $(input).focus();
+
+        $(input).blur(function () {
+            var newSort = $(this).val();
+            if ((/^(\+|-)?\d+$/.test(newSort)) && newSort >= 0) {
+                $$.ajaxAuto({
+                    url: '<?php echo $this->url('product/product-edit-sort')?>',
+                    data: {'id': $$.data('id'), 'sort': newSort},
+                    success: function (re) {
+                        if (re.status != 'ok') {
+                            $$.html(oldSort);
+                        }
+                    }
+                });
+            } else {
+                $.warning('请输入正整数');
+                $$.html(oldSort);
+            }
         });
     });
 </script>
