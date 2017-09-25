@@ -441,6 +441,8 @@ CREATE TABLE `t_configs` (
 DROP TABLE IF EXISTS `t_images`;
 CREATE TABLE `t_images` (
   `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `image_title` varchar(32) COMMENT '标题',
+  `district_id` tinyint(4) NOT NULL COMMENT '城市ID',
   `image_path` varchar(45) NOT NULL COMMENT '图片路径',
   `image_href` varchar(200) COMMENT '图片链接',
   `image_sort` int(5) NOT NULL DEFAULT '0' COMMENT '排序',

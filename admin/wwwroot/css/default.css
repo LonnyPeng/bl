@@ -2310,16 +2310,21 @@ fieldset[disabled] .form-control {
   color: #aaa;
 }
 .album-list .action .setting,
-.album-list .action .edit,
 .album-list .action .delete {
   position: absolute;
   right: 4px;
   top: 4px;
   cursor: pointer;
-  color: #aaa;
+  color: #f00;
+}
+.album-list .action .edit{
+  position: absolute;
+  right: 20px;
+  top: 4px;
+  cursor: pointer;
+  color: #007DC6;
 }
 .album-list .action .setting:hover,
-.album-list .action .edit:hover,
 .album-list .action .delete:hover {
   color: #f00;
 }

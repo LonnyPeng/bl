@@ -221,89 +221,173 @@ class BasicController extends AbstractActionController
 
 	public function homeImageAction()
 	{
-		$sql = "SELECT * FROM t_images ORDER BY image_sort DESC, image_id DESC";
-		$imageList = $this->locator->db->getAll($sql);
+		$districtId = $this->param('district_id');
+		if (!$districtId) {
+			$sql = "SELECT district_id FROM t_district WHERE district_name = ?";
+			$districtId = $this->locator->db->getOne($sql, '上海市');
+			if ($districtId) {
+				$this->funcs->redirect($this->helpers->url('basic/home-image', array('district_id' => $districtId)));
+			} else {
+				$this->funcs->redirect($this->helpers->url('default/index'));
+			}
+		}
+
+		$sql = "SELECT * FROM t_images 
+				WHERE district_id = ? 
+				ORDER BY image_sort DESC, image_id DESC";
+		$imageList = $this->locator->db->getAll($sql, $districtId);
 
 		return array(
 			'imageList' => $imageList,
+			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
 		);
 	}
 
 	public function homeImageEditAction()
 	{
-		if (!$this->funcs->isAjax()) {
-			$this->funcs->redirect($this->helpers->url('default/index'));
+		$id = $this->param('id');
+		$info = array();
+		if ($id) {
+			$sql = "SELECT * FROM t_images WHERE image_id = ?";
+			$info = $this->locator->db->getRow($sql, $id);
 		}
 
-		$id = trim($this->param('id'));
-		$key = trim($this->param('key'));
-		$imageHref = '';
-		if (preg_match("/^((http)|(www\.))/i", $key)) {
-			//链接
-			$imageHref = $key;
-		} elseif (preg_match("/^sp[\d]{6}/i", $key)) {
-			//产品code
-			$sql = "SELECT product_id FROM t_products WHERE product_code = ?";
-			$productId = $this->locator->db->getOne($sql, $key);
-			$imageHref = (string) $this->helpers->url('product/list', array('id' => $productId), true);
-		} elseif ($key) {
-			return new JsonModel('error', '链接错误');
-		}
-		
-		$sql = "UPDATE t_images 
-				SET image_href = :image_href 
-				WHERE image_id = :image_id";
-		$status = $this->locator->db->exec($sql, array(
-			'image_href' => $imageHref,
-			'image_id' => $id,
-		));
-		if ($status) {
-			return JsonModel::init('ok', '成功')->setRedirect('reload');
-		} else {
-			return new JsonModel('error', '失败');
-		}
-	}
-
-	public function imageUpdateAction()
-	{
-		if (!$this->funcs->isAjax()) {
-			$this->funcs->redirect($this->helpers->url('default/index'));
-		}
-		if (!isset($_FILES['file'])) {
-			return new JsonModel('error', '请选择图片');
-		}
-
-		$files = $_FILES['file'];
-		$dir = SYS_DIR;
-		foreach ($files['name'] as $key => $value) {
-			if ($files['error'][$key] 
-				|| !in_array($files['type'][$key], $this->imgType)
-				|| $files['type'][$key] > $this->imgMaxSize) {
-				continue;
-			}
-
-			$upFileName = date('Ymd') . '/';
-			$this->funcs->makeFile($dir . $upFileName);
-
-			$ext = pathinfo($value, PATHINFO_EXTENSION);
-			$fileName = md5($value . $this->funcs->rand());
-			for($i=0;; $i++) {
-				if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
-					$fileName = md5($value . $this->funcs->rand());
-				} else {
-					break;
+		if ($this->funcs->isAjax()) {
+			if (!$id) {
+				if (!isset($_FILES['file'])) {
+					return new JsonModel('error', '请上传图片');
+				} elseif (!in_array($_FILES['file']['type'], $this->imgType)) {
+					return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
+				} elseif ($_FILES['file']['size'] > $this->imgMaxSize) {
+					return new JsonModel('error', '请选择小于4M的图片');
+				}
+			} else {
+				if (isset($_FILES['file'])) {
+					if (!in_array($_FILES['file']['type'], $this->imgType)) {
+						return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
+					} elseif ($_FILES['file']['size'] > $this->imgMaxSize) {
+						return new JsonModel('error', '请选择小于4M的图片');
+					}
 				}
 			}
 
-			$uploadFile = $upFileName . $fileName . '.' . $ext;
-			$uploadFilePath = $dir . $uploadFile;
-			move_uploaded_file($files['tmp_name'][$key], $uploadFilePath);
+			if (!$_POST['district_id']) {
+				return new JsonModel('error', '请选择城市');
+			}
 
-			$sql = "INSERT INTO t_images SET image_path = ?";
-			$this->locator->db->exec($sql, $uploadFile);
+			$key = trim($_POST['image_href']);
+			$imageHref = '';
+			if (preg_match("/^((http)|(www\.))/i", $key)) {
+				//链接
+				$imageHref = $key;
+			} elseif (preg_match("/^sp[\d]{6}/i", $key)) {
+				//产品code
+				$sql = "SELECT product_id FROM t_products WHERE product_code = ?";
+				$productId = $this->locator->db->getOne($sql, $key);
+				$imageHref = (string) $this->helpers->url('product/list', array('id' => $productId), true);
+			} elseif ($key) {
+				return new JsonModel('error', '链接错误');
+			}
+
+			if (!$id) {
+				$path = $this->imageUpdate($_FILES['file']);
+				if (!$path) {
+					return new JsonModel('error', '图片保存失败');
+				} else {
+					//处理图片
+					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$path = $result['content'];
+					}
+				}
+			} else {
+				if (isset($_FILES['file'])) {
+					$path = $this->imageUpdate($_FILES['file']);
+					if (!$path) {
+						return new JsonModel('error', '图片保存失败');
+					} else {
+						//处理图片
+						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+						if (!$result['status']) {
+							return new JsonModel('error', $result['content']);
+						} else {
+							$path = $result['content'];
+						}
+					}
+				}
+			}
+
+			$map = array(
+				'image_title' => trim($_POST['image_title']),
+				'district_id' => trim($_POST['district_id']),
+				'image_href' => $imageHref,
+				'image_sort' => $_POST['image_sort'] ?: 0,
+			);
+			$set = "image_title = :image_title,
+					district_id = :district_id,
+					image_href = :image_href,
+					image_sort = :image_sort";
+
+			if (!$id) {
+				$map['image_path'] = $path;
+				$set .= ",image_path = :image_path";
+
+				$sql = "INSERT INTO t_images SET $set";
+			} else {
+				$map['image_id'] = $id;
+				if (isset($_FILES['file'])) {
+					$sql = "SELECT image_path FROM t_images WHERE image_id = ?";
+					$pathOld = $this->locator->db->getOne($sql, $id);
+
+					$map['image_path'] = $path;
+					$set .= ",image_path = :image_path";
+				}
+				
+				$sql = "UPDATE t_images SET $set
+						WHERE image_id = :image_id";
+			}
+
+			$status = $this->locator->db->exec($sql, $map);
+			if ($status) {
+				if ($id && isset($_FILES['file'])) {
+					$this->delImage(SYS_DIR . $pathOld);
+				}
+				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('basic/home-image'));
+			} else {
+				return new JsonModel('error', '失败');
+			}
 		}
 
-		return JsonModel::init('ok', '')->setRedirect($this->helpers->url('basic/home-image'));
+		return array(
+			'info' => $info,
+			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+		);
+	}
+
+	public function imageUpdate($row = array())
+	{
+		$dir = SYS_DIR;
+
+		$upFileName = date('Ymd') . '/';
+		$this->funcs->makeFile($dir . $upFileName);
+
+		$ext = pathinfo($row['name'], PATHINFO_EXTENSION);
+		$fileName = md5($row['name'] . $this->funcs->rand());
+		for($i=0;; $i++) {
+			if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
+				$fileName = md5($row['name'] . $this->funcs->rand());
+			} else {
+				break;
+			}
+		}
+
+		$uploadFile = $upFileName . $fileName . '.' . $ext;
+		$uploadFilePath = $dir . $uploadFile;
+		move_uploaded_file($row['tmp_name'], $uploadFilePath);
+
+		return $uploadFile;
 	}
 
 	public function delImageAction()
