@@ -566,7 +566,7 @@ class TaskController extends AbstractActionController
 				'turntablep_title' => trim($_POST['turntablep_title']),
 				'turntablep_attr' => trim($_POST['turntablep_attr']),
 				'turntablep_probability' => trim($_POST['turntablep_probability']),
-				'turntablep_sort' => trim($_POST['turntablep_sort']),
+				'turntablep_sort' => trim($_POST['turntablep_sort']) ? 1 : 0,
 				'turntablep_status' => $_POST['turntablep_status'] ? 1 : 0,
 			);
 			$set = "turntablep_title = :turntablep_title,

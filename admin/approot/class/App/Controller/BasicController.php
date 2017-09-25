@@ -437,7 +437,7 @@ class BasicController extends AbstractActionController
 				}
 
 				$score = (int) $_POST['level_score'][$key];
-				if (!$score) {
+				if ($score < 0) {
 					return new JsonModel('error', '请输入所需积分');
 				}
 
