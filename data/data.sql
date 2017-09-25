@@ -571,6 +571,7 @@ CREATE TABLE `t_products` (
   `product_start` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '商品添加时间',
   `product_end` timestamp NOT NULL COMMENT '商品下架时间',
   `product_qr_code_day` int(3) NOT NULL COMMENT '领取二维码有效时长(天)',
+  `product_sort` int(3) DEFAULT 0 COMMENT '商品排序',
   `product_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '商品状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品详情表';
 

@@ -200,6 +200,7 @@ class ProductController extends AbstractActionController
 				'product_desc' => trim($_POST['product_desc']),
 				'product_end' => date("Y-m-d 23:59:59", strtotime(trim($_POST['product_end']))),
 				'product_qr_code_day' => trim($_POST['product_qr_code_day']),
+				'product_sort' => $_POST['product_sort'] ?: '0',
 			);
 			$set = "district_id = :district_id,
 					product_name = :product_name,
@@ -210,7 +211,8 @@ class ProductController extends AbstractActionController
 					product_status = :product_status,
 					product_desc = :product_desc,
 					product_end = :product_end,
-					product_qr_code_day = :product_qr_code_day";
+					product_qr_code_day = :product_qr_code_day,
+					product_sort = :product_sort";
 			if (!$id) {
 				$map['product_code'] = $newCode;
 				$map['product_start'] = date("Y-m-d 00:00:00", strtotime(trim($_POST['product_start'])));

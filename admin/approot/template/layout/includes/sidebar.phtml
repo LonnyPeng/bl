@@ -36,6 +36,12 @@
                 <span class="text-wrap">会员列表</span>
             </a>
         </li>
+        <li class="<?php echo $this->controller() =='order' ? 'active' : ''?>">
+            <a href="<?php echo $this->url('order/list')?>">
+                <span class="icon-wrap"><i class="icon-report"></i></span>
+                <span class="text-wrap">订单列表</span>
+            </a>
+        </li>
         <li class="<?php echo $this->controller() =='review' ? 'active' : ''?>">
             <a href="<?php echo $this->url('review/list')?>">
                 <span class="icon-wrap"><i class="icon-report"></i></span>

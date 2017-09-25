@@ -38,7 +38,7 @@
                     <?php endif;?>
                 </div>
                 <div class="album-pic-load">
-                    <input type="file" name="image[banner][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
+                    <input type="file" name="image[banner][]" class="multi with-preview choose-flie" accept="jpg|jpeg|png|gif"/>
                     <button><i class="icon-camera"></i> 上传图片</button>
                     <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
                 </div>
@@ -65,7 +65,7 @@
                     <?php endif;?>
                 </div>
                 <div class="album-pic-load">
-                    <input type="file" name="image[detail][]" class="multi with-preview choose-flie" maxlength="10" accept="jpg|jpeg|png|gif"/>
+                    <input type="file" name="image[detail][]" class="multi with-preview choose-flie" accept="jpg|jpeg|png|gif"/>
                     <button><i class="icon-camera"></i> 上传图片</button>
                     <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
                 </div>
@@ -158,6 +158,12 @@
             <div class="form-group">
                 <label>领取二维码有效时长（天）<sup>*</sup></label>
                 <input class="form-control" type="text" placeholder="天" name="product_qr_code_day" value="<?php echo isset($info['product_qr_code_day']) ? $info['product_qr_code_day'] : '2'?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>排序</label>
+                <input class="form-control" type="text" name="product_sort" value="<?php echo isset($info['product_sort']) ? $info['product_sort'] : ''?>">
             </div>
         </div>
     </div>

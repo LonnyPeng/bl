@@ -270,7 +270,7 @@ class BasicController extends AbstractActionController
 			$this->funcs->redirect($this->helpers->url('default/index'));
 		}
 		if (!isset($_FILES['file'])) {
-			$this->funcs->redirect($this->helpers->url('default/index'));
+			return new JsonModel('error', '请选择图片');
 		}
 
 		$files = $_FILES['file'];
