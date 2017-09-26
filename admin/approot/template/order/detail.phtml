@@ -1,0 +1,120 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('order/list')?>">订单详情</a> / 详情
+    </strong>
+</div>
+
+<div class="widget-header">
+    <h2 class="title-2"></h2>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>订单号<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_number']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>商品名称<sup>*</sup></label>
+            <span class="form-control"><?= $info['product_name']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>数量<sup>*</sup></label>
+            <span class="form-control"><?= $info['product_quantity']?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>价格<sup>*</sup></label>
+            <span class="form-control"><?= $info['product_price']?></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>取货方式<sup>*</sup></label>
+            <span class="form-control"><?= $filed['shinging_type'][$info['shinging_type']]?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>下单时间<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($info['order_time'])) : ''?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>发货时间<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_shipped_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($info['order_shipped_time'])) : ''?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>到货时间<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_received_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($info['order_received_time'])) : ''?></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>订单状态<sup>*</sup></label>
+            <span class="form-control"><?= $filed['order_type'][$info['order_type']]?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>收货人<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_customer_name'];?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>收货城市<sup>*</sup></label>
+            <span class="form-control"><?= $info['district_name'];?></span>
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="form-group">
+            <label>联系电话<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_tel'];?></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="form-group">
+            <label>收货地址<sup>*</sup></label>
+            <span class="form-control"><?= $info['order_address'];?></span>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-24">
+        <div class="form-group">
+            <label>收货说明</label>
+            <textarea class="form-control" readonly=""><?= $info['order_desc'];?></textarea>
+        </div>
+    </div>
+</div>
+    <?php if ($info['order_type'] == 'pending') : ?>
+        <button data-href="<?= $this->url("order/detail", array("id" => $this->param('id')))?>">发&nbsp;货</button>
+    <?php endif;?>
+    <a href="javascript:history.back();" class="btn">返&nbsp;回 »</a>
+</div>
+<script>
+    $('button').click(function () {
+        var $$ = $(this);
+
+        $.confirm('请确认已发货？', function() {
+            $$.ajaxAuto();
+        }, {
+            title: '确认信息'
+        });
+        return false;
+    });
+</script>

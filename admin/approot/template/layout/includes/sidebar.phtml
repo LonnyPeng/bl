@@ -42,7 +42,7 @@
                 <span class="text-wrap">订单列表</span>
             </a>
             <ul class="<?php echo $this->controller() != 'order' ? 'none' : ''?>">
-                <li class="<?php echo in_array($this->action(), array('list', 'edit')) ? 'active' : ''?>">
+                <li class="<?php echo in_array($this->action(), array('list', 'detail')) ? 'active' : ''?>">
                     <a href="<?php echo $this->url('order/list');?>">
                         <span class="hidden-sm">订单列表</span>
                     </a>

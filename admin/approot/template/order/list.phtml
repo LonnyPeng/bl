@@ -1,0 +1,117 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('order/list')?>">订单</a> / 列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>订单号</label>
+                    <input class="form-control" type="text" name="order_number" value="<?= $this->param('order_number')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品名称</label>
+                    <input class="form-control" type="text" name="product_name" value="<?= $this->param('product_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>用户名称</label>
+                    <input class="form-control" type="text" name="customer_name" value="<?= $this->param('customer_name')?>">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label>日期</label>
+                        <input type="text" name="start"  value="<?= $this->param('start')?>" class="form-control datepicker" readonly="readonly" placeholder="开始时间">
+                    </div>
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <input type="text" name="end"  value="<?= $this->param('end')?>" class="form-control datepicker" readonly="readonly" placeholder="结束时间">
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>订单状态</label>
+                    <select class="form-control" name="order_type">
+                        <option value="">全部</option>
+                        <?php foreach($filed['order_type'] as $key => $value) : ?>
+                            <option value="<?php echo $key?>" <?php echo $this->param('order_type') === $key ? 'selected' : ''?>><?php echo $value?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th class="text-center">订单号</th>
+                <th class="text-center">商品名称</th>
+                <th class="text-center">数量</th>
+                <th class="text-center">价格</th>
+                <th class="text-center">用户名称</th>
+                <th class="text-center">取货方式</th>
+                <th class="text-center">收货人</th>
+                <th class="text-center">收货城市</th>
+                <th class="text-center">联系电话</th>
+                <th class="text-center">收货地址</th>
+                <th class="text-center">收货说明</th>
+                <th class="text-center">下单时间</th>
+                <th class="text-center">发货时间</th>
+                <th class="text-center">到货时间</th>
+                <th class="text-center">订单状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($orderList) : ?>
+                <?php foreach ($orderList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['order_number']?></td>
+                        <td class="text-center"><?= $row['product_name']?></td>
+                        <td class="text-center"><?= $row['product_quantity']?></td>
+                        <td class="text-center"><?= $row['product_price']?></td>
+                        <td class="text-center"><?= $row['customer_name']?></td>
+                        <td class="text-center"><?= $filed['shinging_type'][$row['shinging_type']]?></td>
+                        <td class="text-center"><?= $row['order_customer_name']?></td>
+                        <td class="text-center"><?= $row['district_name']?></td>
+                        <td class="text-center"><?= $row['order_tel']?></td>
+                        <td class="text-center"><?= $row['order_address']?></td>
+                        <td class="text-center" title="<?= $row['order_desc']?>"><?= $this->funcs->mbSubString($row['order_desc'], 0, 10)?></td>
+                        <td class="text-center"><?= $row['order_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['order_time'])) : ''?></td>
+                        <td class="text-center"><?= $row['order_shipped_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['order_shipped_time'])) : ''?></td>
+                        <td class="text-center"><?= $row['order_received_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['order_received_time'])) : ''?></td>
+                        <td class="text-center"><?= $filed['order_type'][$row['order_type']]?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('order/detail', array('id' => $row['order_id']))?>" title="编辑">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif;?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>

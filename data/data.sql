@@ -349,7 +349,7 @@ CREATE TABLE `t_customers` (
   `customer_openid` varchar(100) NOT NULL DEFAULT '' COMMENT '微信ID',
   `customer_gender` varchar(6) COMMENT '性别',
   `customer_age` varchar(10) COMMENT '年龄段',
-  `customer_name` char(16) NOT NULL DEFAULT '' COMMENT '名字',
+  `customer_name` varchar(16) NOT NULL DEFAULT '' COMMENT '名字',
   `customer_headimg` varchar(45) COMMENT '头像',
   `customer_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `district_id` int(11) COMMENT '常住城市ID',
@@ -681,3 +681,29 @@ CREATE TABLE `t_order_groups` (
   `group_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
   `group_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='团购表';
+
+-- ----------------------------
+-- Table structure for t_orders
+-- ----------------------------
+DROP TABLE IF EXISTS `t_orders`;
+CREATE TABLE `t_orders` (
+  `order_id` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `order_number` varchar(32) NOT NULL COMMENT '订单号',
+  `product_id` int(11) unsigned NOT NULL COMMENT '商品ID',
+  `product_name` varchar(150) NOT NULL COMMENT '商品名称',
+  `product_quantity` smallint(6) NOT NULL DEFAULT '1' COMMENT '购买数量',
+  `product_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+  `customer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '下单顾客ID',
+  `shinging_type` enum('self','logistics') NOT NULL COMMENT '取货方式：self自提；logistics配送',
+  `order_customer_name` varchar(16) NOT NULL DEFAULT '' COMMENT '收货人名字',
+  `district_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '收货城市ID',
+  `district_name` varchar(255) NOT NULL COMMENT '收货城市名称',
+  `order_address` varchar(200) NOT NULL DEFAULT '' COMMENT '收货地址',
+  `order_tel` varchar(32) NOT NULL DEFAULT '' COMMENT '联系电话',
+  `order_desc` varchar(200) COMMENT '特殊说明',
+  `order_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
+  `order_shipped_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '发货时间',
+  `order_received_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '收货时间',
+  `order_type` enum('pending','shipped','received', 'review') NOT NULL DEFAULT 'pending' COMMENT '订单状态：pending正在发货；shipped已发货；received已收货；review已评论',
+  `order_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='订单表';
