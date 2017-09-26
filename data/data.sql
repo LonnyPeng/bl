@@ -423,6 +423,17 @@ CREATE TABLE `t_customer_search_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员搜索日志';
 
 -- ----------------------------
+-- 会员收藏表 t_customer_collections
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_collections`;
+CREATE TABLE `t_customer_collections` (
+  `collection_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `product_id` int(11) unsigned NOT NULL COMMENT '商品ID',
+  `customer_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员收藏';
+
+-- ----------------------------
 -- 系统配置表 t_configs
 -- ----------------------------
 DROP TABLE IF EXISTS `t_configs`;
