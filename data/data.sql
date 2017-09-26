@@ -655,7 +655,29 @@ CREATE TABLE `t_reviews` (
 DROP TABLE IF EXISTS `t_review_images`;
 CREATE TABLE `t_review_images` (
   `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
-  `review_id` int(11) NOT NULL COMMENT '商品ID',
+  `review_id` int(11) NOT NULL COMMENT '评论ID',
   `image_path` varchar(45) NOT NULL COMMENT '评论图片',
   `image_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='评论图片表';
+
+-- ----------------------------
+-- Table structure for t_review_logs
+-- ----------------------------
+DROP TABLE IF EXISTS `t_review_logs`;
+CREATE TABLE `t_review_logs` (
+  `log_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `review_id` int(11) NOT NULL COMMENT '评论ID',
+  `customer_id` int(11) NOT NULL COMMENT '顾客ID'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='评论记录表';
+
+-- ----------------------------
+-- Table structure for t_order_groups
+-- ----------------------------
+DROP TABLE IF EXISTS `t_order_groups`;
+CREATE TABLE `t_order_groups` (
+  `group_id` int(10) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '团购ID',
+  `customer_id` varchar(45) NOT NULL COMMENT '顾客ID (1,2,3) 第一个为发起人',
+  `product_id` int(11) unsigned NOT NULL COMMENT '商品ID',
+  `group_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+  `group_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='团购表';
