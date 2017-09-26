@@ -585,7 +585,6 @@ CREATE TABLE `t_products` (
   `product_quantity` smallint(6) NOT NULL DEFAULT '0' COMMENT '库存数量',
   `product_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
   `product_virtual_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品虚拟价格',
-  `product_score` int(5) NOT NULL DEFAULT '0' COMMENT '所需积分',
   `attr_id` int(11) NOT NULL COMMENT '商品类别',
   `product_type` enum('1', '2') NOT NULL COMMENT '领取方式：1:白领；2:组团领',
   `product_group_num` int(3) COMMENT '组团人数',
@@ -618,7 +617,7 @@ CREATE TABLE `t_product_images` (
   `image_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
   `product_id` int(11) NOT NULL COMMENT '商品ID',
   `image_path` varchar(45) NOT NULL COMMENT '商品图片',
-  `image_type` enum('logo', 'home','banner','detail') NOT NULL COMMENT '图片类型：logo品牌；home缩略图；banner详情顶部图片；detail详情底部图片',
+  `image_type` enum('logo','home','banner','detail') NOT NULL COMMENT '图片类型：logo品牌；home缩略图；banner详情顶部图片；detail详情底部图片',
   `image_sort` int(3) DEFAULT 0 COMMENT '排序',
   `image_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品图片表';

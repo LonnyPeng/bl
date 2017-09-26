@@ -105,6 +105,7 @@
     <table class="table" id="data-list">
         <thead>
             <tr>
+                <th class="text-center">品牌名称</th>
                 <th class="text-center">商品名称</th>
                 <th class="text-center">商品CODE</th>
                 <th class="text-center">所在城市</th>
@@ -114,9 +115,13 @@
                 <th class="text-center">商品原价</th>
                 <th class="text-center">开始时间</th>
                 <th class="text-center">结束时间</th>
+                <th class="text-center">领取方式</th>
+                <th class="text-center">组团人数</th>
+                <th class="text-center">组团时长</th>
                 <th class="text-center">推荐说明</th>
-                <th class="text-center">领取二维码有效时间</th>
+                <th class="text-center">二维码有效期</th>
                 <th class="text-center">商品状态</th>
+                <th class="text-center">是否支持配送</th>
                 <th class="text-center">排序</th>
                 <th class="text-center">操作</th>
             </tr>
@@ -124,6 +129,7 @@
         <tbody>
             <?php foreach ($productList as $key => $row) :?>
                 <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['product_logo_name']?></td>
                     <td class="text-center"><?= $row['product_name']?></td>
                     <td class="text-center"><?= $row['product_code']?></td>
                     <td class="text-center"><?= $row['district_name']?></td>
@@ -133,9 +139,13 @@
                     <td class="text-center" style="text-decoration: line-through;"><?= sprintf("%d", $row['product_virtual_price'])?></td>
                     <td class="text-center"><?= date("Y-m-d", strtotime($row['product_start']))?></td>
                     <td class="text-center"><?= date("Y-m-d", strtotime($row['product_end']))?></td>
+                    <td class="text-center"><?= $row['product_type'] == 2 ? '组团领' : '白领'?></td>
+                    <td class="text-center"><?= $row['product_type'] == 2 ? $row['product_group_num'] : ''?></td>
+                    <td class="text-center"><?= $row['product_type'] == 2 ? sprintf("%d天", $row['product_group_time']) : ''?></td>
                     <td class="text-center" title="<?= $row['product_desc']?>"><?= $this->funcs->mbSubString($row['product_desc'], 0, 10)?></td>
                     <td class="text-center"><?= sprintf("%d天", $row['product_qr_code_day'])?></td>
                     <td class="text-center"><?= $row['product_status'] ? '有效' : '禁用';?></td>
+                    <td class="text-center"><?= $row['product_shaping_status'] ? '是' : '否';?></td>
                     <td class="text-center js-sort" title="双击编辑" data-id="<?php echo $row['product_id']?>"><?= $row['product_sort']?></td>
                     <td class="text-center action">
                         <a class="btn btn-xs edit" href="<?= $this->url('product/edit', array('id' => $row['product_id']))?>" title="编辑">

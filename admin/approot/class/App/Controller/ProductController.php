@@ -105,7 +105,7 @@ class ProductController extends AbstractActionController
 							continue;
 						}
 
-						if ($key == 'home') {
+						if (in_array($key, array('home', 'logo'))) {
 							if (isset($_POST['image'][$key][$ke])) {
 								$imageId = $_POST['image'][$key][$ke];
 								$sql = "SELECT image_path 
@@ -136,6 +136,9 @@ class ProductController extends AbstractActionController
 				if (!isset($_FILES['image']['name']['home'])) {
 					return new JsonModel('error', '请上传商品缩略图');
 				}
+				if (!isset($_FILES['image']['name']['logo'])) {
+					return new JsonModel('error', '请上传品牌Logo');
+				}
 
 				if (!isset($_FILES['image']['name']['banner'])) {
 					return new JsonModel('error', '请上传商品图片');
@@ -146,6 +149,9 @@ class ProductController extends AbstractActionController
 				}
 			}
 
+			if (!$_POST['product_logo_name']) {
+				return new JsonModel('error', '品牌名称不能为空');
+			}
 			if (!$_POST['product_name']) {
 				return new JsonModel('error', '商品名不能为空');
 			}
@@ -172,6 +178,18 @@ class ProductController extends AbstractActionController
 			if ($_POST['product_qr_code_day'] < 1) {
 				return new JsonModel('error', '领取二维码有效时长不能小于1天');
 			}
+			if (!$_POST['product_type']) {
+				return new JsonModel('error', '领取方式');
+			} elseif ($_POST['product_type'] == 2) {
+				if ($_POST['product_group_num'] < 1) {
+					return new JsonModel('error', '组团人数不能小于1');
+				}
+				if ($_POST['product_group_time'] < 1) {
+					return new JsonModel('error', '组团过期时间不能小于1（天）');
+				}
+			} else {
+				$_POST['product_group_num'] = $_POST['product_group_time'] = 0;
+			}
 			if (!$_POST['product_desc']) {
 				return new JsonModel('error', '请填写推荐说明');
 			}
@@ -192,10 +210,15 @@ class ProductController extends AbstractActionController
 			$map = array(
 				'district_id' => $_POST['district_id'],
 				'product_name' => trim($_POST['product_name']),
+				'product_logo_name' => trim($_POST['product_logo_name']),
 				'product_quantity' => trim($_POST['product_quantity']),
 				'product_price' => trim($_POST['product_price']),
 				'product_virtual_price' => trim($_POST['product_virtual_price']),
 				'attr_id' => trim($_POST['attr_id']),
+				'product_type' => trim($_POST['product_type']),
+				'product_group_num' => trim($_POST['product_group_num']),
+				'product_group_time' => trim($_POST['product_group_time']),
+				'product_shaping_status' => trim($_POST['product_shaping_status']),
 				'product_status' => trim($_POST['product_status']),
 				'product_desc' => trim($_POST['product_desc']),
 				'product_end' => date("Y-m-d 23:59:59", strtotime(trim($_POST['product_end']))),
@@ -204,10 +227,15 @@ class ProductController extends AbstractActionController
 			);
 			$set = "district_id = :district_id,
 					product_name = :product_name,
+					product_logo_name = :product_logo_name,
 					product_quantity = :product_quantity,
 					product_price = :product_price,
 					product_virtual_price = :product_virtual_price,
 					attr_id = :attr_id,
+					product_type = :product_type,
+					product_group_num = :product_group_num,
+					product_group_time = :product_group_time,
+					product_shaping_status = :product_shaping_status,
 					product_status = :product_status,
 					product_desc = :product_desc,
 					product_end = :product_end,
@@ -233,6 +261,9 @@ class ProductController extends AbstractActionController
 			}
 
 			//保存库存分配
+			$sql = "SELECT quantity_id FROM t_product_quantity WHERE product_id = ?";
+			$quantityIds = (array) $this->locator->db->getColumn($sql, $id);
+
 			$insertSql = "INSERT INTO t_product_quantity 
 					SET product_id = :product_id, 
 					shop_id = :shop_id, 
@@ -241,20 +272,33 @@ class ProductController extends AbstractActionController
 					SET shop_id = :shop_id, 
 					quantity_num = :quantity_num
 					WHERE quantity_id = :quantity_id";
-			foreach ($_POST['shop_id'] as $key => $value) {
-				if ($_POST['quantity_id'][$key]) {
-					$this->locator->db->exec($updateSql, array(
-						'shop_id' => $value,
-						'quantity_num' => $_POST['quantity_num'][$key],
-						'quantity_id' => $_POST['quantity_id'][$key],
-					));
-				} else {
-					$this->locator->db->exec($insertSql, array(
-						'product_id' => $id,
-						'shop_id' => $value,
-						'quantity_num' => $_POST['quantity_num'][$key],
-					));
+			if (isset($_POST['shop_id'])) {
+				foreach ($_POST['shop_id'] as $key => $value) {
+					if ($_POST['quantity_id'][$key]) {
+						unset($quantityIds[array_search($_POST['quantity_id'][$key], $quantityIds)]);
+
+						$this->locator->db->exec($updateSql, array(
+							'shop_id' => $value,
+							'quantity_num' => $_POST['quantity_num'][$key],
+							'quantity_id' => $_POST['quantity_id'][$key],
+						));
+					} else {
+						$this->locator->db->exec($insertSql, array(
+							'product_id' => $id,
+							'shop_id' => $value,
+							'quantity_num' => $_POST['quantity_num'][$key],
+						));
+					}
 				}
+
+				if ($quantityIds) {
+					$sql = "DELETE FROM t_product_quantity WHERE quantity_id IN (%s)";
+					$sql = sprintf($sql, implode(",", $quantityIds));
+					$this->locator->db->exec($sql);
+				}
+			} else {
+				$sql = "DELETE FROM t_product_quantity WHERE product_id = ?";
+				$this->locator->db->exec($sql, $id);
 			}
 
 			//保存图片
