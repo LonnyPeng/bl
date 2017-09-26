@@ -15,6 +15,18 @@
                 <input type="hidden" name="image[home][]" value="<?php echo isset($info['images']['home'][0]['image_id']) ? $info['images']['home'][0]['image_id'] : ''?>">
             </div>
         </div>
+        <div class="col-24">
+            <div class="form-group">
+                <label>品牌LOGO<sup>*</sup></label>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <div style="display: <?php echo !isset($info['images']['home'][0]['image_path']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['images']['logo'][0]['image_path'])? $this->uploadUrl($info['images']['logo'][0]['image_path'], 'product') : ''?>">
+                </div>
+                
+                <input class="form-control" type="file" name="image[logo][]" value="">
+                <input type="hidden" name="image[logo][]" value="<?php echo isset($info['images']['logo'][0]['image_id']) ? $info['images']['logo'][0]['image_id'] : ''?>">
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col-24">
@@ -78,6 +90,12 @@
     <div class="row">
         <div class="col-12">
             <div class="form-group">
+                <label>品牌名称<sup>*</sup></label>
+                <input class="form-control" type="text" placeholder="商品名称" name="product_logo_name" value="<?= isset($info['product_logo_name']) ? $info['product_logo_name'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
                 <label>商品名称<sup>*</sup></label>
                 <input class="form-control" type="text" placeholder="商品名称" name="product_name" value="<?= isset($info['product_name']) ? $info['product_name'] : ''?>">
             </div>
@@ -94,6 +112,8 @@
                 <input class="form-control" type="text" placeholder="库存数量" name="product_quantity" value="<?php echo isset($info['product_quantity']) ? $info['product_quantity'] : ''?>">
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-12">
             <div class="form-group">
                 <label>所在城市<sup>*</sup></label>
@@ -105,8 +125,6 @@
                 </select>
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-12">
             <div class="form-group">
                 <label>商品现价<sup>*</sup></label>
@@ -130,6 +148,8 @@
                 </select>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-12">
             <div class="form-group">
                 <label>商品状态<sup>*</sup></label>
@@ -139,8 +159,6 @@
                 </select>
             </div>
         </div>
-    </div>
-    <div class="row">
         <div class="col-12">
             <div class="form-group">
                 <label>开始时间</label>
@@ -160,10 +178,50 @@
                 <input class="form-control" type="text" placeholder="天" name="product_qr_code_day" value="<?php echo isset($info['product_qr_code_day']) ? $info['product_qr_code_day'] : '2'?>">
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-12">
             <div class="form-group">
                 <label>排序</label>
                 <input class="form-control" type="text" name="product_sort" value="<?php echo isset($info['product_sort']) ? $info['product_sort'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>所需积分</label>
+                <input class="form-control" type="text" name="product_score" value="<?php echo isset($info['product_score']) ? $info['product_score'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>领取方式<sup>*</sup></label>
+                <select class="form-control" name="product_type">
+                    <option value="1" <?php echo isset($info['product_type']) && $info['product_type'] === '1' ? 'selected' : ''?>>白领</option>
+                    <option value="2" <?php echo isset($info['product_type']) && $info['product_type'] === '2' ? 'selected' : ''?>>组团领</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>是否支持配送<sup>*</sup></label>
+                <select class="form-control" name="product_shaping_status">
+                    <option value="0" <?php echo isset($info['product_shaping_status']) && $info['product_shaping_status'] === '0' ? 'selected' : ''?>>不支持</option>
+                    <option value="1" <?php echo isset($info['product_shaping_status']) && $info['product_shaping_status'] === '1' ? 'selected' : ''?>>支持</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row <?php echo isset($info['product_type']) && $info['product_type'] === '2' ? '' : 'none'?>" id="js-group">
+        <div class="col-12">
+            <div class="form-group">
+                <label>组团人数<sup>*</sup></label>
+                <input class="form-control" type="text" name="product_group_num" value="<?php echo isset($info['product_group_num']) ? $info['product_group_num'] : ''?>">
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>组团过期时间（天）<sup>*</sup></label>
+                <input class="form-control" type="text" name="product_group_time" value="<?php echo isset($info['product_group_time']) ? $info['product_group_time'] : ''?>">
             </div>
         </div>
     </div>
@@ -266,6 +324,20 @@
            reader.readAsDataURL(upFile);
 
            imageHolder.parent().show();
+        }
+    });
+
+    $('select[name="product_type"]').change(function() {
+        if ($(this).val() == 2) {
+            $('#js-group').removeClass('none');
+            <?php if (!$this->param('id')) : ?>
+                $('select[name="product_shaping_status"] option[value="1"]').attr('selected', true);
+            <?php endif;?>
+        } else {
+            $('#js-group').addClass('none');
+            <?php if (!$this->param('id')) : ?>
+                $('select[name="product_shaping_status"] option[value="0"]').attr('selected', true);
+            <?php endif;?>
         }
     });
 
