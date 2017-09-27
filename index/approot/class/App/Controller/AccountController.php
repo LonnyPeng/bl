@@ -46,6 +46,8 @@ class AccountController extends AbstractActionController
             if ($info) {
                 $inviteId = $info['customer_id'];
             }
+
+            unset($_SESSION['key']);
         }
 
         $sql = "INSERT INTO t_customers 

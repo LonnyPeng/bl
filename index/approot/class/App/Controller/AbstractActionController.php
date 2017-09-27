@@ -72,8 +72,7 @@ abstract class AbstractActionController extends ActionController
                         $_SESSION['customer_info']['lat'] = 31.236176;
                         $_SESSION['customer_info']['lng'] = 121.481689;
                         $this->funcs->redirect($this->helpers->url('default/index'));
-                    }
-                    
+                    } 
                 }
             } else {
                 //判断是否是新用户
