@@ -1,0 +1,85 @@
+<div><?php echo sprintf('还有%d次抽奖机会', $config['chance_num'])?></div>
+
+<a id="js-chance" href="<?php echo $this->url('task/chance', array('turntable_use_score' => $config['turntable_use_score']))?>">
+	<?php echo sprintf('使用%d积分兑换一次抽奖机会', $config['turntable_use_score'])?>
+</a>
+
+  <select class="col-xs-4 input-sm" id="select" name="animate" style="size:5">
+	<option value="$.easing.easeInOutBounce">easeInOutBounce</option>
+	<option value="$.easing.linear">linear</option>
+	<option value="$.easing.swing">swing</option>
+	<option value="$.easing.jswing">jswing</option>
+	<option value="$.easing.easeInQuad">easeInQuad</option>
+	<option value="$.easing.easeOutQuad">easeOutQuad</option>
+	<option value="$.easing.easeInOutQuad">easeInOutQuad</option>
+	<option value="$.easing.easeInCubic">easeInCubic</option>
+	<option value="$.easing.easeOutCubic">easeOutCubic</option>
+	<option value="$.easing.easeInOutCubic">easeInOutCubic</option>
+	<option value="$.easing.easeInQuart">easeInQuart</option>
+	<option value="$.easing.easeOutQuart">easeOutQuart</option>
+	<option value="$.easing.easeInOutQuint">easeInOutQuint</option>
+	<option value="$.easing.easeInSine">easeInSine</option>
+	<option value="$.easing.easeOutSine">easeOutSine</option>
+	<option value="$.easing.easeInOutSine">easeInOutSine</option>
+	<option value="$.easing.easeInExpo">easeInExpo</option>
+	<option value="$.easing.easeOutExpo">easeOutExpo</option>
+	<option value="$.easing.easeInOutExpo">easeInOutExpo</option>
+	<option value="$.easing.easeInCirc">easeInCirc</option>
+	<option value="$.easing.easeOutCirc">easeOutCirc</option>
+	<option value="$.easing.easeInOutCirc">easeInOutCirc</option>
+	<option value="$.easing.easeInElastic">easeInElastic</option>
+	<option value="$.easing.easeOutElastic">easeOutElastic</option>
+	<option value="$.easing.easeInOutElastic">easeInOutElastic</option>
+	<option value="$.easing.easeInBack">easeInBack</option>
+	<option value="$.easing.easeOutBack">easeOutBack</option>
+	<option value="$.easing.easeInOutBack">easeInOutBack</option>
+	<option value="$.easing.easeInBounce">easeInBounce</option>
+	<option value="$.easing.easeOutBounce">easeOutBounce</option>
+	
+  </select>
+
+<div id="start">			
+	<img src="<?php echo $this->image('turntable.png')?>">
+</div>
+
+<div><?php echo sprintf('当前您等级为%s，每天有%d次免费抽奖机会', $this->locator->get('Profile')['level_name'], $config['turntable_num'])?></div>
+
+<?php echo $this->js('jquery.rotate.js')->wrap();?>
+<script type="text/javascript">
+	$('#js-chance').click(function() {
+		$(this).ajaxAuto();
+		return false;
+	});
+
+	$("#start").click(function() {
+		var $$ = $(this);
+
+		$$.rotate({
+			bind:{
+				click: function(){//绑定点击事件
+					// $$.unbind('click');
+
+					$$.ajaxAuto({
+						success: function (re) {
+							if (re.status == 'ok') {
+								var value = re.data;
+								var effect = $("#select").val();
+								$$.rotate({
+									duration: value.duration,//多少毫秒内完成转动
+									angle: 0,//起始角度
+									animateTo: value.n * 360 + value.angle,//一共转动多少角度
+									easing: eval(effect),//转动动画扩展
+									callback: function() {//结束时的回调函数
+										$$.bind('click');
+
+										console.log(value.message);
+									}
+								})
+							}
+						}
+					});
+				}
+			}
+		})
+	});
+</script>

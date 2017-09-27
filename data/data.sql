@@ -554,6 +554,17 @@ CREATE TABLE `t_turntable_products` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='转盘奖品';
 
 -- ----------------------------
+-- 积分兑换抽奖机会表 t_turntable_chance
+-- ----------------------------
+DROP TABLE IF EXISTS `t_turntable_chance`;
+CREATE TABLE `t_turntable_chance` (
+  `chance_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `chance_num` mediumint(8) NOT NULL COMMENT '次数',
+  `chance_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='积分兑换抽奖机会';
+
+-- ----------------------------
 -- 会员奖品表 t_prizes
 -- ----------------------------
 DROP TABLE IF EXISTS `t_prizes`;

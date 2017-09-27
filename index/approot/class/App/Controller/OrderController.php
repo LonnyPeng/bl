@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-
 class OrderController extends AbstractActionController
 {
     public function init()
