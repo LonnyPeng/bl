@@ -15,10 +15,17 @@ define('APP_DIR',       ROOT_DIR . 'approot/');
 define('CONFIG_DIR',    APP_DIR  . 'config/');
 define('TPL_DIR',       APP_DIR  . 'template/');
 define('INC_DIR',   APP_DIR  . 'include/');
+define('VENDOR_DIR',   APP_DIR  . 'vendor/');
 // additions
 define('JS_DIR',        WWW_DIR . 'js/');
 define('CSS_DIR',       WWW_DIR . 'css/');
 define('IMG_DIR',       WWW_DIR . 'images/');
+
+/**
+ * upload director
+ */
+define('UPLOAD_DIR',    ROOT_DIR  . '../upload/');
+define('USER_DIR', UPLOAD_DIR . 'user/');
 
 /**
  * load the private configure
