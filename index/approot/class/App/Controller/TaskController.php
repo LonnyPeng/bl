@@ -57,7 +57,7 @@ class TaskController extends AbstractActionController
 
         		$angle += $l;
         	}
-
+        	
         	//获取中奖奖品
         	$proSum = 0;
         	foreach($list as $row) {
