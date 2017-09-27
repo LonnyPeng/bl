@@ -355,6 +355,8 @@ CREATE TABLE `t_customers` (
   `district_id` int(11) COMMENT '常住城市ID',
   `customer_default_address_id` int(5) NOT NULL DEFAULT '0' COMMENT '默认收货地址',
   `customer_tel` varchar(32) COMMENT '电话',
+  `customer_invite_code` varchar(8) NOT NULL UNIQUE KEY COMMENT '邀请码',
+  `customer_invite_id` int(11) COMMENT '邀请人',
   `customer_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '积分',
   `customer_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员表';

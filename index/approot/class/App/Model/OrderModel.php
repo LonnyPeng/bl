@@ -7,7 +7,7 @@ class OrderModel extends CommonModel
     protected $name = 't_orders o';
 
     /**
-     * Get member count
+     * 
      *
      */
     public function getCount($sqlInfo)
@@ -19,7 +19,7 @@ class OrderModel extends CommonModel
     }
 
     /**
-     * Get member
+     * 
      *
      */
     public function getOrder($files = '*', $sqlInfo = array())
@@ -29,5 +29,13 @@ class OrderModel extends CommonModel
         $sql = $this->setSql($sql, $sqlInfo);
 
         return $this->locator->db->getAll($sql);
+    }
+
+    public function getOrderInfo($where = array())
+    {
+        $sql = "SELECT * FROM $this->name";
+        $sql = $this->setWhere($sql, $where);
+
+        return $this->locator->db->getRow($sql);
     }
 }

@@ -1,0 +1,15 @@
+<img id="js-qrcode" src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
+
+<div id="update-qrcode">刷新二维码</div>
+
+<script type="text/javascript">
+	$('#update-qrcode').click(function() {
+		$(this).ajaxAuto({
+			success: function (re) {
+				if (re.status == 'ok') {
+					$('#js-qrcode').attr('src', re.data.src);
+				}
+			}
+		});
+	});
+</script>

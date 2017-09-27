@@ -26,4 +26,9 @@ class DefaultController extends AbstractActionController
 
     	return false;
     }
+
+    public function testAction()
+    {
+        return array();
+    }
 }

@@ -11,6 +11,16 @@
             白领
         <?php endif;?>
     </title>
+
+    <?php echo $this->css('weui.min.css')->wrap();?>
+    <?php echo $this->css('jquery-weui.min.css')->wrap();?>
+    <?php echo $this->css('index.css')->wrap();?>
+
+    <?php echo $this->js('jquery.min.js')->wrap();?>
+    <?php echo $this->js('jquery-weui.min.js')->wrap();?>
+    <?php echo $this->js('core.popup.js')->wrap();?>
+    <?php echo $this->js('core.ajaxauto.js')->wrap();?>
+    <?php echo $this->js('core.extend.js')->wrap();?>
 </head>
 <body class="<?php echo $this->class ?: ''?>">
     <?php echo $this->__header; ?>
