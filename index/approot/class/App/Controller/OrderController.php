@@ -12,7 +12,9 @@ class OrderController extends AbstractActionController
 
     public function qrcodeAction()
     {
-        $orderNum = "0123456";
+        $this->layout->title = '领取二维码';
+
+        $orderNum = trim($this->param('order_number'));
         
         $key = HTTP_SERVER . BASE_PATH . "order-{$orderNum}";
         

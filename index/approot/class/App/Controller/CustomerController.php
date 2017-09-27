@@ -13,8 +13,10 @@ class CustomerController extends AbstractActionController
 
     public function qrcodeAction()
     {
-        $openId = '123';
-        $key = HTTP_SERVER . BASE_PATH . "customer/invite?key=";
+        $this->layout->title = '我的邀请码';
+        
+        $openId = $_SESSION['openid'];
+        $key = HTTP_SERVER . BASE_PATH . "default/index?key=";
 
         if ($this->funcs->isAjax()) {
             for($i=0;;$i++) {
