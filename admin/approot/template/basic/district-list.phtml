@@ -45,6 +45,7 @@
     <table class="table" id="data-list">
         <thead>
             <tr>
+                <th class="text-center">首字母</th>
                 <th class="text-center">城市名</th>
                 <th class="text-center">城市状态</th>
                 <th class="text-center">操作</th>
@@ -54,6 +55,7 @@
             <?php if ($districtList) : ?>
                 <?php foreach ($districtList as $key => $row) :?>
                     <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= strtoupper($row['district_initial'])?></td>
                         <td class="text-center"><?= $row['district_name']?></td>
                         <td class="text-center"><?= $row['district_status'] ? '已开通' : '未开通';?></td>
                         <td class="text-center action">

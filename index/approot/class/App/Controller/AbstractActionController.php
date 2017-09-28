@@ -87,6 +87,21 @@ abstract class AbstractActionController extends ActionController
                         $this->funcs->redirect($this->helpers->url('account/register'));
                     }
                 } else {
+                    if (!isset($_SESSION['login'])) {
+                        //记录登录日志
+                        $sql = "INSERT INTO t_customer_login_log 
+                                SET customer_id = :customer_id, 
+                                district_id = :district_id, 
+                                log_ip = :log_ip";
+                        $this->locator->db->exec($sql, array(
+                            'customer_id' => $customer['customer_id'],
+                            'district_id' => $_SESSION['customer_info']['district_id'],
+                            'log_ip' => Http::getIp(),
+                        ));
+
+                        $_SESSION['login'] = true;
+                    }
+
                     $this->locator->setService('Profile', array_merge($customer, $_SESSION['customer_info']));
                 }
             }

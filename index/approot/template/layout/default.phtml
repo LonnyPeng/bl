@@ -27,7 +27,6 @@
     </script>
     <?php echo $this->js('jquery-weui.js')->wrap();?>
     <?php echo $this->js('swiper.min.js')->wrap();?>
-    <?php echo $this->js('index.js')->wrap();?>
     <script type="text/javascript">
         var swiper8 = new Swiper('.m_nav', {
            slidesPerView: 'auto',
@@ -40,7 +39,7 @@
     <?php echo $this->js('core.ajaxauto.js')->wrap();?>
     <?php echo $this->js('core.extend.js')->wrap();?>
 </head>
-<body class="<?php echo $this->class ?: ''?>">
+<body ontouchstart class="<?php echo $this->class ?: ''?>">
     <?php echo $this->__header; ?>
 
     <?php echo $this->__content; ?>

@@ -1,6 +1,6 @@
 <!-- 头部 -->
 <div class="m_top z999 pf clearfix">
-  <a href="选择城市.html" class="fl">
+  <a href="<?php echo $this->url('default/city')?>" class="fl">
     <i class="iconfont add">&#xe617;</i><?php echo $this->locator->get('Profile')['city']?><i class="iconfont narrow">&#xe6cf;</i>
   </a>
   <a href="../my/个人中心.html" class="fr"><i class="iconfont my">&#xe656;</i></a>
@@ -27,7 +27,7 @@
 						<img src="<?php echo $this->uploadUrl($row['image_path'], 'sys')?>" />
 					</a>
 				<?php else : ?>
-					<img src="<?php echo $this->image('banner_01.jpg')?>" />
+					<img src="<?php echo $this->uploadUrl($row['image_path'], 'sys')?>" />
 				<?php endif;?>
 			</div>
 		<?php endforeach;?>
@@ -57,3 +57,55 @@
 
 <!-- 搜索按钮 -->
 <a class="search_btn pf" href="搜索.html"><i class="iconfont">&#xe60a;</i></a>
+
+<script type="text/javascript">
+	$(function(){
+		$(".m_nav").find('.swiper-slide').on('tap', function() {
+			// event.preventDefault();
+			$(this).siblings().removeClass('on');
+			$(this).addClass('on');
+		});
+		$(".m_banner").swiper({
+		    loop: true,
+		    autoplay: 3000
+		});
+	    // 所在城市无商品居中
+	    var wh=$(window).height();
+	    var ww=$(window).width();
+	    $(".noproduct").height(wh-50);
+	    // 分类列表
+	    $(".prod_list").last().css("margin-bottom",0);
+	    // 点击收藏
+	    $(".prod_list").each(function() {
+	    	$(this).find('.fl').on('click', function(event) {
+	    	var num=$(this).find('span').html();
+	    		if($(this).hasClass('on')){
+	    			$(this).removeClass('on');
+	    			num--;
+	    			$(this).find('span').html(num);
+
+	    		}else{
+	    			$(this).addClass('on')
+	    			num++;
+	    			$(this).find('span').html(num)
+	    		}
+	   	 	});
+	    });
+	    // 立即领取详情页点赞
+	    $(".eval_box .jubao").each(function() {
+	        $(this).find('.fr').on('click', function(event) {
+	        var num=$(this).find('span').html();
+	            if($(this).hasClass('on')){
+	                $(this).removeClass('on');
+	                num--;
+	                $(this).find('span').html(num);
+
+	            }else{
+	                $(this).addClass('on')
+	                num++;
+	                $(this).find('span').html(num)
+	            }
+	        });
+	    });
+	})
+</script>

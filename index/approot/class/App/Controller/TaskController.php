@@ -192,26 +192,4 @@ class TaskController extends AbstractActionController
     		return new JsonModel('error', '兑换失败');
     	}
     }
-
-	//获得旋转信息
-	function getRotate($prize_arr) {
-		$data=array();
-		$option=$_GET;//根据前台的选择更改原定默认概率
-		foreach($prize_arr as $k=>&$v) {
-			$v['v']=$option[$k];
-		}
-		$prize=getPrize($prize_arr);//通过概率原理设计函数获得其中一个奖项
-		$angle=$prize['angle'];
-		shuffle($angle);//打乱角度数组
-		$angle=$angle[0];
-		$angle_arr=explode('-',$angle);
-		$min=$angle_arr[0];
-		$max=$angle_arr[1];
-		$angle=mt_rand($min,$max);
-		$data['angle']=$angle;
-		$data['message']=$prize['prize'];
-		$data['duration']=mt_rand(2,5)*1000;
-		$data['n']=mt_rand(3,6);//为了不那么单调，随机一下转动时间和转动圈数
-		echo json_encode($data);
-	}
 }

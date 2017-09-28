@@ -8,6 +8,10 @@
     <div class="col-12">
         <form method="post">
             <div class="form-group">
+                <label>首字母<sup>*</sup></label>
+                <input class="form-control" type="text" name="district_initial" value="<?= isset($districtInfo['district_initial']) ? $districtInfo['district_initial'] : '';?>">
+            </div>
+            <div class="form-group">
                 <label>城市名<sup>*</sup></label>
                 <input class="form-control" type="text" name="district_name" value="<?= isset($districtInfo['district_name']) ? $districtInfo['district_name'] : '';?>">
             </div>
@@ -27,6 +31,7 @@
 </div>
 <script>
     $("form").submit(function() {
+        $.check(!this.district_initial.value, '请输入首字母', this.district_initial) &&
         $.check(!this.district_name.value, '请输入城市名', this.district_name) &&
         $(this).ajaxAuto();
         return false;

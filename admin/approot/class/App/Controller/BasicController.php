@@ -70,9 +70,11 @@ class BasicController extends AbstractActionController
 
 			$map = array(
 				'district_name' => trim($_POST['district_name']),
+				'district_initial' => strtoupper(trim($_POST['district_initial'])),
 				'district_status' => $_POST['district_status'],
 			);
 			$set = "district_name = :district_name,
+					district_initial = :district_initial,
 					district_status = :district_status";
 
 			if (!$districtId) {
