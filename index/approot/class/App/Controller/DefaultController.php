@@ -23,9 +23,7 @@ class DefaultController extends AbstractActionController
         $this->layout->title = '白领首页';
 
         //获取商品类别
-        $sql = "SELECT * FROM t_product_attr 
-                ORDER BY attr_status DESC, attr_sort DESC, attr_id DESC";
-        $attrList = $this->locator->db->getAll($sql);
+        $attrList = $this->models->product->getAttrPair();
 
         //获取焦点图
         $sql = "SELECT * FROM t_images 

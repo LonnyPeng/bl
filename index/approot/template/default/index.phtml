@@ -1,21 +1,5 @@
-<!-- 头部 -->
-<div class="m_top z999 pf clearfix">
-  <a href="<?php echo $this->url('default/city')?>" class="fl">
-    <i class="iconfont add">&#xe617;</i><?php echo $this->locator->get('Profile')['city']?><i class="iconfont narrow">&#xe6cf;</i>
-  </a>
-  <a href="../my/个人中心.html" class="fr"><i class="iconfont my">&#xe656;</i></a>
-</div>
-<!-- 导航切换 -->
-<div class="swiper-container z999 pf m_nav">
-	<div class="swiper-wrapper">
-		<div class="swiper-slide on"><a href="/">首页</a></div>
-		<?php if ($attrList) : ?>
-			<?php foreach($attrList as $row) : ?>
-				<div class="swiper-slide"><a href="分类列表页.html"><?php echo $row['attr_name']?></a></div>
-			<?php endforeach;?>
-		<?php endif;?>
-	</div>
-</div>
+<?= $this->render('includes/nav', array('attrList' => $attrList))?>
+
   <!-- banner -->
 <?php if ($imageList) : ?>
 <div class="swiper-container m_banner mt98">
