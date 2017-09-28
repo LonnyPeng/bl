@@ -1,18 +1,36 @@
 <!-- 搜索框 -->
 <div class="weui-search-bar" id="searchBar">
     <form class="weui-search-bar__form">
-    <div class="weui-search-bar__box">
-    <i class="weui-icon-search"></i>
-    <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入关键字查找商品" required="">
-    <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
-    </div>
-    <label class="weui-search-bar__label" id="searchText">
-    <i class="weui-icon-search"></i>
-    <span>输入关键字查找商品</span>
-    </label>
+        <div class="weui-search-bar__box">
+            <i class="weui-icon-search"></i>
+            <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入关键字查找商品" required="" name="product_name" value="<?php echo $this->param('product_name')?>">
+            <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
+        </div>
+        <label class="weui-search-bar__label" id="searchText">
+        <i class="weui-icon-search"></i>
+        <span>输入关键字查找商品</span>
+        </label>
     </form>
     <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 </div>
+
+<?php if ($productList) : ?>
+    <?php foreach($productList as $row) : ?>
+        <div class="search_hot search_hh">
+            <div class="search_list clearfix pr">
+                <div class="img fl">
+                    <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>" >
+                </div>
+                <h4><?php echo $row['product_name']?></h4>
+                <p><?php echo $this->funcs->showValue($row['product_price'])?>积分</p>
+                <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+                    <?php echo $row['product_type'] == 1 ? '立即白领' : '组团领'?>
+                </a>
+            </div>
+        </div>
+    <?php endforeach?>
+<?php endif;?>
+
 <!-- 搜索历史 -->
 <?php if ($searchList) : ?>
     <div class="search_history wrap pr">
@@ -27,25 +45,41 @@
 <?php endif;?>
   
 <!-- 热门推荐 -->
-<div class="search_hot">
-    <h4>热门推荐</h4>
-    <?php if ($productMain) : ?>
-        <div class="search_list clearfix pr">
-            <div class="img fl">
-                <img src="<?php echo $this->uploadUrl($productMain['images']['banner'][0]['image_path'], 'product')?>" >
+<?php if ($productMain || $productMinor) : ?>
+    <div class="search_hot">
+        <h4>热门推荐</h4>
+        <?php if ($productMain) : ?>
+            <div class="search_list clearfix pr">
+                <div class="img fl">
+                    <img src="<?php echo $this->uploadUrl($productMain['images']['banner'][0]['image_path'], 'product')?>" >
+                </div>
+                <h4><?php echo $productMain['product_name']?></h4>
+                <p><?php echo $this->funcs->showValue($productMain['product_price'])?>积分</p>
+                <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $productMain['product_id']))?>">
+                    <?php echo $productMain['product_type'] == 1 ? '立即白领' : '组团领'?>
+                </a>
             </div>
-            <h4><?php echo $productMain['product_name']?></h4>
-            <p><?php echo $this->funcs->showValue($productMain['product_price'])?>积分</p>
-            <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $productMain['product_id']))?>">
-                <?php echo $productMain['product_type'] == 1 ? '立即白领' : '组团领'?>
-            </a>
-        </div>
+        <?php endif;?>
+        <?php if ($productMinor) : ?>
+            <?php foreach($productMinor as $row) : ?>
+                <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" style="color: #000; margin: 0.5em;">
+                    <p><?php echo $row['product_name']?></p>
+                </a>
+            <?php endforeach;?>
+        <?php endif;?>
+    </div>
+<?php endif;?>
+
+<script type="text/javascript">
+    <?php if ($this->param('product_name')) : ?>
+        $('#searchText').trigger('click');
     <?php endif;?>
-    <?php if ($productMinor) : ?>
-        <?php foreach($productMinor as $row) : ?>
-            <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" style="color: #000; margin: 0.5em;">
-                <p><?php echo $row['product_name']?></p>
-            </a>
-        <?php endforeach;?>
-    <?php endif;?>
-</div>
+    $('input[type="search"]').change(function() {
+        $('form').trigger('submit');
+    });
+    $('input[type="search"]').blur(function() {
+        if (!$(this).val()) {
+            $('form').trigger('submit');
+        }
+    });
+</script>

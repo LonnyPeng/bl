@@ -125,33 +125,66 @@ class DefaultController extends AbstractActionController
     {
         $this->layout->title = '搜索';
 
-        //历史搜索
-        $sql = "SELECT log_name, log_time FROM t_customer_search_log
-                WHERE customer_id = ?
-                ORDER BY log_id DESC
-                LIMIT 0, 10";
-        $searchList = $this->locator->db->getAll($sql, $this->customerId);
+        $searchList = $productMain = $productMinor = $productList = array();
 
-        //获取主要推荐
-        $sql = "SELECT product_id FROM t_hot_products
-                WHERE hot_type = 'main'
-                AND district_id = ?
-                ORDER BY hot_id DESC
-                LIMIT 0, 1";
-        $productId = $this->locator->db->getOne($sql, $this->districtId);
-        $productMain = $this->models->product->getProductById($productId);
+        $where = array(
+            'p.product_status = 1',
+            sprintf("p.district_id = %d", $this->districtId),
+            "p.product_quantity >= 1",
+            sprintf("p.product_end > '%s'", date("Y-m-d H:i:s")),
+        );
 
-        //获取次要要推荐
-        $sql = "SELECT p.* FROM t_hot_products h
-                LEFT JOIN t_products p ON p.product_id = h.product_id
-                WHERE h.hot_type = 'minor'
-                AND h.district_id = ?
-                ORDER BY h.hot_id DESC
-                LIMIT 0, 10";
-        $productMinor = $this->locator->db->getAll($sql, $this->districtId);
+        $productName = trim($this->param('product_name'));
+        if ($productName) {
+            if ($this->param('product_name')) {
+                $where[] = sprintf("p.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
+            }
 
-        // print_r($searchList);die;
+            $sqlInfo = array(
+                'setWhere' => $where,
+                'setLimit' => '0, 20',
+                'setOrderBy' => 'attr_id ASC, product_sort DESC, product_id DESC',
+            );
+
+            $productList = $this->models->product->getProduct('*', $sqlInfo);
+            if ($productList) {
+                foreach ($productList as $key => $row) {
+                    $productList[$key] = $this->models->product->getProductById($row['product_id']);
+                }
+            }
+        } else {
+            //历史搜索
+            $sql = "SELECT log_name, log_time FROM t_customer_search_log
+                    WHERE customer_id = ?
+                    ORDER BY log_id DESC
+                    LIMIT 0, 10";
+            $searchList = $this->locator->db->getAll($sql, $this->customerId);
+
+            //获取主要推荐
+            $sql = "SELECT h.product_id FROM t_hot_products h
+                    LEFT JOIN t_products p ON p.product_id = h.product_id
+                    WHERE h.hot_type = 'main'
+                    AND h.district_id = ? AND " . implode(" AND ", $where) . "
+                    ORDER BY h.hot_id DESC
+                    LIMIT 0, 1";
+            $productId = $this->locator->db->getOne($sql, $this->districtId);
+            if ($productId) {
+                $productMain = $this->models->product->getProductById($productId);
+            }
+
+            //获取次要要推荐
+            $sql = "SELECT p.* FROM t_hot_products h
+                    LEFT JOIN t_products p ON p.product_id = h.product_id
+                    WHERE h.hot_type = 'minor'
+                    AND h.district_id = ? AND " . implode(" AND ", $where) . "
+                    ORDER BY h.hot_id DESC
+                    LIMIT 0, 10";
+            $productMinor = $this->locator->db->getAll($sql, $this->districtId);
+        }
+
+        // print_r($productList);die;
         return array(
+            'productList' => $productList,
             'searchList' => $searchList,
             'productMain' => $productMain,
             'productMinor' => $productMinor,
