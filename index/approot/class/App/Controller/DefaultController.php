@@ -2,19 +2,24 @@
 
 namespace App\Controller;
 
+use Framework\View\Model\JsonModel;
 use Framework\Utils\Http;
 
 class DefaultController extends AbstractActionController
 {
+    public $districtId = null;
+    public $customerId = null;
+
     public function init()
     {
         parent::init();
+
+        $this->districtId = $_SESSION['customer_info']['district_id'];
+        $this->customerId = $this->locator->get('Profile')['customer_id'];
     }
 
     public function indexAction()
     {
-        $districtId = $_SESSION['customer_info']['district_id'];
-
         $this->layout->title = '白领首页';
 
         //获取商品类别
@@ -26,14 +31,14 @@ class DefaultController extends AbstractActionController
         $sql = "SELECT * FROM t_images 
                 WHERE district_id = ? 
                 ORDER BY image_sort DESC, image_id DESC";
-        $imageList = $this->locator->db->getAll($sql, $districtId);
+        $imageList = $this->locator->db->getAll($sql, $this->districtId);
 
         //获取首页推荐商品
         $sql = "SELECT * FROM t_recommends 
                 WHERE district_id = ? 
                 ORDER BY recommend_sort DESC, recommend_id DESC
                 LIMIT 0, 2";
-        $recommendList = $this->locator->db->getAll($sql, $districtId);
+        $recommendList = $this->locator->db->getAll($sql, $this->districtId);
 
         // print_r($imageList);die;
         return array(
@@ -53,7 +58,7 @@ class DefaultController extends AbstractActionController
                 WHERE c.customer_id = ?
                 ORDER BY log_id DESC
                 LIMIT 0, 5";
-        $logList = $this->locator->db->getAll($sql, $this->locator->get('Profile')['customer_id']);
+        $logList = $this->locator->db->getAll($sql, $this->customerId);
         
         //获取城市
         $sqlInfo = array(
@@ -96,7 +101,7 @@ class DefaultController extends AbstractActionController
                     district_id = :district_id, 
                     log_ip = :log_ip";
             $this->locator->db->exec($sql, array(
-                'customer_id' => $this->locator->get('Profile')['customer_id'],
+                'customer_id' => $this->customerId,
                 'district_id' => $_SESSION['customer_info']['district_id'],
                 'log_ip' => Http::getIp(),
             ));
@@ -120,7 +125,55 @@ class DefaultController extends AbstractActionController
     {
         $this->layout->title = '搜索';
 
-        return array();
+        //历史搜索
+        $sql = "SELECT log_name, log_time FROM t_customer_search_log
+                WHERE customer_id = ?
+                ORDER BY log_id DESC
+                LIMIT 0, 10";
+        $searchList = $this->locator->db->getAll($sql, $this->customerId);
+
+        //获取主要推荐
+        $sql = "SELECT product_id FROM t_hot_products
+                WHERE hot_type = 'main'
+                AND district_id = ?
+                ORDER BY hot_id DESC
+                LIMIT 0, 1";
+        $productId = $this->locator->db->getOne($sql, $this->districtId);
+        $productMain = $this->models->product->getProductById($productId);
+
+        //获取次要要推荐
+        $sql = "SELECT p.* FROM t_hot_products h
+                LEFT JOIN t_products p ON p.product_id = h.product_id
+                WHERE h.hot_type = 'minor'
+                AND h.district_id = ?
+                ORDER BY h.hot_id DESC
+                LIMIT 0, 10";
+        $productMinor = $this->locator->db->getAll($sql, $this->districtId);
+
+        // print_r($searchList);die;
+        return array(
+            'searchList' => $searchList,
+            'productMain' => $productMain,
+            'productMinor' => $productMinor,
+        );
+    }
+
+    public function searchClearAction()
+    {
+        $sql = "SELECT log_id FROM t_customer_search_log
+                WHERE customer_id = ?
+                ORDER BY log_id DESC
+                LIMIT 0,10";
+        $logIds = $this->locator->db->getColumn($sql, $this->customerId);
+        if (!$logIds) {
+            $this->funcs->redirect($this->helpers->url('default/search'));
+        }
+
+        $sql = "DELETE FROM t_customer_search_log WHERE log_id IN (%s)";
+        $sql = sprintf($sql, implode(",", $logIds));
+        $this->locator->db->exec($sql);
+
+        $this->funcs->redirect($this->helpers->url('default/search'));
     }
 
     public function redisAction()

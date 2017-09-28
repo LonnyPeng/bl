@@ -601,6 +601,18 @@ class Funcs implements ServiceLocatorAwareInterface
         }                           
     }
 
+    public function showValue($value)
+    {
+        $int = (int) $value;
+        $float = sprintf("%.2f", $value);
+
+        if ($int < $float) {
+            return $float;
+        } else {
+            return $int ?: '';
+        }
+    }
+
     /**
      * Set service locator
      *
