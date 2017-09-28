@@ -32,7 +32,7 @@ class TaskController extends AbstractActionController
         	$config['turntable_num'] = unserialize($config['turntable_num']);
         	$config['turntable_num'] = $config['turntable_num'][$this->locator->get('Profile')['level_id']];
         	//今天抽奖的次数
-        	$sql = "SELECT COUNT(*) FROM t_prizes WHERE customer_id = ? AND DAY(prize_time) = ?";
+        	$sql = "SELECT COUNT(*) FROM t_prizes WHERE customer_id = ? AND DATE(prize_time) = ?";
         	$prizeNum = $this->locator->db->getOne($sql, $this->customerId, date('Y-m-d'));
         	if ($prizeNum > $config['turntable_num']) {
         		$config['chance_num'] = $chanceNum;
@@ -47,6 +47,11 @@ class TaskController extends AbstractActionController
         $list = (array) $this->locator->db->getAll($sql);
 
         if ($this->funcs->isAjax()) {
+        	//判断是否有抽奖机会
+        	if ($config['chance_num'] < 1) {
+        		return new JsonModel('error', '你的抽奖机会已用完');
+        	}
+
         	$sum = array_sum(array_column($list, 'turntablep_probability'));
         	$angle = 0;
         	$l = 360 / count($list);
@@ -70,6 +75,55 @@ class TaskController extends AbstractActionController
         		} else {
         			$proSum -= $row['turntablep_probability'];
         		}
+        	}
+
+        	//保存奖品
+        	$map = array(
+        		'customer_id' => $this->customerId,
+        		'turntablep_id' => $prize['turntablep_id'],
+        	);
+        	if ($prize['turntablep_attr'] == 'product') {
+        		$map['prize_attr'] = 'pending';
+        	} elseif ($prize['turntablep_attr'] == 'score') {
+        		$map['prize_attr'] = 'shipped';
+        	} else {
+        		$map['prize_attr'] = 'received';
+        	}
+        	$sql = "INSERT INTO t_prizes 
+        			SET customer_id = :customer_id,
+        			turntablep_id = :turntablep_id,
+        			prize_attr = :prize_attr";
+        	$status = $this->locator->db->exec($sql, $map);
+        	if ($status) {
+        		$prizeId = $this->locator->db->lastInsertId();
+        		if ($prize['turntablep_attr'] == 'score') {
+        			//改变积分
+        			$status = $this->score(array(
+        				'type' => 'have', 
+        				'des' => Score::CJHDJF, 
+        				'score' => $prize['turntablep_score'],
+        			));
+
+        			if ($status) {
+        				$sql = "UPDATE t_prizes 
+        						SET prize_attr = 'received' 
+        						WHERE prize_id = ? 
+        						AND prize_attr = 'shipped'";
+        				$status = $this->locator->db->exec($sql, $prizeId);
+        			}
+        		}
+        	}
+
+        	if ($status) { //修改积分兑换的次数
+	        	if ($prizeNum + 1 > $config['turntable_num']) { //判断是否是免费的
+			   		$sql = "UPDATE t_turntable_chance 
+		   				SET chance_num = chance_num - 1 WHERE customer_id = ?";
+					$status = $this->locator->db->exec($sql, $this->customerId);
+	        	}
+        	}
+
+        	if (!$status) {
+        		return new JsonModel('error', '抽奖失败');
         	}
 
         	$angle = $prize['angle'];
