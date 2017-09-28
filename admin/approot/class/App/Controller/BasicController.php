@@ -279,6 +279,10 @@ class BasicController extends AbstractActionController
 			$imageHref = '';
 			if (preg_match("/^((http)|(www\.))/i", $key)) {
 				//链接
+				if (preg_match("/^www\./i", $key)) {
+					$key = "http://" . $key;
+				}
+
 				$imageHref = $key;
 			} elseif (preg_match("/^sp[\d]{6}/i", $key)) {
 				//产品code
@@ -807,6 +811,24 @@ class BasicController extends AbstractActionController
 	        $this->locator->db->exec($sql, $row);
 	    }
 
+	    return JsonModel::init('ok', '')->setRedirect('reload');
+	}
+
+	public function setRecommendSortAction()
+	{
+	    if (!$this->funcs->isAjax()) {
+	        $this->funcs->redirect($this->helpers->url('default/index'));
+	    }
+
+	    $data = $_POST['data'];
+	    $sql = "UPDATE t_recommends 
+	            SET recommend_sort = :sort 
+	            WHERE recommend_id = :id";
+	    foreach ($data as $row) {
+	        $this->locator->db->exec($sql, $row);
+	    }
+
+	    die;
 	    return JsonModel::init('ok', '')->setRedirect('reload');
 	}
 }

@@ -1,1 +1,59 @@
-123
+<!-- 头部 -->
+<div class="m_top z999 pf clearfix">
+  <a href="选择城市.html" class="fl">
+    <i class="iconfont add">&#xe617;</i><?php echo $this->locator->get('Profile')['city']?><i class="iconfont narrow">&#xe6cf;</i>
+  </a>
+  <a href="../my/个人中心.html" class="fr"><i class="iconfont my">&#xe656;</i></a>
+</div>
+<!-- 导航切换 -->
+<div class="swiper-container z999 pf m_nav">
+	<div class="swiper-wrapper">
+		<div class="swiper-slide on"><a href="/">首页</a></div>
+		<?php if ($attrList) : ?>
+			<?php foreach($attrList as $row) : ?>
+				<div class="swiper-slide"><a href="分类列表页.html"><?php echo $row['attr_name']?></a></div>
+			<?php endforeach;?>
+		<?php endif;?>
+	</div>
+</div>
+  <!-- banner -->
+<?php if ($imageList) : ?>
+<div class="swiper-container m_banner mt98">
+	<div class="swiper-wrapper">
+		<?php foreach($imageList as $row) : ?>
+			<div class="swiper-slide">
+				<?php if ($row['image_href']) : ?>
+					<a href="<?php echo $row['image_href']?>">
+						<img src="<?php echo $this->uploadUrl($row['image_path'], 'sys')?>" />
+					</a>
+				<?php else : ?>
+					<img src="<?php echo $this->image('banner_01.jpg')?>" />
+				<?php endif;?>
+			</div>
+		<?php endforeach;?>
+	</div>
+	<div class="swiper-pagination"></div>
+</div>
+<?php endif;?>
+<!-- main_list -->
+<?php if ($recommendList) : ?>
+	<?php foreach($recommendList as $key => $row) : ?>
+		<div class="m_list">
+			<img class="m_img" src="<?php echo $this->uploadUrl($row['recommend_path'], 'sys')?>">
+			<div class="clearfix m_info wrap">
+				<div class="photo fl">
+					<img src="<?php echo $this->uploadUrl($row['recommend_logo'], 'sys')?>">
+				</div>
+				<h3 class="lr1"><?php echo $row['recommend_title']?></h3>
+				<?php if (!$key) : ?>
+					<a class="m_btn" href="立即白领详情页.html">立即领取</a>
+				<?php else : ?>
+					<a class="m_btn" href="组团白领详情页.html">组团领</a>
+				<?php endif;?>
+			</div>
+		</div>
+	<?php endforeach;?>
+<?php endif;?>
+
+<!-- 搜索按钮 -->
+<a class="search_btn pf" href="搜索.html"><i class="iconfont">&#xe60a;</i></a>

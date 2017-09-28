@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>
         <?php if ($this->title) : ?>
@@ -13,11 +13,29 @@
     </title>
 
     <?php echo $this->css('weui.min.css')->wrap();?>
-    <?php echo $this->css('jquery-weui.min.css')->wrap();?>
+    <?php echo $this->css('jquery-weui.css')->wrap();?>
+    <?php echo $this->css('swiper.min.css')->wrap();?>
+    <?php echo $this->css('common.css')->wrap();?>
     <?php echo $this->css('index.css')->wrap();?>
 
-    <?php echo $this->js('jquery.min.js')->wrap();?>
-    <?php echo $this->js('jquery-weui.min.js')->wrap();?>
+    <?php echo $this->js('jquery-2.1.4.js')->wrap();?>
+    <?php echo $this->js('fastclick.js')->wrap();?>
+    <script type="text/javascript">
+        $(function() {
+          FastClick.attach(document.body);
+        });
+    </script>
+    <?php echo $this->js('jquery-weui.js')->wrap();?>
+    <?php echo $this->js('swiper.min.js')->wrap();?>
+    <?php echo $this->js('index.js')->wrap();?>
+    <script type="text/javascript">
+        var swiper8 = new Swiper('.m_nav', {
+           slidesPerView: 'auto',
+           paginationClickable: true,
+           spaceBetween: 5,
+           initialSlide :0, //这里要程序处理成当前页面的id。
+         });
+    </script>
     <?php echo $this->js('core.popup.js')->wrap();?>
     <?php echo $this->js('core.ajaxauto.js')->wrap();?>
     <?php echo $this->js('core.extend.js')->wrap();?>

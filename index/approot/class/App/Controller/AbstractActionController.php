@@ -47,11 +47,15 @@ abstract class AbstractActionController extends ActionController
                    $openid = $this->funcs->randPassword(18); 
                 }
 
+                $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", '上海')));
+
                 $customerInfo = array(
                     'username' => '123',
                     'icon' => 'http://q.87.re/2015/08/201508101754256.jpg',
                     'lat' => 31.236176,
                     'lng' => 121.481689,
+                    'city' => $districtInfo['district_name'],
+                    'district_id' => $districtInfo['district_id'],
                 );
                 $_SESSION['openid'] = addslashes($openid);
                 $_SESSION['customer_info'] = $customerInfo;
