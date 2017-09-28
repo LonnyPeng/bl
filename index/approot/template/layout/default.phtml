@@ -28,12 +28,14 @@
     <?php echo $this->js('jquery-weui.js')->wrap();?>
     <?php echo $this->js('swiper.min.js')->wrap();?>
     <script type="text/javascript">
-        var swiper8 = new Swiper('.m_nav', {
-           slidesPerView: 'auto',
-           paginationClickable: true,
-           spaceBetween: 5,
-           initialSlide :0, //这里要程序处理成当前页面的id。
-         });
+        $().ready(function () {
+            var swiper8 = new Swiper('.m_nav', {
+               slidesPerView: 'auto',
+               paginationClickable: true,
+               spaceBetween: 5,
+               initialSlide :0, //这里要程序处理成当前页面的id。
+             });
+        });
     </script>
     <?php echo $this->js('core.popup.js')->wrap();?>
     <?php echo $this->js('core.ajaxauto.js')->wrap();?>
