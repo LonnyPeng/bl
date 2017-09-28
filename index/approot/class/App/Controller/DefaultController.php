@@ -116,6 +116,13 @@ class DefaultController extends AbstractActionController
         return array();
     }
 
+    public function searchAction()
+    {
+        $this->layout->title = '搜索';
+
+        return array();
+    }
+
     public function redisAction()
     {
     	$locator = $this->locator;
@@ -125,10 +132,5 @@ class DefaultController extends AbstractActionController
     	}, 100);
 
     	return false;
-    }
-
-    public function testAction()
-    {
-        return array();
     }
 }

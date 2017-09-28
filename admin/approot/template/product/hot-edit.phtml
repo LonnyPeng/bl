@@ -1,0 +1,39 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/hot-list', array('district_id' => $this->param('district_id')))?>">热门推荐列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>商品CODE<sup>*</sup></label>
+                <input class="form-control" type="text" name="product_code" value="<?= isset($info['product_code']) ? $info['product_code'] : '';?>">
+            </div>
+            <div class="form-group">
+                <label>推荐类型<sup>*</sup></label>
+                <select class="form-control" name="hot_type">
+                    <option value="">选择</option>
+                    <option value="main" <?= (isset($info['hot_type']) && $info['hot_type'] == 'main') ? 'selected' : '' ?>>主要推荐</option>
+                    <option value="minor" <?= (isset($info['hot_type']) && $info['hot_type'] == 'minor') ? 'selected' : '' ?>>次要推荐</option>
+                </select>
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("form").submit(function() {
+        $.check(!this.product_code.value, '请输入商品CODE', this.product_code) &&
+        $.check(!this.hot_type.value, '请输选择推荐类型', this.hot_type) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>
+
+

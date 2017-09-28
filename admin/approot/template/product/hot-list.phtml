@@ -1,0 +1,85 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/list')?>">商品设置</a> / 热门推荐
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>城市</label>
+                    <select class="form-control" name="district_id">
+                        <?php foreach($districtList as $key => $value) : ?>
+                            <option value="<?php echo $key?>" <?php echo $this->param('district_id') == $key ? 'selected' : ''?>><?php echo $value?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="table-tool">
+    <span id="fields-wrapper">
+        <a class="btn" href="<?= $this->url('product/hot-edit', array('district_id' => $this->param('district_id')))?>">
+            <i class="fa fa-plus"></i> 添加
+        </a>
+    </span>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">商品名称</th>
+                <th class="text-center">商品CODE</th>
+                <th class="text-center">推荐类型</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($hotList as $key => $row) :?>
+                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['product_name']?></td>
+                    <td class="text-center"><?= $row['product_code']?></td>
+                    <td class="text-center"><?= $row['hot_type'] == 'main' ? '主要推荐' : '次要推荐'?></td>
+                    <td class="text-center action">
+                        <a class="btn btn-xs edit" href="<?= $this->url('product/hot-edit', array('id' => $row['hot_id']))?>" title="编辑">
+                            <i class="fa fa-edit"></i>
+                        </a>
+                        <span class="btn btn-xs del" data-href="<?= $this->url('product/hot-del', array('id' => $row['hot_id']))?>" title="删除">
+                            <i class="fa fa-trash"></i>
+                        </span>
+                    </td>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+<script>
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

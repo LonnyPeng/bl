@@ -534,4 +534,105 @@ class ProductController extends AbstractActionController
 			@unlink($path);
 		}
 	}
+
+	public function hotListAction()
+	{
+		$districtId = $this->param('district_id');
+		if (!$districtId) {
+			$sql = "SELECT district_id FROM t_district WHERE district_name = ?";
+			$districtId = $this->locator->db->getOne($sql, '上海市');
+			if ($districtId) {
+				$this->funcs->redirect($this->helpers->url('product/hot-list', array('district_id' => $districtId)));
+			} else {
+				$this->funcs->redirect($this->helpers->url('default/index'));
+			}
+		}
+
+		$sql = "SELECT h.*, p.product_code, p.product_name FROM t_hot_products h
+				LEFT JOIN t_products p ON p.product_id = h.product_id
+				WHERE h.district_id = ? 
+				ORDER BY hot_type ASC, hot_id DESC";
+		$hotList = $this->locator->db->getAll($sql, $districtId);
+
+		return array(
+			'hotList' => $hotList,
+			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+		);
+	}
+
+	public function hotEditAction()
+	{
+		$id = $this->param('id');
+		$districtId = $this->param('district_id');
+
+		$info = array();
+		if ($id) {
+			$sql = "SELECT h.*, p.product_code 
+					FROM t_hot_products h 
+					LEFT JOIN t_products p ON p.product_id = h.product_id
+					WHERE hot_id = ?";
+			$info = $this->locator->db->getRow($sql, $id);
+		}
+
+		if ($this->funcs->isAjax()) {
+			if (!$_POST['product_code']) {
+				return new JsonModel('error', '请输入商品CODE');
+			}
+
+			$sql = "SELECT product_id FROM t_products WHERE product_code = ?";
+			$productId = $this->locator->db->getOne($sql, trim($_POST['product_code']));
+			if (!$productId) {
+				return new JsonModel('error', '请输入商品CODE不存在');
+			}
+
+			if (!$_POST['hot_type']) {
+				return new JsonModel('error', '请输选择推荐类型');
+			}
+
+			$map = array(
+				'product_id' => $productId,
+				'hot_type' => trim($_POST['hot_type']) == 'main' ?: 'minor',
+			);
+			$set = "product_id = :product_id,
+					hot_type = :hot_type";
+
+			if (!$id) {
+				$map['district_id'] = $districtId;
+				$set .= ",district_id = :district_id";
+
+				$sql = "INSERT INTO t_hot_products SET $set";
+			} else {
+				$map['hot_id'] = $id;
+				
+				$sql = "UPDATE t_hot_products SET $set
+						WHERE hot_id = :hot_id";
+			}
+
+			$status = $this->locator->db->exec($sql, $map);
+			if ($status) {
+				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('product/hot-list'));
+			} else {
+				return new JsonModel('error', '失败');
+			}
+		}
+		return array(
+			'info' => $info,
+		);
+	}
+
+	public function hotDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "DELETE FROM t_hot_products WHERE hot_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
 }

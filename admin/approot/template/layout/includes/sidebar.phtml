@@ -28,6 +28,11 @@
                         <span class="hidden-sm">商品类别</span>
                     </a>
                 </li>
+                <li class="<?php echo in_array($this->action(), array('hot-list', 'hot-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('product/hot-list');?>">
+                        <span class="hidden-sm">热门推荐</span>
+                    </a>
+                </li>
             </ul>
         </li>
         <li class="<?php echo $this->controller() =='customer' ? 'active' : ''?>">

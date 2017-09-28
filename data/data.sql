@@ -659,6 +659,18 @@ CREATE TABLE `t_product_quantity` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品库存分配表';
 
 -- ----------------------------
+-- Table structure for t_hot_products
+-- ----------------------------
+DROP TABLE IF EXISTS `t_hot_products`;
+CREATE TABLE `t_hot_products` (
+  `hot_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `district_id` tinyint(4) NOT NULL COMMENT '城市ID',
+  `product_id` int(11) NOT NULL COMMENT '商品ID',
+  `hot_type` enum('main','minor') NOT NULL COMMENT '类型：main主要；minor次要',
+  `quantity_num` smallint(6) NOT NULL DEFAULT '0' COMMENT '商家库存数量'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='热门推荐商品';
+
+-- ----------------------------
 -- Table structure for t_reviews
 -- ----------------------------
 DROP TABLE IF EXISTS `t_reviews`;
