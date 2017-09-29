@@ -99,9 +99,34 @@ class ProductController extends AbstractActionController
 			$this->layout->title = $info['product_logo_name'];
 		}
 
+		//获取评论
+		$where = array(
+			"r.review_attr <> 'unread'",
+			sprintf("r.product_id = %d", $id),
+		);
+		$join = 'LEFT JOIN t_customers c ON c.customer_id = r.customer_id';
+		$files = array('r.*', 'c.*');
+
+		$sqlInfo = array(
+			'setJoin' => $join,
+			'setWhere' => $where,
+			'setLimit' => '0, 5',
+			'setOrderBy' => 'review_id DESC',
+		);
+
+		$reviewList = $this->models->review->getReview($files, $sqlInfo);
+		if ($reviewList) {
+			foreach ($reviewList as $key => $row) {
+				$row = $this->models->review->getReviewById($row['review_id']);
+				$row['review_score'] = $this->getStarNum($row['review_score']);
+				$reviewList[$key] = $row;
+			}
+		}
+
 		// print_r($info);die;
 		return array(
 			'info' => $info,
+			'reviewList' => $reviewList,
 		);
 	}
 
@@ -141,7 +166,7 @@ class ProductController extends AbstractActionController
 		if ($this->funcs->isAjax() && $this->param('type') == 'page') {
 		    $limit[0] = $this->param('pageSize') * $limit[1];
 		}
-		
+
 		$where = array(
 			"r.review_attr <> 'unread'",
 			sprintf("r.product_id = %d", $id),
@@ -178,9 +203,12 @@ class ProductController extends AbstractActionController
 		            $reviewList[$key]['customer_headimg'] = (string) $this->helpers->uploadUrl($row['customer_headimg'], 'user');
 		            $reviewList[$key]['review_score'] = sprintf("%d%%", $row['review_score']);
 		            $reviewList[$key]['review_time'] = date("Y-m-d", strtotime($row['review_time']));
-		            // $reviewList[$key]['collection_status'] = $row['collection_id'] ? 'on' : '';
-		            // $reviewList[$key]['href'] = 
-		            // $reviewList[$key]['button'] = $row['product_type'] == 2 ? '组团领' : '立即白领';
+		            if ($row['images']) {
+		            	foreach ($row['images'] as $k => $r) {
+		            		$reviewList[$key]['images'][$k]['image_path'] = (string) $this->helpers->uploadUrl($r['image_path'], 'review');
+		            	}
+		            }
+		            $reviewList[$key]['log_id'] = $row['log_id'] ? 'on' : '';
 		        }
 
 		        return JsonModel::init('ok', '', $reviewList);
@@ -196,7 +224,15 @@ class ProductController extends AbstractActionController
 
 	public function reviewDetailAction()
 	{
-		return array();
+		$id = trim($this->param('id'));
+		$info = $this->models->review->getReviewById($id);
+		if (!$info) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		return array(
+			'info' => $info,
+		);
 	}
 
 	public function reviewEditAction()

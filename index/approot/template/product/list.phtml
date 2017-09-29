@@ -48,7 +48,7 @@
         if (loading) {
             return false;
         } else {
-            $('.weui-loadmore').removeClass('none');
+            $('.weui-loadmore').fadeIn();
             loading = true;
         }
         
@@ -62,14 +62,12 @@
                     $(re.data).each(function (key, row) {
                         ali +='<div class="prod_list"><img src="' + row.image_path + '"><div class="info wrap pr"><h4 class="lr1">' + row.product_name + '</h4><span class="jg pa">[' + row.product_virtual_price + ']</span><span class="pa orange">' + row.product_price + '积分</span></div><div class="info info_click wrap clearfix"><a href="javascript:void(0);" class="fl tac js-collection ' + row.collection_status + '" data-id="' + row.product_id + '"><i class="iconfont">&#xe60b;</i><span>' + row.collection_num + '</span></a><a href="' + row.href + '" class="fr tac"><i class="iconfont ling">&#xe605;</i><span>' + row.button + '</span></a></div></div>';
                     });
-                } else {
-                    $('.weui-loadmore').fadeOut();
                 }
 
                 $("#m_pro").append(ali);
-                $('.weui-loadmore').addClass('none');
                 init();
                 
+                $('.weui-loadmore').fadeOut();
                 loading = false;
             }
         });
