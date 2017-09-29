@@ -61,6 +61,17 @@ class ProductModel extends CommonModel
 	    			LEFT JOIN t_shops s ON pq.shop_id = s.shop_id
 	    			WHERE pq.product_id = ?";
 	    	$productInfo['shop_quantity'] = $this->locator->db->getAll($sql, $id);
+
+	    	//收藏人数
+	    	$sql = "SELECT COUNT(*) FROM t_customer_collections WHERE product_id = ?";
+	    	$productInfo['collection_num'] = $this->locator->db->getOne($sql, $id);
+
+	    	//是否收藏
+	    	$sql = "SELECT collection_id 
+	    			FROM t_customer_collections 
+	    			WHERE product_id = ? 
+	    			AND customer_id = ?";
+	    	$productInfo['collection_id'] = $this->locator->db->getOne($sql, $id, $this->locator->get('Profile')['customer_id']);
 	    }
 
 	    return $productInfo;

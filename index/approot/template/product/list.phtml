@@ -1,85 +1,132 @@
 <?= $this->render('includes/nav', array('attrList' => $attrList))?>
 
-    <!-- 分类列表 -->
-    <div id="m_pro" class='demos-content-padded mt98'>
+<!-- 分类列表 -->
+<div id="m_pro" class='demos-content-padded mt98'>
+    <?php if ($productList) : ?>
+        <?php foreach($productList as $row) : ?>
+            <div class="prod_list">
+                <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
+                <div class="info wrap pr">
+                    <h4 class="lr1"><?php echo $row['product_name']?></h4>
+                    <span class="jg pa">[<?php echo $this->funcs->showValue($row['product_virtual_price'])?>]</span>
+                    <span class="pa orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span>
+                </div>
+                <div class="info info_click wrap clearfix">
+                    <a href="javascript:void(0);" class="fl tac js-collection <?php echo $row['collection_id'] ? 'on' : ''?>" data-id="<?php echo $row['product_id']?>">
+                        <i class="iconfont">&#xe60b;</i>
+                        <span><?php echo $row['collection_num']?></span>
+                    </a>
+                    <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="fr tac">
+                        <i class="iconfont ling">&#xe605;</i><span><?php echo $row['product_type'] == 2 ? '组团领' : '立即白领'?></span>
+                    </a>
+                </div>
+            </div>
+        <?php endforeach;?>
+    <?php endif;?>
+</div>
 
-      <div class="prod_list">
-        <img src="images/prod_01.jpg">
-        <div class="info wrap pr">
-          <h4 class="lr1">比利时啤酒艺术的极致呈现</h4>
-          <span class="jg pa">[98.00]</span>
-          <span class="pa orange">100积分</span>
-        </div>
-        <div class="info info_click wrap clearfix">
-          <a href="javascript:void(0);" class="fl tac"><i class="iconfont">&#xe60b;</i><span>1000</span></a>
-          <a href="立即白领详情页.html" class="fr tac"><i class="iconfont ling">&#xe605;</i><span>立即白领</span></a>
-        </div>
-      </div>
+<div class="mask"></div>
 
-      <div class="prod_list">
-        <img src="images/prod_02.jpg">
-        <div class="info wrap pr">
-          <h4 class="lr1">比利时啤酒艺术的极致呈现</h4>
-          <span class="jg pa">[98.00]</span>
-          <span class="pa orange">100积分</span>
-        </div>
-        <div class="info info_click wrap clearfix">
-          <a href="javascript:void(0);" class="fl tac"><i class="iconfont">&#xe60b;</i><span>1000</span></a>
-          <a href="立即白领详情页.html" class="fr tac"><i class="iconfont ling">&#xe605;</i><span>立即白领</span></a>
-        </div>
-      </div>
-      
-    </div>
-    <div class="weui-loadmore">
-      <i class="weui-loading"></i>
-      <span class="weui-loadmore__tips">正在加载</span>
-    </div>
-    
-    <!-- 搜索按钮 -->
-    <a class="search_btn pf" href="搜索.html"><i class="iconfont">&#xe60a;</i></a>
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
 
-    <script src="../jquery-2.1.4.js"></script>
-    <script src="../fastclick.js"></script>
-    <script>
-      $(function() {
-        FastClick.attach(document.body);
-      });
-    </script>
-    <script src="../jquery-weui.js"></script>
-    <script src="../swiper.min.js"></script>
-    <script src="js/index.js"></script>
-    <script>
-      var swiper8 = new Swiper('.m_nav', {
-          slidesPerView: 'auto',
-          paginationClickable: true,
-          spaceBetween: 5,
-          initialSlide :0, //这里要程序处理成当前页面的id。
+<!-- 搜索按钮 -->
+<a class="search_btn pf" href="<?php echo $this->url('default/search')?>"><i class="iconfont">&#xe60a;</i></a>
+
+<script>
+  // 上拉加载
+  // var loading = false;
+  // $(document.body).infinite().on("infinite", function() {
+  //   if(loading) return;
+  //   loading = true;
+  //   setTimeout(function() {
+  //     $("#m_pro").append("<div class='prod_list'><img src='images/prod_02.jpg'><div class='info wrap pr'><h4 class='lr1'>比利时啤酒艺术的极致呈现</h4><span class='jg pa'>[98.00]</span><span class='pa orange'>100积分</span></div><div class='info info_click wrap clearfix'><a href='javascript:void(0);' class='fl tac'><i class='iconfont'>&#xe60b;</i><span>1000</span></a><a href='#' class='fr tac'><i class='iconfont ling'>&#xe605;</i><span>立即白领</span></a></div></div>");
+  //     loading = false;
+  //     //加载后点击收藏
+  //     $(".prod_list").each(function() {
+  //       $(this).find('.fl').on('click', function(event) {
+  //       var num=$(this).find('span').html();
+  //         if($(this).hasClass('on')){
+  //           $(this).removeClass('on');
+  //           num--;
+  //           $(this).find('span').html(num);
+
+  //         }else{
+  //           $(this).addClass('on')
+  //           num++;
+  //           $(this).find('span').html(num)
+  //         }
+  //       });
+  //     });
+  //     }, 2000);
+
+  // });
+</script>
+
+<script type="text/javascript">
+    init();
+
+    var pageSize = 1;
+    var loading = false;  //状态标记
+    $(document.body).infinite().on("infinite", function() {
+        if (loading) {
+            return false;
+        } else {
+            $('.weui-loadmore').removeClass('none');
+            loading = true;
+        }
+        
+        $(this).ajaxAuto({
+            data: {type: 'page', pageSize: pageSize},
+            success: function (re) {
+                var ali="";
+                if (re.status == 'ok') {
+                    pageSize++;
+
+                    $(re.data).each(function (key, row) {
+                        ali +='<div class="prod_list"><img src="' + row.image_path + '"><div class="info wrap pr"><h4 class="lr1">' + row.product_name + '</h4><span class="jg pa">[' + row.product_virtual_price + ']</span><span class="pa orange">' + row.product_price + '积分</span></div><div class="info info_click wrap clearfix"><a href="javascript:void(0);" class="fl tac js-collection ' + row.collection_status + '" data-id="' + row.product_id + '"><i class="iconfont">&#xe60b;</i><span>' + row.collection_num + '</span></a><a href="' + row.href + '" class="fr tac"><i class="iconfont ling">&#xe605;</i><span>' + row.button + '</span></a></div></div>';
+                    });
+                } else {
+                    $('.weui-loadmore').fadeOut();
+                }
+
+                $("#m_pro").append(ali);
+                $('.weui-loadmore').addClass('none');
+                init();
+                
+                loading = false;
+            }
         });
-      // 上拉加载
-      var loading = false;
-      $(document.body).infinite().on("infinite", function() {
-        if(loading) return;
-        loading = true;
-        setTimeout(function() {
-          $("#m_pro").append("<div class='prod_list'><img src='images/prod_02.jpg'><div class='info wrap pr'><h4 class='lr1'>比利时啤酒艺术的极致呈现</h4><span class='jg pa'>[98.00]</span><span class='pa orange'>100积分</span></div><div class='info info_click wrap clearfix'><a href='javascript:void(0);' class='fl tac'><i class='iconfont'>&#xe60b;</i><span>1000</span></a><a href='#' class='fr tac'><i class='iconfont ling'>&#xe605;</i><span>立即白领</span></a></div></div>");
-          loading = false;
-          //加载后点击收藏
-          $(".prod_list").each(function() {
-            $(this).find('.fl').on('click', function(event) {
-            var num=$(this).find('span').html();
-              if($(this).hasClass('on')){
-                $(this).removeClass('on');
-                num--;
-                $(this).find('span').html(num);
+    });
 
-              }else{
-                $(this).addClass('on')
-                num++;
-                $(this).find('span').html(num)
-              }
+    function init() {
+        //收藏
+        $('.js-collection').click(function() {
+            var $$ = $(this);
+            var id = $$.data('id');
+            var type = $$.hasClass('on') ? 'del' : 'add';
+            var num = parseInt($$.find('span').text());
+
+            $$.removeAttr('href');
+
+            $$.ajaxAuto({
+                url: '<?php echo $this->url('product/collection')?>',
+                data: {id: id, type: type},
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        if (type == 'del') {
+                            $$.removeClass('on');
+                            $$.find('span').html(num - 1);
+                        } else {
+                            $$.addClass('on');
+                            $$.find('span').html(num + 1);
+                        }
+                    }
+                }
             });
-          });
-          }, 2000);
-
-      });
-    </script>
+            return false;
+        });
+    }
+</script>
