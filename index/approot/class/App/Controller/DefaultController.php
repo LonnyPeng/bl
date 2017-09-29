@@ -37,8 +37,17 @@ class DefaultController extends AbstractActionController
                 ORDER BY recommend_sort DESC, recommend_id DESC
                 LIMIT 0, 2";
         $recommendList = $this->locator->db->getAll($sql, $this->districtId);
+        if ($recommendList) {
+            foreach ($recommendList as $key => $row) {
+                if ($row['product_code']) {
+                    $recommendList[$key]['product_id'] = $this->models->product->getProductId(sprintf("product_code = '%s'", $row['product_code']));
+                } else {
+                    $recommendList[$key]['product_id'] = '';
+                }
+            }
+        }
 
-        // print_r($imageList);die;
+        // print_r($recommendList);die;
         return array(
             'attrList' => $attrList,
             'imageList' => $imageList,
@@ -134,6 +143,16 @@ class DefaultController extends AbstractActionController
 
         $productName = trim($this->param('product_name'));
         if ($productName) {
+            //记录搜索记录
+            $map = array(
+                'customer_id' => $this->customerId,
+                'log_name' => $productName,
+            );
+            $sql = "DELETE FROM t_customer_search_log WHERE customer_id = :customer_id AND log_name = :log_name";
+            $this->locator->db->exec($sql, $map);
+            $sql = "INSERT INTO t_customer_search_log SET customer_id = :customer_id, log_name = :log_name";
+            $this->locator->db->exec($sql, $map);
+
             if ($this->param('product_name')) {
                 $where[] = sprintf("p.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
             }

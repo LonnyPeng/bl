@@ -86,4 +86,12 @@ class ProductModel extends CommonModel
 
 		return $this->locator->db->getPairs($sql);
 	}
+
+	public function getProductId($where = array())
+	{
+		$sql = "SELECT product_id FROM t_products";
+		$sql = $this->setWhere($sql, $where);
+
+		return $this->locator->db->getOne($sql);
+	}
 }

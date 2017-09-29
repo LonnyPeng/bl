@@ -38,7 +38,9 @@
         <h4>搜索历史</h4>
         <p>
             <?php foreach($searchList as $row) : ?>
-                <a href="搜索结果.html"><?php echo $row['log_name']?></a>
+                <a href="<?php echo $this->url('default/search', array('product_name' => $row['log_name']))?>">
+                    <?php echo $row['log_name']?>
+                </a>
             <?php endforeach?>
         </p>
     </div>

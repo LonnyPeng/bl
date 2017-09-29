@@ -1,13 +1,15 @@
-<!-- 头部 -->
-<div class="m_top pf z999 clearfix">
-  <a href="#" class="fl">
-    <i class="iconfont add">&#xe617;</i><?php echo $this->locator->get('Profile')['city']?><i class="iconfont narrow">&#xe6cf;</i>
-  </a>
-  <a href="#" class="fr"><i class="iconfont my">&#xe656;</i></a>
-</div>
+<?= $this->render('includes/header')?>
+
 <!-- 说明 -->
 <div class="noproduct">
   <p class="tac">
     您所在城市暂无商品，先去参与互动赚取积分吧！
   </p>
 </div>
+
+<script type="text/javascript">
+	// 所在城市无商品居中
+	var wh=$(window).height();
+	var ww=$(window).width();
+	$(".noproduct").height(wh-50);
+</script>

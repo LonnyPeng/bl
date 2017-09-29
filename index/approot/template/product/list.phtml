@@ -1,3 +1,5 @@
+<?= $this->render('includes/header')?>
+
 <?= $this->render('includes/nav', array('attrList' => $attrList))?>
 
 <!-- 分类列表 -->
@@ -35,37 +37,9 @@
 <!-- 搜索按钮 -->
 <a class="search_btn pf" href="<?php echo $this->url('default/search')?>"><i class="iconfont">&#xe60a;</i></a>
 
-<script>
-  // 上拉加载
-  // var loading = false;
-  // $(document.body).infinite().on("infinite", function() {
-  //   if(loading) return;
-  //   loading = true;
-  //   setTimeout(function() {
-  //     $("#m_pro").append("<div class='prod_list'><img src='images/prod_02.jpg'><div class='info wrap pr'><h4 class='lr1'>比利时啤酒艺术的极致呈现</h4><span class='jg pa'>[98.00]</span><span class='pa orange'>100积分</span></div><div class='info info_click wrap clearfix'><a href='javascript:void(0);' class='fl tac'><i class='iconfont'>&#xe60b;</i><span>1000</span></a><a href='#' class='fr tac'><i class='iconfont ling'>&#xe605;</i><span>立即白领</span></a></div></div>");
-  //     loading = false;
-  //     //加载后点击收藏
-  //     $(".prod_list").each(function() {
-  //       $(this).find('.fl').on('click', function(event) {
-  //       var num=$(this).find('span').html();
-  //         if($(this).hasClass('on')){
-  //           $(this).removeClass('on');
-  //           num--;
-  //           $(this).find('span').html(num);
-
-  //         }else{
-  //           $(this).addClass('on')
-  //           num++;
-  //           $(this).find('span').html(num)
-  //         }
-  //       });
-  //     });
-  //     }, 2000);
-
-  // });
-</script>
-
 <script type="text/javascript">
+    $(".prod_list").last().css("margin-bottom",0);
+
     init();
 
     var pageSize = 1;
