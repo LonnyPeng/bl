@@ -628,34 +628,7 @@ $.confirms.defaults = {
  *	$.status('Operate successfully', true);
  */
 $.status = function(msg, closable) {
-    $('.cancel').trigger('click');
-
-    if ($("#popup-status").length > 0) {
-        $.status.remove(function() {
-            $.status(msg, closable);
-        });
-        return false;
-    }
-    if (typeof closable === 'boolean') {
-        $.status.closable = closable;
-    }
-    var str = '<div class="weui-msg" id="popup-status" style="z-index: 9999; color: #fff;"><div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div><div class="weui-msg__text-area"><h2 class="weui-msg__title tip-message"></h2></div></div>';
-    $("body").append(str);
-    $("#popup-status .tip-message").html(msg);
-    $("#popup-status").css({top: '-' + ($("#popup-status").outerHeight() + 2) + 'px', position: 'fixed'});
-
-    $.status._adjustPosition();
-
-    if (!$('.mask').length) {
-        $("body").append('<div class="mask"></div>');
-    }
-
-    $('.mask').show();
-    $("#popup-status").animate({top: 0}, 1000);
-    setTimeout(function() {
-        $("#popup-status").remove();
-        $('.mask').hide();
-    }, 2000);
+    $.toast(msg);
 };
 
 $.status.closable = true;

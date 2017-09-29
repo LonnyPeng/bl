@@ -45,6 +45,13 @@ class ReviewModel extends CommonModel
 	    			ORDER BY image_id DESC";
 	    	$reviewImages = $this->locator->db->getAll($sql, $id);
 	    	$info['images'] = $reviewImages;
+
+	    	//判断是否赞过评论
+	    	$sql = "SELECT log_id 
+	    			FROM t_review_logs 
+	    			WHERE review_id = ? 
+	    			AND customer_id = ?";
+	    	$info['log_id'] = $this->locator->db->getOne($sql, $id, $this->locator->get('Profile')['customer_id']);
 	    }
 
 	    return $info;

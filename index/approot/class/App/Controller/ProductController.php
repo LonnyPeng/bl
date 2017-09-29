@@ -137,7 +137,11 @@ class ProductController extends AbstractActionController
 
 		$this->layout->title = '评价';
 
-		$limit = array(0, 3);
+		$limit = array(0, 5);
+		if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+		    $limit[0] = $this->param('pageSize') * $limit[1];
+		}
+		
 		$where = array(
 			"r.review_attr <> 'unread'",
 			sprintf("r.product_id = %d", $id),
@@ -161,10 +165,33 @@ class ProductController extends AbstractActionController
 			}
 		}
 
-		// print_r($reviewList);die;
-		return array(
-			'reviewList' => $reviewList,
-		);
+		if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+		    if ($reviewList) {
+		        foreach ($reviewList as $key => $row) {
+		            foreach ($row as $ke => $value) {
+		                if (!$value) {
+		                    $reviewList[$key][$ke] = '';
+		                }
+		            }
+
+		            $reviewList[$key]['href'] = (string) $this->helpers->url('product/review-detail', array('id' => $row['review_id']));
+		            $reviewList[$key]['customer_headimg'] = (string) $this->helpers->uploadUrl($row['customer_headimg'], 'user');
+		            $reviewList[$key]['review_score'] = sprintf("%d%%", $row['review_score']);
+		            $reviewList[$key]['review_time'] = date("Y-m-d", strtotime($row['review_time']));
+		            // $reviewList[$key]['collection_status'] = $row['collection_id'] ? 'on' : '';
+		            // $reviewList[$key]['href'] = 
+		            // $reviewList[$key]['button'] = $row['product_type'] == 2 ? '组团领' : '立即白领';
+		        }
+
+		        return JsonModel::init('ok', '', $reviewList);
+		    } else {
+		        return new JsonModel('error', '');
+		    }
+		} else {
+		    return array(
+		    	'reviewList' => $reviewList,
+		    );
+		}
 	}
 
 	public function reviewDetailAction()
@@ -179,10 +206,47 @@ class ProductController extends AbstractActionController
 		}
 
 		$id = $this->param('id');
-		$sql = "UPDATE t_reviews SET review_attr = 'pending' WHERE review_id = ? ANND review_attr";
-
-		$status = $this->locator->db->exec($sql, $this->customerId, $id);
+		$sql = "UPDATE t_reviews 
+				SET review_attr = 'pending' 
+				WHERE review_id = ? 
+				AND review_attr = 'published'";
+		$status = $this->locator->db->exec($sql, $id);
 		if ($status) {
+			return JsonModel::init('ok', '已经成功举报该评论!');
+		} else {
+			return new JsonModel('error', '举报失败');
+		}
+	}
+
+	public function reviewUpAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+
+		//判断是否赞过评论
+		$sql = "SELECT log_id 
+				FROM t_review_logs 
+				WHERE review_id = ? 
+				AND customer_id = ?";
+		if ($this->locator->db->getOne($sql, $id, $this->customerId)) {
+			return new JsonModel('error', '你已赞过该评论');
+		}
+
+		$sql = "UPDATE t_reviews 
+				SET review_vote_up = review_vote_up + 1 
+				WHERE review_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			$sql = "INSERT INTO t_review_logs 
+					SET review_id = :review_id, 
+					customer_id = :customer_id";
+			$this->locator->db->exec($sql, array(
+				'review_id' => $id,
+				'customer_id' => $this->customerId,
+			));
 			return JsonModel::init('ok', '');
 		} else {
 			return new JsonModel('error', '失败');
@@ -200,6 +264,6 @@ class ProductController extends AbstractActionController
 	        }
 	    }
 	    
-	    return $number;
+	    return $number * 20;
 	}
 }

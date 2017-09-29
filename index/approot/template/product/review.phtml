@@ -1,4 +1,4 @@
-<div class="eval bgwhite">
+<div class="eval bgwhite" id="m_pro">
 <!-- 评价列表 -->
     <?php if ($reviewList) : ?>
         <?php foreach($reviewList as $row) : ?>
@@ -9,7 +9,7 @@
                             <img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>">
                         </div>
                         <h3><?php echo $row['customer_name']?></h3>
-                        <p><span style="width:60%;"></span></p>
+                        <p><span style="width:<?php echo sprintf("%d%%", $row['review_score'])?>;"></span></p>
                         <div class="pa"><?php echo date("Y-m-d", strtotime($row['review_time']))?></div>
                     </div>
                     <div class="wrap">
@@ -24,64 +24,146 @@
                     </div>
                 </a>
                 <div class="jubao wrap clearfix">
-                    <a class="jb fl show-confirm" href="javascript:;" data-status="<?php echo $row['review_attr']?>">举报</a>
-                    <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>206</span></a>
+                    <a class="jb fl show-confirm" href="javascript:;" data-id="<?php echo $row['review_id']?>" data-status="<?php echo $row['review_attr']?>">举报</a>
+                    <a href="javascript:void(0);" class="fr tac <?php echo $row['log_id'] ? 'on' : ''?> js-up" data-id="<?php echo $row['review_id']?>">
+                        <i class="iconfont">&#xe609;</i>
+                        <span><?php echo $row['review_vote_up']?></span>
+                    </a>
                 </div>
             </div>
         <?php endforeach;?>
     <?php endif;?>
 </div>
 
+<div class="mask"></div>
+
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
 <script type="text/javascript">
     // 举报弹窗
     $(document).on("click", ".show-confirm", function() {
-        var status = $(this).data('status');
+        var $$ = $(this);
+        var status = $$.data('status');
+        var id = $$.data('id');
+
         if (status == 'pending') {
             $.toast("该条评论已被别人举报过！");
         } else {
             $.confirm("确定要举报此条评论吗?", "", function() {
-                
-                $.toast("已经成功举报该评论!");
+                $$.removeAttr('href');
+                $$.ajaxAuto({
+                    url: '<?php echo $this->url('product/review-edit')?>',
+                    data: {id: id},
+                    success: function (re) {
+                        if (re.status == 'ok') {
+                            $$.data('status', 'pending');
+                        }
+                    }
+                });
             }, function() {
                 //取消操作
             });
         }
+    });
 
-    })
+    init();
+
+    var pageSize = 1;
+    var loading = false;  //状态标记
+    $(document.body).infinite().on("infinite", function() {
+        if (loading) {
+            return false;
+        } else {
+            $('.weui-loadmore').removeClass('none');
+            loading = true;
+        }
+        
+        $(this).ajaxAuto({
+            data: {type: 'page', pageSize: pageSize},
+            success: function (re) {
+                var ali="";
+                if (re.status == 'ok') {
+                    pageSize++;
+
+                    $(re.data).each(function (key, row) {
+                        ali +='<div class="eval_box"><a href="' + row.href + '" class="pjxq"><div class="peo_photo clearfix pr wrap"><div class="img fl"><img src="' + row.customer_headimg + '"></div><h3>' + row.customer_name + '</h3><p><span style="width:' + row.review_score + ';"></span></p><div class="pa">' + row.review_time + '</div></div><div class="wrap"><p>评论内容：' + row.review_content + '</p><?php if ($row['images']) : ?><div class="pj_img clearfix"><?php foreach($row['images'] as $image) : ?><img src="<?php echo $this->uploadUrl($image['image_path'], 'review')?>" class="fl"><?php endforeach;?></div><?php endif;?></div></a><div class="jubao wrap clearfix"><a class="jb fl show-confirm" href="javascript:;" data-id="<?php echo $row['review_id']?>" data-status="<?php echo $row['review_attr']?>">举报</a><a href="javascript:void(0);" class="fr tac <?php echo $row['log_id'] ? 'on' : ''?> js-up" data-id="<?php echo $row['review_id']?>"><i class="iconfont">&#xe609;</i><span><?php echo $row['review_vote_up']?></span></a></div></div>';
+                    });
+                } else {
+                    $('.weui-loadmore').fadeOut();
+                }
+
+                $("#m_pro").append(ali);
+                $('.weui-loadmore').addClass('none');
+                init();
+                
+                loading = false;
+            }
+        });
+    });
+
+    function init() {
+        //收藏
+        $('.js-up').click(function() {
+            var $$ = $(this);
+            if ($$.hasClass('on')) {
+                return false;
+            }
+
+            var id = $$.data('id');
+            var num = parseInt($$.find('span').text());
+
+            $$.removeAttr('href');
+
+            $$.ajaxAuto({
+                url: '<?php echo $this->url('product/review-up')?>',
+                data: {id: id},
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.addClass('on');
+                        $$.find('span').html(num + 1);
+                    }
+                }
+            });
+            return false;
+        });
+    }
 </script>
 
 <script>
-  $(function() {
-    FastClick.attach(document.body);
-  });
-  // 点击图片放大
+  // $(function() {
+  //   FastClick.attach(document.body);
+  // });
+  // // 点击图片放大
        
   
-  $(".pj_img img").click(function(event) {
-      var phot=[]; 
-       var inx=$(this).index();
-       $(this).parent().find("img").each(function(index, el) {
-          var pho_img=$(this).attr("src");
-              phot.push(pho_img)
-        });           
-      $.tpyl(phot,inx)       
-  });
-  $.tpyl=function(phot,inx){
-    var pb1 = $.photoBrowser({
-          items: phot,
+  // $(".pj_img img").click(function(event) {
+  //     var phot=[]; 
+  //      var inx=$(this).index();
+  //      $(this).parent().find("img").each(function(index, el) {
+  //         var pho_img=$(this).attr("src");
+  //             phot.push(pho_img)
+  //       });           
+  //     $.tpyl(phot,inx)       
+  // });
+  // $.tpyl=function(phot,inx){
+  //   var pb1 = $.photoBrowser({
+  //         items: phot,
 
-          onSlideChange: function(index) {
-            console.log(this, index);
-          },
+  //         onSlideChange: function(index) {
+  //           console.log(this, index);
+  //         },
 
-          onOpen: function() {
-            console.log("onOpen", this);
-          },
-          onClose: function() {
-            console.log("onClose", this);
-          },
-          initIndex:inx
-        });      
-      pb1.open();
-  }
+  //         onOpen: function() {
+  //           console.log("onOpen", this);
+  //         },
+  //         onClose: function() {
+  //           console.log("onClose", this);
+  //         },
+  //         initIndex:inx
+  //       });      
+  //     pb1.open();
+  // }
 </script>
