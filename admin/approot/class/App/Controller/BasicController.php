@@ -498,7 +498,7 @@ class BasicController extends AbstractActionController
 
 			$code = trim($_POST['product_code']);
 			if ($code) {
-				if (!preg_match("/^sp[\d]{6}/i", $key)) {
+				if (!preg_match("/^sp[\d]{6}/i", $code)) {
 					return new JsonModel('error', '商品CODE错误');
 				} 
 			}

@@ -137,8 +137,6 @@ class DefaultController extends AbstractActionController
         $where = array(
             'p.product_status = 1',
             sprintf("p.district_id = %d", $this->districtId),
-            "p.product_quantity >= 1",
-            sprintf("p.product_end > '%s'", date("Y-m-d H:i:s")),
         );
 
         $productName = trim($this->param('product_name'));

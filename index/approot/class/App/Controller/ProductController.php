@@ -32,8 +32,6 @@ class ProductController extends AbstractActionController
 		$where = array(
 		    'p.product_status = 1',
 		    sprintf("p.district_id = %d", $this->districtId),
-		    "p.product_quantity >= 1",
-		    sprintf("p.product_end > '%s'", date("Y-m-d H:i:s")),
 		    sprintf("p.attr_id = %d", $attrInfo['attr_id']),
 		);
 
@@ -87,6 +85,8 @@ class ProductController extends AbstractActionController
 
 	public function detailAction()
 	{
+		$id = trim($this->param('id'));
+		$info = $this->models->product->getProductById($id);
 		return array();
 	}
 
