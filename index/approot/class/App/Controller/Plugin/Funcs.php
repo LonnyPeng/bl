@@ -374,20 +374,30 @@ class Funcs implements ServiceLocatorAwareInterface
         return $str;
     }
 
-    public function showTime($time) {
-        $time = strtotime(trim($time));
-        $time -= time();
+    /**
+     * Show time
+     * @param int $time
+     * @return string
+     */
+    public function showTime($time) 
+    {
+        $time = (int) trim($time);
         if ($time < 0) {
             $time = 0;
         }
 
         $init = [
+            'year' => [31536000, '年'],
+            'month' => [2592000, '月'],
             'day' => [86400, '天'],
+            'hour' => [3600, '小时'],
+            'minute' => [60, '分'],
+            'second' => [1, '秒'],
         ];
 
         $str = '';
         foreach ($init as $key => $row) {
-            $num = floor($time / $row[0]) + 1;
+            $num = floor($time / $row[0]);
             if (!$num) {
                 continue;
             }
@@ -395,8 +405,8 @@ class Funcs implements ServiceLocatorAwareInterface
             $str .= $num . $row[1];
             $time -= $num * $row[0];
         }
-        
-        return $str;
+
+        return $str ?: '0秒';
     }
 
     public function isMobile()

@@ -1,0 +1,207 @@
+<div class="prod_dt bgwhite mb15">
+    <div class="img pr">
+        <img src="<?php echo $this->uploadUrl($info['images']['banner'][0]['image_path'], 'product')?>">
+        <div class="pa">
+            <p class="lr1">
+                <i class="iconfont">&#xe620;</i>
+                <span>
+                    距离兑换结束还有
+                    <label id="time" data-time="<?php echo strtotime($info['product_end']) - time()?>">
+                        <?php echo $this->funcs->showTime(strtotime($info['product_end']) - time())?>
+                    </label>
+                </span>
+            </p>
+        </div>
+    </div>
+    <div class="t_info wrap">
+        <h4><?php echo $info['product_name']?></h4>
+        <div class="jg clearfix">
+            <span class="fl">
+                免费领取<b>[<?php echo sprintf("%.2f", $info['product_virtual_price'])?>]</b>
+            </span>
+            <span class="fr">
+                每人限领取一份<?php echo $info['product_shaping_status'] ? '&nbsp;|&nbsp;支持配送' : ''?>
+            </span>
+        </div>
+        <p>推荐理由：<?php echo $info['product_desc']?></p>
+    </div>
+</div>
+<!-- 组团说明 -->
+<?php if ($info['product_type'] == 2) : ?>
+  <div class="tuan bgwhite">
+      <a href="#" class="eval_title wrap clearfix">
+      <b class="fl">组团说明</b>
+      </a>
+      <div class="wrap info">
+          <p><?php echo $info['product_group_num']?>人以上才可参加组团东西好价钱实惠，服务态度超级棒欢迎下次继续光临本店.</p>
+      </div>
+  </div>
+<?php endif;?>
+<!-- 评价 -->
+<div class="eval bgwhite mb15">
+    <a href="<?php echo $this->url('product/review', array('id' => $info['product_id']))?>" class="eval_title wrap clearfix">
+        <b class="fl">评论</b>
+        <span class="fr">更多<i class="iconfont">&#xe628;</i></span>
+    </a>
+<!-- 评价列表 -->
+  <div class="eval_box">
+    <a href="评价详情.html" class="pjxq">
+      <div class="peo_photo clearfix pr wrap">
+        <div class="img fl">
+          <img src="images/photo_01.jpg">
+        </div>
+        <h3>一只猫咪</h3>
+        <p><span style="width:60%;"></span></p>
+        <div class="pa">2017-02-14</div>
+      </div>
+      <div class="wrap">
+        <p>评论内容：东西好价钱实惠，服务态度超级棒下次继续光临本店.</p>
+        <div class="pj_img clearfix">
+          <img src="images/pj_01.jpg" class="fl">
+          <img src="images/pj_02.jpg" class="fl">
+          <img src="images/pj_03.jpg" class="fl">
+        </div>
+      </div>
+    </a>
+    <div class="jubao wrap clearfix">
+      <a class="jb fl show-confirm" href="javascript:;">举报</a>
+      <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>206</span></a>
+    </div>
+  </div>
+  <!-- 评价列表 -->
+  <div class="eval_box">
+    <a href="评价详情.html" class="pjxq">
+      <div class="peo_photo clearfix pr wrap">
+        <div class="img fl">
+          <img src="images/photo_01.jpg">
+        </div>
+        <h3>一只猫咪</h3>
+        <p><span style="width:60%;"></span></p>
+        <div class="pa">2017-02-14</div>
+      </div>
+      <div class="wrap">
+        <p>评论内容：东西好价钱实惠，服务态度超级棒下次继续光临本店.</p>
+        <div class="pj_img clearfix">
+          <img src="images/pj_01.jpg" class="fl">
+          <img src="images/pj_02.jpg" class="fl">
+          <img src="images/pj_03.jpg" class="fl">
+        </div>
+      </div>
+    </a>
+    <div class="jubao wrap clearfix">
+      <a class="jb fl show-confirm" href="javascript:;">举报</a>
+      <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>300</span></a>
+    </div>
+  </div>
+</div>
+<!-- 图文详情 -->
+<div class="dt_pic bgwhite">
+  <a href="javascript:;" class="eval_title wrap clearfix">
+    <b class="fl">图文详情</b>
+  </a>
+  <img src="images/xq_01.jpg" alt="">
+</div>
+<!-- footer -->
+<div class="pf pro_foot tuan_foot clearfix">
+  <a href="javascript:void(0);" class="sc fl"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
+  <a href="#" class="fr lq">已过领取时间</a>
+</div>
+
+<script type="text/javascript">
+    $(".m_banner").swiper({
+        loop: true,
+        autoplay: 3000
+    });
+
+    setInterval(function () {
+        var $$ = $('#time');
+        var time = parseInt($$.data('time'));
+        if (time < 0) {
+            time = 0;
+        }
+
+        var init = {
+            'year': [31536000, '年'],
+            'month': [2592000, '月'],
+            'day': [86400, '天'],
+            'hour': [3600, '小时'],
+            'minute': [60, '分'],
+            'second': [1, '秒'],
+        };
+        var str = '';
+        for(key in init) {
+            num = Math.floor(time / init[key][0]);
+            if (num) {
+                str += num + init[key][1];
+                time -= num * init[key][0];
+            }
+        }
+
+        if (!str) {
+            str = '0秒';
+        }
+
+        $$.data('time', parseInt($$.data('time')) - 1);
+        $$.html(str);
+    }, 1000);
+</script>
+
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+  // 点击图片放大
+       
+  
+  $(".pj_img img").click(function(event) {
+      var phot=[]; 
+       var inx=$(this).index();
+       $(this).parent().find("img").each(function(index, el) {
+          var pho_img=$(this).attr("src");
+              phot.push(pho_img)
+        });           
+      $.tpyl(phot,inx)       
+  });
+  $.tpyl=function(phot,inx){
+    var pb1 = $.photoBrowser({
+          items: phot,
+
+          onSlideChange: function(index) {
+            console.log(this, index);
+          },
+
+          onOpen: function() {
+            console.log("onOpen", this);
+          },
+          onClose: function() {
+            console.log("onClose", this);
+          },
+          initIndex:inx
+        });      
+      pb1.open();
+  }
+  // 举报弹窗
+  $(document).on("click", ".show-confirm", function() {
+    $.confirm("确定要举报此条评论吗?", "", function() {
+      $.toast("已经成功举报该评论!");
+    }, function() {
+      //取消操作
+    });
+  });
+  // 立即领取详情页点赞
+  $(".eval_box .jubao").each(function() {
+      $(this).find('.fr').on('click', function(event) {
+      var num=$(this).find('span').html();
+          if($(this).hasClass('on')){
+              $(this).removeClass('on');
+              num--;
+              $(this).find('span').html(num);
+
+          }else{
+              $(this).addClass('on')
+              num++;
+              $(this).find('span').html(num)
+          }
+      });
+  });
+</script>

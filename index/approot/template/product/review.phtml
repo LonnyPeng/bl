@@ -1,0 +1,77 @@
+<div class="eval bgwhite">
+<!-- 评价列表 -->
+    <?php if ($reviewList) : ?>
+        <?php foreach($reviewList as $row) : ?>
+            <div class="eval_box">
+                <a href="<?php echo $this->url('product/review-detail', array('id' => $row['review_id']))?>" class="pjxq">
+                    <div class="peo_photo clearfix pr wrap">
+                        <div class="img fl">
+                            <img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>">
+                        </div>
+                        <h3><?php echo $row['customer_name']?></h3>
+                        <p><span style="width:60%;"></span></p>
+                        <div class="pa"><?php echo date("Y-m-d", strtotime($row['review_time']))?></div>
+                    </div>
+                    <div class="wrap">
+                        <p>评论内容：<?php echo $row['review_content']?></p>
+                        <?php if ($row['images']) : ?>
+                            <div class="pj_img clearfix">
+                                <?php foreach($row['images'] as $image) : ?>
+                                    <img src="<?php echo $this->uploadUrl($image['image_path'], 'review')?>" class="fl">
+                                <?php endforeach;?>
+                            </div>
+                        <?php endif;?>
+                    </div>
+                </a>
+                <div class="jubao wrap clearfix">
+                    <a class="jb fl show-confirm" href="javascript:;">举报</a>
+                    <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>206</span></a>
+                </div>
+            </div>
+        <?php endforeach;?>
+    <?php endif;?>
+</div>
+
+<script>
+  $(function() {
+    FastClick.attach(document.body);
+  });
+  // 点击图片放大
+       
+  
+  $(".pj_img img").click(function(event) {
+      var phot=[]; 
+       var inx=$(this).index();
+       $(this).parent().find("img").each(function(index, el) {
+          var pho_img=$(this).attr("src");
+              phot.push(pho_img)
+        });           
+      $.tpyl(phot,inx)       
+  });
+  $.tpyl=function(phot,inx){
+    var pb1 = $.photoBrowser({
+          items: phot,
+
+          onSlideChange: function(index) {
+            console.log(this, index);
+          },
+
+          onOpen: function() {
+            console.log("onOpen", this);
+          },
+          onClose: function() {
+            console.log("onClose", this);
+          },
+          initIndex:inx
+        });      
+      pb1.open();
+  }
+  // 举报弹窗
+  $(document).on("click", ".show-confirm", function() {
+    $.confirm("确定要举报此条评论吗?", "", function() {
+      $.toast("已经成功举报该评论!");
+    }, function() {
+      //取消操作
+    });
+  })
+</script>

@@ -36,7 +36,8 @@ class ProductModel extends CommonModel
 	    $sql = "SELECT * FROM $this->name
 	    		LEFT JOIN t_district d ON p.district_id = d.district_id
 	    		LEFT JOIN t_product_attr pa ON p.attr_id = pa.attr_id
-	    		WHERE product_id = ?";
+	    		WHERE product_id = ?
+	    		AND product_status = 1";
 	    $productInfo = (array) $this->locator->db->getRow($sql, $id);
 	    if (isset($productInfo['product_id'])) {
 	    	$data = array();
@@ -72,6 +73,10 @@ class ProductModel extends CommonModel
 	    			WHERE product_id = ? 
 	    			AND customer_id = ?";
 	    	$productInfo['collection_id'] = $this->locator->db->getOne($sql, $id, $this->locator->get('Profile')['customer_id']);
+
+	    	//是否领取过
+	    	$sql = "SELECT COUNT(*) FROM t_orders WHERE product_id = ? AND customer_id = ?";
+	    	$productInfo['order_num'] = $this->locator->db->getOne($sql, $id, $this->locator->get('Profile')['customer_id']);
 	    }
 
 	    return $productInfo;

@@ -21,6 +21,15 @@
             </div>
             <div class="col-8">
                 <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" name="review_attr">
+                        <option value="">全部</option>
+                        <option value="pending" <?= $this->param('review_attr') == 'pending' ? 'selected' : '' ?>>举报</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
                     <label class="hide"></label>
                     <div>
                         <button type="submit">搜索</button>

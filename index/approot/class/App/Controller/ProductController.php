@@ -64,7 +64,7 @@ class ProductController extends AbstractActionController
 
 		            $productList[$key]['image_path'] = (string) $this->helpers->uploadUrl($row['images']['home'][0]['image_path'], 'product');
 		            $productList[$key]['product_price'] = $this->funcs->showValue($row['product_price']);
-		            $productList[$key]['product_virtual_price'] = $this->funcs->showValue($row['product_virtual_price']);
+		            $productList[$key]['product_virtual_price'] = sprintf("%.2f", $row['product_virtual_price']);
 		            $productList[$key]['collection_num'] = $row['collection_num'] ?: 0;
 		            $productList[$key]['collection_status'] = $row['collection_id'] ? 'on' : '';
 		            $productList[$key]['href'] = (string) $this->helpers->url('product/detail', array('id' => $row['product_id']));
@@ -87,7 +87,22 @@ class ProductController extends AbstractActionController
 	{
 		$id = trim($this->param('id'));
 		$info = $this->models->product->getProductById($id);
-		return array();
+		if (!$info) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		if ($info['product_type'] == 2) {
+			//组团
+			$this->layout->title = '组团白领详情页';
+		} else {
+			//白领
+			$this->layout->title = $info['product_logo_name'];
+		}
+
+		// print_r($info);die;
+		return array(
+			'info' => $info,
+		);
 	}
 
 	public function collectionAction()
@@ -110,5 +125,64 @@ class ProductController extends AbstractActionController
 		} else {
 			return new JsonModel('error', '失败');
 		}
+	}
+
+	public function reviewAction()
+	{
+		$id = trim($this->param('id'));
+		$info = $this->models->product->getProductById($id);
+		if (!$info) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$this->layout->title = '评价';
+
+		$limit = array(0, 3);
+		$where = array(
+			"r.review_attr <> 'unread'",
+			sprintf("r.product_id = %d", $id),
+		);
+		$join = 'LEFT JOIN t_customers c ON c.customer_id = r.customer_id';
+		$files = array('r.*', 'c.*');
+
+		$sqlInfo = array(
+			'setJoin' => $join,
+			'setWhere' => $where,
+			'setLimit' => $limit,
+			'setOrderBy' => 'review_id DESC',
+		);
+
+		$reviewList = $this->models->review->getReview($files, $sqlInfo);
+		if ($reviewList) {
+			foreach ($reviewList as $key => $row) {
+				$row = $this->models->review->getReviewById($row['review_id']);
+				$row['review_score'] = $this->getStarNum($row['review_score']);
+				$reviewList[$key] = $row;
+			}
+		}
+
+		// print_r($reviewList);die;
+		return array(
+			'reviewList' => $reviewList,
+		);
+	}
+
+	public function reviewDetailAction()
+	{
+		return array();
+	}
+
+	protected function getStarNum($value = '')
+	{
+	    $number = 0; 
+	    for ($i = 0; $i < 5; $i++) {
+	        if ($value > ($i + 0.5)) {
+	            $number++;
+	        } elseif ($value > $i) {
+	            $number += 0.5;
+	        }
+	    }
+	    
+	    return $number;
 	}
 }

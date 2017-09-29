@@ -47,7 +47,6 @@
 <script type="text/javascript">
 	$(function(){
 		$(".m_nav").find('.swiper-slide').on('tap', function() {
-			// event.preventDefault();
 			$(this).siblings().removeClass('on');
 			$(this).addClass('on');
 		});
@@ -55,22 +54,5 @@
 		    loop: true,
 		    autoplay: 3000
 		});
-
-	    // 立即领取详情页点赞
-	    $(".eval_box .jubao").each(function() {
-	        $(this).find('.fr').on('click', function(event) {
-	        var num=$(this).find('span').html();
-	            if($(this).hasClass('on')){
-	                $(this).removeClass('on');
-	                num--;
-	                $(this).find('span').html(num);
-
-	            }else{
-	                $(this).addClass('on')
-	                num++;
-	                $(this).find('span').html(num)
-	            }
-	        });
-	    });
 	})
 </script>

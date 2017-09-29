@@ -8,7 +8,7 @@ class ReviewController extends AbstractActionController
 {
 	protected $fileConfig = array(
 		'review_attr' => array(
-			'unread' => '已下线', 'pending' => '审核中', 'published' => '已发布',
+			'unread' => '已下线', 'pending' => '举报', 'published' => '已发布',
 		),
 	);
 	protected $imgType = array('image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png');
@@ -26,6 +26,9 @@ class ReviewController extends AbstractActionController
 		}
 		if ($this->param('product_name')) {
 			$where[] = sprintf("p.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
+		}
+		if ($this->param('review_attr')) {
+			$where[] = sprintf("review_attr = '%s'", trim($this->param('review_attr')));
 		}
 
 		$join = array(

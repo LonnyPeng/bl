@@ -10,7 +10,7 @@
                 <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
                 <div class="info wrap pr">
                     <h4 class="lr1"><?php echo $row['product_name']?></h4>
-                    <span class="jg pa">[<?php echo $this->funcs->showValue($row['product_virtual_price'])?>]</span>
+                    <span class="jg pa">[<?php echo sprintf("%.2f", $row['product_virtual_price'])?>]</span>
                     <span class="pa orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span>
                 </div>
                 <div class="info info_click wrap clearfix">

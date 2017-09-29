@@ -304,6 +304,16 @@ class ProductController extends AbstractActionController
 			//保存图片
 			if (isset($_FILES['image'])) {
 				$images = $this->saveProductImg($_FILES['image']);
+				foreach ($images as $key => $row) {
+					//处理图片
+					$result = $this->funcs->setImage(PRODUCT_DIR . $row['image_path'], PRODUCT_DIR);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$images[$key]['image_path'] = $result['content'];
+					}
+				}
+
 				$sql = "INSERT INTO t_product_images 
 						SET product_id = :product_id, 
 						image_path = :image_path, 
