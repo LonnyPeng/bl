@@ -172,6 +172,23 @@ class ProductController extends AbstractActionController
 		return array();
 	}
 
+	public function reviewEditAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "UPDATE t_reviews SET review_attr = 'pending' WHERE review_id = ? ANND review_attr";
+
+		$status = $this->locator->db->exec($sql, $this->customerId, $id);
+		if ($status) {
+			return JsonModel::init('ok', '');
+		} else {
+			return new JsonModel('error', '失败');
+		}
+	}
+
 	protected function getStarNum($value = '')
 	{
 	    $number = 0; 

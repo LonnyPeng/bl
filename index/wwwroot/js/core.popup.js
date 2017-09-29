@@ -477,60 +477,60 @@ $.alert.defaults = {
  *	$.confirm(msg, submitHandler, opts);
  *	$.confirm(msg, submitHandler, title);
  */
-$.confirm = function(msg, submitHandler, cancelHandler, opts) {
-    if (typeof cancelHandler !== 'function') {
-        if (typeof cancelHandler === 'string') {
-            opts = {title: cancelHandler};
-        } else if (typeof cancelHandler === 'object') {
-            opts = cancelHandler;
-        }
-    }
-    if (typeof opts === 'string') {
-        opts = {title: opts};
-    }
+// $.confirm = function(msg, submitHandler, cancelHandler, opts) {
+//     if (typeof cancelHandler !== 'function') {
+//         if (typeof cancelHandler === 'string') {
+//             opts = {title: cancelHandler};
+//         } else if (typeof cancelHandler === 'object') {
+//             opts = cancelHandler;
+//         }
+//     }
+//     if (typeof opts === 'string') {
+//         opts = {title: opts};
+//     }
 
-    opts = $.extend({}, $.confirm.defaults, opts);
-    msg = '<div class="popup-message">' + msg + '<div>';
-    $.popup(msg, opts,
-            function() {
-                $('.popup-wrapper').attr('id', 'popup-confirm');
-                $(".popup-footer").html('<button class="popup-button-submit button">' + opts.submit + '</button><button class="popup-button-cancel button">' + opts.cancel + '</button>');
-                $(".popup-footer").find(".popup-button-cancel").focus();
-                $(".popup-button-submit").one('click', function() {
-                    $.popup.remove();
-                    if ($.isFunction(submitHandler)) {
-                        submitHandler.call();
-                    }
-                });
-                $(".popup-button-cancel").one('click', function() {
-                    $.popup.remove();
-                    if ($.isFunction(cancelHandler)) {
-                        cancelHandler.call();
-                    }
-                });
-                $(".popup-close").one('click', function() {
-                    if ($.isFunction(cancelHandler)) {
-                        cancelHandler.call();
-                    }
-                });
-            },
-            function() {
-                $(".popup-button-submit").off();
-                $(".popup-button-cancel").off();
-                $(".popup-close").off();
-            }
-    );
-};
+//     opts = $.extend({}, $.confirm.defaults, opts);
+//     msg = '<div class="popup-message">' + msg + '<div>';
+//     $.popup(msg, opts,
+//             function() {
+//                 $('.popup-wrapper').attr('id', 'popup-confirm');
+//                 $(".popup-footer").html('<button class="popup-button-submit button">' + opts.submit + '</button><button class="popup-button-cancel button">' + opts.cancel + '</button>');
+//                 $(".popup-footer").find(".popup-button-cancel").focus();
+//                 $(".popup-button-submit").one('click', function() {
+//                     $.popup.remove();
+//                     if ($.isFunction(submitHandler)) {
+//                         submitHandler.call();
+//                     }
+//                 });
+//                 $(".popup-button-cancel").one('click', function() {
+//                     $.popup.remove();
+//                     if ($.isFunction(cancelHandler)) {
+//                         cancelHandler.call();
+//                     }
+//                 });
+//                 $(".popup-close").one('click', function() {
+//                     if ($.isFunction(cancelHandler)) {
+//                         cancelHandler.call();
+//                     }
+//                 });
+//             },
+//             function() {
+//                 $(".popup-button-submit").off();
+//                 $(".popup-button-cancel").off();
+//                 $(".popup-close").off();
+//             }
+//     );
+// };
 
-$.confirm.defaults = {
-    title: '',
-    overlay: {},
-    dragable: true,
-    closable: false,
-    submit: '是',
-    cancel: '否',
-    focus: 'cancel'
-};
+// $.confirm.defaults = {
+//     title: '',
+//     overlay: {},
+//     dragable: true,
+//     closable: false,
+//     submit: '是',
+//     cancel: '否',
+//     focus: 'cancel'
+// };
 
 /**
  * Extend to jQuery.confirm

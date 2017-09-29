@@ -24,13 +24,31 @@
                     </div>
                 </a>
                 <div class="jubao wrap clearfix">
-                    <a class="jb fl show-confirm" href="javascript:;">举报</a>
+                    <a class="jb fl show-confirm" href="javascript:;" data-status="<?php echo $row['review_attr']?>">举报</a>
                     <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>206</span></a>
                 </div>
             </div>
         <?php endforeach;?>
     <?php endif;?>
 </div>
+
+<script type="text/javascript">
+    // 举报弹窗
+    $(document).on("click", ".show-confirm", function() {
+        var status = $(this).data('status');
+        if (status == 'pending') {
+            $.toast("该条评论已被别人举报过！");
+        } else {
+            $.confirm("确定要举报此条评论吗?", "", function() {
+                
+                $.toast("已经成功举报该评论!");
+            }, function() {
+                //取消操作
+            });
+        }
+
+    })
+</script>
 
 <script>
   $(function() {
@@ -66,12 +84,4 @@
         });      
       pb1.open();
   }
-  // 举报弹窗
-  $(document).on("click", ".show-confirm", function() {
-    $.confirm("确定要举报此条评论吗?", "", function() {
-      $.toast("已经成功举报该评论!");
-    }, function() {
-      //取消操作
-    });
-  })
 </script>
