@@ -301,7 +301,7 @@ class BasicController extends AbstractActionController
 					return new JsonModel('error', '图片保存失败');
 				} else {
 					//处理图片
-					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 750, 540);
 					if (!$result['status']) {
 						return new JsonModel('error', $result['content']);
 					} else {
@@ -510,7 +510,7 @@ class BasicController extends AbstractActionController
 					return new JsonModel('error', '图片保存失败');
 				} else {
 					//处理图片
-					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 750, 393);
 					if (!$result['status']) {
 						return new JsonModel('error', $result['content']);
 					} else {
@@ -520,6 +520,13 @@ class BasicController extends AbstractActionController
 
 				if (isset($_FILES['recommend_logo'])) {
 					$logo = $this->imageUpdate($_FILES['recommend_logo']);
+					//处理图片
+					$result = $this->funcs->setImage(SYS_DIR . $logo, SYS_DIR, 70, 70);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$logo = $result['content'];
+					}
 				}
 			} else {
 				if (isset($_FILES['recommend_path'])) {
@@ -539,6 +546,12 @@ class BasicController extends AbstractActionController
 
 				if (isset($_FILES['recommend_logo'])) {
 					$logo = $this->imageUpdate($_FILES['recommend_logo']);
+					$result = $this->funcs->setImage(SYS_DIR . $logo, SYS_DIR, 70, 70);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$logo = $result['content'];
+					}
 				}
 			}
 

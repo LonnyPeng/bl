@@ -6,21 +6,23 @@
         <div class="col-24">
             <div class="form-group">
                 <label>商品缩略图<sup>*</sup></label>
-                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF ) 750 * 393</p>
                 <div style="display: <?php echo !isset($info['images']['home'][0]['image_path']) ? 'none' : ''?>; text-align: center;">
-                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['images']['home'][0]['image_path'])? $this->uploadUrl($info['images']['home'][0]['image_path'], 'product') : ''?>">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 150px; height: 79px;" src="<?php echo isset($info['images']['home'][0]['image_path'])? $this->uploadUrl($info['images']['home'][0]['image_path'], 'product') : ''?>">
                 </div>
                 
                 <input class="form-control" type="file" name="image[home][]" value="">
                 <input type="hidden" name="image[home][]" value="<?php echo isset($info['images']['home'][0]['image_id']) ? $info['images']['home'][0]['image_id'] : ''?>">
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-24">
             <div class="form-group">
                 <label>品牌LOGO<sup>*</sup></label>
-                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF ) 70 * 70</p>
                 <div style="display: <?php echo !isset($info['images']['home'][0]['image_path']) ? 'none' : ''?>; text-align: center;">
-                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['images']['logo'][0]['image_path'])? $this->uploadUrl($info['images']['logo'][0]['image_path'], 'product') : ''?>">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 70px; height: 70px;" src="<?php echo isset($info['images']['logo'][0]['image_path'])? $this->uploadUrl($info['images']['logo'][0]['image_path'], 'product') : ''?>">
                 </div>
                 
                 <input class="form-control" type="file" name="image[logo][]" value="">
@@ -52,10 +54,12 @@
                 <div class="album-pic-load">
                     <input type="file" name="image[banner][]" class="multi with-preview choose-flie" accept="jpg|jpeg|png|gif"/>
                     <button><i class="icon-camera"></i> 上传图片</button>
-                    <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                    <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF ) 750 * 600</p>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-24">
             <div class="form-group">
                 <label>图文详情<sup>*</sup></label>
@@ -79,7 +83,7 @@
                 <div class="album-pic-load">
                     <input type="file" name="image[detail][]" class="multi with-preview choose-flie" accept="jpg|jpeg|png|gif"/>
                     <button><i class="icon-camera"></i> 上传图片</button>
-                    <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
+                    <p class="tip">( 图片类型: JPG, JPEG, PNG, GIF ) 宽度750</p>
                 </div>
             </div>
         </div>
@@ -269,7 +273,7 @@
         <?php endif; ?>
     </div>
 
-    <div class="employee-detail-submit">
+    <div class="employee-detail-submit js-fixed fixed">
         <button type="submit" id="jq-submit" class="btn">保存</button>
         <a href="javascript:history.back();" class="btn">返回 »</a>
     </div>
@@ -382,5 +386,23 @@
     $('form').submit(function() {
         $(this).ajaxAuto();
         return false;
+    });
+
+    $(function(){
+        $(window.document).scroll(function() {
+            var top =$(document).scrollTop(),
+                docHeight = $(document).height(),
+                winHeight = $(window).height(),
+                bottom = docHeight - winHeight -top;
+            if(bottom > 30){
+                $(".js-fixed").css({
+                    "bottom":5
+                });
+            } else {
+               $(".js-fixed").css({
+                    "bottom":50
+                });
+            }
+        });
     });
 </script>

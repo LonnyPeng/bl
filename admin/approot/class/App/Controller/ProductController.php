@@ -302,11 +302,23 @@ class ProductController extends AbstractActionController
 			}
 
 			//保存图片
+			$imageSizeMap = array(
+				'home' => array(750, 393),
+				'logo' => array(70, 70),
+				'banner' => array(750, 600),
+				'detail' => array(750, 0),
+			);
 			if (isset($_FILES['image'])) {
 				$images = $this->saveProductImg($_FILES['image']);
 				foreach ($images as $key => $row) {
 					//处理图片
-					$result = $this->funcs->setImage(PRODUCT_DIR . $row['image_path'], PRODUCT_DIR);
+					$imageSize = $imageSizeMap[$row['image_type']];
+					if (!$imageSize[1]) {
+						$fileInfo = $this->funcs->getFileInfo(PRODUCT_DIR . $row['image_path']);
+						$imageSize[1] = ($imageSize[0] * $fileInfo[1]) / $fileInfo[0];
+					}
+
+					$result = $this->funcs->setImage(PRODUCT_DIR . $row['image_path'], PRODUCT_DIR, $imageSize[0], $imageSize[1]);
 					if (!$result['status']) {
 						return new JsonModel('error', $result['content']);
 					} else {

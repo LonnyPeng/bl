@@ -199,6 +199,38 @@ class Funcs implements ServiceLocatorAwareInterface
         return $str;
     }
 
+    /**
+     * Get the file information
+     *
+     * @param string $filename
+     * @return array
+     */
+    public function getFileInfo($filename = "")
+    {
+        $pregArr = array(
+            "/\f/i" => "/f", "/\n/i" => "/n", "/\r/i" => "/r",
+            "/\t/i" => "/t", "/\v/i" => "/v", "/\\\\/" => "/",
+        );
+        $imgType = array("jpg", "gif", "png");
+
+        // init file path
+        foreach ($pregArr as $key => $value) {
+            $filename = preg_replace($key, $value, $filename);
+        }
+
+        if (!file_exists($filename)) {
+            return false;
+        }
+
+        $pathinfo = pathinfo($filename);
+        if (isset($pathinfo['extension']) && in_array(strtolower($pathinfo['extension']), $imgType)) {
+            $imgInfo = getimagesize($filename);
+            $pathinfo = array_merge($imgInfo, $pathinfo);
+        }
+
+        return $pathinfo;
+    }
+
     public function setImage($path = null, $dir = '', $width = 750, $height = 380)
     {
         $insInit = array(

@@ -131,13 +131,13 @@
                 <?php foreach ($productList as $key => $row) :?>
                     <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
                         <td class="text-center"><?= $row['product_logo_name']?></td>
-                        <td class="text-center"><?= $row['product_name']?></td>
+                        <td class="text-center" title="<?= $row['product_name']?>"><?= $this->funcs->mbSubString($row['product_name'], 0, 5)?></td>
                         <td class="text-center"><?= $row['product_code']?></td>
                         <td class="text-center"><?= $row['district_name']?></td>
                         <td class="text-center"><?= $row['attr_name']?></td>
                         <td class="text-center"><?= $row['product_quantity']?></td>
                         <td class="text-center"><?= sprintf("%d", $row['product_price'])?></td>
-                        <td class="text-center" style="text-decoration: line-through;"><?= sprintf("%d", $row['product_virtual_price'])?></td>
+                        <td class="text-center" style="text-decoration: line-through;"><?= sprintf("%.2f", $row['product_virtual_price'])?></td>
                         <td class="text-center"><?= date("Y-m-d", strtotime($row['product_start']))?></td>
                         <td class="text-center"><?= date("Y-m-d", strtotime($row['product_end']))?></td>
                         <td class="text-center"><?= $row['product_type'] == 2 ? '组团领' : '白领'?></td>
