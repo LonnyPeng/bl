@@ -162,7 +162,7 @@ class ProductController extends AbstractActionController
 				return new JsonModel('error', '请选择商品所在城市');
 			}
 			if ($_POST['product_price'] < 0) {
-				return new JsonModel('error', '商品现价不能小于0');
+				return new JsonModel('error', '商品积分不能小于0');
 			}
 			if ($_POST['product_virtual_price'] < 0) {
 				return new JsonModel('error', '商品原价不能小于0');
