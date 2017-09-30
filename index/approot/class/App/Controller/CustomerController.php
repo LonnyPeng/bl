@@ -17,6 +17,13 @@ class CustomerController extends AbstractActionController
         $this->customerId = $this->locator->get('Profile')['customer_id'];
     }
 
+    public function indexAction()
+    {
+        $this->layout->title = '个人中心';
+
+        return array();
+    }
+
     public function qrcodeAction()
     {
         $this->layout->title = '我的邀请码';
