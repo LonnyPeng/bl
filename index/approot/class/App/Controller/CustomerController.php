@@ -130,7 +130,10 @@ class CustomerController extends AbstractActionController
         if ($status) {
             $redirect = $this->param('redirect');
             if ($redirect) {
-                $redirect .= "&address=1";
+                $redirect = str_replace("&amp;", "&", $redirect);
+                $redirect = $this->funcs->getUrl($redirect);
+                $redirect['params']['address'] = true;
+                $redirect = $this->funcs->urlInit($redirect);
                 return JsonModel::init('ok', '')->setRedirect($redirect);
             } else {
                 return JsonModel::init('ok', '');

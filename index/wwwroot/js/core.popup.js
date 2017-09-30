@@ -672,31 +672,7 @@ $.status.remove = function(callback) {
  * @param float delay Default value is 5
  */
 $.warning = function(msg, delay) {
-    if ($.warning.autoClose) {
-        clearTimeout($.warning.autoClose);
-    }
-    if ($("#popup-warning").length > 0) {
-        $.warning.remove(function() {
-            $.warning(msg, delay);
-        });
-        return false;
-    }
-
-    if (parseFloat(delay) > 0) {
-        $.warning.delay = parseFloat(delay);
-    } else if (typeof delay !== 'undefined') {
-        $.warning.delay = 0;
-    }
-    var str = '<div id="popup-warning" class="weui-btn" style="display: none;"></div>';
-    $("body").append(str);
-    $("#popup-warning").html(msg);
-    $("#popup-warning").slideDown(500);
-
-    if ($.warning.delay > 0) {
-        $.warning.autoClose = setTimeout(function() {
-            $.warning.remove();
-        }, $.warning.delay * 1500);
-    }
+    $.toast(msg);
 };
 
 $.warning.delay = 1;

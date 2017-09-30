@@ -624,6 +624,107 @@ class Funcs implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Set the URL
+     * 
+     * @param string $url = ""
+     * @return array
+     */
+    public function getUrl($url = "")
+    {
+        $url = urldecode(trim($url));
+        if (!$url) {
+            return false;
+        }
+
+        $urlInfo = explode("?", $url);
+        if (isset($urlInfo[0])) {
+            $urlInfo['url'] = $urlInfo[0];
+            unset($urlInfo[0]);
+        }
+
+        if (isset($urlInfo[1])) {
+            $urlInfo['params'] = array();
+            foreach (explode("&", $urlInfo[1]) as $value) {
+                if ($value) {
+                    $rows = explode("=", $value);
+                    $urlInfo['params'][$rows[0]] = isset($rows[1]) ? $rows[1] : '';
+                }
+            }
+            unset($urlInfo[1]);
+        }
+
+        return $urlInfo;
+    }
+
+    /**
+     * Dispose of legitimate URLs
+     * 
+     * @param string $url = ""
+     * @return string
+     */
+    public function urlInit($urlInfo = "") 
+    {
+        $urlArr = parse_url($urlInfo['url']);
+
+        if (isset($urlInfo['params'])) {
+            $params = "";
+            foreach ($urlInfo['params'] as $key => $row) {
+                if (is_array($row)) {
+                    foreach ($row as $value) {
+                        if ($params) {
+                            $params .= "&" . $key . "=" . $value;
+                        } else {
+                            $params .= $key . "=" . $value;
+                        }
+                    }
+                } else {
+                    if ($params) {
+                        $params .= "&" . $key . "=" . $row;
+                    } else {
+                        $params .= $key . "=" . $row;
+                    }
+                }
+            }
+            
+            if (isset($urlArr['query'])) {
+                if (preg_match("/&$/", $urlArr['query'])) {
+                    $urlArr['query'] .= $params;
+                } else {
+                    $urlArr['query'] .= "&" . $params;
+                }
+            } else {
+                $urlArr['query'] = $params;
+            }
+        }
+
+        if (isset($urlArr['host'])) {
+            if (isset($urlArr['scheme'])) {
+                $url = $urlArr['scheme'] . "://" . $urlArr['host'];
+            } else {
+                $url = $urlArr['host'];
+            }
+
+            if (isset($urlArr['port'])) {
+                $url .= ":" . $urlArr['port'];
+            }
+        } else {
+            $url = '';
+        }
+
+        if (isset($urlArr['path'])) {
+            $url .= $urlArr['path'];
+        }
+        if (isset($urlArr['query'])) {
+            $url .= "?" . $urlArr['query'];
+        }
+        if (isset($urlArr['fragment'])) {
+            $url .= "#" . $urlArr['fragment'];
+        }
+
+        return $url;
+    }
+
+    /**
      * Set service locator
      *
      * @param ServiceLocator $serviceLocator

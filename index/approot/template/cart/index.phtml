@@ -76,7 +76,7 @@
   <a href="javascript:void(0);" class="sc fl">
       <span><i class="orange">合计：</i><?php echo $this->funcs->showValue($info['product_price'])?>积分</span>
   </a>
-  <a href="<?php echo $this->url('order/index')?>" class="fr lq">确定</a>
+  <a href="<?php echo $this->url('order/create', array('id' => $info['product_id']))?>" id="js-submit" class="fr lq" data-type="self">确定</a>
 </div>
 
 <script type="text/javascript">
@@ -96,6 +96,7 @@
             $('#js-address, #js-address-detail').fadeOut();
         }
 
+        $('#js-submit').data('type', type);
         $("#half").children('.weui-cell__ft').text(qhl)
         $(".order_qh").find('.qh_ch').html(qhl);
     });
@@ -103,4 +104,28 @@
     <?php if ($this->param('address')) : ?>
         $('.qh_xz p[data-type="logistics"]').parents('.qh_xz').trigger('click');
     <?php endif;?>
+
+    $('#js-submit').click(function() {
+        var $$ = $(this);
+        var type = $$.data('type');
+        var shopId = 0;
+        var href = '<?php echo $this->url('order/create', array('id' => $info['product_id']))?>';
+
+        if (type != 'self') {
+            if (!$('#js-address-detail').length) {
+                window.location.href =  $('#js-address').attr('href');
+            } 
+        } else {
+            //提货地点
+            shopId = 1;
+        }
+
+        $$.removeAttr('href');
+
+        $$.ajaxAuto({
+          url: href + '&type=' + type + '&shop_id=' + shopId
+        });
+        
+        return false;
+    });
 </script>
