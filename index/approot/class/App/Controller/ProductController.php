@@ -143,7 +143,7 @@ class ProductController extends AbstractActionController
 		} else {
 			$sql = "INSERT INTO t_customer_collections SET customer_id = ?, product_id = ?";
 		}
-
+		
 		$status = $this->locator->db->exec($sql, $this->customerId, $id);
 		if ($status) {
 			return JsonModel::init('ok', '');

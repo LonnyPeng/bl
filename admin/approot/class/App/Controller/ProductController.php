@@ -155,8 +155,8 @@ class ProductController extends AbstractActionController
 			if (!$_POST['product_name']) {
 				return new JsonModel('error', '商品名不能为空');
 			}
-			if ($_POST['product_quantity'] < 1) {
-				return new JsonModel('error', '商品库存数量不能小于1');
+			if ($_POST['product_quantity'] < 0) {
+				return new JsonModel('error', '商品库存数量不能小于0');
 			}
 			if (!$_POST['district_id']) {
 				return new JsonModel('error', '请选择商品所在城市');

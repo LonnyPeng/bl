@@ -9,6 +9,13 @@ class OrderController extends AbstractActionController
         parent::init();
     }
 
+    public function indexAction()
+    {
+        $this->layout->title = '订单';
+
+        return array();
+    }
+
     public function qrcodeAction()
     {
         $this->layout->title = '领取二维码';

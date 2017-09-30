@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>江中牌猴菇米饭</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+    ">
+
+    <link rel="stylesheet" href="../weui.min.css">
+    <link rel="stylesheet" href="../jquery-weui.css">
+    <link rel="stylesheet" href="../swiper.min.css">
+    <link rel="stylesheet" href="../common.css">
+    <link rel="stylesheet" href="css/index.css">
+
+  </head>
+
+  <body ontouchstart>
+    <div class="prod_dt bgwhite mb15">
+      <div class="img pr">
+        <img src="images/dt_01.jpg">
+        <div class="pa">
+          <p class="lr1"><i class="iconfont">&#xe620;</i><span>距离兑换结束还有5小时20分20秒</span></p>
+        </div>
+      </div>
+      <div class="t_info wrap">
+        <h4>江中猴菇早餐米稀营养糊健康有营养江中猴米稀</h4>
+        <div class="jg clearfix">
+          <span class="fl">
+            免费领取<b>[98.00]</b>
+          </span>
+          <span class="fr">
+            每人限领取一份  |  支持配送
+          </span>
+        </div>
+        <p>推荐理由：江中猴菇早餐米稀营养糊健康有营养江中猴稀地江中猴菇早餐米稀营养糊健康有营养江中猴米稀.</p>
+      </div>
+    </div>
+    
+    <div class="eval bgwhite mb15">
+      <a href="评价.html" class="eval_title wrap clearfix">
+        <b class="fl">评论</b>
+        <span class="fr">更多<i class="iconfont">&#xe628;</i></span>
+      </a>
+    <!-- 评价列表 -->
+      <div class="eval_box">
+        <a href="评价详情.html" class="pjxq">
+          <div class="peo_photo clearfix pr wrap">
+            <div class="img fl">
+              <img src="images/photo_01.jpg">
+            </div>
+            <h3>一只猫咪</h3>
+            <p><span style="width:60%;"></span></p>
+            <div class="pa">2017-02-14</div>
+          </div>
+          <div class="wrap">
+            <p>评论内容：东西好价钱实惠，服务态度超级棒下次继续光临本店.</p>
+            <div class="pj_img clearfix">
+              <img src="images/pj_01.jpg" class="fl">
+              <img src="images/pj_02.jpg" class="fl">
+              <img src="images/pj_03.jpg" class="fl">
+            </div>
+          </div>
+        </a>
+        <div class="jubao wrap clearfix">
+          <a class="jb fl show-confirm" href="javascript:;">举报</a>
+          <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>206</span></a>
+        </div>
+      </div>
+      <!-- 评价列表 -->
+      <div class="eval_box">
+        <a href="评价详情.html" class="pjxq">
+          <div class="peo_photo clearfix pr wrap">
+            <div class="img fl">
+              <img src="images/photo_01.jpg">
+            </div>
+            <h3>一只猫咪</h3>
+            <p><span style="width:60%;"></span></p>
+            <div class="pa">2017-02-14</div>
+          </div>
+          <div class="wrap">
+            <p>评论内容：东西好价钱实惠，服务态度超级棒下次继续光临本店.</p>
+            <div class="pj_img clearfix">
+              <img src="images/pj_01.jpg" class="fl">
+              <img src="images/pj_02.jpg" class="fl">
+              <img src="images/pj_03.jpg" class="fl">
+            </div>
+          </div>
+        </a>
+        <div class="jubao wrap clearfix">
+          <a class="jb fl show-confirm" href="javascript:;">举报</a>
+          <a href="javascript:void(0);" class="fr tac"><i class="iconfont">&#xe609;</i><span>300</span></a>
+        </div>
+      </div>
+    </div>
+    <!-- 图文详情 -->
+    <div class="dt_pic bgwhite">
+      <a href="javascript:;" class="eval_title wrap clearfix">
+        <b class="fl">图文详情</b>
+      </a>
+      <img src="images/xq_01.jpg" alt="">
+    </div>
+    <!-- footer -->
+    <div class="pf pro_foot clearfix">
+      <a href="javascript:void(0);" class="sc fl"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
+      <a href="白领自提订单确认.html" class="fr lq">立即白领</a>
+    </div>
+
+    <script src="../jquery-2.1.4.js"></script>
+    <script src="../fastclick.js"></script>
+    <script src="../jquery-weui.js"></script>
+    <script type='text/javascript' src='../swiper.js' charset='utf-8'></script>
+    <script src="js/index.js"></script>
+    <script>
+      $(function() {
+        FastClick.attach(document.body);
+      });
+      // 点击图片放大
+           
+      
+      $(".pj_img img").click(function(event) {
+          var phot=[]; 
+           var inx=$(this).index();
+           $(this).parent().find("img").each(function(index, el) {
+              var pho_img=$(this).attr("src");
+                  phot.push(pho_img)
+            });           
+          $.tpyl(phot,inx)       
+      });
+      $.tpyl=function(phot,inx){
+        var pb1 = $.photoBrowser({
+              items: phot,
+
+              onSlideChange: function(index) {
+                console.log(this, index);
+              },
+
+              onOpen: function() {
+                console.log("onOpen", this);
+              },
+              onClose: function() {
+                console.log("onClose", this);
+              },
+              initIndex:inx
+            });      
+          pb1.open();
+      }
+      // 举报弹窗
+      $(document).on("click", ".show-confirm", function() {
+        $.confirm("确定要举报此条评论吗?", "", function() {
+          $.toast("已经成功举报该评论!");
+        }, function() {
+          //取消操作
+        });
+      })
+    </script>
+  </body>
+</html>

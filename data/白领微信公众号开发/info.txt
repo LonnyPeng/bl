@@ -1,1 +1,8 @@
 UE: https://pro.modao.cc/app/3LVHrFof6mD7UynFaGCbkLuzYN16Fj7#screen=s19B26B3CB91503027433506
+
+代码测试
+前台：http://www.bl.com/?openid=wx1df1a198b53b46b5
+
+后台：http://www.bl.com/admin admin@123456
+
+h5 http://47.93.216.209:8026/bailing/index/

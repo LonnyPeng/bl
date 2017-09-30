@@ -4,14 +4,24 @@
         <div class="pa">
             <p class="lr1">
                 <i class="iconfont">&#xe620;</i>
-                <span>
-                    距离兑换结束还有
-                    <label id="time" data-time="<?php echo strtotime($info['product_end']) - time()?>">
-                        <?php echo $this->funcs->showTime(strtotime($info['product_end']) - time())?>
-                    </label>
-                </span>
+                <?php if (strtotime($info['product_end']) < time()) : ?>
+                    <span>领取时间已过</span>
+                <?php else : ?>
+                    <span>
+                        距离兑换结束还有
+                        <label id="time" data-time="<?php echo strtotime($info['product_end']) - time()?>">
+                            <?php echo $this->funcs->showTime(strtotime($info['product_end']) - time())?>
+                        </label>
+                    </span>
+                <?php endif;?>
+
             </p>
         </div>
+        <?php if ($info['product_quantity'] < 1) : ?>
+            <span class="pa tip">
+              商品已领完了，下次早些来
+            </span>
+        <?php endif;?>
     </div>
     <div class="t_info wrap">
         <h4><?php echo $info['product_name']?></h4>
@@ -94,15 +104,28 @@
       <a href="javascript:void(0);" class="sc fl"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
       <a href="#" class="fr lq">已过领取时间</a>
     </div>
+<?php elseif ($info['product_quantity'] < 1) : ?>
+    <div class="pf pro_foot clearfix">
+      <a href="javascript:void(0);" class="sc fl js-collection <?php echo $info['collection_id'] ? '' : 'no-collection'?>" data-id="<?php echo $info['product_id']?>"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
+        <a href="javascript:void(0);" class="fr lq" style="color: #fff; background-color: #999;">商品已领完</a>
+    </div>
 <?php elseif ($info['product_type'] == 2) : ?>
     <div class="pf pro_foot clearfix">
-      <a href="javascript:void(0);" class="sc fl"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
-      <a href="#" class="fr lq">立即组团领</a>
+      <a href="javascript:void(0);" class="sc fl js-collection <?php echo $info['collection_id'] ? '' : 'no-collection'?>" data-id="<?php echo $info['product_id']?>"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
+        <?php if ($info['order_num']) : ?>
+            <a href="javascript:void(0);" class="fr lq" style="color: #fff; background-color: #999;">每人限领取一份</a>
+        <?php else : ?>
+            <a href="<?php echo $this->url('cart/index', array('id' => $info['product_id']))?>" class="fr lq">立即组团领</a>
+        <?php endif;?>
     </div>
 <?php else : ?>
     <div class="pf pro_foot clearfix">
-      <a href="javascript:void(0);" class="sc fl"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
-      <a href="#" class="fr lq">立即白领</a>
+      <a href="javascript:void(0);" class="sc fl js-collection <?php echo $info['collection_id'] ? 'on' : ''?>" style="color: <?php echo $info['collection_id'] ? '#ff7c00;' : '#999;'?>" data-id="<?php echo $info['product_id']?>"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
+      <?php if ($info['order_num']) : ?>
+          <a href="javascript:void(0);" class="fr lq" style="color: #fff; background-color: #999;">每人限领取一份</a>
+      <?php else : ?>
+          <a href="<?php echo $this->url('cart/index', array('id' => $info['product_id']))?>" class="fr lq">立即白领</a>
+      <?php endif;?>
     </div>
 <?php endif;?>
 
@@ -117,6 +140,9 @@
         var time = parseInt($$.data('time'));
         if (time < 0) {
             time = 0;
+
+            window.location.reload();
+            return false;
         }
 
         var init = {
@@ -171,6 +197,33 @@
     });
 
     init();
+
+    //收藏
+    $('.js-collection').click(function() {
+        var $$ = $(this);
+        var id = $$.data('id');
+        var type = $$.hasClass('on') ? 'del' : 'add';
+        var num = parseInt($$.find('span').text());
+
+        $$.removeAttr('href');
+
+        $$.ajaxAuto({
+            url: '<?php echo $this->url('product/collection')?>',
+            data: {id: id, type: type},
+            success: function (re) {
+                if (re.status == 'ok') {
+                    if (type == 'del') {
+                        $$.removeClass('on');
+                        $$.css({color: '#999'});
+                    } else {
+                        $$.addClass('on');
+                        $$.css({color: '#ff7c00'});
+                    }
+                }
+            }
+        });
+        return false;
+    });
 
     function init() {
         //赞
