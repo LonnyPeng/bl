@@ -230,6 +230,8 @@ class ProductController extends AbstractActionController
 			$this->funcs->redirect($this->helpers->url('default/index'));
 		}
 
+		$info['review_score'] = $this->getStarNum($info['review_score']);
+
 		return array(
 			'info' => $info,
 		);
