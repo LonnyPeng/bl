@@ -8,7 +8,8 @@ use Framework\ServiceLocator\ServiceLocator;
 class Score implements ServiceLocatorAwareInterface
 {
     const JFDHCJ = '积分兑换抽奖';
-	const CJHDJF = '抽奖获得积分';
+    const CJHDJF = '抽奖获得积分';
+	const GMSP = '购买商品';
 
 	protected $locator = null;
 

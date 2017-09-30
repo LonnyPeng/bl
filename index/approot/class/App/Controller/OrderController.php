@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
+use App\Controller\Plugin\Score;
 
 class OrderController extends AbstractActionController
 {
@@ -21,7 +22,11 @@ class OrderController extends AbstractActionController
     {
         $this->layout->title = '订单';
 
-        return array();
+        $orderNumber = trim($this->param('order_number'));
+
+        return array(
+            'orderNumber' => $orderNumber,
+        );
     }
 
     public function createAction()
@@ -142,11 +147,38 @@ class OrderController extends AbstractActionController
         }
 
         //扣除积分
+        $sql = "UPDATE t_customers 
+                SET customer_score = customer_score - ? 
+                WHERE customer_id = ?";
+        $status = $this->locator->db->exec($sql, $map['product_price'], $this->customerId);
+        if (!$status) {
+            $sql = "DELETE FROM t_orders WHERE order_number = ?";
+            $this->locator->db->exec($sql, $map['order_number']);
+        }
+
+        //记录积分变动
+        $this->score(array(
+            'type' => 'buy', 
+            'des' => Score::GMSP, 
+            'score' => $map['product_price'],
+        ));
         
         //扣除商品数量
-        
+        $sql = "UPDATE t_products 
+                SET product_quantity = product_quantity - 1 
+                WHERE product_id = ?";
+        $this->locator->db->exec($sql, $map['product_id']);
+        if ($type == 'self') { //自提
+            $sql = "UPDATE t_product_quantity 
+                    SET quantity_num = quantity_num - 1 
+                    WHERE product_id = ?
+                    AND shop_id = ?";
+            $this->locator->db->exec($sql, $map['product_id'], $shopId);
 
-        return JsonModel::init('ok', '123');
+            return JsonModel::init('ok', '')->setRedirect($this->helpers->url('order/qrcode', array('order_number' => $map['order_number'])));
+        } else {
+            return JsonModel::init('ok', '下单成功')->setRedirect($this->helpers->url('order/index', array('order_number' => $map['order_number'])));
+        }
     }
 
     public function qrcodeAction()
