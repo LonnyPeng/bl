@@ -585,7 +585,7 @@ class BasicController extends AbstractActionController
 					$sql = "SELECT recommend_logo FROM t_recommends WHERE recommend_id = ?";
 					$logoOld = $this->locator->db->getOne($sql, $id);
 
-					$map['recommend_logo'] = $path;
+					$map['recommend_logo'] = $logo;
 					$set .= ",recommend_logo = :recommend_logo";
 				}
 				
@@ -843,7 +843,13 @@ class BasicController extends AbstractActionController
 	        $this->locator->db->exec($sql, $row);
 	    }
 
-	    die;
 	    return JsonModel::init('ok', '')->setRedirect('reload');
+	}
+
+	protected function delImage($path = '')
+	{
+		if (file_exists($path)) {
+			@unlink($path);
+		}
 	}
 }
