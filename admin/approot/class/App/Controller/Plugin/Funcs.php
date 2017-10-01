@@ -237,6 +237,7 @@ class Funcs implements ServiceLocatorAwareInterface
             'width' => $width,
             'height' => $height,
         );
+
         $data = array(
             'dir' => '', 'src' => '',
             'dir_x' => 0, 'dir_y' => 0,
@@ -314,7 +315,7 @@ class Funcs implements ServiceLocatorAwareInterface
             $key[1]($abbreviationsImg, $dirFile);
             imagedestroy($abbreviationsImg);
 
-            return $this->setImage($dirFile, $dir);
+            return $this->setImage($dirFile, $dir, $insInit['width'], $insInit['height']);
         }
 
         // copy image
