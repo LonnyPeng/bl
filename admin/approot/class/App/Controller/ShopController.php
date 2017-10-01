@@ -122,7 +122,7 @@ class ShopController extends AbstractActionController
 						return new JsonModel('error', '缩略图保存失败');
 					} else {
 						//处理图片
-						$result = $this->funcs->setImage(SHOP_DIR . $path, SHOP_DIR, 400, 400);
+						$result = $this->funcs->setImage(SHOP_DIR . $path, SHOP_DIR, 70, 70);
 						if (!$result['status']) {
 							return new JsonModel('error', $result['content']);
 						} else {

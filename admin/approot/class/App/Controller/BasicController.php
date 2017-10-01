@@ -315,7 +315,7 @@ class BasicController extends AbstractActionController
 						return new JsonModel('error', '图片保存失败');
 					} else {
 						//处理图片
-						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 750, 540);
 						if (!$result['status']) {
 							return new JsonModel('error', $result['content']);
 						} else {
@@ -535,7 +535,7 @@ class BasicController extends AbstractActionController
 						return new JsonModel('error', '图片保存失败');
 					} else {
 						//处理图片
-						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 70, 70);
 						if (!$result['status']) {
 							return new JsonModel('error', $result['content']);
 						} else {

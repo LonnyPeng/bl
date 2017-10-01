@@ -89,28 +89,12 @@ class TaskController extends AbstractActionController
 				$path = $this->saveReadImg($_FILES['file']);
 				if (!$path) {
 					return new JsonModel('error', '缩略图保存失败');
-				} else {
-					//处理图片
-					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
-					if (!$result['status']) {
-						return new JsonModel('error', $result['content']);
-					} else {
-						$path = $result['content'];
-					}
 				}
 			} else {
 				if (isset($_FILES['file'])) {
 					$path = $this->saveReadImg($_FILES['file']);
 					if (!$path) {
 						return new JsonModel('error', '缩略图保存失败');
-					} else {
-						//处理图片
-						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
-						if (!$result['status']) {
-							return new JsonModel('error', $result['content']);
-						} else {
-							$path = $result['content'];
-						}
 					}
 				}
 			}
@@ -281,28 +265,12 @@ class TaskController extends AbstractActionController
 				$path = $this->saveReadImg($_FILES['file']);
 				if (!$path) {
 					return new JsonModel('error', '缩略图保存失败');
-				} else {
-					//处理图片
-					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
-					if (!$result['status']) {
-						return new JsonModel('error', $result['content']);
-					} else {
-						$path = $result['content'];
-					}
 				}
 			} else {
 				if (isset($_FILES['file'])) {
 					$path = $this->saveReadImg($_FILES['file']);
 					if (!$path) {
 						return new JsonModel('error', '缩略图保存失败');
-					} else {
-						//处理图片
-						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
-						if (!$result['status']) {
-							return new JsonModel('error', $result['content']);
-						} else {
-							$path = $result['content'];
-						}
 					}
 				}
 			}
@@ -537,7 +505,7 @@ class TaskController extends AbstractActionController
 						return new JsonModel('error', '缩略图保存失败');
 					} else {
 						//处理图片
-						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 400, 400);
 						if (!$result['status']) {
 							return new JsonModel('error', $result['content']);
 						} else {
@@ -551,7 +519,7 @@ class TaskController extends AbstractActionController
 							return new JsonModel('error', '缩略图保存失败');
 						} else {
 							//处理图片
-							$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR);
+							$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 400, 400);
 							if (!$result['status']) {
 								return new JsonModel('error', $result['content']);
 							} else {
