@@ -164,4 +164,9 @@ class CustomerController extends AbstractActionController
 
         return JsonModel::init('ok', '');
     }
+
+    public function groupAction()
+    {
+        return array();
+    }
 }

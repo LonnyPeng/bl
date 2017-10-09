@@ -77,27 +77,13 @@ class OrderController extends AbstractActionController
                 return new JsonModel('error', '你的收获地址不存在');
             }
         } else { //自提
-            //选择提货地点
-            $shopId = $this->param('shop_id');
-            if (!$shopId) {
-                return new JsonModel('error', '请选择提货地点');
-            }
-            $sql = "SELECT s.*, d.district_name, pq.quantity_num
-                    FROM t_shops s 
-                    LEFT JOIN t_district d ON d.district_id = s.district_id 
-                    LEFT JOIN t_product_quantity pq ON pq.shop_id = s.shop_id AND pq.product_id = ? 
-                    WHERE s.shop_id = ?";
-            $address = $this->locator->db->getRow($sql, $productInfo['product_id'], $shopId);
-            if (!$address) {
-                return new JsonModel('error', '提货地点不存在');
-            }
-            if ($address['quantity_num'] < 1) {
-                return new JsonModel('error', '提货地点的商品已被领完');
-            }
-
-            $address['user_name'] = $this->locator->get('Profile')['customer_name'];
-            $address['user_address'] = $address['shop_address'];
-            $address['user_tel'] = $this->locator->get('Profile')['customer_tel'] ?: '';
+            $address = array(
+                'user_name' => $this->locator->get('Profile')['customer_name'],
+                'district_id' => $this->districtId,
+                'district_name' => $this->locator->get('Profile')['city'],
+                'user_address' => '',
+                'user_tel' => '',
+            );
         }
 
         $sql = "SELECT MAX(order_number) FROM t_orders";
@@ -168,17 +154,8 @@ class OrderController extends AbstractActionController
                 SET product_quantity = product_quantity - 1 
                 WHERE product_id = ?";
         $this->locator->db->exec($sql, $map['product_id']);
-        if ($type == 'self') { //自提
-            $sql = "UPDATE t_product_quantity 
-                    SET quantity_num = quantity_num - 1 
-                    WHERE product_id = ?
-                    AND shop_id = ?";
-            $this->locator->db->exec($sql, $map['product_id'], $shopId);
 
-            return JsonModel::init('ok', '')->setRedirect($this->helpers->url('order/qrcode', array('order_number' => $map['order_number'])));
-        } else {
-            return JsonModel::init('ok', '下单成功')->setRedirect($this->helpers->url('order/index', array('order_number' => $map['order_number'])));
-        }
+        return JsonModel::init('ok', '下单成功')->setRedirect($this->helpers->url('order/index', array('order_number' => $map['order_number'])));
     }
 
     public function qrcodeAction()
