@@ -423,44 +423,44 @@ $.popup.remove = function(noAnimate) {
  *	$.alert(msg, opts|title)
  *	$.alert(msg, submitHandler, opts|title)
  */
-$.alert = function(msg, submitHandler, opts) {
-    if (typeof submitHandler === 'string') {
-        opts = $.extend({}, opts, {title: submitHandler});
-    } else if (typeof submitHandler === 'object') {
-        opts = submitHandler;
-    }
+// $.alert = function(msg, submitHandler, opts) {
+//     if (typeof submitHandler === 'string') {
+//         opts = $.extend({}, opts, {title: submitHandler});
+//     } else if (typeof submitHandler === 'object') {
+//         opts = submitHandler;
+//     }
 
-    if (typeof opts === 'string') {
-        opts = {title: opts};
-    }
-    opts = $.extend({}, $.alert.defaults, opts);
-    msg = '<div class="popup-message">' + msg + '</div>';
-    $.popup(msg, opts,
-            function() {
-                $('.popup-wrapper').attr('id', 'popup-alert');
-                $('.popup-footer').html('<button class="popup-button-submit button">' + opts.submit + '</button');
-                $(".popup-footer").find(".popup-button-submit").focus();
-                $(".popup-button-submit").one('click', function() {
-                    $.popup.remove();
-                });
-            },
-            function() {
-                $(".popup-button-submit").off();
-                if ($.isFunction(submitHandler)) {
-                    submitHandler.call();
-                }
-            }
-    );
-};
+//     if (typeof opts === 'string') {
+//         opts = {title: opts};
+//     }
+//     opts = $.extend({}, $.alert.defaults, opts);
+//     msg = '<div class="popup-message">' + msg + '</div>';
+//     $.popup(msg, opts,
+//             function() {
+//                 $('.popup-wrapper').attr('id', 'popup-alert');
+//                 $('.popup-footer').html('<button class="popup-button-submit button">' + opts.submit + '</button');
+//                 $(".popup-footer").find(".popup-button-submit").focus();
+//                 $(".popup-button-submit").one('click', function() {
+//                     $.popup.remove();
+//                 });
+//             },
+//             function() {
+//                 $(".popup-button-submit").off();
+//                 if ($.isFunction(submitHandler)) {
+//                     submitHandler.call();
+//                 }
+//             }
+//     );
+// };
 
-$.alert.defaults = {
-    title: '',
-    overlay: {},
-    dragable: true,
-    closable: false,
-    submit: 'Yes',
-    focus: 'submit'
-};
+// $.alert.defaults = {
+//     title: '',
+//     overlay: {},
+//     dragable: true,
+//     closable: false,
+//     submit: 'Yes',
+//     focus: 'submit'
+// };
 
 /**
  * window.confirm like function
@@ -672,7 +672,8 @@ $.status.remove = function(callback) {
  * @param float delay Default value is 5
  */
 $.warning = function(msg, delay) {
-    $.toast(msg);
+    // $.toast(msg);
+    $.alert(msg);
 };
 
 $.warning.delay = 1;

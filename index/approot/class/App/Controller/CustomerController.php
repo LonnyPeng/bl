@@ -157,7 +157,75 @@ class CustomerController extends AbstractActionController
 
         $this->layout->title = $id ? '编辑地址' : '新建地址';
 
-        return array();
+        $sql = "SELECT c.*, d.district_name FROM t_customer_address c
+                LEFT JOIN t_district d ON d.district_id = c.district_id
+                WHERE address_id = ?";
+        $info = $this->locator->db->getRow($sql, $id);
+
+        if ($this->funcs->isAjax()) {
+            if (!$_POST['user_name']) {
+                return new JsonModel('error', '请输入姓名');
+            }
+            if (!$_POST['user_tel']) {
+                return new JsonModel('error', '请输入手机号码');
+            } elseif (!isPhone($_POST['user_tel'])) {
+                return new JsonModel('error', '手机格式错误');
+            }
+            if (!$_POST['user_address_city']) {
+                return new JsonModel('error', '请选择省市区');
+            }
+            if (!$_POST['user_address_detail']) {
+                return new JsonModel('error', '请填写详细地址');
+            }
+
+            $addressCity = preg_replace("/[ ]{2,}/", " ", trim($_POST['user_address_city']));
+            $addressCity = explode(" ", $addressCity);
+            if (count($addressCity) > 1) {
+                $city = $addressCity[1];
+            } else {
+                $city = $addressCity[0];
+            }
+            $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $city)));
+
+            $map = array(
+                'district_id' => $districtInfo['district_id'],
+                'user_address' => implode(" ", $addressCity) . '  ' . preg_replace("/[ ]{2,}/", " ", trim($_POST['user_address_detail'])),
+                'user_name' => trim($_POST['user_name']),
+                'user_tel' => trim($_POST['user_tel']),
+            );
+            $set = "district_id = :district_id, user_address= :user_address, user_name = :user_name, user_tel = :user_tel";
+            if ($info) {
+                $map['address_id'] = $id;
+                $sql = "UPDATE t_customer_address SET {$set} WHERE address_id = :address_id";
+            } else {
+                $map['customer_id'] = $this->customerId;
+                $set .= ',customer_id = :customer_id';
+                $sql = "INSERT INTO t_customer_address SET {$set}";
+            }
+
+            $status = $this->locator->db->exec($sql, $map);
+            if ($status) {
+                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address'));
+            } else {
+                return new JsonModel('error', '提交失败');
+            }
+        }
+
+        if ($info) {
+            $address = explode("  ", $info['user_address']);
+            if (count($address) > 1) {
+                $info['user_address_city'] = $address[0];
+                $info['user_address_detail'] = $address[1];
+            } else {
+                $info['user_address_city'] = '';
+                $info['user_address_detail'] = $address[0];
+            }
+        }
+
+        // print_r($info);die;
+        return array(
+            'info' => $info,
+        );
     }
 
     public function collectionAction()
