@@ -741,6 +741,6 @@ CREATE TABLE `t_orders` (
   `order_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
   `order_shipped_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '发货时间',
   `order_received_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '收货时间',
-  `order_type` enum('pending','shipped','received', 'review') NOT NULL DEFAULT 'pending' COMMENT '订单状态：pending正在发货；shipped已发货；received已收货；review已评论',
+  `order_type` enum('group','pending','shipped','received', 'review') NOT NULL DEFAULT 'pending' COMMENT '订单状态：group组团中；pending正在发货；shipped已发货；received已收货；review已评论',
   `order_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='订单表';

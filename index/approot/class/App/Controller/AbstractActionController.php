@@ -80,7 +80,7 @@ abstract class AbstractActionController extends ActionController
                 }
             } else {
                 //判断是否是新用户
-                $where = sprintf("customer_openid = '%s'", $_SESSION['openid']);
+                $where = sprintf("customer_openid = '%s'", addslashes($_SESSION['openid']));
                 $customer = $this->models->customer->getCustomerInfo($where);
                 if (!$customer) {
                     if ($this->helpers->pageId() != 'account-register') {

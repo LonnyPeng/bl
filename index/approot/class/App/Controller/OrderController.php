@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
 use App\Controller\Plugin\Score;
+use App\Controller\Plugin\Layout;
 
 class OrderController extends AbstractActionController
 {
@@ -20,12 +21,33 @@ class OrderController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->layout->title = '订单';
+        $this->layout(Layout::LAYOUT_UE);
+        $this->layout->title = '我的订单';
 
-        $orderNumber = trim($this->param('order_number'));
+        $status = trim($this->param('status'));
 
+        $limit = array(0, 3);
+        $where = array(
+            'o.order_status = 1',
+            sprintf("o.customer_id = %d", $this->customerId),
+        );
+
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            $limit[0] = $this->param('pageSize') * $limit[1];
+        }
+        
+        $files = "o.*, p.*";
+        $sqlInfo = array(
+            'setJoin' => 'LEFT JOIN t_products p ON p.product_id = o.product_id',
+            'setWhere' => $where,
+            'setLimit' => $limit,
+            'setOrderBy' => 'o.order_id DESC',
+        );
+
+        $orderList = $this->models->order->getOrder($files, $sqlInfo);
+
+        // print_r($orderList);die;
         return array(
-            'orderNumber' => $orderNumber,
         );
     }
 
@@ -100,62 +122,112 @@ class OrderController extends AbstractActionController
             $newCode = date('YmdHis') . "000001";
         }
 
-        //创建订单
-        $map = array(
-            'order_number' => $newCode,
-            'product_id' => $productInfo['product_id'],
-            'product_name' => $productInfo['product_name'],
-            'product_price' => $productInfo['product_price'],
-            'customer_id' => $this->customerId,
-            'shinging_type' => $type,
-            'order_customer_name' => $address['user_name'],
-            'district_id' => $address['district_id'],
-            'district_name' => $address['district_name'],
-            'order_address' => $address['user_address'],
-            'order_tel' => $address['user_tel'],
-        );
-        $sql = "INSERT INTO t_orders 
-                SET order_number = :order_number,
-                product_id = :product_id,
-                product_name = :product_name,
-                product_quantity = 1,
-                product_price = :product_price,
-                customer_id = :customer_id,
-                shinging_type = :shinging_type,
-                order_customer_name = :order_customer_name,
-                district_id = :district_id,
-                district_name = :district_name,
-                order_address = :order_address,
-                order_tel = :order_tel";
-        $status = $this->locator->db->exec($sql, $map);
-        if (!$status) {
-            return new JsonModel('error', '订单创建失败');
+        if ($productInfo['product_type'] == 2) { //组团
+            //创建组团
+            $sql = "INSERT INTO t_order_groups 
+                    SET customer_id = :customer_id, 
+                    product_id = :product_id";
+            $status = $this->locator->db->exec($sql, array(
+                'customer_id' => $this->customerId,
+                'product_id' => $productInfo['product_id'],
+            ));
+            if (!$status) {
+                return new JsonModel('error', '组团失败');
+            }
+            $groupId = $this->locator->db->lastInsertId();
+
+            //创建订单
+            $map = array(
+                'order_number' => $newCode,
+                'product_id' => $productInfo['product_id'],
+                'product_name' => $productInfo['product_name'],
+                'product_price' => $productInfo['product_price'],
+                'customer_id' => $this->customerId,
+                'shinging_type' => $type,
+                'order_customer_name' => $address['user_name'],
+                'district_id' => $address['district_id'],
+                'district_name' => $address['district_name'],
+                'order_address' => $address['user_address'],
+                'order_tel' => $address['user_tel'],
+            );
+            $sql = "INSERT INTO t_orders 
+                    SET order_number = :order_number,
+                    product_id = :product_id,
+                    product_name = :product_name,
+                    product_quantity = 1,
+                    product_price = :product_price,
+                    customer_id = :customer_id,
+                    shinging_type = :shinging_type,
+                    order_customer_name = :order_customer_name,
+                    district_id = :district_id,
+                    district_name = :district_name,
+                    order_address = :order_address,
+                    order_type = 'group',
+                    order_tel = :order_tel";
+            $status = $this->locator->db->exec($sql, $map);
+            if (!$status) {
+                return new JsonModel('error', '订单创建失败');
+            }
+
+            return JsonModel::init('ok', '组团成功')->setRedirect($this->helpers->url('customer/group-detail', array('id' => $groupId)));
+        } else { //白领
+            //创建订单
+            $map = array(
+                'order_number' => $newCode,
+                'product_id' => $productInfo['product_id'],
+                'product_name' => $productInfo['product_name'],
+                'product_price' => $productInfo['product_price'],
+                'customer_id' => $this->customerId,
+                'shinging_type' => $type,
+                'order_customer_name' => $address['user_name'],
+                'district_id' => $address['district_id'],
+                'district_name' => $address['district_name'],
+                'order_address' => $address['user_address'],
+                'order_tel' => $address['user_tel'],
+            );
+            $sql = "INSERT INTO t_orders 
+                    SET order_number = :order_number,
+                    product_id = :product_id,
+                    product_name = :product_name,
+                    product_quantity = 1,
+                    product_price = :product_price,
+                    customer_id = :customer_id,
+                    shinging_type = :shinging_type,
+                    order_customer_name = :order_customer_name,
+                    district_id = :district_id,
+                    district_name = :district_name,
+                    order_address = :order_address,
+                    order_tel = :order_tel";
+            $status = $this->locator->db->exec($sql, $map);
+            if (!$status) {
+                return new JsonModel('error', '订单创建失败');
+            }
+
+            //扣除积分
+            $sql = "UPDATE t_customers 
+                    SET customer_score = customer_score - ? 
+                    WHERE customer_id = ?";
+            $status = $this->locator->db->exec($sql, $map['product_price'], $this->customerId);
+            if (!$status) {
+                $sql = "DELETE FROM t_orders WHERE order_number = ?";
+                $this->locator->db->exec($sql, $map['order_number']);
+            }
+
+            //记录积分变动
+            $this->score(array(
+                'type' => 'buy', 
+                'des' => Score::GMSP, 
+                'score' => $map['product_price'],
+            ));
+            
+            //扣除商品数量
+            $sql = "UPDATE t_products 
+                    SET product_quantity = product_quantity - 1 
+                    WHERE product_id = ?";
+            $this->locator->db->exec($sql, $map['product_id']);
+
+            return JsonModel::init('ok', '下单成功')->setRedirect($this->helpers->url('order/index'));
         }
-
-        //扣除积分
-        $sql = "UPDATE t_customers 
-                SET customer_score = customer_score - ? 
-                WHERE customer_id = ?";
-        $status = $this->locator->db->exec($sql, $map['product_price'], $this->customerId);
-        if (!$status) {
-            $sql = "DELETE FROM t_orders WHERE order_number = ?";
-            $this->locator->db->exec($sql, $map['order_number']);
-        }
-
-        //记录积分变动
-        $this->score(array(
-            'type' => 'buy', 
-            'des' => Score::GMSP, 
-            'score' => $map['product_price'],
-        ));
-        
-        //扣除商品数量
-        $sql = "UPDATE t_products 
-                SET product_quantity = product_quantity - 1 
-                WHERE product_id = ?";
-        $this->locator->db->exec($sql, $map['product_id']);
-
-        return JsonModel::init('ok', '下单成功')->setRedirect($this->helpers->url('order/index', array('order_number' => $map['order_number'])));
     }
 
     public function qrcodeAction()

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>
+        <?php if ($this->title) : ?>
+            <?php echo $this->escape($this->title);?>
+        <?php else : ?>
+            白领
+        <?php endif;?>
+    </title>
+
+    <link rel="stylesheet" type="text/css" href="https://pro.modao.cc/assets/sharing-8ab37ece0535f69dc1ab67e86fdc5320.css">
+    <link rel="stylesheet" type="text/css" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+
+    <?php echo $this->js('jquery-2.1.4.js')->wrap();?>
+    <?php echo $this->js('core.popup.js')->wrap();?>
+    <?php echo $this->js('core.ajaxauto.js')->wrap();?>
+    <?php echo $this->js('core.extend.js')->wrap();?>
+</head>
+<body ontouchstart class="<?php echo $this->class ?: ''?>" style="background:#FFF;">
+    <?php echo $this->__content; ?>
+</body>
+</html>
+</html>

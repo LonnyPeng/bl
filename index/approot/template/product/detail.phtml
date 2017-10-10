@@ -115,7 +115,7 @@
         <?php if ($info['order_num']) : ?>
             <a href="javascript:void(0);" class="fr lq" style="color: #fff; background-color: #999;">每人限领取一份</a>
         <?php else : ?>
-            <a href="<?php echo $this->url('customer/group', array('id' => $info['product_id']))?>" class="fr lq">立即组团领</a>
+            <a href="<?php echo $this->url('cart/index', array('id' => $info['product_id']))?>" class="fr lq">立即组团领</a>
         <?php endif;?>
     </div>
 <?php else : ?>

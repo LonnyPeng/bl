@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
+use App\Controller\Plugin\Layout;
 
 class CustomerController extends AbstractActionController
 {
     public $districtId = null;
     public $customerId = null;
+    public $levelColor = array('1' => '#fff', '2' => '#ff7b00', '3' => '#f03c3c', '4' => '#cf9911');
 
     public function init()
     {
@@ -19,13 +21,63 @@ class CustomerController extends AbstractActionController
 
     public function indexAction()
     {
+        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '个人中心';
+
+        //待领取
+        $sql = "SELECT COUNT(*) FROM t_orders 
+                WHERE order_status = 1 
+                AND order_type = 'pending' 
+                AND shinging_type = 'self' 
+                AND customer_id = ?";
+        $receiveNum = $this->locator->db->getOne($sql, $this->customerId);
+
+        //组团中
+        $groupNum = 0;
+        $groupInfo = $this->models->orderGroup->getOrderGroup('*', array('setWhere' => 'group_status = 1'));
+        if ($groupInfo) {
+            foreach ($groupInfo as $row) {
+                if ($row['group_type']['status'] == 'pending') {
+                    $groupNum++;
+                }
+            }
+        }
+
+        //待评论
+        $sql = "SELECT COUNT(*) FROM t_orders 
+                WHERE order_status = 1 
+                AND order_type = 'received' 
+                AND customer_id = ?";
+        $reviewNum = $this->locator->db->getOne($sql, $this->customerId);
+
+        // print_r($receiveNum);die;
+        return array(
+            'levelColor' => $this->levelColor,
+            'receiveNum' => $receiveNum,
+            'groupNum' => $groupNum,
+            'reviewNum' => $reviewNum,
+        );
+    }
+
+    public function infoAction()
+    {
+        $this->layout(Layout::LAYOUT_UE);
+        $this->layout->title = '我的资料';
+
+        return array();
+    }
+
+    public function checkInAction()
+    {
+        $this->layout(Layout::LAYOUT_UE);
+        $this->layout->title = '签到';
 
         return array();
     }
 
     public function qrcodeAction()
     {
+        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '我的邀请码';
         
         $openId = $_SESSION['openid'];
@@ -165,8 +217,30 @@ class CustomerController extends AbstractActionController
         return JsonModel::init('ok', '');
     }
 
-    public function groupAction()
+    public function groupDetailAction()
     {
-        return array();
+        $id = trim($this->param('id'));
+        $info = $this->models->orderGroup->getOrderGroupById($id);
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('default/index'));
+        }
+
+        $this->layout(Layout::LAYOUT_UE);
+        $this->layout->title = '订单详情';
+        
+        $sql = "SELECT * FROM t_orders 
+                WHERE product_id = ? 
+                AND customer_id = ?";
+        $order = $this->locator->db->getRow($sql, $info['product_id'], $this->customerId);
+        $order['product'] = $this->models->product->getProductById($info['product_id']);
+
+        //剩余时间
+        $info['time'] = (strtotime($info['group_time']) + $order['product']['product_group_time'] * 86400) - time();
+
+        // print_r($order);die;
+        return array(
+            'order' => $order,
+            'info' => $info,
+        );
     }
 }
