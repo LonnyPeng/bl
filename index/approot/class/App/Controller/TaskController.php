@@ -15,6 +15,20 @@ class TaskController extends AbstractActionController
         $this->customerId = $this->locator->get('Profile')['customer_id'];
     }
 
+    public function indexAction()
+    {
+        $this->layout->title = '任务中心';
+
+        return array();
+    }
+
+    public function scoreAction()
+    {
+        $this->layout->title = '积分任务';
+
+        return array();
+    }
+
     public function turntableAction()
     {
         $this->layout->title = '惊喜大转盘';
@@ -191,5 +205,12 @@ class TaskController extends AbstractActionController
     	} else {
     		return new JsonModel('error', '兑换失败');
     	}
+    }
+
+    public function chanceListAction()
+    {
+        $this->layout->title = '我的奖品';
+
+        return array();
     }
 }

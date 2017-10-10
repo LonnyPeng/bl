@@ -21,7 +21,6 @@ class OrderController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '我的订单';
 
         $limit = array(0, 3);

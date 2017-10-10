@@ -21,27 +21,21 @@ class CustomerController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '个人中心';
 
         //待领取
         $sql = "SELECT COUNT(*) FROM t_orders 
                 WHERE order_status = 1 
-                AND order_type = 'pending' 
-                AND shinging_type = 'self' 
+                AND order_type IN ('pending', 'shipped')
                 AND customer_id = ?";
         $receiveNum = $this->locator->db->getOne($sql, $this->customerId);
 
         //组团中
-        $groupNum = 0;
-        $groupInfo = $this->models->orderGroup->getOrderGroup('*', array('setWhere' => 'group_status = 1'));
-        if ($groupInfo) {
-            foreach ($groupInfo as $row) {
-                if ($row['group_type']['status'] == 'pending') {
-                    $groupNum++;
-                }
-            }
-        }
+        $sql = "SELECT COUNT(*) FROM t_orders 
+                WHERE order_status = 1 
+                AND order_type IN ('group')
+                AND customer_id = ?";
+        $groupNum = $this->locator->db->getOne($sql, $this->customerId);
 
         //待评论
         $sql = "SELECT COUNT(*) FROM t_orders 
@@ -61,7 +55,6 @@ class CustomerController extends AbstractActionController
 
     public function infoAction()
     {
-        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '我的资料';
 
         return array();
@@ -69,15 +62,21 @@ class CustomerController extends AbstractActionController
 
     public function checkInAction()
     {
-        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '签到';
+        $this->layout->class = 'calendar';
+
+        return array();
+    }
+
+    public function scoreAction()
+    {
+        $this->layout->title = '我的积分';
 
         return array();
     }
 
     public function qrcodeAction()
     {
-        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '我的邀请码';
         
         $openId = $_SESSION['openid'];
@@ -157,6 +156,13 @@ class CustomerController extends AbstractActionController
         $id = trim($this->param('id'));
 
         $this->layout->title = $id ? '编辑地址' : '新建地址';
+
+        return array();
+    }
+
+    public function collectionAction()
+    {
+        $this->layout->title = '编辑地址';
 
         return array();
     }

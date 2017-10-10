@@ -1,0 +1,19 @@
+<div class="task">
+  <div class="task_item">
+    <a href="<?php echo $this->url('task/score')?>" class="img">
+      <img src="<?php echo $this->image('answer.jpg')?>"/>
+    </a>
+  </div>
+  <div class="task_item">
+    <a href="<?php echo $this->url('task/turntable')?>" class="img">
+      <img src="<?php echo $this->image('dial.jpg')?>"/>
+    </a>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    var windowH=$(window).height();
+    $(".task_item").height(windowH/2);
+  })
+</script>
