@@ -375,23 +375,34 @@
   <div class="text" style="padding: 0px;"><p>&nbsp;</p></div>
   
 </div>
-<div class="widget label vmiddle" id="widgetwE33A307C5B1503293685315p" data-cid="wE33A307C5B1503293685315" data-link_cid="" style="width:81px;height:45px;left:1px;top:65px;color:#FF7B00;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
-  <p>全部</p>
-  
-</div>
-<div class="widget label vmiddle clickable" id="widgetw652FAE60211503293729014p" data-cid="w652FAE60211503293729014" data-link_cid="l942D5641211503310368615" style="width:75px;height:45px;left:80px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
-  <p>待领取</p>
-  <div class="region gesture "></div>
-</div>
-<div class="widget label vmiddle clickable" id="widgetwA644BAD1071503293734297p" data-cid="wA644BAD1071503293734297" data-link_cid="l0ECEE4854B1503310378850" style="width:90px;height:45px;left:216px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
-  <p>待评价</p>
-  <div class="region gesture "></div>
-</div>
-<div class="widget label vmiddle clickable" id="widgetw3EBCCD48381503293740096p" data-cid="w3EBCCD48381503293740096" data-link_cid="l4B0FF66AE21503310383350" style="width:84px;height:45px;left:292px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
-  <p>已完成</p>
-  <div class="region gesture "></div>
-</div>
-<div class="widget hr" id="widgetwE6863936CF1503293820257p" data-cid="wE6863936CF1503293820257" data-link_cid="" style="width:50px;height:13px;left:<?php echo ($this->param())?>px;top:103px;border-color:#FF7B00;transform: rotate(0deg);-webkit-transform: rotate(0deg);border-style:solid;font-weight:normal;font-style:normal;z-index:5;opacity:1;pointer-events:auto">
+<a href="<?php echo $this->url('order/index')?>">
+  <div class="widget label vmiddle" id="widgetwE33A307C5B1503293685315p" data-cid="wE33A307C5B1503293685315" data-link_cid="" style="width:81px;height:45px;left:1px;top:65px;<?php echo !$this->param('status') ? 'color:#FF7B00;' : ''?>transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
+    <p>全部</p>
+    
+  </div>
+</a>
+
+<a href="<?php echo $this->url('order/index', array('status' => 'picke'))?>">
+  <div class="widget label vmiddle clickable" id="widgetw652FAE60211503293729014p" data-cid="w652FAE60211503293729014" data-link_cid="l942D5641211503310368615" style="<?php echo $this->param('status') == 'picke' ? 'color:#FF7B00;' : ''?>width:75px;height:45px;left:80px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
+    <p>待领取</p>
+    <div class="region gesture "></div>
+  </div>
+</a>
+
+<a href="<?php echo $this->url('order/index', array('status' => 'review'))?>">
+  <div class="widget label vmiddle clickable" id="widgetwA644BAD1071503293734297p" data-cid="wA644BAD1071503293734297" data-link_cid="l0ECEE4854B1503310378850" style="<?php echo $this->param('status') == 'review' ? 'color:#FF7B00;' : ''?>width:90px;height:45px;left:216px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
+    <p>待评价</p>
+    <div class="region gesture "></div>
+  </div>
+</a>
+<a href="<?php echo $this->url('order/index', array('status' => 'over'))?>">
+  <div class="widget label vmiddle clickable" id="widgetw3EBCCD48381503293740096p" data-cid="w3EBCCD48381503293740096" data-link_cid="l4B0FF66AE21503310383350" style="<?php echo $this->param('status') == 'over' ? 'color:#FF7B00;' : ''?>width:84px;height:45px;left:292px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
+    <p>已完成</p>
+    <div class="region gesture "></div>
+  </div>
+</a>
+<?php $left = 18;if($this->param('status') == 'picke'){$left += 75 * 1;}elseif($this->param('status') == 'group'){$left += 75 * 2;}elseif($this->param('status') == 'review'){$left += 75 * 3;}elseif($this->param('status') == 'over'){$left += 75 * 4;}?>
+<div class="widget hr" id="widgetwE6863936CF1503293820257p" data-cid="wE6863936CF1503293820257" data-link_cid="" style="width:50px;height:13px;left:<?php echo $left?>px;top:103px;border-color:#FF7B00;transform: rotate(0deg);-webkit-transform: rotate(0deg);border-style:solid;font-weight:normal;font-style:normal;z-index:5;opacity:1;pointer-events:auto">
   <span style="border-top-width: 3px;"></span>
   
 </div>
@@ -495,10 +506,13 @@
   <p>订单号：2017082115160001</p>
   
 </div>
-<div class="widget label vmiddle clickable" id="widgetw71142D2CAF1505198218284p" data-cid="w71142D2CAF1505198218284" data-link_cid="l150CB1857B1505198723550" style="width:75px;height:45px;left:150px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
-  <p>组团中</p>
-  <div class="region gesture "></div>
-</div>
+<a href="<?php echo $this->url('order/index', array('status' => 'group'))?>">
+  <div class="widget label vmiddle clickable" id="widgetw71142D2CAF1505198218284p" data-cid="w71142D2CAF1505198218284" data-link_cid="l150CB1857B1505198723550" style="<?php echo $this->param('status') == 'group' ? 'color:#FF7B00;' : ''?>width:75px;height:45px;left:150px;top:65px;transform: rotate(0deg);-webkit-transform: rotate(0deg);font-size:14.0px;padding:0px;border-radius:0px;border-width:0px;border-style:solid;line-height:20px;font-weight:normal;font-style:normal;justify-content: center;align-items: center;z-index:5;opacity:1;pointer-events:auto">
+    <p>组团中</p>
+    <div class="region gesture "></div>
+  </div>
+</a>
+
 </div>
       <div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 3px;"><div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 3px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
       <div class="stickies"></div>

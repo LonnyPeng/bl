@@ -24,13 +24,29 @@ class OrderController extends AbstractActionController
         $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '我的订单';
 
-        $status = trim($this->param('status'));
-
         $limit = array(0, 3);
         $where = array(
             'o.order_status = 1',
             sprintf("o.customer_id = %d", $this->customerId),
         );
+
+        $status = trim($this->param('status'));
+        switch ($status) {
+            case 'picke': //待领取
+                $where[] = "o.order_type IN ('pending', 'shipped')";
+                break;
+            case 'group': //组团中
+                $where[] = "o.order_type IN ('group')";
+                break;
+            case 'review': //待评论
+                $where[] = "o.order_type IN ('received')";
+                break;
+            case 'over': //已完成
+                $where[] = "o.order_type IN ('review')";
+                break;
+            default:
+                break;
+        }
 
         if ($this->funcs->isAjax() && $this->param('type') == 'page') {
             $limit[0] = $this->param('pageSize') * $limit[1];
@@ -48,6 +64,7 @@ class OrderController extends AbstractActionController
 
         // print_r($orderList);die;
         return array(
+            'orderList' => $orderList,
         );
     }
 
