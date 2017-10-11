@@ -281,20 +281,65 @@ class OrderController extends AbstractActionController
         $this->layout->title = '领取二维码';
 
         $orderNum = trim($this->param('order_number'));
+        $where = sprintf("order_number = '%s'", $orderNum);
+        $info = $this->models->order->getOrderInfo($where);
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('default/index'));
+        }
+        $sql = "SELECT product_qr_code_day FROM t_products WHERE product_id = ?";
+        $qrcodeDay = $this->locator->db->getOne($sql, $info['product_id']);
+        $time = strtotime($info['order_time']) + $qrcodeDay * 86400 - time();
         
-        $key = HTTP_SERVER . BASE_PATH . "order-{$orderNum}";
+        $key = HTTP_SERVER . '/admin/' . "order/self?key=" . $orderNum;
         
         return array(
             'key' => $key,
+            'time' => $time,
         );
     }
 
     public function infoAction()
     {
-    	$orderNum = $this->param('key');
-    	$where = sprintf("order_number = '%s'", $orderNum);
+    	$id = $this->param('id');
+    	$where = sprintf("order_id = '%s'", $id);
     	$info = $this->models->order->getOrderInfo($where);
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('default/index'));
+        }
 
-    	print_r($info);die;
+        $info['product'] = $this->models->product->getProductById($info['product_id']);
+        if ($info['order_type'] == 'pending') {
+            if ($info['shinging_type'] == 'logistics') {
+                $info['status'] = '待配送';
+            } else {
+                $info['status'] = '待自提';
+            }
+        } elseif ($info['order_type'] == 'shipped') {
+            $info['status'] = '待领取';
+        } elseif ($info['order_type'] == 'group') {
+            $sql = "SELECT group_id FROM t_order_groups WHERE customer_id IN (?) AND product_id = ?";
+            $groupId = $this->locator->db->getOne($sql, $this->customerId, $info['product_id']);
+            $result = $this->models->orderGroup->getOrderGroupById($groupId);
+            $info['status'] = $result['msg'];
+        } elseif ($info['order_type'] == 'received') {
+            $info['status'] = '已收货';
+        } else {
+            $info['status'] = '已完成';
+        }
+
+        $this->layout->title = '我的订单';
+
+        $sql = "SELECT product_qr_code_day FROM t_products WHERE product_id = ?";
+        $qrcodeDay = $this->locator->db->getOne($sql, $info['product_id']);
+        $time = strtotime($info['order_time']) + $qrcodeDay * 86400 - time();
+
+        $key = HTTP_SERVER . '/admin/' . "order/self?key=" . $info['order_number'];
+
+    	// print_r($key);die;
+        return array(
+            'info' => $info,
+            'key' => $key,
+            'time' => $time,
+        );
     }
 }

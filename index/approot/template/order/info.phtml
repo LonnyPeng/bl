@@ -1,0 +1,44 @@
+  <div class="or_tlt pf">
+    <p><?php echo $info['status']?></p>
+  </div>
+   <!-- 导航切换 -->
+  <div class="my_collect my_order order_dt">
+    <div class="collect_li">
+      <div class="weui-cells">
+        <div class="weui-cell">
+          <div class="weui-cell__bd">
+            <p>订单号：<?php echo $info['order_number']?></p>
+          </div>
+          <div class="weui-cell__ft gray"><?php echo date("Y/m/d H:i", strtotime($info['order_time']))?></div>
+        </div>
+      </div>
+      <div class="clearfix wrap inf pr">
+        <div class="img fl">
+          <img src="<?php echo $this->uploadUrl($info['product']['images']['banner'][0]['image_path'], 'product')?>">
+        </div>
+        <h4 class="lr2"><?php echo $info['product']['product_name']?></h4>
+        <p><span class="gray"><?php echo $info['product']['product_weight']?></span></p>
+        <div class="pa jif"><?php echo $this->funcs->showValue($info['product']['product_price'])?>积分</div>
+      </div>
+      <div class="weui-cells daipj">
+        <div class="weui-cell">
+          <div class="weui-cell__bd">
+            <p>取货方式</p>
+          </div>
+          <div class="weui-cell__ft orange"><?php echo $info['shinging_type'] == 'logistics' ? '配送' : '自提'?></div>
+        </div>
+      </div>
+      <?php if ($info['order_type'] == 'received' && $info['shinging_type'] == 'self' && $time > 0) : ?>
+          <div class="ewmcode ewmcode_01 tac">  
+            <h4 class="orange">取货点：<?php echo $info['order_address']?></h4>
+            <p class="gray">我的领取码</p>
+            <div class="img pr">
+              <img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
+            </div>
+          </div>
+          <div class="ck_dt clearfix">
+            <a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
+          </div>
+        <?php endif;?>
+    </div>
+  </div>

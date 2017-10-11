@@ -37,4 +37,11 @@ class OrderModel extends CommonModel
 	    $info = $this->locator->db->getRow($sql, $id);
 	    return $info;
 	}
+
+	public function getOrderByNumber($number)
+	{
+	    $sql = "SELECT * FROM $this->name WHERE order_number = ?";
+	    $info = $this->locator->db->getRow($sql, $number);
+	    return $info;
+	}
 }

@@ -1,1 +1,19 @@
-<img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
+<div class="lqewm">
+	<div class="lqewm_m">
+		<div class="lqewm_img">
+			<div class="lqewm_mack"></div>
+			<p>领取码</p>
+			<img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>"/>
+		</div>		
+	</div>
+</div>	
+
+<script type="text/javascript">
+	$(function(){
+        $(".lqewm").height($(window).height());
+        <?php if ($time <= 0) : ?>
+            $(".lqewm_m p").html("已失效");
+            $(".lqewm_mack").show();
+        <?php endif;?>
+	})
+</script>
