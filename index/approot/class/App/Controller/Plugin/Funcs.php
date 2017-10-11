@@ -440,12 +440,13 @@ class Funcs implements ServiceLocatorAwareInterface
         }
     }
 
-    public function setImage($path = null, $dir = '')
+    public function setImage($path = null, $dir = '', $width = 750, $height = 380)
     {
         $insInit = array(
-            'width' => 800,
-            'height' => 400,
+            'width' => $width,
+            'height' => $height,
         );
+
         $data = array(
             'dir' => '', 'src' => '',
             'dir_x' => 0, 'dir_y' => 0,
@@ -453,7 +454,7 @@ class Funcs implements ServiceLocatorAwareInterface
             'dir_w' => 0, 'dir_h' => 0,
             'src_w' => 0, 'src_h' => 0,
         );
-        $key = array('imagecreatefromjpeg', 'imagejpeg');
+
         if (!file_exists($path)) {
             return array('status' => false, 'content' => '图片保存失败');
         }
@@ -461,13 +462,16 @@ class Funcs implements ServiceLocatorAwareInterface
         $pathinfo = getimagesize($path);
         if (!in_array($pathinfo['mime'], array('image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png'))) {
             return array('status' => false, 'content' => '请上传图片类型为 JPG, JPEG, PNG');
-        } else {
-            if (in_array($pathinfo['mime'], array('image/x-png', 'image/png'))) {
-                $key = array('imagecreatefrompng', 'imagepng');
-            } elseif (in_array($pathinfo['mime'], array('image/gif'))) {
-                $key = array('imagecreatefromgif', 'imagegif');
-            }
         }
+
+        if (in_array($pathinfo['mime'], array('image/x-png', 'image/png'))) {
+            $key = array('imagecreatefrompng', 'imagepng');
+        } elseif (in_array($pathinfo['mime'], array('image/gif'))) {
+            $key = array('imagecreatefromgif', 'imagegif');
+        } else {
+            $key = array('imagecreatefromjpeg', 'imagejpeg');
+        }
+        
         $pathinfo = array_merge($pathinfo, pathinfo($path));
 
         // new file path
@@ -510,9 +514,9 @@ class Funcs implements ServiceLocatorAwareInterface
             $min = min($pathinfo[0], $pathinfo[1]);
             if ($min == $pathinfo[0]) {
                 $width = $insInit['width'];
-                $height = $pathinfo[1] * $insInit['height'] / $pathinfo[0];
+                $height = $pathinfo[1] * $insInit['width'] / $pathinfo[0];
             } else {
-                $width = $pathinfo[0] * $insInit['width'] / $pathinfo[1];
+                $width = $pathinfo[0] * $insInit['height'] / $pathinfo[1];
                 $height = $insInit['height'];
             }
 
@@ -523,7 +527,7 @@ class Funcs implements ServiceLocatorAwareInterface
             $key[1]($abbreviationsImg, $dirFile);
             imagedestroy($abbreviationsImg);
 
-            return $this->setImage($dirFile, $dir);
+            return $this->setImage($dirFile, $dir, $insInit['width'], $insInit['height']);
         }
 
         // copy image

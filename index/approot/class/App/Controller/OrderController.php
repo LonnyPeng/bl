@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Framework\View\Model\ViewModel;
 use Framework\View\Model\JsonModel;
 use App\Controller\Plugin\Score;
 use App\Controller\Plugin\Layout;
@@ -82,10 +83,18 @@ class OrderController extends AbstractActionController
             }
         }
 
-        // print_r($orderList);die;
-        return array(
-            'orderList' => $orderList,
-        );
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            if ($orderList) {
+                $viewModel = new ViewModel(array('orderList' => $orderList), 'order/row');
+                return JsonModel::init('ok', '', array('list' => $this->view->render($viewModel)));
+            } else {
+                return new JsonModel('error', '');
+            }
+        } else {
+            return array(
+                'orderList' => $orderList,
+            );
+        }
     }
 
     public function createAction()

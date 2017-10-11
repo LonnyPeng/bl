@@ -674,3 +674,23 @@ a.eval_title span.fr i{font-size: 14px;}
 .myprize .weui-cells:after{display: none;}
 .myprize_ts{width: 80%;line-height: 40px;border-radius: 5px;background: #dedede;font-size: 16px;color: #FFF;text-align: center;margin: 80px auto 0;box-shadow: 0px 1px 1px rgba(0,0,0,.3);}
 /*我的奖品*/
+
+//星星
+.star-0 {
+	width:0%;
+}
+.star-1 {
+	width:20%;
+}
+.star-2 {
+	width:40%;
+}
+.star-3 {
+	width:60%;
+}
+.star-4 {
+	width:80%;
+}
+.star-5 {
+	width:100%;
+}

@@ -3,11 +3,14 @@
 namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
+use App\Controller\Plugin\Score;
 
 class ProductController extends AbstractActionController
 {
 	public $districtId = null;
 	public $customerId = null;
+	protected $imgType = array('image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png');
+	protected $imgMaxSize = 1024 * 1024 * 4; //4M
 
 	public function init() 
 	{
@@ -254,6 +257,115 @@ class ProductController extends AbstractActionController
 		} else {
 			return new JsonModel('error', '举报失败');
 		}
+	}
+
+	public function reviewAddAction()
+	{
+		$id = trim($this->param('id'));
+		$where = array(
+			sprintf("order_id = %d", $id),
+			"order_type = 'received'",
+		);
+		$info = $this->models->order->getOrderInfo($where);
+		if (!$info && !$this->param('status')) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		if ($this->funcs->isPost()) {
+			//添加评论
+			$map = array(
+				'customer_id' => $this->customerId,
+				'product_id' => $info['product_id'],
+				'review_content' => trim($_POST['review_content']),
+				'review_score' => trim($_POST['review_score']),
+			);
+			$sql = "INSERT INTO t_reviews 
+					SET customer_id = :customer_id,
+					 product_id = :product_id, 
+					 review_content = :review_content, 
+					 review_score = :review_score,
+					 review_attr = 'published'";
+			$status = $this->locator->db->exec($sql, $map);
+			$reviewId = $this->locator->db->lastInsertId();
+
+			//保存图片
+			if (isset($_FILES['file'])) {
+				$images = $this->saveReviewImg($_FILES['file']);
+				foreach ($images as $key => $row) {
+					//处理图片
+					$result = $this->funcs->setImage(REVIEW_DIR . $row['image_path'], REVIEW_DIR, 100, 100);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$images[$key]['image_path'] = $result['content'];
+					}
+				}
+
+				$sql = "INSERT INTO t_review_images 
+						SET review_id = :review_id, 
+						image_path = :image_path";
+				foreach ($images as $row) {
+					$this->locator->db->exec($sql, array(
+						'review_id' => $reviewId,
+						'image_path' => $row['image_path'],
+					));
+				}
+			}
+
+			//修改订单状态
+			$sql = "UPDATE t_orders 
+					SET order_type = 'review' 
+					WHERE order_type = 'received' 
+					AND order_id = ?";
+			$status = $this->locator->db->exec($sql, $id);
+
+			//改变积分 获取评论10积分
+			$status = $this->score(array(
+				'type' => 'have', 
+				'des' => Score::PLSP, 
+				'score' => 10,
+			));
+
+			$this->funcs->redirect($this->helpers->url('product/review-add', array('id' => $id, 'status' => 'ok')));
+		}
+
+		// print_r($info);die;
+		return array();
+	}
+
+	protected function saveReviewImg($files = array())
+	{
+		$dir = REVIEW_DIR;
+		$data = array();
+		foreach ($files['name'] as $key => $row) {
+			if (!$files['error'][$key] || in_array($files['type'][$key], $this->imgType) || $files['size'][$key] > $this->imgMaxSize) {
+				continue;
+			}
+
+			$filename = $files['tmp_name'][$key];
+			$upFileName = date('Ymd') . '/';
+			$this->funcs->makeFile($dir . $upFileName);
+
+			$ext = pathinfo($value, PATHINFO_EXTENSION);
+			$fileName = md5($value . $this->funcs->rand());
+			for($i=0;; $i++) {
+				if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
+					$fileName = md5($value . $this->funcs->rand());
+				} else {
+					break;
+				}
+			}
+
+			$uploadFile = $upFileName . $fileName . '.' . $ext;
+			$uploadFilePath = $dir . $uploadFile;
+			if (move_uploaded_file($files['tmp_name'][$key], $uploadFilePath)) {
+				$data[] = array(
+					'image_path' => $uploadFile,
+				);
+			}
+		}
+
+		return $data;
 	}
 
 	public function reviewUpAction()

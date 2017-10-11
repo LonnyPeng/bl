@@ -26,6 +26,7 @@ define('IMG_DIR',       WWW_DIR . 'images/');
  */
 define('UPLOAD_DIR',    ROOT_DIR  . '../upload/');
 define('USER_DIR', UPLOAD_DIR . 'user/');
+define('REVIEW_DIR', UPLOAD_DIR . 'review/');
 
 /**
  * load the private configure
