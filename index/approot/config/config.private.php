@@ -5,3 +5,4 @@
 !defined('DB_USERNAME') && define('DB_USERNAME', 'root');
 !defined('DB_PASSWORD') && define('DB_PASSWORD', 'root');
 !defined('DB_DATABASE') && define('DB_DATABASE', 'db_bl');
+
