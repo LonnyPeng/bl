@@ -208,6 +208,12 @@
                 </select>
             </div>
         </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>重量</label>
+                <input class="form-control" type="text" name="product_weight" value="<?php echo isset($info['product_weight']) ? $info['product_weight'] : ''?>" placeholder="350g">
+            </div>
+        </div>
     </div>
     <div class="row <?php echo isset($info['product_type']) && $info['product_type'] === '2' ? '' : 'none'?>" id="js-group">
         <div class="col-12">

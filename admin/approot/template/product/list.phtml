@@ -113,6 +113,7 @@
                 <th class="text-center">商品库存</th>
                 <th class="text-center">商品现价</th>
                 <th class="text-center">商品原价</th>
+                <th class="text-center">商品重量</th>
                 <th class="text-center">开始时间</th>
                 <th class="text-center">结束时间</th>
                 <th class="text-center">领取方式</th>
@@ -138,6 +139,7 @@
                         <td class="text-center"><?= $row['product_quantity']?></td>
                         <td class="text-center"><?= sprintf("%d", $row['product_price'])?></td>
                         <td class="text-center" style="text-decoration: line-through;"><?= sprintf("%.2f", $row['product_virtual_price'])?></td>
+                        <td class="text-center"><?= $row['product_weight']?></td>
                         <td class="text-center"><?= date("Y-m-d", strtotime($row['product_start']))?></td>
                         <td class="text-center"><?= date("Y-m-d", strtotime($row['product_end']))?></td>
                         <td class="text-center"><?= $row['product_type'] == 2 ? '组团领' : '白领'?></td>

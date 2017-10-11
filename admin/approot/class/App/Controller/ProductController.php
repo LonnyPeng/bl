@@ -172,8 +172,6 @@ class ProductController extends AbstractActionController
 			}
 			if (!$_POST['product_end']) {
 				return new JsonModel('error', '请选择商品结束时间');
-			} elseif (time() >= strtotime($_POST['product_end'])) {
-				return new JsonModel('error', '商品结束时间不能小于当前时间');
 			}
 			if ($_POST['product_qr_code_day'] < 1) {
 				return new JsonModel('error', '领取二维码有效时长不能小于1天');
@@ -221,6 +219,7 @@ class ProductController extends AbstractActionController
 				'product_shaping_status' => trim($_POST['product_shaping_status']),
 				'product_status' => trim($_POST['product_status']),
 				'product_desc' => trim($_POST['product_desc']),
+				'product_weight' => trim($_POST['product_weight']),
 				'product_end' => date("Y-m-d 23:59:59", strtotime(trim($_POST['product_end']))),
 				'product_qr_code_day' => trim($_POST['product_qr_code_day']),
 				'product_sort' => $_POST['product_sort'] ?: '0',
@@ -238,6 +237,7 @@ class ProductController extends AbstractActionController
 					product_shaping_status = :product_shaping_status,
 					product_status = :product_status,
 					product_desc = :product_desc,
+					product_weight = :product_weight,
 					product_end = :product_end,
 					product_qr_code_day = :product_qr_code_day,
 					product_sort = :product_sort";

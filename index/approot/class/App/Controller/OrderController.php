@@ -51,15 +51,36 @@ class OrderController extends AbstractActionController
             $limit[0] = $this->param('pageSize') * $limit[1];
         }
         
-        $files = "o.*, p.*";
         $sqlInfo = array(
-            'setJoin' => 'LEFT JOIN t_products p ON p.product_id = o.product_id',
             'setWhere' => $where,
             'setLimit' => $limit,
             'setOrderBy' => 'o.order_id DESC',
         );
 
-        $orderList = $this->models->order->getOrder($files, $sqlInfo);
+        $orderList = $this->models->order->getOrder('*', $sqlInfo);
+        if ($orderList) {
+            foreach ($orderList as $key => $row) {
+                $orderList[$key]['product'] = $this->models->product->getProductById($row['product_id']);
+                if ($row['order_type'] == 'pending') {
+                    if ($row['shinging_type'] == 'logistics') {
+                        $orderList[$key]['status'] = '待配送';
+                    } else {
+                        $orderList[$key]['status'] = '待自提';
+                    }
+                } elseif ($row['order_type'] == 'shipped') {
+                    $orderList[$key]['status'] = '待领取';
+                } elseif ($row['order_type'] == 'group') {
+                    $sql = "SELECT group_id FROM t_order_groups WHERE customer_id IN (?) AND product_id = ?";
+                    $groupId = $this->locator->db->getOne($sql, $this->customerId, $row['product_id']);
+                    $result = $this->models->orderGroup->getOrderGroupById($groupId);
+                    $orderList[$key]['status'] = $result['msg'];
+                } elseif ($row['order_type'] == 'received') {
+                    $orderList[$key]['status'] = '已收货';
+                } else {
+                    $orderList[$key]['status'] = '已完成';
+                }
+            }
+        }
 
         // print_r($orderList);die;
         return array(

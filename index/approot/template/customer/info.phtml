@@ -5,7 +5,7 @@
           <p>头像</p>
         </div>
         <div class="weui-cell__ft img openmk">
-          <img src="<?php echo $this->image('head_img.jpg')?>"/>
+          <img src="<?php echo $this->uploadUrl($this->locator->get('Profile')['customer_headimg'], 'user')?>"/>
         </div>
     </div>
     <div class="weui-cell weui-cell_access" >
@@ -48,15 +48,14 @@
 </div>
 <div class="head_xz">
   <div class="head_xz_top">
-    <a href="">照片</a>
-    <a href="">相机</a>
+    <a href="#">照片</a>
+    <a href="#">相机</a>
   </div>
   <button class="head_xz_close">取消</button>
 </div>
 <div class="mask"></div>
 
 <script type="text/javascript">
-  
   $(".openmk").click(function(){
     $(".mask").fadeIn()
   })

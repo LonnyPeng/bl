@@ -57,6 +57,11 @@ class CustomerController extends AbstractActionController
     {
         $this->layout->title = '我的资料';
 
+        if ($this->funcs->isAjax()) {
+            
+        }
+
+        // print_r($this->locator->get('Profile')['customer_headimg']);die;
         return array();
     }
 

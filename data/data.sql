@@ -609,6 +609,7 @@ CREATE TABLE `t_products` (
   `product_name` varchar(150) NOT NULL COMMENT '商品名称',
   `product_quantity` smallint(6) NOT NULL DEFAULT '0' COMMENT '库存数量',
   `product_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+  `product_weight` varchar(20) COMMENT '商品重量',
   `product_virtual_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品虚拟价格',
   `attr_id` int(11) NOT NULL COMMENT '商品类别',
   `product_type` enum('1', '2') NOT NULL COMMENT '领取方式：1:白领；2:组团领',
