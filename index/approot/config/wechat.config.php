@@ -25,7 +25,7 @@ return [
     'log' => [
         'level'      => 'debug',
         'permission' => 0777,
-        'file'       => ROOT_DIR . 'tmp/easywechat.log',
+        'file'       => '/tmp/easywechat.log',
     ],
     /**
      * OAuth 配置
