@@ -342,4 +342,9 @@ class OrderController extends AbstractActionController
             'time' => $time,
         );
     }
+
+    public function selfAddressAction()
+    {
+        
+    }
 }

@@ -22,7 +22,7 @@
             <?php if ($row['order_type'] == 'pending') : ?>
                 <?php if ($row['shinging_type'] == 'self') : ?>
                     <a href="<?php echo $this->url('order/qrcode', array('order_number' => $row['order_number']))?>" class="btn btn_01">领取码</a>
-                    <a href="搜索取货点.html" class="btn btn_02">取货点</a>
+                    <a href="<?php echo $this->url('shop/index', array('order_id' => $row['order_id']))?>" class="btn btn_02">取货点</a>
                 <?php endif;?>
             <?php elseif ($row['order_type'] == 'shipped') : ?>
                 <a href="订单确认.html" class="btn btn_01">确认收货</a>
