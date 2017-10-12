@@ -31,16 +31,36 @@ var calUtil = {
     //绑定上个月事件
     $(".calendar_month_prev").click(function(){
       //ajax获取日历json数据
-      var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];
-      calUtil.eventName="prev";
-      calUtil.init(signList);
+      $(this).ajaxAuto({
+        url: calUtil_url,
+        data: {date: calUtil.showYear+"-"+calUtil.showMonth, status: 'prev'},
+        success: function (re) {
+            if (re.status == 'ok') {
+                calUtil.eventName="prev";
+                if (re.data == undefined) {
+                    re.data = [];
+                }
+                calUtil.init(re.data);
+            }
+        }
+      });
     });
     //绑定下个月事件
     $(".calendar_month_next").click(function(){
       //ajax获取日历json数据
-      var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];
-      calUtil.eventName="next";
-      calUtil.init(signList);
+      $(this).ajaxAuto({
+        url: calUtil_url,
+        data: {date: calUtil.showYear+"-"+calUtil.showMonth, status: 'next'},
+        success: function (re) {
+            if (re.status == 'ok') {
+                calUtil.eventName="next";
+                if (re.data == undefined) {
+                    re.data = [];
+                }
+                calUtil.init(re.data);
+            }
+        }
+      });
     });
   },
   //获取当前选择的年月
@@ -109,7 +129,7 @@ var calUtil = {
      }
     }
    }
-   console.log(aMonth)
+   // console.log(aMonth)
    return aMonth;
   },
   ifHasSigned : function(signList,day){
@@ -141,7 +161,7 @@ var calUtil = {
     htmls.push("<tr>");
     for (d = 0; d < 7; d++) {
      var ifHasSigned = calUtil.ifHasSigned(signList,myMonth[w][d]);
-     console.log(ifHasSigned);
+     // console.log(ifHasSigned);
      if(ifHasSigned){
       htmls.push("<td class='on'>" + (!isNaN(myMonth[w][d]) ? myMonth[w][d] : "")+"<i class='iconfont'>&#xe601;</i>"+ "</td>");
      } else {

@@ -1,32 +1,48 @@
-  <div class="calenbox">
-    <div id="calendar"></div>
-  </div>
-  <div class="qd_ts">
-    <p>你已连续签到2天，明天继续签到可获得5个积分</p>
-  </div>
-  <button class="btn-qiandao" onClick="signIn()">签到</button>
-<div class="maskbox"></div>
-<div class="qdbox">
-  <h5>+3.5积分</h5>
-  <p>连续签到2天</p>
+<div class="calenbox">
+  <div id="calendar"></div>
 </div>
 
+<div class="qd_ts">
+  <p>你已连续签到<?php echo $days?>天，明天继续签到可获得<?php echo $scoreNext?>个积分</p>
+</div>
+
+<button class="btn-qiandao" onClick="signIn()" id="js-check">签到</button>
+
+<div class="maskbox"></div>
+<div class="qdbox">
+  <h5>+<span id="add-score"></span>积分</h5>
+  <p>连续签到<span id="js-day"></span>天</p>
+</div>
+
+<script type="text/javascript">
+    var calUtil_url = '<?php echo $this->url('customer/check-history')?>';
+</script>
 <?php echo $this->js('calendar.js')->wrap();?>
 <script type="text/javascript">
-  
   $(function(){
     //ajax获取日历json数据
-    var signList=[{"signDay":"10"},{"signDay":"11"},{"signDay":"12"},{"signDay":"13"}];
-     calUtil.init(signList);
+    var signList=<?php echo json_encode($checkList)?>;
+    calUtil.init(signList);
   });
-  
-  function  signIn(){
-    $(".maskbox").fadeIn();
-    $(".qdbox").fadeIn();
-    $(".maskbox").height($(document).height());
-  }
-  $(".maskbox").click(function(){
-    $(".maskbox").fadeOut();
-    $(".qdbox").fadeOut();
-  });
+
+    $('#js-check').click(function () {
+        $(this).ajaxAuto({
+            success: function (re) {
+                if (re.status == 'ok') {
+                    $(".maskbox").fadeIn();
+                    $(".qdbox").fadeIn();
+                    $(".maskbox").height($(document).height());
+
+                    $('#add-score').html(re.data.score);
+                    $('#js-day').html(re.data.i);
+                }
+            }
+        });
+    });
+
+    $(".maskbox").click(function(){
+        $(".maskbox").fadeOut();
+        $(".qdbox").fadeOut();
+        window.location.reload();
+    });
 </script>

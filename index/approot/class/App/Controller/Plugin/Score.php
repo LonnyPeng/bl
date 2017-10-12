@@ -10,7 +10,8 @@ class Score implements ServiceLocatorAwareInterface
     const JFDHCJ = '积分兑换抽奖';
     const CJHDJF = '抽奖获得积分';
     const GMSP = '购买商品';
-	const PLSP = '评论商品';
+    const PLSP = '评论商品';
+	const YHQD = '用户签到';
 
 	protected $locator = null;
 
@@ -42,7 +43,6 @@ class Score implements ServiceLocatorAwareInterface
     			score_quantity = :score_quantity";
     	$this->locator->db->exec($sql, array(
     		'customer_id' => $customeId,
-    		'score_type' => $row['type'],
     		'score_type' => $row['type'],
     		'score_des' => $row['des'],
     		'score_quantity' =>$row['score'],

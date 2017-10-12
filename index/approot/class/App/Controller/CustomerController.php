@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
 use App\Controller\Plugin\Layout;
+use App\Controller\Plugin\Score;
 
 class CustomerController extends AbstractActionController
 {
@@ -70,7 +71,99 @@ class CustomerController extends AbstractActionController
         $this->layout->title = '签到';
         $this->layout->class = 'calendar';
 
-        return array();
+        $date = date('Y-m-d');
+
+        //连续签到记录
+        $sql = "SELECT COUNT(*) FROM t_customer_score_log 
+                WHERE customer_id = ? 
+                AND score_type = 'have' 
+                AND score_des = ?
+                AND DATE(log_time) = ?";     
+        for($i=0;;$i++) {
+            $time = date('Y-m-d', strtotime("{$date} - {$i} days"));
+            $status = $this->locator->db->getOne($sql, $this->customerId, Score::YHQD, $time);
+            if (!$status && $time != date('Y-m-d')) {
+                break;
+            }
+        }
+
+        //判断今天是否签到
+        $sql = "SELECT COUNT(*) FROM t_customer_score_log 
+                WHERE customer_id = ? 
+                AND score_type = 'have' 
+                AND score_des = ?
+                AND DATE(log_time) = ?";
+        $checkDay = $this->locator->db->getOne($sql, $this->customerId, Score::YHQD, $date);
+
+        //明天获得积分
+        if ($checkDay) {
+            $scoreNext = (($i + 1) * 1) > 5 ? 5 : (($i + 1) * 1);
+        } else {
+            $scoreNext = (($i + 2) * 1) > 5 ? 5 : (($i + 2) * 1);
+            $i--;
+        }
+        
+        if ($this->funcs->isAjax()) {
+            //签到
+            if ($checkDay) {
+                return new JsonModel('error', '今天已签到，请明天再来。');
+            }
+
+            //改变积分
+            $score = ($i + 1) * 1 > 5 ? 5 : ($i + 1) * 1;
+            $status = $this->score(array(
+                'type' => 'have', 
+                'des' => Score::YHQD, 
+                'score' => $score,
+            ));
+            if ($status) {
+                return JsonModel::init('ok', '', array('score' => $score, 'i' => $i + 1));
+            } else {
+                return new JsonModel('error', '签到失败');
+            }
+        }
+
+        //获取签到记录
+        $checkList = $this->checkHistoryAction($date);
+
+        // print_r($i);die;
+        return array(
+            'days' => $i,
+            'scoreNext' => $scoreNext,
+            'checkList' => $checkList,
+        );
+    }
+
+    public function checkHistoryAction($date = '')
+    {
+        if ($this->funcs->isAjax()) {
+            $date = $this->param('date');
+            if ($this->param('status') == 'prev') {
+                $date = date("Y-m", strtotime($date . " - 1 months"));
+            } else {
+                $date = date("Y-m", strtotime($date . " + 1 months"));
+            }
+        } else {
+            $date = date("Y-m", strtotime($date));
+        }
+        
+        $start = date('Y-m-01', strtotime($date));
+        $end = date('Y-m-01', strtotime($date . " + 1 months"));
+
+        //获取历史签到记录
+        $sql = "SELECT DAY(log_time) AS signDay FROM t_customer_score_log 
+                WHERE customer_id = ? 
+                AND score_type = 'have' 
+                AND score_des = ?
+                AND DATE(log_time) >= ?
+                AND DATE(log_time) < ?";
+        $checkList = $this->locator->db->getAll($sql, $this->customerId, Score::YHQD, $start, $end);
+        
+        if ($this->funcs->isAjax()) {
+            return JsonModel::init('ok', '', $checkList);
+        } else {
+            return $checkList;
+        }
     }
 
     public function scoreAction()
