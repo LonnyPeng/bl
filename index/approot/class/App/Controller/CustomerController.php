@@ -370,9 +370,53 @@ class CustomerController extends AbstractActionController
 
     public function collectionAction()
     {
-        $this->layout->title = '编辑地址';
+        $this->layout->title = '我的收藏';
 
-        return array();
+        $limit = array(0, 6);
+        $where = array(
+            sprintf("customer_id = %d", $this->customerId),
+        );
+
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            $limit[0] = $this->param('pageSize') * $limit[1];
+        }
+
+        $sql = "SELECT *
+                FROM t_customer_collections
+                WHERE " . implode(" AND ", $where) . "
+                ORDER BY collection_id DESC
+                LIMIT " . implode(",", $limit);
+        $collectionList = $this->locator->db->getAll($sql);
+        if ($collectionList) {
+            foreach ($collectionList as $key => $row) {
+                $collectionList[$key] = $this->models->product->getProductById($row['product_id']);
+            }
+        }
+
+        // print_r($collectionList);die;
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            if ($collectionList) {
+                foreach ($collectionList as $key => $row) {
+                    foreach ($row as $ke => $value) {
+                        if (!$value) {
+                            $collectionList[$key][$ke] = '';
+                        }
+                    }
+
+                    $collectionList[$key]['image_path'] = (string) $this->helpers->uploadUrl($row['images']['home'][0]['image_path'], 'product');
+                    $collectionList[$key]['product_price'] = $this->funcs->showValue($row['product_price']);
+                    $collectionList[$key]['url'] = (string) $this->url('product/detail', array('id' => $row['product_id']));
+                }
+
+                return JsonModel::init('ok', '', $collectionList);
+            } else {
+                return new JsonModel('error', '');
+            }
+        } else {
+            return array(
+                'collectionList' => $collectionList,
+            );
+        }
     }
 
     public function addressDefaultAction()

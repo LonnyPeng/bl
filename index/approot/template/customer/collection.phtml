@@ -1,28 +1,64 @@
-    <div class="my_collect">
-      <div class="collect_li clearfix wrap pr">
-        <div class="img fl">
-          <img src="images/col_01.jpg">
-        </div>
-        <h4>山东红富士苹果两粒装买一送一</h4>
-        <p><span class="orange">100积分</span></p>
-        <a href="领取二维码.html" class="btn pa">去领取</a>
-      </div>
+<div class="my_collect" id="m_pro">
+    <?php if ($collectionList) : ?>
+        <?php foreach($collectionList as $row) : ?>
+              <div class="collect_li clearfix wrap pr">
+                <div class="img fl">
+                  <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
+                </div>
+                <h4><?php echo $row['product_name']?></h4>
+                <p><span class="orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span></p>
+                <?php if ($row['order_num']) : ?>
+                    <a href="javascript:;" class="btn pa btn_no">去领取</a>
+                <?php else : ?>
+                    <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="btn pa">去领取</a>
+                <?php endif;?>
+              </div>
+        <?php endforeach;?>
+    <?php endif;?>
+</div>
 
-      <div class="collect_li clearfix wrap pr">
-        <div class="img fl">
-          <img src="images/col_02.jpg">
-        </div>
-        <h4>山东红富士苹果两粒装买一送一山东红富士苹果两粒装买一送一</h4>
-        <p><span class="orange">100积分</span></p>
-        <a href="领取二维码.html" class="btn pa">去领取</a>
-      </div>
+<div class="mask"></div>
 
-      <div class="collect_li clearfix wrap pr">
-        <div class="img fl">
-          <img src="images/col_01.jpg">
-        </div>
-        <h4>山东红富士苹果两粒装买一送一山东红富士苹果两粒装买一送一</h4>
-        <p><span class="orange">100积分</span></p>
-        <a href="javascript:;" class="btn pa btn_no">去领取</a>
-      </div>
-    </div>
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
+<script type="text/javascript">
+    var pageSize = 1;
+    var loading = false;  //状态标记
+    $(document.body).infinite().on("infinite", function() {
+        if (loading) {
+            return false;
+        } else {
+            $('.weui-loadmore').fadeIn();
+            loading = true;
+        }
+        
+        $(this).ajaxAuto({
+            data: {type: 'page', pageSize: pageSize},
+            success: function (re) {
+                var ali="";
+                if (re.status == 'ok') {
+                    pageSize++;
+
+                    $(re.data).each(function (key, row) {
+                        ali +='<div class="collect_li clearfix wrap pr"><div class="img fl"><img src="' + row.data.image_path + '"></div><h4>' + row.data.product_name + '</h4><p><span class="orange">' + row.data.product_price + '积分</span></p>';
+                        if (row.data.order_num) {
+                            ali += '<a href="javascript:;" class="btn pa btn_no">去领取</a>';
+                        } else {
+                            ali += '<a href="' + row.data.url + '" class="btn pa">去领取</a>';
+                        }
+
+                        ali += '</div>';
+                    });
+                }
+
+                $("#m_pro").append(ali);
+                
+                $('.weui-loadmore').fadeOut();
+                loading = false;
+            }
+        });
+    });
+</script>
