@@ -26,11 +26,38 @@ class ShopController extends AbstractActionController
 
 	public function indexAction()
 	{
-		$lat = $this->locator->get('Profile')['lat'];
-		$lng = $this->locator->get('Profile')['lng'];
+		if ($this->funcs->isAjax()) {
+			$lat = $this->param('lat');
+			$lng = $this->param('lng');
+		} else {
+			$lat = $this->locator->get('Profile')['lat'];
+			$lng = $this->locator->get('Profile')['lng'];
+		}
+
+		$urlInfo = array(
+			'url' => "http://api.map.baidu.com/geocoder/v2/",
+			'params' => array(
+				'ak' => "se0o5ZCif8WBlePtDwnpOmfL",
+				'location' => $lat . "," . $lng,
+				'output' => 'json',
+				'pois' => '0',
+			),
+		);
+		$result = $this->funcs->curl($urlInfo);
+		$result = json_decode($result, true);
+		if (isset($result['result']['formatted_address'])) {
+			$formattedAddress = $result['result']['formatted_address'];
+		} else {
+			$formattedAddress = '';
+		}
+
+		if ($this->funcs->isAjax()) {
+			return JsonModel::init('ok', '', array('address' => $formattedAddress));
+		}
 		
 		// print_r($this->locator->get('Profile'));die;
 		return array(
+			'formattedAddress' => $formattedAddress,
 			'js' => $this->app->js,
 		);
 	}

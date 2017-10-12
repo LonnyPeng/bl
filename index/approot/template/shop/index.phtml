@@ -11,10 +11,10 @@
     </label>
   </form>
   <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
-</div>  
+</div>
 <div class="qhd_top">
     <h5>当前位置</h5>
-    <p>上海市宝山区沪太路3100号</p>
+    <p id="js-address"><?php echo $formattedAddress?></p>
     <div class="qhd_gx">
         <i class="iconfont">&#xe612;</i>
     </div>
@@ -49,11 +49,20 @@
 <script type="text/javascript">
     wx.config(<?php echo $js->config(array('getLocation'), false) ?>);
     wx.ready(function() {
-        wx.getLocation({
-            type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-            success: function (res) {
-                console.log(res);
-            }
+        $('.qhd_gx').click(function() {
+            wx.getLocation({
+                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                success: function (res) {
+                    $(this).ajaxAuto({
+                        data: {lat: res.latitude, lng: res.longitude},
+                        success: function (re) {
+                            if (re.status == 'ok') {
+                                $('#js-address').html(re.data.address);
+                            }
+                        }
+                    });
+                },
+            });
         });
     });
-</script>             
+</script>     
