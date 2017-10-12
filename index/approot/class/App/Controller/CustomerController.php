@@ -210,7 +210,7 @@ class CustomerController extends AbstractActionController
 
             $status = $this->locator->db->exec($sql, $map);
             if ($status) {
-                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address'));
+                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address', array('redirect' => $this->param('redirect'))));
             } else {
                 return new JsonModel('error', '提交失败');
             }

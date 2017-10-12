@@ -22,7 +22,7 @@
 
 <!-- 新建收货地址 -->
 <div class="new_addr pf bgwhite">
-  <a href="<?php echo $this->url('customer/address-edit')?>" class="weui-btn weui-btn_orange">新建收货地址</a>
+  <a href="<?php echo $this->url('customer/address-edit', array('redirect' => $this->param('redirect')))?>" class="weui-btn weui-btn_orange">新建收货地址</a>
 </div>
 
 <script type="text/javascript">
