@@ -1,7 +1,13 @@
 <div class="prod_dt bgwhite mb15">
-    <div class="img pr">
-        <img src="<?php echo $this->uploadUrl($info['images']['banner'][0]['image_path'], 'product')?>">
-        <div class="pa">
+    <div class="swiper-container m_banner img pr">
+        <div class="swiper-wrapper">
+            <?php foreach($info['images']['banner'] as $row) : ?>
+                <div class="swiper-slide">
+                    <img src="<?php echo $this->uploadUrl($row['image_path'], 'product')?>">
+                </div>
+            <?php endforeach;?>
+        </div>
+        <div class="pa" style="z-index: 10;">
             <p class="lr1">
                 <i class="iconfont">&#xe620;</i>
                 <?php if (strtotime($info['product_end']) < time()) : ?>
