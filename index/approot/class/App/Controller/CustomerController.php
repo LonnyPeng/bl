@@ -154,7 +154,6 @@ class CustomerController extends AbstractActionController
 
         //获取城市
         $sqlInfo = array(
-            'setWhere' => 'district_status = 1',
             'setOrderBy' => 'CONVERT(d.district_name USING GBK) ASC',
         );
 
