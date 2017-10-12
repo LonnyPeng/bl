@@ -1,95 +1,72 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>我的积分</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
-    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
-    ">
-
-    <link rel="stylesheet" href="../weui.min.css">
-    <link rel="stylesheet" href="../jquery-weui.css">
-    <link rel="stylesheet" type="text/css" href="../common.css"/>
-    <link rel="stylesheet" href="css/index.css">
-
-  </head>
-
-  <body ontouchstart>
-  	<div class="current_t clearfix">
-  		<div class="fl">
-  			当前积分<b class="orange">500</b>
-  		</div>
-  		<a href="积分说明.html" class="fr"><i class="iconfont orange">&#xe68c;</i></a>
-  	</div>
-	<div class="jifen_tlt">
-		<div class="clearfix title">
-			<a href="我的积分.html" class="fl tlt_l on">
-				积分获取记录
-			</a>
-			<a href="消耗积分.html" class="fr tlt_l">
-				积分消费记录
-			</a>
+	<div class="current_t clearfix">
+		<div class="fl">
+			当前积分<b class="orange"><?php echo $this->locator->get('Profile')['customer_score']?></b>
 		</div>
+		<a href="<?php echo $this->url('help/protocol', array('status' => 'jfsm'))?>" class="fr"><i class="iconfont orange">&#xe68c;</i></a>
 	</div>
-	<div class="jifen_m wrap">
-		<div class="clearfix jifen_li">
-			<div class="fl name">
-				兑换抽奖机会
+<div class="jifen_tlt">
+	<div class="clearfix title">
+		<a href="<?php echo $this->url('customer/score', array('type' => 'have'))?>" class="fl tlt_l <?php echo $this->param('type') == 'have' ? 'on' : ''?>">
+			积分获取记录
+		</a>
+		<a href="<?php echo $this->url('customer/score', array('type' => 'buy'))?>" class="fr tlt_l <?php echo $this->param('type') == 'buy' ? 'on' : ''?>">
+			积分消费记录
+		</a>
+	</div>
+</div>
+<div class="jifen_m wrap" id="m_pro">
+	<?php if ($scoreList) : ?>
+		<?php foreach($scoreList as $row) : ?>
+			<div class="clearfix jifen_li">
+				<div class="fl name">
+					<?php echo $row['score_des']?>
+				</div>
+				<div class="fl time">
+					<?php echo $row['log_time']?>
+				</div>
+				<div class="fr tar num">
+					<?php echo $row['score_type'] == 'buy' ? (0 - $row['score_quantity']) : $row['score_quantity']?>
+				</div>
 			</div>
-			<div class="fl time">
-				2017-08-22  02:22
-			</div>
-			<div class="fr tar num">
-				-5000
-			</div>
-		</div>
-		<div class="clearfix jifen_li">
-			<div class="fl name">
-				兑换商品
-			</div>
-			<div class="fl time">
-				2017-08-22  02:22
-			</div>
-			<div class="fr tar num">
-				-500
-			</div>
-		</div>
-		<div class="clearfix jifen_li">
-			<div class="fl name">
-				兑换商品
-			</div>
-			<div class="fl time">
-				2017-08-22  02:22
-			</div>
-			<div class="fr tar num">
-				-500
-			</div>
-		</div>
-		<div class="clearfix jifen_li">
-			<div class="fl name">
-				兑换商品
-			</div>
-			<div class="fl time">
-				2017-08-22  02:22
-			</div>
-			<div class="fr tar num">
-				-500
-			</div>
-		</div>
-	</div>	
+		<?php endforeach;?>
+	<?php endif;?>
+</div>
 
+<div class="mask"></div>
 
-    <script src="../jquery-2.1.4.js"></script>
-    <script src="../fastclick.js"></script>
-    <script>
-      $(function() {
-        FastClick.attach(document.body);
-      });
-    </script>
-    <script src="../jquery-weui.js"></script>
-		<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
-  </body>
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
 
-</html>
+<script type="text/javascript">
+	var pageSize = 1;
+	var loading = false;  //状态标记
+	$(document.body).infinite().on("infinite", function() {
+	    if (loading) {
+	        return false;
+	    } else {
+	        $('.weui-loadmore').fadeIn();
+	        loading = true;
+	    }
+	    
+	    $(this).ajaxAuto({
+	        data: {type: 'page', pageSize: pageSize},
+	        success: function (re) {
+	            var ali="";
+	            if (re.status == 'ok') {
+	                pageSize++;
+
+	                $(re.data).each(function (key, row) {
+	                    ali +='<div class="clearfix jifen_li"><div class="fl name">' + row.data.score_des + '</div><div class="fl time">' + row.data.log_time + '</div><div class="fr tar num">' + row.data.score_quantity + '</div></div>';
+	                });
+	            }
+
+	            $("#m_pro").append(ali);
+	            
+	            $('.weui-loadmore').fadeOut();
+	            loading = false;
+	        }
+	    });
+	});
+</script>

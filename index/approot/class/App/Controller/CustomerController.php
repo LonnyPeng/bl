@@ -168,9 +168,51 @@ class CustomerController extends AbstractActionController
 
     public function scoreAction()
     {
+        $type = trim($this->param('type'));
+        if (!in_array($type, array('have', 'buy'))) {
+            $this->funcs->redirect($this->helpers->url('customer/score', array('type' => 'have')));
+        }
+
         $this->layout->title = '我的积分';
 
-        return array();
+        $limit = array(0, 11);
+        $where = array(
+            sprintf("customer_id = %d", $this->customerId),
+            sprintf("score_type = '%s'", $type),
+        );
+
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            $limit[0] = $this->param('pageSize') * $limit[1];
+        }
+
+        $sql = "SELECT * 
+                FROM t_customer_score_log 
+                WHERE " . implode(" AND ", $where) . "
+                ORDER BY log_id DESC
+                LIMIT " . implode(",", $limit);
+        $scoreList = $this->locator->db->getAll($sql);
+
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            if ($scoreList) {
+                foreach ($scoreList as $key => $row) {
+                    foreach ($row as $ke => $value) {
+                        if (!$value) {
+                            $scoreList[$key][$ke] = '';
+                        }
+                    }
+
+                    $scoreList[$key]['score_quantity'] = $type == 'buy' ? (0 - $row['score_quantity']) : $row['score_quantity'];
+                }
+
+                return JsonModel::init('ok', '', $scoreList);
+            } else {
+                return new JsonModel('error', '');
+            }
+        } else {
+            return array(
+                'scoreList' => $scoreList,
+            );
+        }
     }
 
     public function qrcodeAction()
