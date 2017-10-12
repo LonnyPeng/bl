@@ -11,6 +11,8 @@ class CustomerController extends AbstractActionController
     public $districtId = null;
     public $customerId = null;
     public $levelColor = array('1' => '#fff', '2' => '#ff7b00', '3' => '#f03c3c', '4' => '#cf9911');
+    protected $imgType = array('image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png');
+    protected $imgMaxSize = 1024 * 1024 * 4; //4M
 
     public function init()
     {
@@ -59,10 +61,195 @@ class CustomerController extends AbstractActionController
         $this->layout->title = '我的资料';
 
         if ($this->funcs->isAjax()) {
-            
+            if ($_POST['customer_gender']) { //选择性别
+                $sql = "UPDATE t_customers SET customer_gender = ? WHERE customer_id = ?";
+                $this->locator->db->exec($sql, trim($_POST['customer_gender']), $this->customerId);
+
+                $sql = "SELECT COUNT(*) 
+                        FROM t_customer_score_log 
+                        WHERE customer_id = ? 
+                        AND score_type = 'have' 
+                        AND score_des = ?";
+                if (!$this->locator->db->getOne($sql, $this->customerId, Score::XZXB)) {
+                    //改变积分
+                    $result = $this->score(array(
+                        'type' => 'have', 
+                        'des' => Score::XZXB, 
+                        'score' => 10,
+                    ));
+                }
+            }
+
+            if ($_POST['customer_age']) { //选择年龄段
+                $sql = "UPDATE t_customers SET customer_age = ? WHERE customer_id = ?";
+                $status = $this->locator->db->exec($sql, trim($_POST['customer_age']), $this->customerId);
+
+                $sql = "SELECT COUNT(*) 
+                        FROM t_customer_score_log 
+                        WHERE customer_id = ? 
+                        AND score_type = 'have' 
+                        AND score_des = ?";
+                if (!$this->locator->db->getOne($sql, $this->customerId, Score::XZNLD)) {
+                    //改变积分
+                    $result = $this->score(array(
+                        'type' => 'have', 
+                        'des' => Score::XZNLD, 
+                        'score' => 10,
+                    ));
+                }
+            }
+
+            if ($_FILES['file']) {
+                $row = $_FILES['file'];
+                if (!$row['error'] && in_array($row['type'], $this->imgType) && $row['size'] <= $this->imgMaxSize) {
+                    $dir = USER_DIR;
+
+                    $filename = $row['tmp_name'];
+                    $upFileName = date('Ymd') . '/';
+                    $this->funcs->makeFile($dir . $upFileName);
+
+                    $ext = pathinfo($row['name'], PATHINFO_EXTENSION);
+                    $fileName = md5($row['name'] . $this->funcs->rand());
+                    for($i=0;; $i++) {
+                        if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
+                            $fileName = md5($row['name'] . $this->funcs->rand());
+                        } else {
+                            break;
+                        }
+                    }
+
+                    $uploadFile = $upFileName . $fileName . '.' . $ext;
+                    $uploadFilePath = $dir . $uploadFile;
+                    move_uploaded_file($row['tmp_name'], $uploadFilePath);
+
+                    //处理图片
+                    $result = $this->funcs->setImage(USER_DIR . $uploadFile, USER_DIR, 64, 64);
+                    if ($result['status']) {
+                        $uploadFile = $result['content'];
+
+                        $sql = "UPDATE t_customers SET customer_headimg = ? WHERE customer_id = ?";
+                        $status = $this->locator->db->exec($sql, $uploadFile, $this->customerId);
+
+                        //删除原图片
+                        if (file_exists(USER_DIR . $this->locator->get('Profile')['customer_headimg'])) {
+                            unlink(USER_DIR . $this->locator->get('Profile')['customer_headimg']);
+                        }
+                    }
+                }
+            }
+
+            return JsonModel::init('ok', '')->setRedirect('reload');
         }
 
-        // print_r($this->locator->get('Profile')['customer_headimg']);die;
+
+        // print_r($this->models->customer->getCustomerInfo(sprintf("customer_id = '%s'", $this->customerId)));die;
+        return array(
+            'info' => $this->models->customer->getCustomerInfo(sprintf("customer_id = '%s'", $this->customerId)),
+        );
+    }
+
+    public function cityAction()
+    {
+        $this->layout->title = '我的常驻地';
+
+        //获取城市
+        $sqlInfo = array(
+            'setWhere' => 'district_status = 1',
+            'setOrderBy' => 'CONVERT(d.district_name USING GBK) ASC',
+        );
+
+        $districtList = $this->models->district->getDistrict('*', $sqlInfo);
+        if ($districtList) {
+            foreach ($districtList as $key => $row) {
+                if (isset($districtList[$row['district_initial']])) {
+                    $districtList[$row['district_initial']][] = $row;
+                } else {
+                    $districtList[$row['district_initial']] = array($row);
+                }
+
+                unset($districtList[$key]);
+            }
+        }
+
+        // print_r($districtList);die;
+        return array(
+            'districtList' => $districtList,
+        );
+    }
+
+    public function changeCityAction()
+    {
+        //选择常驻地
+        $id = trim($this->param('id'));
+        $info = $this->models->district->getDistrictInfo(sprintf("district_id = %d", $id));
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('default/index'));
+        }
+
+        //修改常住城市
+        $sql = "UPDATE t_customers SET district_id = ? WHERE customer_id = ?";
+        $this->locator->db->exec($sql, $id, $this->customerId);
+
+        $sql = "SELECT COUNT(*) 
+                FROM t_customer_score_log 
+                WHERE customer_id = ? 
+                AND score_type = 'have' 
+                AND score_des = ?";
+        if (!$this->locator->db->getOne($sql, $this->customerId, Score::XZCZD)) {
+            //改变积分
+            $result = $this->score(array(
+                'type' => 'have', 
+                'des' => Score::XZCZD, 
+                'score' => 10,
+            ));
+        }
+
+        $this->funcs->redirect($this->helpers->url('customer/info'));
+    }
+
+    public function phoneAction()
+    {
+        $this->layout->title = '绑定手机';
+
+        if ($this->funcs->isAjax()) {
+            if (!$_POST['customer_tel']) {
+                return new JsonModel('error', '请输入手机号码');
+            } elseif (!isPhone($_POST['customer_tel'])) {
+                return new JsonModel('error', '手机号码格式错误');
+            }
+            if (!$_POST['code']) {
+                return new JsonModel('error', '请输入验证码');
+            }
+            $sql = "SELECT * FROM t_phone_verif WHERE phone_number = ?";
+            $phoneInfo = $this->locator->db->getRow($sql, trim($_POST['customer_tel']));
+            if (!$phoneInfo) {
+                return new JsonModel('error', '验证码错误');
+            }
+            if ($phoneInfo['phone_code'] != trim($_POST['code'])) {
+                return new JsonModel('error', '验证码错误');
+            }
+
+            //绑定手机
+            $sql = "UPDATE t_customers SET customer_tel = ? WHERE customer_id = ?";
+            $this->locator->db->exec($sql, trim($_POST['customer_tel']), $this->customerId);
+
+            $sql = "SELECT COUNT(*) 
+                    FROM t_customer_score_log 
+                    WHERE customer_id = ? 
+                    AND score_type = 'have' 
+                    AND score_des = ?";
+            if (!$this->locator->db->getOne($sql, $this->customerId, Score::BDSJ)) {
+                //改变积分
+                $result = $this->score(array(
+                    'type' => 'have', 
+                    'des' => Score::BDSJ, 
+                    'score' => 10,
+                ));
+            }
+
+            return JsonModel::init('ok', '绑定成功')->setRedirect($this->helpers->url('customer/info'));
+        }
+
         return array();
     }
 

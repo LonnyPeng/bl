@@ -11,7 +11,11 @@ class Score implements ServiceLocatorAwareInterface
     const CJHDJF = '抽奖获得积分';
     const GMSP = '购买商品';
     const PLSP = '评论商品';
-	const YHQD = '用户签到';
+    const YHQD = '用户签到';
+    const XZCZD = '选择常驻地';
+    const XZXB = '选择性别';
+    const XZNLD = '选择年龄段';
+	const BDSJ = '绑定手机';
 
 	protected $locator = null;
 

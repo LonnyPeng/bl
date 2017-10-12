@@ -1,71 +1,103 @@
-<div class="mydata">
-  <div class="weui-cells">
-    <div class="weui-cell" >
-        <div class="weui-cell__bd">
-          <p>头像</p>
+<form method="post" enctype="multipart/form-data">
+    <div class="mydata">
+      <div class="weui-cells">
+        <div class="weui-cell" >
+            <div class="weui-cell__bd">
+              <p>头像</p>
+            </div>
+            <div class="weui-cell__ft img openmk">
+              <img id="sfzZ" src="<?php echo $this->uploadUrl($this->locator->get('Profile')['customer_headimg'], 'user')?>"/>
+            </div>
+            <div class="none">
+                <input type="file" name="file" id="file"/>
+            </div>
         </div>
-        <div class="weui-cell__ft img openmk">
-          <img src="<?php echo $this->uploadUrl($this->locator->get('Profile')['customer_headimg'], 'user')?>"/>
+        <div class="weui-cell weui-cell_access" >
+           <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+            <div class="weui-cell__bd">
+               <input class="weui-input openmk" id="inline" type="text" value="<?php echo $info['customer_gender'] ?: ''?>" name="customer_gender" placeholder="未选择">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+            <div class="bg_wen">填写送10积分</div>
         </div>
+        <a class="weui-cell weui-cell_access" href="<?php echo $this->url('customer/city')?>">
+           <div class="weui-cell__hd"><label class="weui-label">常驻地</label></div>
+            <div class="weui-cell__bd">
+              <h5><?php echo $info['district_name'] ?: '未选择'?></h5>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+            <div class="bg_wen">填写送10积分</div>
+        </a>
+        <div class="weui-cell weui-cell_access" >
+           <div class="weui-cell__hd"><label class="weui-label">选择年龄段</label></div>
+            <div class="weui-cell__bd">
+               <input class="weui-input openmk" id="inline1" type="text" value="<?php echo $info['customer_age'] ?: ''?>" name="customer_age" placeholder="未选择">
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+            <div class="bg_wen">填写送10积分</div>
+        </div>
+        <a class="weui-cell weui-cell_access" href="<?php echo $this->url('customer/phone')?>">
+           <div class="weui-cell__hd"><label class="weui-label">绑定手机号</label></div>
+            <div class="weui-cell__bd">
+              <h5><?php echo $info['customer_tel'] ?: '未绑定'?></h5>
+            </div>
+            <div class="weui-cell__ft">
+            </div>
+            <div class="bg_wen">填写送10积分</div>
+        </a>
+      </div>
+
+      <button class="feedback_tj" style="display: none;" type="submit">提交</button>
     </div>
-    <div class="weui-cell weui-cell_access" >
-       <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
-        <div class="weui-cell__bd">
-           <input class="weui-input openmk" id="inline" type="text" value="" placeholder="未选择">
-        </div>
-        <div class="weui-cell__ft">
-        </div>
-        <div class="bg_wen">填写送10积分</div>
-    </div>
-    <a class="weui-cell weui-cell_access" href="常驻地址.html">
-       <div class="weui-cell__hd"><label class="weui-label">常驻地</label></div>
-        <div class="weui-cell__bd">
-          <h5>未选择</h5>
-        </div>
-        <div class="weui-cell__ft">
-        </div>
-        <div class="bg_wen">填写送10积分</div>
-    </a>
-    <div class="weui-cell weui-cell_access" >
-       <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
-        <div class="weui-cell__bd">
-           <input class="weui-input openmk" id="inline1" type="text" value="" placeholder="未选择">
-        </div>
-        <div class="weui-cell__ft">
-        </div>
-        <div class="bg_wen">填写送10积分</div>
-    </div>
-    <a class="weui-cell weui-cell_access" href="绑定手机.html">
-       <div class="weui-cell__hd"><label class="weui-label">绑定手机号</label></div>
-        <div class="weui-cell__bd">
-          <h5>13456789076</h5>
-        </div>
-        <div class="weui-cell__ft">
-        </div>
-        <div class="bg_wen">填写送10积分</div>
-    </a>
-  </div>
-</div>
-<div class="head_xz">
+</form>
+
+<!-- <div class="head_xz">
   <div class="head_xz_top">
-    <a href="#">照片</a>
-    <a href="#">相机</a>
+    <a href="#" id="js-picture">照片</a>
+    <a href="#" id="js-camera">相机</a>
   </div>
   <button class="head_xz_close">取消</button>
-</div>
-<div class="mask"></div>
+</div>-->
 
+<div class="mask"></div> 
+
+<?php echo $this->js('LocalResizeIMG.js')->wrap();?>
 <script type="text/javascript">
-  $(".openmk").click(function(){
-    $(".mask").fadeIn()
-  })
-  $(".mydata .img.openmk").click(function(){
-    $(".head_xz").animate({"bottom":0},500)
-  })
-  $(".head_xz_close").click(function(){
-    $(".head_xz").animate({"bottom":-170},300)
-    $(".mask").fadeOut()
-  })
+  // $(".openmk").click(function(){
+  //   $(".mask").fadeIn()
+  // })
+  // $(".mydata .img.openmk").click(function(){
+  //   $(".head_xz").animate({"bottom":0},500)
+  // })
+  // $(".head_xz_close").click(function(){
+  //   $(".head_xz").animate({"bottom":-170},300)
+  //   $(".mask").fadeOut()
+  // })
+  
+  $('.mydata .img.openmk').click(function() {
+      $('#file').trigger('click');
+  });
+
+  $("input:file").unbind('change').on('change', function() {
+      var $$ = $(this);
+      if (typeof (FileReader) != "undefined") {
+          var upFile = $(this)[0].files[0];
+          var imageHolder = $('#sfzZ');
+
+          var reader = new FileReader();
+          reader.onload = function (e) {
+              var result = e.target.result;
+              imageHolder.attr('src', result);
+          }
+          reader.readAsDataURL(upFile);
+      }
+
+      $('form').trigger('submit');
+  });
+
   $("#inline").picker({
         title: "选择性别",
         cols: [
@@ -75,25 +107,36 @@
           }
         ],
         onChange: function(p, v, dv) {
-          console.log(p, v, dv);
+            $(".mask").fadeIn();
         },
         onClose: function(p, v, d) {
-          $(".mask").fadeOut()
+          $(".mask").fadeOut();
+
+          $('input[name="customer_gender"]').val(p.value[0]);
+          $('form').trigger('submit');
         }
      });
+
   $("#inline1").picker({
         title: "选择年龄段",
         cols: [
           {
             textAlign: 'center',
-            values: ['16-18', '18-25','25-35']
+            values: ['< 18', '18-25','25-35', '> 35']
           }
         ],
         onChange: function(p, v, dv) {
-          console.log(p, v, dv);
+            $(".mask").fadeIn();
         },
         onClose: function(p, v, d) {
-          $(".mask").fadeOut()
+          $(".mask").fadeOut();
+          $('input[name="customer_age"]').val(p.value[0]);
+          $('form').trigger('submit');
         }
      });
+
+  $('form').submit(function() {
+      $(this).ajaxAuto();
+      return false;
+  });
 </script>

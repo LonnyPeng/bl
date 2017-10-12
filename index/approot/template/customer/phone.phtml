@@ -1,0 +1,76 @@
+<form method="post">
+	<div class="bd_phone">
+		<div class="weui-cells">
+			<div class="weui-cell" >
+		  		<div class="weui-cell__bd">
+			    	<i class="iconfont">&#xe610;</i><input type="number" name="customer_tel" placeholder="输入手机号" />
+			   </div>
+		   </div>
+		   <div class="weui-cell" >
+		  		<div class="weui-cell__bd">
+			      <i class="iconfont">&#xe649;</i><input type="text" name="code" placeholder="输入验证码" />
+			   </div>
+			   <button class="getcode js-yzm">获取验证码</button>
+		   </div>
+		</div>
+	</div>
+
+	<a class="twtj_btn read_btn js-submit" href="javascript:;">绑定手机</a>
+</form>
+
+<script type="text/javascript">
+	$('.getcode').click(function() {
+		var $$ = $(this);
+
+		if (!$('input[name="customer_tel"]').val()) {
+			$.warning('请输入手机号码');
+			return false;
+		}
+
+		if (!$(this).hasClass('js-yzm')) {
+			return false;
+		}
+
+		$.getJSON('<?php echo $this->url('common/phone-code')?>', {phone: $('input[name="customer_tel"]').val()}, function (re) {
+			if (re.status == 'ok') {
+				settime($$);
+			} else {
+				$.warning(re.msg);
+			}
+		});
+	});
+
+	$('.js-submit').click(function() {
+		$('form').trigger('submit');
+
+		return false;
+	});
+
+	$('form').submit(function() {
+		var $$ = $(this);
+
+		$.check(!this.customer_tel.value, '请输入手机号码', this.customer_tel) &&
+		$.check(!this.code.value, '请输入验证码', this.code) &&
+		$$.ajaxAuto();
+		return false;
+	});
+
+	var countdown = 60; 
+	function settime(val) {
+		if (countdown == 0) { 
+			val.css({background: '#ff7c00'});  
+			val.html("获取验证码");
+			val.addClass('js-yzm');
+			countdown = 60; 
+		} else {
+			val.css({background: '#dbdbdb'});
+			val.html("重发(" + countdown + ")");
+			val.removeClass('js-yzm');
+			countdown--;
+
+			setTimeout(function() { 
+				settime(val) 
+			},1000);
+		}
+	}
+</script>

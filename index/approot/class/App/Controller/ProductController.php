@@ -338,7 +338,7 @@ class ProductController extends AbstractActionController
 		$dir = REVIEW_DIR;
 		$data = array();
 		foreach ($files['name'] as $key => $row) {
-			if (!$files['error'][$key] || in_array($files['type'][$key], $this->imgType) || $files['size'][$key] > $this->imgMaxSize) {
+			if ($files['error'][$key] || !in_array($files['type'][$key], $this->imgType) || $files['size'][$key] > $this->imgMaxSize) {
 				continue;
 			}
 

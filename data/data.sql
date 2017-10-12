@@ -362,6 +362,18 @@ CREATE TABLE `t_customers` (
   `customer_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
+--
+-- 手机验证码 `t_phone_verif`
+--
+DROP TABLE IF EXISTS `t_phone_verif`;
+CREATE TABLE `t_phone_verif` (
+  `phone_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `phone_number` varchar(32) COMMENT '电话',
+  `phone_code` varchar(6) COMMENT '验证码',
+  `phone_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `phone_status` tinyint(1) NOT NULL DEFAULT 1 COMMENT ''
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='手机验证';
+
 -- ----------------------------
 -- 会员收货地址表 t_customer_address
 -- ----------------------------
