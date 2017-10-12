@@ -1,8 +1,10 @@
-<div class="feedback">
-  <div class="feedback_place">请填写您宝贵的意见，非常感谢！</div>
-  <textarea name="" rows="" cols=""></textarea>   
-  <button class="feedback_tj">提交</button>
-</div>
+<form method="post">
+    <div class="feedback">
+      <div class="feedback_place">请填写您宝贵的意见，非常感谢！</div>
+      <textarea name="feedback_text" rows="" cols=""></textarea>   
+      <button class="feedback_tj" type="submit">提交</button>
+    </div>
+</form>
 
 <script type="text/javascript">
   $(".feedback textarea").focus(function(){
@@ -12,5 +14,14 @@
     if($(this).val()==""){
       $(".feedback_place").show()
     } 
-  })
+  });
+
+  $('form').submit(function() {
+      var $$ = $(this);
+
+      $.check(!this.feedback_text.value, '请填写您宝贵的意见') &&
+      $$.ajaxAuto();
+
+      return false;
+  });
 </script>

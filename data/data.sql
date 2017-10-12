@@ -362,6 +362,18 @@ CREATE TABLE `t_customers` (
   `customer_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='会员表';
 
+-- ----------------------------
+-- 用户反馈 t_customer_feedbacks
+-- ----------------------------
+DROP TABLE IF EXISTS `t_customer_feedbacks`;
+CREATE TABLE `t_customer_feedbacks` (
+  `feedback_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `feedback_text` text COMMENT '内容',
+  `feedback_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `feedback_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户反馈';
+
 --
 -- 手机验证码 `t_phone_verif`
 --

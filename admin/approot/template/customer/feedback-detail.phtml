@@ -1,0 +1,27 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('customer/feedback')?>">反馈列表</a> / 详情
+    </strong>
+</div>
+
+<div class="widget-header">
+    <h2 class="title-theme-2">内容</h2>
+</div>
+<div class="row">
+    <div class="col-24">
+        <div class="form-group">
+            <label>&nbsp;</label>
+            <textarea class="form-control" readonly=""><?= $info['feedback_text'];?></textarea>
+        </div>
+    </div>
+</div>
+<?php if ($info['feedback_status']) : ?>
+    <button id="js-submit">已&nbsp;阅</button>
+<?php endif;?>
+<a href="javascript:history.back();" class="btn">返&nbsp;回 »</a>
+
+<script type="text/javascript">
+    $('#js-submit').click(function() {
+        $(this).ajaxAuto();
+    });
+</script>

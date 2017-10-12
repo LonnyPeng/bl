@@ -119,4 +119,55 @@ class CustomerController extends AbstractActionController
             return new JsonModel('error', '失败');
         }
     }
+
+    public function feedbackAction()
+    {
+        $where = array();
+
+        $count = $this->models->feedback->getCount(array('setWhere' => $where));
+        $this->helpers->paginator($count, 10);
+        $limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
+
+        $files = 'cf.*, c.customer_name';
+        $sqlInfo = array(
+            'setJoin' => 'LEFT JOIN t_customers c ON c.customer_id = cf.customer_id',
+            'setWhere' => $where,
+            'setLimit' => $limit,
+            'setOrderBy' => 'feedback_status DESC, feedback_id DESC',
+        );
+
+        $feedbackList = $this->models->feedback->getFeedback($files, $sqlInfo);
+
+        // print_r($feedbackList);die;
+        return array(
+            'feedbackList' => $feedbackList,
+        );
+    }
+
+    public function feedbackDetailAction()
+    {
+        $id = $this->param('id');
+        $info = $this->models->feedback->getFeedbackById($id);
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('customer/feedback'));
+        }
+
+        if ($this->funcs->isAjax()) {
+            $sql = "UPDATE t_customer_feedbacks 
+                    SET feedback_status = 0 
+                    WHERE feedback_status = 1 
+                    AND feedback_id = ?";
+            $status = $this->locator->db->exec($sql, $id);
+            if ($status) {
+                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/feedback'));
+            } else {
+                return new JsonModel('error', '失败');
+            }
+
+        }
+
+        return array(
+            'info' => $info,
+        );
+    }
 }

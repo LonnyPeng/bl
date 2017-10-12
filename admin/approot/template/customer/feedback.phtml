@@ -1,0 +1,42 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('customer/list')?>">会员</a> / 反馈列表
+    </strong>
+</div>
+
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">用户名</th>
+                <th class="text-center">反馈内容</th>
+                <th class="text-center">反馈时间</th>
+                <th class="text-center">状态</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($feedbackList) : ?>
+                <?php foreach ($feedbackList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['customer_name']?></td>
+                        <td class="text-center" title="<?php echo $row['feedback_text']?>">
+                            <?php echo $this->funcs->mbSubString($row['feedback_text'], 0, 20)?>
+                        </td>
+                        <td class="text-center"><?= $row['feedback_time']?></td>
+                        <td class="text-center"><?= $row['feedback_status'] ? '未阅' : '已阅'?></td>
+                        <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('customer/feedback-detail', array('id' => $row['feedback_id']))?>" title="详情">
+                                <i class="fa fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>

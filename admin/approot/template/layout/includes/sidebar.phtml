@@ -38,8 +38,20 @@
         <li class="<?php echo $this->controller() =='customer' ? 'active' : ''?>">
             <a href="<?php echo $this->url('customer/list')?>">
                 <span class="icon-wrap"><i class="icon-report"></i></span>
-                <span class="text-wrap">会员列表</span>
+                <span class="text-wrap">会员</span>
             </a>
+            <ul class="<?php echo $this->controller() != 'customer' ? 'none' : ''?>">
+                <li class="<?php echo in_array($this->action(), array('list', 'detail')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('customer/list');?>">
+                        <span class="hidden-sm">会员列表</span>
+                    </a>
+                </li>
+                <li class="<?php echo in_array($this->action(), array('feedback', 'feedback-detail')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('customer/feedback');?>">
+                        <span class="hidden-sm">会员反馈</span>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="<?php echo $this->controller() =='order' ? 'active' : ''?>">
             <a href="<?php echo $this->url('order/list')?>">
