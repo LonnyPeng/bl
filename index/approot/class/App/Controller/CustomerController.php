@@ -99,10 +99,10 @@ class CustomerController extends AbstractActionController
         if ($checkDay) {
             $scoreNext = (($i + 1) * 1) > 5 ? 5 : (($i + 1) * 1);
         } else {
-            $scoreNext = (($i + 2) * 1) > 5 ? 5 : (($i + 2) * 1);
             $i--;
+            $scoreNext = (($i + 2) * 1) > 5 ? 5 : (($i + 2) * 1);
         }
-        
+
         if ($this->funcs->isAjax()) {
             //签到
             if ($checkDay) {
