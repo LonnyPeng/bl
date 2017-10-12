@@ -43,7 +43,7 @@ class DefaultController extends AbstractActionController
                     $recommendList[$key]['product_id'] = $this->models->product->getProductId(sprintf("product_code = '%s'", $row['product_code']));
 
                     $sql = "SELECT product_type FROM t_products WHERE product_code = ?";
-                    $recommendList[$key]['product_type'] = $this->locator->db->getOne($$sql, $row['product_code']);
+                    $recommendList[$key]['product_type'] = $this->locator->db->getOne($sql, $row['product_code']);
                 } else {
                     $recommendList[$key]['product_id'] = '';
                 }
