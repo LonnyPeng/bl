@@ -589,7 +589,7 @@ class CustomerController extends AbstractActionController
                         }
                     }
 
-                    $collectionList[$key]['image_path'] = (string) $this->helpers->uploadUrl($row['images']['home'][0]['image_path'], 'product');
+                    $collectionList[$key]['image_path'] = (string) $this->helpers->uploadUrl($row['images']['banner'][0]['image_path'], 'product');
                     $collectionList[$key]['product_price'] = $this->funcs->showValue($row['product_price']);
                     $collectionList[$key]['url'] = (string) $this->url('product/detail', array('id' => $row['product_id']));
                 }
