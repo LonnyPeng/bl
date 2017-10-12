@@ -473,6 +473,8 @@ class BasicController extends AbstractActionController
 					} elseif ($_FILES['recommend_logo']['size'] > $this->imgMaxSize) {
 						return new JsonModel('error', '请选择小于4M的图片');
 					}
+				} else {
+					return new JsonModel('error', '品牌Logo');
 				}
 			} else {
 				if (isset($_FILES['recommend_path'])) {

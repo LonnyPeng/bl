@@ -62,7 +62,7 @@
                         <td class="text-center"><?= $filed['turntablep_attr'][$row['turntablep_attr']]?></td>
                         <td class="text-center">
                             <?php if ($row['turntablep_attr'] == 'product') : ?>
-                            <img src="<?php echo $this->uploadUrl($row['turntablep_image'], 'sys')?>" style="border: 1px solid #ddd; padding: 2px; width: 200px;">
+                            <img src="<?php echo $this->uploadUrl($row['turntablep_image'], 'sys')?>" style="border: 1px solid #ddd; padding: 2px; width: 50px;">
                             <?php elseif ($row['turntablep_attr'] == 'score') : ?>
                                 <?php echo sprintf("%d积分", $row['turntablep_score'])?>
                             <?php else : ?>
