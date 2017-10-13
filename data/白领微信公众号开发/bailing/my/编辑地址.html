@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>编辑地址</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+    ">
+
+    <link rel="stylesheet" href="../weui.min.css">
+    <link rel="stylesheet" href="../jquery-weui.css">
+    <link rel="stylesheet" type="text/css" href="../common.css"/>
+    <link rel="stylesheet" href="css/index.css">
+
+  </head>
+
+  <body ontouchstart>
+  	<div class="mydata newaddress">
+  		<div class="weui-cells">	  		
+			  <div class="weui-cell" >
+			  	 <div class="weui-cell__hd"><label class="weui-label">收件人姓名</label></div>
+			  		<div class="weui-cell__bd">
+				   		 <input type="text" class="importinp" name="" value="" placeholder="请输入姓名"/>
+				   </div>
+			  </div>
+			  <div class="weui-cell" >
+			  	 <div class="weui-cell__hd"><label class="weui-label">手机号码</label></div>
+			  		<div class="weui-cell__bd">
+				   		 <input type="text" class="importinp" name="" value="" placeholder="请输入手机号码"/>
+				   </div>
+			  </div>
+			  <div class="weui-cell weui-cell_access" >
+			  	 <div class="weui-cell__hd"><label class="weui-label">省市区</label></div>
+			  		<div class="weui-cell__bd">
+				   		 <input class="weui-input openmk" id="city-picker" type="text" value="" placeholder="请选择">
+				    </div>
+				    <div class="weui-cell__ft">
+	    			</div>
+			  </div>
+			  <div class="weui-cell" >
+			  	 <div class="weui-cell__hd"><label class="weui-label">详细地址</label></div>
+			  		<div class="weui-cell__bd">
+				   		 <input type="text" class="importinp" name="" value="" placeholder="请填写详细地址"/>
+				   </div>
+			  </div>
+	  	</div>
+  	</div>
+		<div class="mask"></div>
+    <script src="../jquery-2.1.4.js"></script>
+    <script src="../fastclick.js"></script>
+    <script>
+      $(function() {
+        FastClick.attach(document.body);
+      });
+    </script>
+    <script src="../jquery-weui.js"></script>
+    <script src="../city-picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+  	<script type="text/javascript">
+			
+			$(".openmk").click(function(){
+				$(".mask").fadeIn()
+			})			
+			$("#city-picker").cityPicker({
+		    title: "请选择收货地址",
+		    onClose: function (picker, values, displayValues) {
+         	$(".mask").fadeOut()
+        }
+		  });
+		  
+		</script>
+  </body>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>我的订单</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+    ">
+
+    <link rel="stylesheet" href="../weui.min.css">
+    <link rel="stylesheet" href="../jquery-weui.css">
+    <link rel="stylesheet" type="text/css" href="../common.css"/>
+    <link rel="stylesheet" href="css/index.css">
+
+  </head>
+
+  <body ontouchstart>
+    <div class="or_tlt pf">
+      <p>已完成</p>
+    </div>
+     <!-- 导航切换 -->
+  	<div class="my_collect my_order order_dt">
+      <div class="collect_li">
+        <div class="weui-cells">
+          <div class="weui-cell">
+            <div class="weui-cell__bd">
+              <p>订单号：2390871390871</p>
+            </div>
+            <div class="weui-cell__ft gray">2017/06/20  05:23</div>
+          </div>
+        </div>
+        <div class="clearfix wrap inf pr">
+          <div class="img fl">
+            <img src="images/col_02.jpg">
+          </div>
+          <h4 class="lr2">山东红富士苹果两粒装买一送一山东</h4>
+          <p><span class="gray">350g</span></p>
+          <!-- <a href="#" class="btn pa">去领取</a> -->
+          <div class="pa jif">0积分</div>
+        </div>
+        <div class="ewmcode tac">
+          <h4 class="orange">剩余领取时间：<span id="mydate"></span></h4>
+          <p class="gray">我的领取码</p>
+          <div class="img pr">
+            <img src="images/ewcode.jpg">
+            <div class="pa orange yshix">
+              已失效
+            </div>
+          </div>
+        </div>
+
+        <div class="ck_dt clearfix">
+          <a href="添加评价.html" class="btn btn_02">去评价</a>
+          <a href="#" class="btn btn_01">分享订单</a>
+        </div>
+      </div>
+
+
+    </div>
+	
+    <script src="../jquery-2.1.4.js"></script>
+    <script src="../fastclick.js"></script>
+    <script>
+      $(function() {
+        FastClick.attach(document.body);
+      });
+    </script>
+    <script src="../jquery-weui.js"></script>
+		<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+      //计时器
+        function displayTime(){
+            var elt = document.getElementById("mydate");
+            if(leftTime<0){
+                elt.innerHTML = "Over";
+            }
+            else{
+                var endTime = new Date("2017/9/27 13:51:00");
+                var now = new Date();
+                var leftTime = endTime.getTime() -now.getTime();
+                var ms = parseInt(leftTime%1000).toString();
+                leftTime = parseInt(leftTime/1000);
+           var d = Math.floor(leftTime / 3600 /24 );
+                var o = Math.floor(leftTime /3600%24 );
+                var m = Math.floor(leftTime/60%60);
+                var s = leftTime%60;
+          if (d <= 9) minute = '0' + d;
+             if (o <= 9) second = '0' + o;
+            if (m <= 9) second = '0' + m;
+           if (s <= 9) second = '0' + s;
+           
+                elt.innerHTML =d + "天"+ o + "小时" + m + "分" + s + "秒";
+                if(s<0){
+                  document.getElementById('mydate').innerHTML='0天0小时0分0秒';
+                  callfn()
+                  return;
+                };
+                setTimeout(displayTime,100);
+            }
+        }
+        displayTime();
+         function callfn(){
+            $(".yshix").show()
+            $(".ewmcode").children('h4').html("领取已过，下次记得早点领取哦")
+        }
+    </script>
+  </body>
+</html>

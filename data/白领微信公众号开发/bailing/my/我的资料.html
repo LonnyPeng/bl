@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>我的资料</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <meta name="description" content="Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.
+    ">
+
+    <link rel="stylesheet" href="../weui.min.css">
+    <link rel="stylesheet" href="../jquery-weui.css">
+    <link rel="stylesheet" type="text/css" href="../common.css"/>
+    <link rel="stylesheet" href="css/index.css">
+
+  </head>
+
+  <body ontouchstart>
+  	<div class="mydata">
+  		<div class="weui-cells">
+	  		<div class="weui-cell" >
+			  		<div class="weui-cell__bd">
+				    	<p>头像</p>
+				    </div>
+				    <div class="weui-cell__ft img openmk">
+				    	<img src="images/head_img.jpg"/>
+	    			</div>
+			  </div>
+			  <div class="weui-cell weui-cell_access" >
+			  	 <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+			  		<div class="weui-cell__bd">
+				   		 <input class="weui-input openmk" id="inline" type="text" value="" placeholder="未选择">
+				    </div>
+				    <div class="weui-cell__ft">
+	    			</div>
+	    			<div class="bg_wen">填写送10积分</div>
+			  </div>
+			  <a class="weui-cell weui-cell_access" href="常驻地址.html">
+			  	 <div class="weui-cell__hd"><label class="weui-label">常驻地</label></div>
+			  		<div class="weui-cell__bd">
+				   		<h5>未选择</h5>
+				    </div>
+				    <div class="weui-cell__ft">
+	    			</div>
+	    			<div class="bg_wen">填写送10积分</div>
+			  </a>
+			  <div class="weui-cell weui-cell_access" >
+			  	 <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
+			  		<div class="weui-cell__bd">
+				   		 <input class="weui-input openmk" id="inline1" type="text" value="" placeholder="未选择">
+				    </div>
+				    <div class="weui-cell__ft">
+	    			</div>
+	    			<div class="bg_wen">填写送10积分</div>
+			  </div>
+			  <a class="weui-cell weui-cell_access" href="绑定手机.html">
+			  	 <div class="weui-cell__hd"><label class="weui-label">绑定手机号</label></div>
+			  		<div class="weui-cell__bd">
+				   		<h5>13456789076</h5>
+				    </div>
+				    <div class="weui-cell__ft">
+	    			</div>
+	    			<div class="bg_wen">填写送10积分</div>
+			  </a>
+	  	</div>
+  	</div>
+		<div class="head_xz">
+			<div class="head_xz_top">
+				<a href="">照片</a>
+				<a href="">相机</a>
+			</div>
+			<button class="head_xz_close">取消</button>
+		</div>
+		<div class="mask"></div>
+    <script src="../jquery-2.1.4.js"></script>
+    <script src="../fastclick.js"></script>
+    <script>
+      $(function() {
+        FastClick.attach(document.body);
+      });
+    </script>
+    <script src="../jquery-weui.js"></script>
+		<script src="js/index.js" type="text/javascript" charset="utf-8"></script>
+  	<script type="text/javascript">
+			
+			$(".openmk").click(function(){
+				$(".mask").fadeIn()
+			})
+			$(".mydata .img.openmk").click(function(){
+				$(".head_xz").animate({"bottom":0},500)
+			})
+			$(".head_xz_close").click(function(){
+				$(".head_xz").animate({"bottom":-170},300)
+				$(".mask").fadeOut()
+			})
+			$("#inline").picker({
+		        title: "选择性别",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: ['男', '女',]
+		          }
+		        ],
+		        onChange: function(p, v, dv) {
+		          console.log(p, v, dv);
+		        },
+		        onClose: function(p, v, d) {
+		          $(".mask").fadeOut()
+		        }
+		     });
+		  $("#inline1").picker({
+		        title: "选择年龄段",
+		        cols: [
+		          {
+		            textAlign: 'center',
+		            values: ['16-18', '18-25','25-35']
+		          }
+		        ],
+		        onChange: function(p, v, dv) {
+		          console.log(p, v, dv);
+		        },
+		        onClose: function(p, v, d) {
+		          $(".mask").fadeOut()
+		        }
+		     });
+		</script>
+  </body>
+
+</html>
