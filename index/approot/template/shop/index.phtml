@@ -21,28 +21,21 @@
 </div>
 <div class="qhd_down">
     <h6>附近取货点</h6>
-    <div class="qhd_item">
-        <div class="qhd_item_l">
-            <h5>呼玛小区服务点</h5>
-            <p>上海市宝山区呼兰路725号</p>
-        </div>
-        <div class="qhd_item_r">
-            <i class="iconfont">&#xe636;</i>
-            <p>0.56km</p>
-            <p>库存:30</p>
-        </div>
-    </div>
-    <div class="qhd_item">
-        <div class="qhd_item_l">
-            <h5>呼玛小区服务点</h5>
-            <p>上海市宝山区呼兰路725号</p>
-        </div>
-        <div class="qhd_item_r">
-            <i class="iconfont">&#xe636;</i>
-            <p>0.56km</p>
-            <p>库存:30</p>
-        </div>
-    </div>
+    <?php if ($shopList) : ?>
+        <?php foreach($shopList as $row) : ?>
+            <div class="qhd_item">
+                <div class="qhd_item_l">
+                    <h5><?php echo $row['shop_name']?></h5>
+                    <p><?php echo $row['shop_address']?></p>
+                </div>
+                <div class="qhd_item_r">
+                    <i class="iconfont">&#xe636;</i>
+                    <p><?php echo $this->funcs->setLength($row['distance'])?></p>
+                    <p>库存:<?php echo $row['quantity_num']?></p>
+                </div>
+            </div>
+        <?php endforeach;?>
+    <?php endif;?>
 </div>
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>

@@ -26,6 +26,13 @@ class ShopController extends AbstractActionController
 
 	public function indexAction()
 	{
+		$id = trim($this->param('order_id'));
+		$where = sprintf("order_id = %d", $id);
+		$info = $this->models->order->getOrderInfo($where);
+		if (!$info) {
+		    $this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
 		if ($this->funcs->isAjax()) {
 			$lat = $this->param('lat');
 			$lng = $this->param('lng');
@@ -54,10 +61,38 @@ class ShopController extends AbstractActionController
 		if ($this->funcs->isAjax()) {
 			return JsonModel::init('ok', '', array('address' => $formattedAddress));
 		}
+
+		//获取最近取货点3个
+		$field = array(
+		    's.*, pq.quantity_num',
+		    sprintf("ROUND(
+		        6378.137 * 1000 * 2 * ASIN(
+		            SQRT(
+		                POW(SIN((%s * PI() / 180 - s.shop_lat * PI() / 180) / 2), 2) + 
+		                COS(%s * PI() / 180) * 
+		                COS(s.shop_lat * PI() / 180) * 
+		                POW(SIN((%s * PI() / 180 - s.shop_lng * PI() / 180) / 2), 2)
+		            )
+		        )
+		    ) AS distance", $lat, $lat, $lng),
+		);
+		$where = array(
+			's.shop_status = 1',
+			sprintf("s.district_id = %d", $this->districtId),
+			sprintf("pq.product_id = %d", $info['product_id']),
+		);
+
+		$sql = "SELECT " . implode(",", $field) . " FROM t_product_quantity pq 
+				LEFT JOIN t_shops s ON pq.shop_id = s.shop_id
+				WHERE " . implode(" AND ", $where) . " 
+				ORDER BY distance ASC
+				LIMIT 0, 3";
+		$shopList = $this->locator->db->getAll($sql, $this->districtId);
 		
-		// print_r($this->locator->get('Profile'));die;
+		// print_r($shopList);die;
 		return array(
 			'formattedAddress' => $formattedAddress,
+			'shopList' => $shopList,
 			'js' => $this->app->js,
 		);
 	}
