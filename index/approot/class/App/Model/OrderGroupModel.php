@@ -45,6 +45,7 @@ class OrderGroupModel extends CommonModel
 	    $info = $this->locator->db->getRow($sql, $id);
 	    if ($info) {
 	    	$info['group_type'] = $this->getStatus($info);
+	    	$info['customers'] = $info['customer_id'];
 	    	$info['customer_id'] = $this->getCustomer($info['customer_id']);
 	    }
 	    return $info;

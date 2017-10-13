@@ -705,13 +705,13 @@ class CustomerController extends AbstractActionController
         }
 
         //在规定时间内组团成功，系统自动下单
-        if ($info['time'] > 0 && $info['status'] = 'success') {
+        if ($info['time'] > 0 && $info['status'] == 'success') {
             $sql = "SELECT * FROM t_orders 
                     WHERE order_type = 'group'
                     AND order_status = 1
-                    AND customer_id = ?
+                    AND customer_id IN (?)
                     AND product_id = ?";
-            $orders = $this->locator->db->getAll($sql, $row['customer_id'], $info['product_id']);
+            $orders = $this->locator->db->getAll($sql, $info['customers'], $info['product_id']);
             if ($orders) {
                 $sql = "UPDATE t_orders 
                         SET order_type = 'pending', 
