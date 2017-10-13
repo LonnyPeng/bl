@@ -24,14 +24,12 @@
 <script type="text/javascript">
     wx.config(<?php echo $js->config(array('onMenuShareAppMessage'), false) ?>);
     wx.ready(function() {
-        $('#js-qrcode').click(function() {
-            wx.onMenuShareAppMessage({
-                title: '白领', // 分享标题
-                desc: '', // 分享描述
-                link: '<?php echo $key?>', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                imgUrl: '<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)), '', true)?>', // 分享图标
-                type: 'link', // 分享类型,music、video或link，不填默认为link
-            });
+        wx.onMenuShareAppMessage({
+            title: '白领', // 分享标题
+            desc: '', // 分享描述
+            link: '<?php echo $key?>', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+            imgUrl: '<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)), '', true)?>', // 分享图标
+            type: 'link', // 分享类型,music、video或link，不填默认为link
         });
     });
 
