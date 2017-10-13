@@ -38,6 +38,7 @@ abstract class AbstractActionController extends ActionController
 
             if (true) {
                 if ($this->helpers->controller() != 'wechat') {
+                    $_SESSION['redirect'] = $this->helpers->selfUrl(null, false);
                     $this->funcs->redirect($this->helpers->url('wechat/index'));
                 }
             } else {
@@ -105,6 +106,13 @@ abstract class AbstractActionController extends ActionController
                     $this->locator->setService('Profile', array_merge($customer, $_SESSION['customer_info']));
                 }
             }
+        }
+
+        if (isset($_SESSION['redirect'])) {
+            $redirect = $_SESSION['redirect'];
+            unset($_SESSION['redirect']);
+
+            $this->funcs->redirect($redirect);
         }
     }
 }
