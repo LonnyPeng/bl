@@ -29,7 +29,7 @@
             <?php elseif ($row['order_type'] == 'shipped') : ?>
                 <a href="javascript:void(0);" class="btn btn_01 js-receipt" data-id="<?php echo $row['order_id']?>">确认收货</a>
             <?php elseif ($row['order_type'] == 'group') : ?>
-                <a href="组团详情-失败.html" class="btn btn_01">组团详情</a>
+                <a href="<?php echo $this->url('customer/group-detail', array('id' => $row['group_id']))?>" class="btn btn_01">组团详情</a>
             <?php elseif ($row['order_type'] == 'received') : ?>
                 <a href="<?php echo $this->url('order/info', array('id' => $row['order_id']))?>" class="btn btn_01">查看详情</a>
                 <a href="<?php echo $this->url('product/review-add', array('id' => $row['order_id']))?>" class="btn btn_01">去评价</a>

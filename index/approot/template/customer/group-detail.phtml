@@ -1,10 +1,19 @@
-<div class="cluster">
+<div class="cluster <?php echo $info['status'] == 'error' ? 'lose_team' : ''?>">
   <div class="order_top clearfix">
     <div class="img fl">
       <img src="<?php echo $this->uploadUrl($order['product']['images']['banner'][0]['image_path'], 'product')?>">
     </div>
     <h4><?php echo $order['product']['product_name']?></h4>
   </div>
+  <?php if ($info['status'] == 'error') : ?>
+      <div class="cluster_cg">
+          <h5><i class="iconfont">&#xe611;</i>组团失败</h5>
+      </div>
+    <?php elseif ($info['status'] == 'success') : ?>
+        <div class="cluster_cg">
+            <h5><i class="weui-icon-success"></i>组团成功</h5>
+        </div>
+    <?php endif;?>
   <div class="cluster_ul">
     <?php foreach($info['customer_id'] as $key => $row) : ?>
         <?php if (!$key) : ?>
@@ -26,19 +35,28 @@
             </div>
         <?php endif;?>
     <?php endforeach;?>
-    <?php for($i=0; $i<(5 - count($info['customer_id'])); $i++) : ?>
+    <?php for($i=0; $i<($info['group_type']['data']['product_group_num'] - count($info['customer_id'])); $i++) : ?>
         <div class="cluster_li">
           <div class="img"></div>
           <p></p>
         </div>
     <?php endfor;?>
   </div>
-  <div class="cluster_down">
-    <p>
-        还剩<?php echo $i?>个名额：<span id="time" data-time="<?php echo $info['time']?>"><?php echo $this->funcs->showTime($info['time'])?></span>后结束
-    </p>
-    <a href="我的邀请码.html" class="feedback_tj weui-btn weui-btn_primary">邀请好友一起组团领</a>
-  </div>
+    <?php if ($info['status'] == 'success') : ?>
+    <?php elseif ($info['status'] == 'pending') : ?>
+        <div class="cluster_down">
+          <p>
+              还剩<?php echo $i?>个名额：
+              <span id="time" data-time="<?php echo $info['time']?>"><?php echo $this->funcs->showTime($info['time'])?></span>后结束
+          </p>
+          <a href="<?php echo $this->url('customer/qrcode', array('group_id' => $info['group_id'], 'type' => 'group'))?>" class="feedback_tj weui-btn weui-btn_primary">邀请好友一起组团领</a>
+        </div>
+    <?php else : ?>
+        <div class="cluster_down">
+            <p>仅剩<?php echo $i?>人组团成功，下次记得多多邀请好友</p>
+        </div>
+    <?php endif;?>
+
 </div>
 
 <script type="text/javascript">

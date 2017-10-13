@@ -74,7 +74,8 @@ class OrderController extends AbstractActionController
                     $sql = "SELECT group_id FROM t_order_groups WHERE customer_id IN (?) AND product_id = ?";
                     $groupId = $this->locator->db->getOne($sql, $this->customerId, $row['product_id']);
                     $result = $this->models->orderGroup->getOrderGroupById($groupId);
-                    $orderList[$key]['status'] = $result['msg'];
+                    $orderList[$key]['status'] = $result['group_type']['msg'];
+                    $orderList[$key]['group_id'] = $groupId;
                 } elseif ($row['order_type'] == 'received') {
                     $orderList[$key]['status'] = '已收货';
                 } else {
@@ -186,18 +187,36 @@ class OrderController extends AbstractActionController
         }
 
         if ($productInfo['product_type'] == 2) { //组团
-            //创建组团
-            $sql = "INSERT INTO t_order_groups 
-                    SET customer_id = :customer_id, 
-                    product_id = :product_id";
-            $status = $this->locator->db->exec($sql, array(
-                'customer_id' => $this->customerId,
-                'product_id' => $productInfo['product_id'],
-            ));
-            if (!$status) {
-                return new JsonModel('error', '组团失败');
+            if ($this->param('group_id')) { //被邀请组团
+                $groupId = trim($this->param('group_id'));
+                $sql = "SELECT customer_id FROM t_order_groups WHERE group_id = ?";
+                $customers = $this->locator->db->getOne($sql, $groupId);
+                if (!$customers) {
+                    return new JsonModel('error', '成团不存在');
+                }
+                if (in_array($this->customerId, explode(",", $customers))) {
+                    return new JsonModel('error', '你已加入该团');
+                }
+
+                $customers .= "," . $this->customerId;
+                $sql = "UPDATE t_order_groups SET customer_id = ? WHERE group_id = ?";
+                $status = $this->locator->db->exec($sql, $customers, $groupId);
+                if (!$status) {
+                    return new JsonModel('error', '组团失败');
+                }
+            } else { //创建组团
+                $sql = "INSERT INTO t_order_groups 
+                        SET customer_id = :customer_id, 
+                        product_id = :product_id";
+                $status = $this->locator->db->exec($sql, array(
+                    'customer_id' => $this->customerId,
+                    'product_id' => $productInfo['product_id'],
+                ));
+                if (!$status) {
+                    return new JsonModel('error', '组团失败');
+                }
+                $groupId = $this->locator->db->lastInsertId();
             }
-            $groupId = $this->locator->db->lastInsertId();
 
             //创建订单
             $map = array(

@@ -105,25 +105,23 @@
         $('.qh_xz p[data-type="logistics"]').parents('.qh_xz').trigger('click');
     <?php endif;?>
 
+    var groupId = '<?php echo $this->param('group_id')?>';
     $('#js-submit').click(function() {
         var $$ = $(this);
         var type = $$.data('type');
-        var shopId = 0;
+        
         var href = '<?php echo $this->url('order/create', array('id' => $info['product_id']))?>';
 
         if (type != 'self') {
             if (!$('#js-address-detail').length) {
                 window.location.href =  $('#js-address').attr('href');
             } 
-        } else {
-            //提货地点
-            shopId = 1;
         }
 
         $$.removeAttr('href');
 
         $$.ajaxAuto({
-          url: href + '&type=' + type + '&shop_id=' + shopId
+          url: href + '&type=' + type + '&group_id=' + groupId
         });
         
         return false;

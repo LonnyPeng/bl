@@ -404,9 +404,21 @@ class CustomerController extends AbstractActionController
     public function qrcodeAction()
     {
         $this->layout->title = '我的邀请码';
-        
+
         $openId = $_SESSION['openid'];
-        $key = HTTP_SERVER . BASE_PATH . "default/index?key=";
+
+        if ($this->param('status') == 'group') {
+            //邀请组团
+            $id = trim($this->param('group_id'));
+            $info = $this->models->orderGroup->getOrderGroupById($id);
+            if (!$info) {
+                $this->funcs->redirect($this->helpers->url('default/index'));
+            }
+
+            $key = HTTP_SERVER . BASE_PATH . "cart/index?id=" . $info['product_id'] . "&group_id=" . $info['group_id'];
+        } else {
+            $key = HTTP_SERVER . BASE_PATH . "default/index?key=";
+        }
 
         if ($this->funcs->isAjax()) {
             for($i=0;;$i++) {
@@ -428,10 +440,12 @@ class CustomerController extends AbstractActionController
             }
         }
 
-        $where = sprintf("customer_openid = '%s'", $openId);
-    	$info = $this->models->customer->getCustomerInfo($where);
+        if (!$this->param('status')) {
+            $where = sprintf("customer_openid = '%s'", $openId);
+            $info = $this->models->customer->getCustomerInfo($where);
 
-        $key .= $info['customer_invite_code'];
+            $key .= $info['customer_invite_code'];
+        }
 
     	return array(
     		'key' => $key,
@@ -681,7 +695,16 @@ class CustomerController extends AbstractActionController
         //剩余时间
         $info['time'] = (strtotime($info['group_time']) + $order['product']['product_group_time'] * 86400) - time();
 
-        // print_r($info['time']);die;
+        //组团状态
+        if (count($info['customer_id']) == $info['group_type']['data']['product_group_num']) {
+            $info['status'] = 'success';
+        } elseif ($info['time'] > 0) {
+            $info['status'] = 'pending';
+        } else {
+            $info['status'] = 'error';
+        }
+
+        // print_r($info);die;
         return array(
             'order' => $order,
             'info' => $info,

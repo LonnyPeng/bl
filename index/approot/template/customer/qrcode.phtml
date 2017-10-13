@@ -3,7 +3,9 @@
     <div class="code_mack"></div>
     <div class="inv_code_pro">
       <img id="js-qrcode" src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>"/>
-      <p id="update-qrcode">刷新二维码</p>
+      <?php if (!$this->param('type')) : ?>
+        <p id="update-qrcode">刷新二维码</p>
+      <?php endif;?>
     </div>
   </div>
   <div class="inv_code_d">

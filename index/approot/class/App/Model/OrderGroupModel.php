@@ -58,11 +58,11 @@ class OrderGroupModel extends CommonModel
 
 		$num = $productInfo['product_group_num'] - count(explode(",", $row['customer_id']));
 		if ($num == 0) {
-			return array('status' => 'success', 'msg' => '组团成功');
+			return array('status' => 'success', 'msg' => '组团成功', 'data' => array('product_group_num' => $productInfo['product_group_num']));
 		} elseif (time() > strtotime(sprintf("%s + %d days", $row['group_time'], $productInfo['product_group_time']))) {
-			return array('status' => 'error', 'msg' => '组团失败');
+			return array('status' => 'error', 'msg' => '组团失败', 'data' => array('product_group_num' => $productInfo['product_group_num']));
 		} elseif ($num > 0) {
-			return array('status' => 'pending', 'msg' => sprintf("待成团，还差%d人", $num));
+			return array('status' => 'pending', 'msg' => sprintf("待成团，还差%d人", $num), 'data' => array('product_group_num' => $productInfo['product_group_num']));
 		}
 	}
 
