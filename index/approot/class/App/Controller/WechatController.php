@@ -42,7 +42,7 @@ class WechatController extends AbstractActionController
         $sql = "SELECT d.district_name
                 FROM t_customers c 
                 LEFT JOIN t_district d ON d.district_id = c.district_id 
-                WHERE c.customer_openid = ?"
+                WHERE c.customer_openid = ?";
         $userCity = $this->locator->db->getOne($sql, $original['openid']);
         if ($userCity) {
             $original['city'] = $userCity;
