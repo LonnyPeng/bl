@@ -83,6 +83,17 @@ class OrderController extends AbstractActionController
             }
         }
 
+        if ($this->funcs->isAjax() && $this->param('type') != 'page') {
+            //确认收货
+            $id = trim($this->param('id'));
+            $sql = "UPDATE t_orders 
+                    SET order_type = 'received', 
+                    order_received_time = now() 
+                    WHERE order_id = ? 
+                    AND order_type = 'shipped'
+                    order_status = 1";
+        }
+
         if ($this->funcs->isAjax() && $this->param('type') == 'page') {
             if ($orderList) {
                 $viewModel = new ViewModel(array('orderList' => $orderList), 'order/row');

@@ -27,6 +27,8 @@
         paginationClickable: true,
     });
 
+    init();
+
     var pageSize = 1;
     var loading = false;  //状态标记
     $(document.body).infinite().on("infinite", function() {
@@ -48,14 +50,20 @@
                 }
 
                 $("#m_pro").append(ali);
+
+                init();
                 
                 $('.weui-loadmore').fadeOut();
                 loading = false;
             }
         });
     });
-    
-</script>
-<script>
 
+    function init() {
+        $('.js-receipt').click(function() {
+            $(this).ajaxAuto();
+
+            return false;
+        });
+    }
 </script>
