@@ -2,7 +2,7 @@
   <form class="weui-search-bar__form">
     <div class="weui-search-bar__box">
       <i class="weui-icon-search"></i>
-      <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="">
+      <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="" name="address_name">
       <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
     </div>
     <label class="weui-search-bar__label" id="searchText">
@@ -61,5 +61,11 @@
 
     $('.js-row').click(function() {
         $(this).ajaxAuto();
+    });
+
+    $('input[type="search"]').blur(function() {
+        if (!$(this).val()) {
+            window.location.href = '<?php echo $this->url('shop/search', array('order_id' => $this->param('order_id')))?>&address_name=' + $(this).val();
+        }
     });
 </script>     

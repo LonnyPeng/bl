@@ -2,45 +2,60 @@
   <form class="weui-search-bar__form">
     <div class="weui-search-bar__box">
       <i class="weui-icon-search"></i>
-      <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="">
+      <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="" name="address_name" value="<?php echo $this->param('address_name')?>">
       <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
     </div>
     <label class="weui-search-bar__label" id="searchText">
       <i class="weui-icon-search"></i>
       <span>输入地址匹配周边的取货点</span>
     </label>
+
+    <input type="hidden" name="order_id" value="<?php echo $this->param('order_id')?>">
   </form>
   <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 </div>  
-    <div class="qhd_down qhd_radio">
-        <div class="qhd_item">
-            <div class="qhd_ico on">
-                <i class="iconfont">&#xe608;</i>
-                <i class="iconfont">&#xe60c;</i>
+<div class="qhd_down qhd_radio">
+    <?php if ($shopList) : ?>
+        <?php foreach($shopList as $row) : ?>
+            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>">
+                <div class="qhd_ico">
+                    <i class="iconfont">&#xe608;</i>
+                    <i class="iconfont">&#xe60c;</i>
+                </div>
+                <div class="qhd_item_l">
+                    <h5><?php echo $row['shop_name']?></h5>
+                    <p><?php echo $row['shop_address']?></p>
+                </div>
+                <div class="qhd_item_r">
+                    <i class="iconfont">&#xe636;</i>
+                    <p><?php echo $this->funcs->setLength($row['distance'])?></p>
+                    <p>库存:<?php echo $row['quantity_num']?></p>
+                </div>
             </div>
-            <div class="qhd_item_l">
-                <h5>呼玛小区服务点</h5>
-                <p>上海市宝山区呼兰路725号</p>
-            </div>
-            <div class="qhd_item_r">
-                <i class="iconfont">&#xe636;</i>
-                <p>0.56km</p>
-                <p>库存:30</p>
-            </div>
-        </div>
-        <div class="qhd_item">
-            <div class="qhd_ico">
-                <i class="iconfont">&#xe608;</i>
-                <i class="iconfont">&#xe60c;</i>
-            </div>
-            <div class="qhd_item_l">
-                <h5>呼玛小区服务点</h5>
-                <p>上海市宝山区呼兰路725号</p>
-            </div>
-            <div class="qhd_item_r">
-                <i class="iconfont">&#xe636;</i>
-                <p>0.56km</p>
-                <p>库存:30</p>
-            </div>
-        </div>
-    </div>
+        <?php endforeach;?>
+    <?php endif;?>
+</div>
+
+<script type="text/javascript">
+    <?php if ($this->param('address_name')) : ?>
+        $('#searchText').trigger('click');
+        $('input[type="search"]').trigger('blur');
+    <?php endif;?>
+    $('input[type="search"]').change(function() {
+        $('form').trigger('submit');
+    });
+    $('input[type="search"]').blur(function() {
+        if ($(this).val()) {
+            $('form').trigger('submit');
+        }
+    });
+
+    $('.qhd_ico').click(function() {
+        $('.qhd_ico').removeClass('on');
+        $(this).addClass('on');
+    });
+
+    $('.js-row').click(function() {
+        $(this).ajaxAuto();
+    });
+</script>

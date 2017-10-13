@@ -44,7 +44,7 @@
     <!-- mobileBUGFix.js 兼容修复移动设备 -->
     <?php echo $this->js('mobileBUGFix.mini.js')->wrap();?>
 </head>
-<body ontouchstart class="<?php echo $this->class ?: ''?>" style="background:#FFF;">
+<body ontouchstart class="<?php echo $this->class ?: ''?>" style="<?php echo $this->style ?: ''?>">
     <?php echo $this->__header; ?>
 
     <?php echo $this->__content; ?>

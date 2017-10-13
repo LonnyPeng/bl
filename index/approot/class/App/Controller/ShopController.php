@@ -22,6 +22,8 @@ class ShopController extends AbstractActionController
         require_once VENDOR_DIR . 'autoload.php';
 
         $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
+
+        $this->layout->title = '搜索取货点';
 	}
 
 	public function indexAction()
@@ -82,8 +84,8 @@ class ShopController extends AbstractActionController
 			sprintf("pq.product_id = %d", $info['product_id']),
 		);
 
-		$sql = "SELECT " . implode(",", $field) . " FROM t_product_quantity pq 
-				LEFT JOIN t_shops s ON pq.shop_id = s.shop_id
+		$sql = "SELECT " . implode(",", $field) . " FROM t_shops s
+				LEFT JOIN t_product_quantity pq ON pq.shop_id = s.shop_id
 				WHERE " . implode(" AND ", $where) . " 
 				ORDER BY distance ASC
 				LIMIT 0, 3";
@@ -99,9 +101,51 @@ class ShopController extends AbstractActionController
 
 	public function searchAction()
 	{
-		
+		$lat = $this->locator->get('Profile')['lat'];
+		$lng = $this->locator->get('Profile')['lng'];
+
+		$id = trim($this->param('order_id'));
+		$where = sprintf("order_id = %d", $id);
+		$info = $this->models->order->getOrderInfo($where);
+		if (!$info) {
+		    $this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$address = trim($this->param('address_name'));
+		if (!$address) {
+		    $this->funcs->redirect($this->helpers->url('shop/index', array('order_id' => $id)));
+		}
+
+		$field = array(
+		    's.*, pq.quantity_num, pq.quantity_id',
+		    sprintf("ROUND(
+		        6378.137 * 1000 * 2 * ASIN(
+		            SQRT(
+		                POW(SIN((%s * PI() / 180 - s.shop_lat * PI() / 180) / 2), 2) + 
+		                COS(%s * PI() / 180) * 
+		                COS(s.shop_lat * PI() / 180) * 
+		                POW(SIN((%s * PI() / 180 - s.shop_lng * PI() / 180) / 2), 2)
+		            )
+		        )
+		    ) AS distance", $lat, $lat, $lng),
+		);
+		$where = array(
+			's.shop_status = 1',
+			sprintf("s.district_id = %d", $this->districtId),
+			sprintf("pq.product_id = %d", $info['product_id']),
+			sprintf("s.shop_address LIKE '%%%s%%'", $address),
+		);
+
+		$sql = "SELECT " . implode(",", $field) . " FROM t_shops s 
+				LEFT JOIN t_product_quantity pq ON pq.shop_id = s.shop_id
+				WHERE " . implode(" AND ", $where) . " 
+				ORDER BY distance ASC
+				LIMIT 0, 5";
+		$shopList = $this->locator->db->getAll($sql, $this->districtId);
 
 		// print_r($shopList);die;
-		return array();
+		return array(
+			'shopList' => $shopList,
+		);
 	}
 }
