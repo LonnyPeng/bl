@@ -704,6 +704,101 @@ class CustomerController extends AbstractActionController
             $info['status'] = 'error';
         }
 
+        //在规定时间内组团成功，系统自动下单
+        if ($info['time'] > 0 && $info['status'] = 'success') {
+            $sql = "SELECT * FROM t_orders 
+                    WHERE order_type = 'group'
+                    AND order_status = 1
+                    AND customer_id = ?
+                    AND product_id = ?";
+            $orders = $this->locator->db->getAll($sql, $row['customer_id'], $info['product_id']);
+            if ($orders) {
+                $sql = "UPDATE t_orders 
+                        SET order_type = 'pending', 
+                        order_time = now() 
+                        WHERE order_id = ?";
+                foreach ($orders as $row) {
+                    $status = $this->locator->db->exec($sql, $row['order_id']);
+                    if (!$status) {
+                        continue;
+                    }
+
+                    //判断是否是被邀请的用户第一次下单
+                    $customerInfo = $this->models->customer->getCustomerInfo(sprintf("customer_id = %d", $row['customer_id']));
+                    if ($customerInfo['customer_invite_id']) {
+                        //下单次数
+                        $sql = "SELECT COUNT(*) FROM t_orders WHERE customer_id = ?";
+                        $orderCount = $this->locator->db->getOne($sql, $row['customer_id']);
+                        if (!$orderCount) {
+                            //给邀请人50积分奖励
+                            $sql = "UPDATE t_customers 
+                                    SET customer_score = customer_score + :customer_score 
+                                    WHERE customer_id = :customer_id";
+                            $this->locator->db->exec($sql, array(
+                                'customer_score' => '50',
+                                'customer_id' => $customerInfo['customer_invite_id'],
+                            ));
+
+                            //记录积分日志
+                            $sql = "INSERT INTO t_customer_score_log 
+                                    SET customer_id = :customer_id,
+                                    score_type = :score_type,
+                                    score_des = :score_des,
+                                    score_quantity = :score_quantity";
+                            $this->locator->db->exec($sql, array(
+                                'customer_id' => $customerInfo['customer_invite_id'],
+                                'score_type' => 'have',
+                                'score_des' => Score::YQHY,
+                                'score_quantity' => '50',
+                            ));
+                        }
+                    } 
+
+                    //扣除积分
+                    $sql = "UPDATE t_customers 
+                            SET customer_score = customer_score - ? 
+                            WHERE customer_id = ?";
+                    $this->locator->db->exec($sql, $row['product_price'], $row['customer_id']);
+
+                    //记录积分变动
+                    $this->score(array(
+                        'type' => 'buy', 
+                        'des' => Score::GMSP, 
+                        'score' => $row['product_price'],
+                    ));
+                    
+                    //扣除商品数量
+                    $sql = "UPDATE t_products 
+                            SET product_quantity = product_quantity - 1 
+                            WHERE product_id = ?";
+                    $this->locator->db->exec($sql, $row['product_id']);
+
+                    if ($row['customer_id'] == $info['customer_id'][0]['customer_id']) { //奖励团长50积分
+                        $sql = "UPDATE t_customers 
+                                SET customer_score = customer_score + :customer_score 
+                                WHERE customer_id = :customer_id";
+                        $this->locator->db->exec($sql, array(
+                            'customer_score' => '50',
+                            'customer_id' => $row['customer_id'],
+                        ));
+
+                        //记录积分日志
+                        $sql = "INSERT INTO t_customer_score_log 
+                                SET customer_id = :customer_id,
+                                score_type = :score_type,
+                                score_des = :score_des,
+                                score_quantity = :score_quantity";
+                        $this->locator->db->exec($sql, array(
+                            'customer_id' => $row['customer_id'],
+                            'score_type' => 'have',
+                            'score_des' => Score::ZTCG,
+                            'score_quantity' => '50',
+                        ));
+                    }
+                }
+            }
+        }
+
         // print_r($info);die;
         return array(
             'order' => $order,

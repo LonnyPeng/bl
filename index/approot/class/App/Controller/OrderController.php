@@ -285,6 +285,36 @@ class OrderController extends AbstractActionController
                 return new JsonModel('error', '订单创建失败');
             }
 
+            //判断是否是被邀请的用户第一次下单，非组团的
+            if ($this->locator->get('Profile')['customer_invite_id']) {
+                //下单次数
+                $sql = "SELECT COUNT(*) FROM t_orders WHERE customer_id = ?";
+                $orderCount = $this->locator->db->getOne($sql, $this->customerId);
+                if (!$orderCount) {
+                    //给邀请人50积分奖励
+                    $sql = "UPDATE t_customers 
+                            SET customer_score = customer_score + :customer_score 
+                            WHERE customer_id = :customer_id";
+                    $this->locator->db->exec($sql, array(
+                        'customer_score' => '50',
+                        'customer_id' => $this->locator->get('Profile')['customer_invite_id'],
+                    ));
+
+                    //记录积分日志
+                    $sql = "INSERT INTO t_customer_score_log 
+                            SET customer_id = :customer_id,
+                            score_type = :score_type,
+                            score_des = :score_des,
+                            score_quantity = :score_quantity";
+                    $this->locator->db->exec($sql, array(
+                        'customer_id' => $this->locator->get('Profile')['customer_invite_id'],
+                        'score_type' => 'have',
+                        'score_des' => Score::YQHY,
+                        'score_quantity' => '50',
+                    ));
+                }
+            }  
+
             //扣除积分
             $sql = "UPDATE t_customers 
                     SET customer_score = customer_score - ? 
@@ -414,12 +444,6 @@ class OrderController extends AbstractActionController
                 SET quantity_num = quantity_num - 1 
                 WHERE quantity_id";
         $this->locator->db->exec($sql, $quantityId);
-
-        //扣除商品数量
-        $sql = "UPDATE t_products 
-                SET product_quantity = product_quantity - 1 
-                WHERE product_id = ?";
-        $this->locator->db->exec($sql, $info['product_id']);
 
         //修改订单状态
         $sql = "UPDATE t_orders 

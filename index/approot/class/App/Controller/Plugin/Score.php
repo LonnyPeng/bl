@@ -7,15 +7,17 @@ use Framework\ServiceLocator\ServiceLocator;
 
 class Score implements ServiceLocatorAwareInterface
 {
-    const JFDHCJ = '积分兑换抽奖';
-    const CJHDJF = '抽奖获得积分';
-    const GMSP = '购买商品';
-    const PLSP = '评论商品';
-    const YHQD = '用户签到';
-    const XZCZD = '选择常驻地';
-    const XZXB = '选择性别';
-    const XZNLD = '选择年龄段';
-	const BDSJ = '绑定手机';
+    const JFDHCJ = '积分兑换抽奖'; // -10
+    const CJHDJF = '抽奖获得积分'; // *
+    const GMSP = '购买商品'; // -*
+    const PLSP = '评论商品'; // 10
+    const YHQD = '用户签到'; // 1 2 3 4 5 5
+    const XZCZD = '选择常驻地'; //10
+    const XZXB = '选择性别'; //10
+    const XZNLD = '选择年龄段'; //10
+    const BDSJ = '绑定手机'; //10
+    const YQHY = '邀请好友'; //50
+	const ZTCG = '组团成功'; //50
 
 	protected $locator = null;
 
