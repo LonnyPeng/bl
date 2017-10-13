@@ -39,6 +39,8 @@ class WechatController extends AbstractActionController
         $userInfo = $user->toArray();
         $original = $userInfo['original'];
 
+        print_r($original);die;
+
         $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
 
         $_SESSION['openid'] = $original['openid'];
