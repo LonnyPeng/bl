@@ -64,7 +64,7 @@ class ShopController extends AbstractActionController
 
 		//获取最近取货点3个
 		$field = array(
-		    's.*, pq.quantity_num',
+		    's.*, pq.quantity_num, pq.quantity_id',
 		    sprintf("ROUND(
 		        6378.137 * 1000 * 2 * ASIN(
 		            SQRT(

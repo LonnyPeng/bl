@@ -23,7 +23,7 @@
     <h6>附近取货点</h6>
     <?php if ($shopList) : ?>
         <?php foreach($shopList as $row) : ?>
-            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id', 'quantity_id' => $row['quantity_id'])))?>">
+            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>">
                 <div class="qhd_item_l">
                     <h5><?php echo $row['shop_name']?></h5>
                     <p><?php echo $row['shop_address']?></p>
