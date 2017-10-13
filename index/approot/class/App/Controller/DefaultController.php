@@ -89,7 +89,7 @@ class DefaultController extends AbstractActionController
             }
         }
 
-        // print_r($districtList);die;
+        print_r($districtList);die;
         return array(
             'logList' => $logList,
             'districtList' => $districtList,
