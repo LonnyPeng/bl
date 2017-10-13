@@ -181,6 +181,8 @@ class ProductController extends AbstractActionController
 			} elseif ($_POST['product_type'] == 2) {
 				if ($_POST['product_group_num'] < 1) {
 					return new JsonModel('error', '组团人数不能小于1');
+				} elseif ($_POST['product_group_num'] > 5) {
+					return new JsonModel('error', '组团人数不能大于5');
 				}
 				if ($_POST['product_group_time'] < 1) {
 					return new JsonModel('error', '组团过期时间不能小于1（天）');
