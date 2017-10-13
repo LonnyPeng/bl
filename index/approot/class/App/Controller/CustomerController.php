@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use EasyWeChat\Foundation\Application;
 use Framework\View\Model\JsonModel;
 use App\Controller\Plugin\Layout;
 use App\Controller\Plugin\Score;
@@ -11,7 +10,6 @@ class CustomerController extends AbstractActionController
 {
     public $districtId = null;
     public $customerId = null;
-    private $app = null;
     public $levelColor = array('1' => '#fff', '2' => '#ff7b00', '3' => '#f03c3c', '4' => '#cf9911');
     protected $imgType = array('image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png');
     protected $imgMaxSize = 1024 * 1024 * 4; //4M
@@ -405,10 +403,6 @@ class CustomerController extends AbstractActionController
 
     public function qrcodeAction()
     {
-        require_once VENDOR_DIR . 'autoload.php';
-
-        $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
-
         $this->layout->title = '我的邀请码';
         
         $openId = $_SESSION['openid'];
@@ -441,7 +435,6 @@ class CustomerController extends AbstractActionController
 
     	return array(
     		'key' => $key,
-            'js' => $this->app->js,
     	);
     }
 
