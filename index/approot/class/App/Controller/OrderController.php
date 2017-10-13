@@ -91,7 +91,7 @@ class OrderController extends AbstractActionController
                     order_received_time = now() 
                     WHERE order_id = ? 
                     AND order_type = 'shipped'
-                    order_status = 1";
+                    AND order_status = 1";
             $status = $this->locator->db->exec($sql, $id);
             if ($status) {
                 return JsonModel('ok', '收货成功')->setRedirect($this->helpers->url('order/index', array('status' => 'review')));
