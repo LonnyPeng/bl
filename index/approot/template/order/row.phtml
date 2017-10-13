@@ -24,7 +24,7 @@
                     <a href="<?php echo $this->url('order/qrcode', array('order_number' => $row['order_number']))?>" class="btn btn_01">领取码</a>
                     <a href="<?php echo $this->url('shop/index', array('order_id' => $row['order_id']))?>" class="btn btn_02">取货点</a>
                 <?php else : ?>
-                    <a href="javascript:void(0);" class="btn btn_01 btn_no">确认收货</a>
+                    <a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">确认收货</a>
                 <?php endif;?>
             <?php elseif ($row['order_type'] == 'shipped') : ?>
                 <a href="订单确认.html" class="btn btn_01">确认收货</a>
