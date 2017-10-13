@@ -64,7 +64,7 @@
     });
 
     $('input[type="search"]').blur(function() {
-        if (!$(this).val()) {
+        if ($(this).val()) {
             window.location.href = '<?php echo $this->url('shop/search', array('order_id' => $this->param('order_id')))?>&address_name=' + $(this).val();
         }
     });
