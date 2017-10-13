@@ -92,6 +92,7 @@ class OrderController extends AbstractActionController
                     WHERE order_id = ? 
                     AND order_type = 'shipped'
                     order_status = 1";
+            $staus = $
         }
 
         if ($this->funcs->isAjax() && $this->param('type') == 'page') {
