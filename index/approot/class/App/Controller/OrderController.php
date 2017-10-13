@@ -92,7 +92,12 @@ class OrderController extends AbstractActionController
                     WHERE order_id = ? 
                     AND order_type = 'shipped'
                     order_status = 1";
-            $staus = $
+            $status = $this->locator->db->exec($sql, $id);
+            if ($status) {
+                return JsonModel('ok', '收货成功')->setRedirect($this->helpers->url('order/index', array('status' => 'review')));
+            } else {
+                return new JsonModel('error', '收货失败');
+            }
         }
 
         if ($this->funcs->isAjax() && $this->param('type') == 'page') {
