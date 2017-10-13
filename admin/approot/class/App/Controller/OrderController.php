@@ -72,7 +72,8 @@ class OrderController extends AbstractActionController
 
 		if ($this->funcs->isAjax()) {
 			$sql = "UPDATE t_orders 
-					SET order_type = 'shipped' 
+					SET order_type = 'shipped',
+					order_shipped_time = now() 
 					WHERE order_id = ?
 					AND order_type = 'pending'";
 			$status = $this->locator->db->exec($sql, $id);
