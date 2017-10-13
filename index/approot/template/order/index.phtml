@@ -63,9 +63,9 @@
         $('.js-receipt').click(function() {
             var $$ = $(this);
 
-            $$.removeAttr('href');
-            
-            $(this).ajaxAuto();
+            $(this).ajaxAuto({
+                url: $$.data('href');
+            });
 
             return false;
         });
