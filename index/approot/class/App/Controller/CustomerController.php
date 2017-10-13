@@ -669,8 +669,8 @@ class CustomerController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('default/index'));
         }
 
-        $this->layout(Layout::LAYOUT_UE);
         $this->layout->title = '订单详情';
+        $this->layout->style = "background:#FFF;";
         
         $sql = "SELECT * FROM t_orders 
                 WHERE product_id = ? 
@@ -681,7 +681,7 @@ class CustomerController extends AbstractActionController
         //剩余时间
         $info['time'] = (strtotime($info['group_time']) + $order['product']['product_group_time'] * 86400) - time();
 
-        // print_r($order);die;
+        // print_r($info['time']);die;
         return array(
             'order' => $order,
             'info' => $info,

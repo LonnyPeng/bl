@@ -71,9 +71,9 @@ class OrderGroupModel extends CommonModel
 		$data = array();
 
 		$ids = explode(",", $ids);
-		$sql = "SELECT customer_name FROM t_customers WHERE customer_id = ?";
+		$sql = "SELECT * FROM t_customers WHERE customer_id = ?";
 		foreach ($ids as $value) {
-			$data[$value] = $this->locator->db->getOne($sql, $value);
+			$data[] = $this->locator->db->getRow($sql, $value);
 		}
 		
 		return $data;
