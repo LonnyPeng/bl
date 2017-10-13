@@ -452,6 +452,6 @@ class OrderController extends AbstractActionController
                 WHERE order_id = ?";
         $this->locator->db->exec($sql, $quantityInfo['shop_address'], $orderId);
 
-        return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('order/detail', array('id' => $orderId)));
+        return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('order/info', array('id' => $orderId)));
     }
 }
