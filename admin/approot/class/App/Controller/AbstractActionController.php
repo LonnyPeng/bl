@@ -32,6 +32,11 @@ abstract class AbstractActionController extends ActionController
         // set breadcrumb
         $this->helpers->breadcrumb->add('首页', $this->helpers->url());
 
+        //生成随机密码
+        // $password = $this->funcs->randPassword(8);
+        // $data = array($password, $this->password->encrypt($password));
+        // print_r($data);die;
+
          // check login
         if (empty($_SESSION['login_id'])) {
             if ($this->helpers->pageId() != 'account-login') {

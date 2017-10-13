@@ -719,6 +719,59 @@ class Funcs implements ServiceLocatorAwareInterface
     }
 
     /**
+     * Generate a random password
+     *
+     * @param $length
+     *
+     * @return string
+     */
+    function randPassword($length = '') {
+        $length = (int) $length;
+        if ($length < 8) {
+            $length = mt_rand(8, 32);
+        }
+
+        $data = array(
+            'n' => ceil($length * 0.3),
+            'l' => ceil($length * 0.4),
+            'u' => ceil($length * 0.1),
+        );
+        $o = $length - $data['n'] - $data['l'] - $data['u'];
+        if ($o) {
+            $data['o'] = $o;
+        } else {
+            $data['l'] -= 1;
+            $data['o'] = 1;
+        }
+
+        $str = "";
+        for ($i=0; $i<$length; $i++) {
+            foreach ($data as $key => $value) {
+                if ($value <= 0) {
+                    unset($data[$key]);
+                }
+            }
+
+            $n = chr(mt_rand(48, 57));
+            $l = chr(mt_rand(97, 122));
+            $u = chr(mt_rand(65, 90));
+
+            $oArr = array(
+                mt_rand(33, 47), mt_rand(58, 64), 
+                mt_rand(92, 96), mt_rand(123, 125),
+            );
+            $o = chr($oArr[array_rand($oArr, 1)]);
+
+            $ke = array_rand($data, 1);
+
+            $str .= $$ke;
+            $data[$ke] -= 1;
+        }
+
+        return $str;
+    }
+
+    /**
      * Set service locator
      *
      * @param ServiceLocator $serviceLocator
