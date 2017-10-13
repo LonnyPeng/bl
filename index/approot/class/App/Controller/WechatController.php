@@ -22,8 +22,8 @@ class WechatController extends AbstractActionController
     public function indexAction()
     {
         //设置测试账号的菜单
-        $this->menu();
-        die;
+        // $this->menu();
+        // die;
 
         $oauth = $this->app->oauth;
         
