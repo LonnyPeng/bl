@@ -37,7 +37,11 @@
             </div>
           </div>
           <div class="ck_dt clearfix">
-            <a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
+            <?php if ($info['order_type'] == 'received') : ?>
+              <a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
+            <?php else : ?>
+              <a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">去评价</a>
+            <?php endif;?>
           </div>
         <?php endif;?>
     </div>
