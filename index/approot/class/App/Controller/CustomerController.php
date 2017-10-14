@@ -441,7 +441,16 @@ class CustomerController extends AbstractActionController
             if ($status) {
                 $key .= $code;
                 $src = (string) $this->helpers->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)));
-                return JsonModel::init('ok', '', array('src' => $src));
+
+                $shareInfo = array(
+                    'title' => '和我一起来白领',
+                    'desc' => '白领商品的地方',
+                    'link' => $key,
+                    'imgUrl' => (string) $this->helpers->image('head_img.jpg', true),
+                    'type' => 'link',
+                );
+
+                return JsonModel::init('ok', '', array('src' => $src, 'shareInfo' => $shareInfo));
             } else {
                 return new JsonModel('error', '刷新失败');
             }
@@ -452,11 +461,28 @@ class CustomerController extends AbstractActionController
             $info = $this->models->customer->getCustomerInfo($where);
 
             $key .= $info['customer_invite_code'];
+
+            $shareInfo = array(
+                'title' => '和我一起来白领',
+                'desc' => '白领商品的地方',
+                'link' => $key,
+                'imgUrl' => (string) $this->helpers->image('head_img.jpg', true),
+                'type' => 'link',
+            );
+        } else {
+            $shareInfo = array(
+                'title' => '和我一起来组团',
+                'desc' => '白领商品的地方',
+                'link' => $key,
+                'imgUrl' => (string) $this->helpers->image('head_img.jpg', true),
+                'type' => 'link',
+            );
         }
 
     	return array(
     		'key' => $key,
             'js' => $this->app->js,
+            'shareInfo' => $shareInfo,
     	);
     }
 
