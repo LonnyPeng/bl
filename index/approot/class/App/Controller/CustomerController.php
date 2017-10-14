@@ -414,7 +414,7 @@ class CustomerController extends AbstractActionController
 
         $openId = $_SESSION['openid'];
 
-        if ($this->param('status') == 'group') {
+        if ($this->param('type') == 'group') {
             //邀请组团
             $id = trim($this->param('group_id'));
             $info = $this->models->orderGroup->getOrderGroupById($id);
@@ -456,7 +456,7 @@ class CustomerController extends AbstractActionController
             }
         }
 
-        if (!$this->param('status')) {
+        if (!$this->param('type')) {
             $where = sprintf("customer_openid = '%s'", $openId);
             $info = $this->models->customer->getCustomerInfo($where);
 
