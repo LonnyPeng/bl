@@ -22,20 +22,32 @@
   </div>
 </div>
 
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-    $(function(){
-    //  邀请码
-      $(".inv_code_pro").height($(".inv_code_pro").width());
-      $(".inv_code_pro").css("line-height",$(".inv_code_pro").width()+"px")
+  wx.config(<?php echo $js->config(array('getLocation'), false) ?>);
+  wx.ready(function() {
+    wx.onMenuShareAppMessage({
+        title: '和我一起来白领', // 分享标题
+        desc: '白领商品的地方', // 分享描述
+        link: '<?php echo $key?>', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        imgUrl: '<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>', // 分享图标
+        type: 'link', // 分享类型,music、video或link，不填默认为link
     });
+  });
 
-    $('#update-qrcode').click(function() {
-      $(this).ajaxAuto({
-        success: function (re) {
-          if (re.status == 'ok') {
-            $('#js-qrcode').attr('src', re.data.src);
-          }
+  $(function(){
+  //  邀请码
+    $(".inv_code_pro").height($(".inv_code_pro").width());
+    $(".inv_code_pro").css("line-height",$(".inv_code_pro").width()+"px")
+  });
+
+  $('#update-qrcode').click(function() {
+    $(this).ajaxAuto({
+      success: function (re) {
+        if (re.status == 'ok') {
+          $('#js-qrcode').attr('src', re.data.src);
         }
-      });
+      }
     });
+  });
 </script>
