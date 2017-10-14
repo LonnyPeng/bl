@@ -23,7 +23,7 @@ class Image implements ServiceLocatorAwareInterface
      * @param string $file
      * @return Image
      */
-	public function __invoke($file)
+	public function __invoke($file, $forceHost = false)
 	{
         if (strpos($file, '//') !== false || ($file && $file{0} == '/')) {
             $this->url = $file;
@@ -31,6 +31,9 @@ class Image implements ServiceLocatorAwareInterface
         }
 
         $this->url = BASE_PATH . 'image/' . $file;
+        if ($forceHost) {
+            $this->url = "http://" . $_SERVER['HTTP_HOST'] . $this->url;
+        }
 		return $this;
 	}
 
