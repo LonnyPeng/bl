@@ -1,0 +1,60 @@
+<div class="answer_xq">
+	<div class="img">
+		<img src="images/read_img01.jpg"/>
+	</div>
+	<div class="answer_wt">
+		<p>1.傻大姐为什么叫傻大姐</p>
+		<p>2.买错洗面奶毁容怎么办的危险哦！</p>
+		<p>3.白领提供你想选择</p>
+		<p>4.你的皮肤是什么性质的</p>
+	</div>
+	<div class="weui-cells answer_xz">
+	  <div class="weui-cell">
+	    <div class="weui-cell__bd">
+	      <h5>1.请问性质是？</h5>
+				<p><span>男</span><span class="on">女</span><span>不重要</span></p>
+	    </div>
+	  </div>
+	  <div class="weui-cell">
+	    <div class="weui-cell__bd">
+	      <h5>2.请有危险吗？</h5>
+				<p><span>有</span><span>没有</span><span>不重要</span></p>
+	    </div>
+	  </div>
+	  <div class="weui-cell">
+	    <div class="weui-cell__bd">
+	      <h5>2.请有危险吗？</h5>
+				<p><span>有</span><span>没有</span><span>不重要</span><span>是</span></p>
+	    </div>
+	  </div>
+	</div>
+</div>
+<a class="twtj_btn answer_btn" href="javascript:;">提交获积分</a>
+<div class="dialog">
+	<h4>恭喜您，获得</h4>
+	<h5><i class="iconfont">&#xe634;</i>100积分</h5>
+	<p>奖品已发送到您的账户中，请查收</p>
+	<div class="weui-flex">
+	  <div class="weui-flex__item dl_btn cancel">好的</div>
+	  <div class="weui-flex__item dl_btn fxbtn">分享</div>
+	</div>
+</div>
+<div class="mask"></div>
+
+<script type="text/javascript">
+	$(".answer_xz p span").click(function(){
+		$(this).addClass("on").siblings().removeClass("on")
+	})
+	var dltop=$(".dialog").height()/2
+	$(".dialog").css("margin-top",-dltop)
+	$(".answer_btn").click(function(){
+		$(".dialog").fadeIn()
+		$(".mask").fadeIn()
+		$("body").css("overflow-y","hidden")
+	})
+	$(".cancel").click(function(){
+		$(".dialog").fadeOut()
+		$(".mask").fadeOut()
+		$("body").css("overflow-y","auto")
+	})
+</script>

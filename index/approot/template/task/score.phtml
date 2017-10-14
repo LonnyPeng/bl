@@ -1,22 +1,29 @@
-    <div class="integral_task">
+<div class="integral_task">
+    <?php if ($list) : ?>
       <div class="weui-cells">
-        <a class="weui-cell weui-cell_access" href="阅读详情.html">
-          <div class="weui-cell__hd img"><img src="images/integral_img.jpg"></div>
-          <div class="weui-cell__bd">
-            <h5 class="lr2">山东红富士苹果（两粒装）买一送一</h5>
-            <p>+50积分</p>
-          </div>
-          <div class="weui-cell__ft">
-          </div>
-        </a>
-        <a class="weui-cell weui-cell_access" href="答题详情.html">
-          <div class="weui-cell__hd img"><img src="images/integral_img.jpg"></div>
-          <div class="weui-cell__bd">
-            <h5 class="lr2">山东红富士苹果（两粒装）买一送一</h5>
-            <p>+50积分</p>
-          </div>
-          <div class="weui-cell__ft">
-          </div>
-        </a>
+        <?php foreach($list as $row) : ?>
+            <?php if ($row['type'] == 'read') : ?>
+                <a class="weui-cell weui-cell_access" href="<?php echo $this->url('task/read', array('id' => $row['read_id']))?>">
+                  <div class="weui-cell__hd img"><img src="<?php echo $this->uploadUrl($row['read_banner'], 'sys')?>"></div>
+                  <div class="weui-cell__bd">
+                    <h5 class="lr2"><?php echo $row['read_title']?></h5>
+                    <p>+<?php echo $row['read_score']?>积分</p>
+                  </div>
+                  <div class="weui-cell__ft">
+                  </div>
+                </a>
+            <?php else :?>
+                <a class="weui-cell weui-cell_access" href="<?php echo $this->url('task/question', array('id' => $row['question_id']))?>">
+                  <div class="weui-cell__hd img"><img src="<?php echo $this->uploadUrl($row['question_banner'], 'sys')?>"></div>
+                  <div class="weui-cell__bd">
+                    <h5 class="lr2"><?php echo $row['question_title']?></h5>
+                    <p>+<?php echo $row['question_score']?>积分</p>
+                  </div>
+                  <div class="weui-cell__ft">
+                  </div>
+                </a>
+            <?php endif;?>
+        <?php endforeach;?>
       </div>
-    </div>
+    <?php endif;?>
+</div>

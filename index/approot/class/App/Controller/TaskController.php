@@ -26,7 +26,59 @@ class TaskController extends AbstractActionController
     {
         $this->layout->title = '积分任务';
 
-        return array();
+        //获取阅读列表
+        $sql = "SELECT *, 'read' AS type FROM t_task_reads 
+                WHERE read_status = 1 
+                ORDER BY read_id DESC";
+        $readList = (array) $this->locator->db->getAll($sql);
+
+        //获取答题列表
+        $sql = "SELECT *, 'question' AS type FROM t_task_questions 
+                WHERE question_status = 1 
+                ORDER BY question_id DESC";
+        $questionList = (array) $this->locator->db->getAll($sql);
+
+        $list = array_merge($readList, $questionList);
+        shuffle($list);
+
+        // print_r($list);die;
+        return array(
+            'list' => $list,
+        );
+    }
+
+    public function readAction()
+    {
+        $this->layout->title = '阅读详情';
+        $id = trim($this->param('id'));
+        $sql = "SELECT * FROM t_task_reads 
+                WHERE read_id = ? 
+                AND read_status = 1";
+        $info = $this->locator->db->getRow($sql, $id);
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('task/score'));
+        }
+
+        return array(
+            'info' => $info,
+        );
+    }
+
+    public function questionAction()
+    {
+        $this->layout->title = '答题详情';
+        $id = trim($this->param('id'));
+        $sql = "SELECT * FROM t_task_questions 
+                WHERE question_id = ? 
+                AND question_status = 1";
+        $info = $this->locator->db->getRow($sql, $id);
+        if (!$info) {
+            $this->funcs->redirect($this->helpers->url('task/score'));
+        }
+
+        return array(
+            'info' => $info,
+        );
     }
 
     public function turntableAction()
