@@ -470,11 +470,12 @@ class CustomerController extends AbstractActionController
                 'type' => 'link',
             );
         } else {
+            $productInfo = $this->models->product->getProductById($info['product_id']);
             $shareInfo = array(
                 'title' => '和我一起来组团',
-                'desc' => '白领商品的地方',
+                'desc' => $productInfo['product_desc'],
                 'link' => $key,
-                'imgUrl' => (string) $this->helpers->image('head_img.jpg', true),
+                'imgUrl' => (string) $this->helpers->uploadUrl($productInfo['images']['banner'][0]['image_path'], 'product', true),
                 'type' => 'link',
             );
         }

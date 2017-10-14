@@ -16,7 +16,7 @@ class UploadUrl
      * @param string $type
      * @return string
      */
-    public function __invoke($file, $type)
+    public function __invoke($file, $type, $forceHost = false)
     {
         if (strpos($file, '//') !== false || ($file && $file{0} == '/')) {
             $this->url = $file;
@@ -24,6 +24,10 @@ class UploadUrl
         }
 
         $this->url = '/index/upload/' . $type . '/' . $file;
+        if ($forceHost) {
+            $this->url = "http://" . $_SERVER['HTTP_HOST'] . $this->url;
+        }
+        
 		return $this;
     }
 
