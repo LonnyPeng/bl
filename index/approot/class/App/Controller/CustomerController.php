@@ -10,7 +10,8 @@ class CustomerController extends AbstractActionController
 {
     public $districtId = null;
     public $customerId = null;
-    public $levelColor = array('1' => '#fff', '2' => '#ff7b00', '3' => '#f03c3c', '4' => '#cf9911');
+    public $levelColor = array('1' => '#f2f2f2', '2' => '#f6e802', '3' => '#fc4e47', '4' => '#fed043');
+    public $levelIcon = array('1' => '&#xe60f;', '2' => '&#xe60e;', '3' => '&#xe613;', '4' => '&#xe615;');
     protected $imgType = array('image/jpeg', 'image/x-png', 'image/pjpeg', 'image/png');
     protected $imgMaxSize = 1024 * 1024 * 4; //4M
 
@@ -803,6 +804,38 @@ class CustomerController extends AbstractActionController
         return array(
             'order' => $order,
             'info' => $info,
+        );
+    }
+
+    public function levelAction()
+    {
+        $this->layout->title = '123';
+
+        $nextScore = array();
+        $historyScore = $this->models->customer->historyScore($this->customerId);
+
+        $sql = "SELECT * FROM t_customer_score_level 
+                WHERE level_status = 1 
+                ORDER BY level_score ASC";
+        $list = $this->locator->db->getAll($sql);
+        if ($list) {
+            foreach ($list as $key => $row) {
+                if ($row['level_id'] == $this->locator->get('Profile')['level_id']) {
+                    if (isset($list[$key + 1])) {
+                        $nextScore['score'] = $list[$key + 1]['level_score'] - $historyScore;
+                        $nextScore['name'] = $list[$key + 1]['level_name'];
+                    }
+                }
+            }
+        }
+
+        // print_r($list);die;
+        return array(
+            'historyScore' => $historyScore,
+            'nextScore' => $nextScore,
+            'list' => $list,
+            'levelColor' => $this->levelColor,
+            'levelIcon' => $this->levelIcon,
         );
     }
 }

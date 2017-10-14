@@ -72,4 +72,13 @@ class CustomerModel extends CommonModel
                 ORDER BY level_score ASC";
         return $this->locator->db->getPairs($sql);
     }
+
+    public function historyScore($id)
+    {
+        $sql = "SELECT SUM(score_quantity) 
+                FROM t_customer_score_log 
+                WHERE customer_id = ? 
+                AND score_type = 'have'";
+        return $this->locator->db->getOne($sql, $id);
+    }
 }
