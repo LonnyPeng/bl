@@ -69,7 +69,7 @@ class TaskController extends AbstractActionController
         $this->layout->title = '答题详情';
         $id = trim($this->param('id'));
 
-        $sql = "SELECT * FROM $this->name WHERE task_id = ?";
+        $sql = "SELECT * FROM t_task_questions WHERE task_id = ?";
         $info = (array) $this->locator->db->getRow($sql, $id);
         if (!$info) {
             $this->funcs->redirect($this->helpers->url('task/score'));
