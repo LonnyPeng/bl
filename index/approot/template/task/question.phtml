@@ -1,5 +1,7 @@
 <div class="answer_xq">
-	<?php echo $info['task_desc']?>
+	<div class="answer_wt">
+		<?php echo $info['task_desc']?>
+	</div>
 	<div class="weui-cells answer_xz">
 		<?php if ($info['data']) : ?>
 			<?php foreach($info['data'] as $key => $row) : ?>
@@ -30,6 +32,10 @@
 <div class="mask"></div>
 
 <script type="text/javascript">
+	$(this).ready(function () {
+		$('.answer_xq p img').parent().addClass('img');
+	});
+	
 	$(".answer_xz p span").click(function(){
 		$(this).addClass("on").siblings().removeClass("on")
 	})
