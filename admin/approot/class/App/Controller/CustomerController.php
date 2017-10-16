@@ -170,4 +170,53 @@ class CustomerController extends AbstractActionController
             'info' => $info,
         );
     }
+
+    public function questionAction()
+    {
+        $where = array();
+        $limit = '';
+
+        if ($this->param('customer_name')) {
+            $where[] = sprintf("c.customer_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('customer_name'))) . '%'));
+        }
+
+        $join = array(
+            "LEFT JOIN t_customers c ON c.customer_id = tl.customer_id"
+        );
+
+        $count = $this->models->questionLog->getCount(array('setWhere' => $where, 'setJoin' => $join));
+        $this->helpers->paginator($count, 10);
+        $limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
+
+        $files = 'tl.*, c.customer_name';
+        $sqlInfo = array(
+            'setJoin' => $join,
+            'setWhere' => $where,
+            'setLimit' => $limit,
+            'setOrderBy' => 'log_id DESC',
+        );
+
+        $list = $this->models->questionLog->getQuestion($files, $sqlInfo);
+        if ($list) {
+            $sql = "SELECT * FROM t_questions WHERE question_id = ?";
+            foreach ($list as $key => $row) {
+                $questions = unserialize($row['log_question_answer']);
+                $result = [];
+                foreach ($questions as $ke => $r) {
+                    $info = $this->locator->db->getRow($sql, $r['id']);
+                    $result[$ke]['title'] = $info['question_title'];
+                    foreach ($r['data'] as $value) {
+                        $result[$ke]['answer'][$value] = $info['question_' . $value];
+                    }
+                }
+
+                $list[$key]['questions'] = $result;
+            }
+        }
+
+        // print_r($list);die;
+        return array(
+            'list' => $list,
+        );
+    }
 }

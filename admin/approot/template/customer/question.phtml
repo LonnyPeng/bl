@@ -1,0 +1,66 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('customer/list')?>">会员</a> / 问卷列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input class="form-control" type="text" name="customer_name" value="<?= $this->param('customer_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">用户名</th>
+                <th class="text-center">用户答案</th>
+                <th class="text-center">答卷时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($list) : ?>
+                <?php foreach ($list as $key => $rows) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $rows['customer_name']?></td>
+                        <td class="text-center">
+                            <?php foreach($rows['questions'] as $ke => $row) : ?>
+                                <div>
+                                    <div>
+                                        <b><?php echo $ke + 1 . "." . $row['title']?></b>
+                                    </div>
+                                    <div>
+                                        <?php foreach($row['answer'] as $k => $value) : ?>
+                                            <span><?php echo sprintf("%s&nbsp;%s", strtoupper($k), $value)?></span>&nbsp;&nbsp;
+                                        <?php endforeach;?>
+                                    </div>
+                                </div>
+                            <?php endforeach;?>
+                        </td>
+                        <td class="text-center"><?= $rows['log_time']?></td>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>

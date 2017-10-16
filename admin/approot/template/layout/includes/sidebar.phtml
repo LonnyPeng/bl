@@ -46,6 +46,11 @@
                         <span class="hidden-sm">会员列表</span>
                     </a>
                 </li>
+                <li class="<?php echo in_array($this->action(), array('question', 'question-detail')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('customer/question');?>">
+                        <span class="hidden-sm">会员问卷</span>
+                    </a>
+                </li>
                 <li class="<?php echo in_array($this->action(), array('feedback', 'feedback-detail')) ? 'active' : ''?>">
                     <a href="<?php echo $this->url('customer/feedback');?>">
                         <span class="hidden-sm">会员反馈</span>

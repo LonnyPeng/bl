@@ -16,9 +16,9 @@ class TaskController extends AbstractActionController
         parent::init();
         $this->customerId = $this->locator->get('Profile')['customer_id'];
 
-        require_once VENDOR_DIR . 'autoload.php';
+        // require_once VENDOR_DIR . 'autoload.php';
 
-        $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
+        // $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
     }
 
     public function indexAction()
