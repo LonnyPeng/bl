@@ -126,7 +126,7 @@
     </div>
 
     <div class="employee-detail-submit">
-        <button  id="jq-submit" class="btn">保存</button>
+        <button type="submit" id="jq-submit" class="btn">保存</button>
         <a href="javascript:history.back();" class="btn">返回 »</a>
     </div>
 </form>
@@ -251,7 +251,8 @@
             $(this).find('input[name="question_answer[]"]').val(question_answer);
         });
 
-        $.check(!this.task_title.value, '请输入问题描述', this.task_title) &&
+        $.check(!this.task_title.value, '请输入标题', this.task_title) &&
+        $.check(!this.task_desc.value, '请输入问题描述', this.task_desc) &&
         $.check(!this.task_score.value, '请输入答题奖励积分', this.task_score) &&
         $(this).ajaxAuto();
         return false;

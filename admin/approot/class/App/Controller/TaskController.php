@@ -237,6 +237,9 @@ class TaskController extends AbstractActionController
 			}
 
 			if (!$_POST['task_title']) {
+				return new JsonModel('error', '请输入标题');
+			}
+			if (!$_POST['task_desc']) {
 				return new JsonModel('error', '请输入问题描述');
 			}
 			if (!$_POST['task_score']) {
@@ -290,10 +293,12 @@ class TaskController extends AbstractActionController
 
 			$map = array(
 				'task_title' => trim($_POST['task_title']),
+				'task_desc' => trim($_POST['task_desc']),
 				'task_score' => trim($_POST['task_score']),
 				'task_status' => $_POST['task_status'] ? 1 : 0,
 			);
 			$set = "task_title = :task_title,
+					task_desc = :task_desc,
 					task_score = :task_score,
 					task_status = :task_status";
 
