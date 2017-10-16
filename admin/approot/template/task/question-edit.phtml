@@ -4,95 +4,255 @@
     </strong>
 </div>
 
-<div class="row">
-    <div class="col-24">
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
+<form method="post" enctype="multipart/form-data">
+    <div class="widget-header">
+        <h2 class="title-theme-2">问卷</h2>
+    </div>
+    <div>
+        <div class="row">
+            <div class="form-group col-24">
                 <label>缩略图<sup>*</sup></label>
-                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF )</p>
-                <div style="display: <?php echo !isset($info['question_banner']) ? 'none' : ''?>; text-align: center;">
-                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 400px;" src="<?php echo isset($info['question_banner']) && $info['question_banner'] ? $this->uploadUrl($info['question_banner'], 'sys') : ''?>">
+                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF ) 140 * 140</p>
+                <div style="display: <?php echo !isset($info['task_banner']) ? 'none' : ''?>; text-align: center;">
+                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 200px;" src="<?php echo isset($info['task_banner']) && $info['task_banner'] ? $this->uploadUrl($info['task_banner'], 'sys') : ''?>">
                 </div>
                 
                 <input class="form-control" type="file" name="file" value="">
             </div>
-            <div class="form-group">
+        </div>
+        <div class="row">
+            <div class="form-group col-24">
                 <label>问题描述<sup>*</sup></label>
-                <input class="form-control" type="text" name="question_title" value="<?= isset($info['question_title']) ? $info['question_title'] : '';?>" placeholder="你的性别是？">
+                <script type="text/plain" id="myEditor" style="width:100%;height:100%;" name="task_desc">
+                    <?= isset($info['task_desc']) ? $info['task_desc'] : '';?>
+                </script>
             </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-12">
+                <label>标题<sup>*</sup></label>
+                <input class="form-control" type="text" name="task_title" value="<?= isset($info['task_title']) ? $info['task_title'] : '';?>" placeholder="">
+            </div>
+            <div class="form-group col-12">
+                <label>奖励积分<sup>*</sup></label>
+                <input class="form-control" type="number" name="task_score" value="<?= isset($info['task_score']) ? $info['task_score'] : '';?>">
+            </div>
+            <div class="form-group col-12">
+                <label>状态<sup>*</sup></label>
+                <select class="form-control" name="task_status">
+                    <option value="1" <?= (isset($info['task_status']) && $info['task_status'] == 1) ? 'selected' : '' ?>>上线</option>
+                    <option value="0" <?= (isset($info['task_status']) && $info['task_status'] == 0) ? 'selected' : '' ?>>下线</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="widget-header">
+        <h2 class="title-theme-2">题库</h2>
+        <button type="button" id="jq-contract-add"><i class="fa fa-plus"></i> 添加</button>
+    </div>
+    <div id="jq-contract-box">
+        <?php if (isset($info['data'])) : ?>
+            <?php foreach($info['data'] as $row) : ?>
+                <div class="row jq-item">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>问题<sup>*</sup></label>
+                            <input class="form-control" type="text" name="question_title[]" value="<?= $row['question_title'];?>" placeholder="你的性别是？">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>选项A<sup>*</sup></label>
+                            <input class="form-control" type="text" name="question_a[]" value="<?= $row['question_a'];?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>选项B<sup>*</sup></label>
+                            <input class="form-control" type="text" name="question_b[]" value="<?= $row['question_b'];?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>选项C</label>
+                            <input class="form-control" type="text" name="question_c[]" value="<?= $row['question_c'];?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>选项D</label>
+                            <input class="form-control" type="text" name="question_d[]" value="<?= $row['question_d'];?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>选项E</label>
+                            <input class="form-control" type="text" name="question_e[]" value="<?= $row['question_e'];?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>选项F</label>
+                            <input class="form-control" type="text" name="question_f[]" value="<?= $row['question_f'];?>">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>正确答案<sup>*</sup></label>
+                            <div class="form-control">
+                                <span class="radio-check border-right"><input class="radio" type="checkbox" value="a" <?= in_array('a', explode(",", $row['question_answer'])) ? 'checked' : '' ?>/> A</span>
+                                <span class="radio-check border-right"><input class="radio" type="checkbox" value="b" <?= in_array('b', explode(",", $row['question_answer'])) ? 'checked' : '' ?>/> B</span>
+                                <span class="radio-check border-right"><input class="radio" type="checkbox" value="c" <?= in_array('c', explode(",", $row['question_answer'])) ? 'checked' : '' ?>/> C</span>
+                                <span class="radio-check border-right"><input class="radio" type="checkbox" value="d" <?= in_array('d', explode(",", $row['question_answer'])) ? 'checked' : '' ?>/> D</span>
+                                <span class="radio-check border-right"><input class="radio" type="checkbox" value="e" <?= in_array('e', explode(",", $row['question_answer'])) ? 'checked' : '' ?>/> E</span>
+                                <span class="radio-check"><input class="radio" type="checkbox" value="f" <?= in_array('f', explode(",", $row['question_answer'])) ? 'checked' : '' ?>/> F</span>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="question_answer[]" value="<?php echo $row['question_answer']?>">
+                    <input type="hidden" name="question_id[]" value="<?php echo $row['question_id']?>">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>操作 </label>
+                            <div>
+                                <button type="button" class="js-button"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach;?>
+        <?php endif;?>
+    </div>
+
+    <div class="employee-detail-submit">
+        <button  id="jq-submit" class="btn">保存</button>
+        <a href="javascript:history.back();" class="btn">返回 »</a>
+    </div>
+</form>
+
+<div id="jq-contract-template" class="none">
+    <div class="row jq-item">
+        <div class="col-12">
+            <div class="form-group">
+                <label>问题<sup>*</sup></label>
+                <input class="form-control" type="text" name="question_title[]" value="" placeholder="你的性别是？">
+            </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label>选项A<sup>*</sup></label>
-                <input class="form-control" type="text" name="question_a" value="<?= isset($info['question_a']) ? $info['question_a'] : '';?>">
+                <input class="form-control" type="text" name="question_a[]" value="">
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label>选项B<sup>*</sup></label>
-                <input class="form-control" type="text" name="question_b" value="<?= isset($info['question_b']) ? $info['question_b'] : '';?>">
+                <input class="form-control" type="text" name="question_b[]" value="">
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label>选项C</label>
-                <input class="form-control" type="text" name="question_c" value="<?= isset($info['question_c']) ? $info['question_c'] : '';?>">
+                <input class="form-control" type="text" name="question_c[]" value="">
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label>选项D</label>
-                <input class="form-control" type="text" name="question_d" value="<?= isset($info['question_d']) ? $info['question_d'] : '';?>">
+                <input class="form-control" type="text" name="question_d[]" value="">
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label>选项E</label>
-                <input class="form-control" type="text" name="question_e" value="<?= isset($info['question_e']) ? $info['question_e'] : '';?>">
+                <input class="form-control" type="text" name="question_e[]" value="">
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label>选项F</label>
-                <input class="form-control" type="text" name="question_f" value="<?= isset($info['question_f']) ? $info['question_f'] : '';?>">
+                <input class="form-control" type="text" name="question_f[]" value="">
             </div>
+        </div>
+        <div class="col-12">
             <div class="form-group">
                 <label>正确答案<sup>*</sup></label>
                 <div class="form-control">
-                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="a" <?= isset($info['question_answer']) && in_array('a', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> A</span>
-                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="b" <?= isset($info['question_answer']) && in_array('b', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> B</span>
-                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="c" <?= isset($info['question_answer']) && in_array('c', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> C</span>
-                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="d" <?= isset($info['question_answer']) && in_array('d', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> D</span>
-                    <span class="radio-check border-right"><input class="radio" type="checkbox" name="question_answer[]" value="e" <?= isset($info['question_answer']) && in_array('e', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> E</span>
-                    <span class="radio-check"><input class="radio" type="checkbox" name="question_answer[]" value="f" <?= isset($info['question_answer']) && in_array('f', explode(",", $info['question_answer'])) ? 'checked' : '' ?>/> F</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" value="a"/> A</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" value="b"/> B</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" value="c"/> C</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" value="d"/> D</span>
+                    <span class="radio-check border-right"><input class="radio" type="checkbox" value="e"/> E</span>
+                    <span class="radio-check"><input class="radio" type="checkbox" value="f"/> F</span>
                 </div>
             </div>
+        </div>
+        <input type="hidden" name="question_answer[]" value="">
+        <input type="hidden" name="question_id[]" value="">
+        <div class="col-12">
             <div class="form-group">
-                <label>答题奖励积分<sup>*</sup></label>
-                <input class="form-control" type="number" name="question_score" value="<?= isset($info['question_score']) ? $info['question_score'] : '';?>">
+                <label>操作 </label>
+                <div>
+                    <button type="button" class="js-button"><i class="fa fa-times"></i></button>
+                </div>
             </div>
-            <div class="form-group">
-                <label>状态<sup>*</sup></label>
-                <select class="form-control" name="question_status">
-                    <option value="1" <?= (isset($info['question_status']) && $info['question_status'] == 1) ? 'selected' : '' ?>>上线</option>
-                    <option value="0" <?= (isset($info['question_status']) && $info['question_status'] == 0) ? 'selected' : '' ?>>下线</option>
-                </select>
-            </div>
-            <div>
-                <button type="submit">提交</button>
-                <a href="javascript:history.back();" class="btn">返回 »</a>
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
 <script type="text/javascript">
-    $(".js-simplemde").each(function(){
-        var $$ = $(this)[0];
-
-        if (!$(this).hasClass('js-mark-down')) {
-            new SimpleMDE({
-                element: $$,
-                spellChecker: false,
-                forceSync: true,
-            });
-            $(this).addClass('js-mark-down');
-        }
+    //实例化编辑器
+    UM.getEditor('myEditor');
+    
+    $("#jq-contract-add").on('click', function() {
+        $("#jq-contract-box").append($("#jq-contract-template").clone().html());
+        datepicker();
+        removeAction();
     });
 
+    var removeAction = function() {
+        $("#jq-contract-box").find(".js-button").on('click', function() {
+            var row = $(this).parents('.row');
+            var id = row.find('input[name="question_id[]"]').val();
+
+            if (id) {
+                $(this).ajaxAuto({
+                    url: '<?php echo $this->url('task/question-del')?>',
+                    data: {id: id},
+                    success: function (re) {
+                        if (re.status == 'ok') {
+                            row.remove();
+                        }
+                    }
+                });
+            } else {
+                row.remove();
+            }
+        });
+    };
+
+    removeAction();
+
     $("form").submit(function() {
-        $.check(!this.question_title.value, '请输入问题描述', this.question_title) &&
-        $.check(!this.question_a.value, '请输入选项A', this.question_a) &&
-        $.check(!this.question_b.value, '请输入选项B', this.question_b) &&
-        $.check(!this.question_score.value, '请输入答题奖励积分', this.question_score) &&
+        var $$ = $(this);
+        $$.find('.jq-item').each(function() {
+            var question_answer = '';
+            $(this).find('input[type="checkbox"]').each(function() {
+                if ($(this).is(':checked')) {
+                    if (question_answer) {
+                        question_answer += ',' + $(this).val();
+                    } else {
+                        question_answer += $(this).val();
+                    }  
+                }
+            });
+
+            $(this).find('input[name="question_answer[]"]').val(question_answer);
+        });
+
+        $.check(!this.task_title.value, '请输入问题描述', this.task_title) &&
+        $.check(!this.task_score.value, '请输入答题奖励积分', this.task_score) &&
         $(this).ajaxAuto();
         return false;
     });

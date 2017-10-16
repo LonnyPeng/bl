@@ -33,7 +33,12 @@ class QuestionModel extends CommonModel
 
 	public function getQuestionById($id)
 	{
-	    $sql = "SELECT * FROM $this->name WHERE question_id = ?";
-	    return $this->locator->db->getRow($sql, $id);
+	    $sql = "SELECT * FROM $this->name WHERE task_id = ?";
+	    $task = (array) $this->locator->db->getRow($sql, $id);
+
+	    $sql = "SELECT * FROM t_questions WHERE task_id = ?";
+	    $task['data'] = $this->locator->db->getAll($sql, $id);
+	    
+	    return $task;
 	}
 }

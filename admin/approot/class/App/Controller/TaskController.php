@@ -169,18 +169,11 @@ class TaskController extends AbstractActionController
 	public function questionListAction()
 	{
 		$where = array();
-		if ($this->param('question_title')) {
-			$where[] = sprintf("question_title LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('question_title'))) . '%'));
+		if ($this->param('task_title')) {
+			$where[] = sprintf("task_title LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('task_title'))) . '%'));
 		}
-		if ($this->param('question_status') === '0' || $this->param('question_status') === '1') {
-			$where[] = sprintf("question_status = %d", $this->param('question_status'));
-		}
-		if ($this->param('question_type')) {
-			if ($this->param('question_type') > 1) {
-				$where[] = "question_answer_num > 1";
-			} else {
-				$where[] = "question_answer_num = 1";
-			}
+		if ($this->param('task_status') === '0' || $this->param('task_status') === '1') {
+			$where[] = sprintf("task_status = %d", $this->param('task_status'));
 		}
 
 		$count = $this->models->question->getCount(array('setWhere' => $where));
@@ -191,26 +184,10 @@ class TaskController extends AbstractActionController
 		$sqlInfo = array(
 			'setWhere' => $where,
 			'setLimit' => $limit,
-			'setOrderBy' => 'question_status DESC, question_id DESC',
+			'setOrderBy' => 'task_status DESC, task_id DESC',
 		);
 
 		$questionList = $this->models->question->getQuestion($files, $sqlInfo);
-		if ($questionList) {
-			foreach ($questionList as $key => $row) {
-				$question = array();
-				foreach ($row as $ke => $value) {
-					if (!preg_match("/question_[abcdef]{1}$/i", $ke)) {
-						continue;
-					}
-					if ($value) {
-						$ke = preg_replace("/^question_/i", '', $ke);
-						$question[$ke] = $value;
-					}
-				}
-
-				$questionList[$key]['question'] = $question;
-			}
-		}
 
 		// print_r($questionList);die;
 	    return array(
@@ -245,20 +222,28 @@ class TaskController extends AbstractActionController
 				}
 			}
 
-			if (!$_POST['question_title']) {
+			if (!$_POST['task_title']) {
 				return new JsonModel('error', '请输入问题描述');
 			}
-			if (!$_POST['question_a']) {
-				return new JsonModel('error', '请输入选项A');
-			}
-			if (!$_POST['question_b']) {
-				return new JsonModel('error', '请输入选项B');
-			}
-			if (!$_POST['question_answer']) {
-				return new JsonModel('error', '请选项正确答案');
-			}
-			if (!$_POST['question_score']) {
+			if (!$_POST['task_score']) {
 				return new JsonModel('error', '请输入阅读奖励积分');
+			}
+			if (!isset($_POST['question_title'])) {
+				return new JsonModel('error', '请添加问题');
+			}
+			foreach ($_POST['question_title'] as $key => $value) {
+				if (!$value) {
+					return new JsonModel('error', '请输入问题');
+				}
+				if (!$_POST['question_a'][$key]) {
+					return new JsonModel('error', '请输入选项A');
+				}
+				if (!$_POST['question_b'][$key]) {
+					return new JsonModel('error', '请输入选项B');
+				}
+				if (!$_POST['question_answer'][$key]) {
+					return new JsonModel('error', '请选项正确答案');
+				}
 			}
 
 			if (!$id) {
@@ -266,60 +251,103 @@ class TaskController extends AbstractActionController
 				if (!$path) {
 					return new JsonModel('error', '缩略图保存失败');
 				}
+				//处理图片
+				$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 140, 140);
+				if (!$result['status']) {
+					return new JsonModel('error', $result['content']);
+				} else {
+					$path = $result['content'];
+				}
 			} else {
 				if (isset($_FILES['file'])) {
 					$path = $this->saveReadImg($_FILES['file']);
 					if (!$path) {
 						return new JsonModel('error', '缩略图保存失败');
 					}
+					//处理图片
+					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 140, 140);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$path = $result['content'];
+					}
 				}
 			}
 
 			$map = array(
-				'question_title' => trim($_POST['question_title']),
-				'question_a' => trim($_POST['question_a']),
-				'question_b' => trim($_POST['question_b']),
-				'question_c' => trim($_POST['question_c']),
-				'question_d' => trim($_POST['question_d']),
-				'question_e' => trim($_POST['question_e']),
-				'question_f' => trim($_POST['question_f']),
-				'question_answer' => implode(",", $_POST['question_answer']),
-				'question_answer_num' => count($_POST['question_answer']),
-				'question_score' => trim($_POST['question_score']),
-				'question_status' => $_POST['question_status'] ? 1 : 0,
+				'task_title' => trim($_POST['task_title']),
+				'task_score' => trim($_POST['task_score']),
+				'task_status' => $_POST['task_status'] ? 1 : 0,
 			);
-			$set = "question_title = :question_title,
-					question_a = :question_a,
-					question_b = :question_b,
-					question_c = :question_c,
-					question_d = :question_d,
-					question_e = :question_e,
-					question_f = :question_f,
-					question_answer = :question_answer,
-					question_answer_num = :question_answer_num,
-					question_score = :question_score,
-					question_status = :question_status";
+			$set = "task_title = :task_title,
+					task_score = :task_score,
+					task_status = :task_status";
 
 			if (!$id) {
-				$map['question_banner'] = $path;
-				$set .= ",question_banner = :question_banner";
+				$map['task_banner'] = $path;
+				$set .= ",task_banner = :task_banner";
 
 				$sql = "INSERT INTO t_task_questions SET $set";
 			} else {
-				$map['question_id'] = $id;
+				$map['task_id'] = $id;
 				if (isset($_FILES['file'])) {
-					$sql = "SELECT question_banner FROM t_task_questions WHERE question_id = ?";
+					$sql = "SELECT task_banner FROM t_task_questions WHERE task_id = ?";
 					$pathOld = $this->locator->db->getOne($sql, $id);
 
-					$map['question_banner'] = $path;
-					$set .= ",question_banner = :question_banner";
+					$map['task_banner'] = $path;
+					$set .= ",task_banner = :task_banner";
 				}
 				
 				$sql = "UPDATE t_task_questions SET $set
-						WHERE question_id = :question_id";
+						WHERE task_id = :task_id";
+			}
+			$status = $this->locator->db->exec($sql, $map);
+			if (!$status) {
+				return new JsonModel('error', '失败');
+			}
+			if (!$id) {
+				$taskId = $this->locator->db->lastInsertId();
+			} else {
+				$taskId = $id;
 			}
 
-			$status = $this->locator->db->exec($sql, $map);
+			//保存题库
+			foreach ($_POST['question_id'] as $key => $value) {
+				$map = array(
+					'question_title' => trim($_POST['question_title'][$key]),
+					'question_a' => trim($_POST['question_a'][$key]),
+					'question_b' => trim($_POST['question_b'][$key]),
+					'question_c' => trim($_POST['question_c'][$key]),
+					'question_d' => trim($_POST['question_d'][$key]),
+					'question_e' => trim($_POST['question_e'][$key]),
+					'question_f' => trim($_POST['question_f'][$key]),
+					'question_answer' => trim($_POST['question_answer'][$key]),
+					'question_answer_num' => count(explode(",", trim($_POST['question_answer'][$key]))),
+				);
+				$set = "question_title = :question_title,
+						question_a = :question_a,
+						question_b = :question_b,
+						question_c = :question_c,
+						question_d = :question_d,
+						question_e = :question_e,
+						question_f = :question_f,
+						question_answer = :question_answer,
+						question_answer_num = :question_answer_num";
+				if ($value) {
+					$map['question_id'] = $value;
+					
+					$sql = "UPDATE t_questions SET $set
+							WHERE question_id = :question_id";
+				} else {
+					$map['task_id'] = $taskId;
+					$set .= ",task_id = :task_id";
+
+					$sql = "INSERT INTO t_questions SET $set";
+				}
+
+				$this->locator->db->exec($sql, $map);
+			}
+
 			if ($status) {
 				if ($id && isset($_FILES['file'])) {
 					$this->delImage(SYS_DIR . $pathOld);
@@ -341,10 +369,26 @@ class TaskController extends AbstractActionController
 		}
 
 		$id = $this->param('id');
-		$sql = "SELECT question_banner FROM t_task_questions WHERE question_id = ?";
+		$sql = "DELETE FROM t_questions WHERE question_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
+
+	public function taskDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "SELECT task_banner FROM t_task_questions WHERE task_id = ?";
 		$path = $this->locator->db->getOne($sql, $id);
 		
-		$sql = "DELETE FROM t_task_questions WHERE question_id = ?";
+		$sql = "DELETE FROM t_task_questions WHERE task_id = ?";
 		$status = $this->locator->db->exec($sql, $id);
 		if ($status) {
 			$this->delImage(SYS_DIR . $path);

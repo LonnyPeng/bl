@@ -535,9 +535,23 @@ CREATE TABLE `t_task_reads` (
 -- ----------------------------
 DROP TABLE IF EXISTS `t_task_questions`;
 CREATE TABLE `t_task_questions` (
+  `task_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `task_title` varchar(200) NOT NULL COMMENT '标题',
+  `task_desc` text COMMENT '问题描述',
+  `task_banner` varchar(45) NOT NULL COMMENT '缩略图路径',
+  `task_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '答题积分',
+  `task_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `task_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='答题任务';
+
+-- ----------------------------
+-- 题库表 t_questions
+-- ----------------------------
+DROP TABLE IF EXISTS `t_questions`;
+CREATE TABLE `t_questions` (
   `question_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
-  `question_title` varchar(200) NOT NULL COMMENT '问题描述',
-  `question_banner` varchar(45) NOT NULL COMMENT '缩略图路径',
+  `task_id` int(4) NOT NULL COMMENT '答题任务ID',
+  `question_title` varchar(200) NOT NULL COMMENT '问题',
   `question_a` varchar(200) NOT NULL COMMENT '选项A',
   `question_b` varchar(200) NOT NULL COMMENT '选项B',
   `question_c` varchar(200) NOT NULL COMMENT '选项C',
@@ -546,10 +560,9 @@ CREATE TABLE `t_task_questions` (
   `question_f` varchar(200) NOT NULL COMMENT '选项F',
   `question_answer` varchar(20) NOT NULL COMMENT '答案',
   `question_answer_num` tinyint(1) NOT NULL DEFAULT '1' COMMENT '答案个数',
-  `question_score` mediumint(8) NOT NULL DEFAULT '0' COMMENT '答题积分',
   `question_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
   `question_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='答题任务';
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='题库表';
 
 
 -- ----------------------------
