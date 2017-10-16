@@ -1,32 +1,20 @@
 <div class="answer_xq">
-	<div class="img">
-		<img src="images/read_img01.jpg"/>
-	</div>
-	<div class="answer_wt">
-		<p>1.傻大姐为什么叫傻大姐</p>
-		<p>2.买错洗面奶毁容怎么办的危险哦！</p>
-		<p>3.白领提供你想选择</p>
-		<p>4.你的皮肤是什么性质的</p>
-	</div>
+	<?php echo $info['task_desc']?>
 	<div class="weui-cells answer_xz">
-	  <div class="weui-cell">
-	    <div class="weui-cell__bd">
-	      <h5>1.请问性质是？</h5>
-				<p><span>男</span><span class="on">女</span><span>不重要</span></p>
-	    </div>
-	  </div>
-	  <div class="weui-cell">
-	    <div class="weui-cell__bd">
-	      <h5>2.请有危险吗？</h5>
-				<p><span>有</span><span>没有</span><span>不重要</span></p>
-	    </div>
-	  </div>
-	  <div class="weui-cell">
-	    <div class="weui-cell__bd">
-	      <h5>2.请有危险吗？</h5>
-				<p><span>有</span><span>没有</span><span>不重要</span><span>是</span></p>
-	    </div>
-	  </div>
+		<?php if ($info['data']) : ?>
+			<?php foreach($info['data'] as $key => $row) : ?>
+			  <div class="weui-cell">
+			    <div class="weui-cell__bd">
+			      <h5><?php echo sprintf("%d.%s", $key + 1, $row['question_title'])?></h5>
+					<p>
+						<?php foreach($row['question'] as $value) : ?>
+							<span><?php echo $value?></span>
+						<?php endforeach;?>
+					</p>
+			    </div>
+			  </div>
+			<?php endforeach;?>
+		<?php endif;?>
 	</div>
 </div>
 <a class="twtj_btn answer_btn" href="javascript:;">提交获积分</a>

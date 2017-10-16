@@ -76,7 +76,24 @@ class TaskController extends AbstractActionController
         }
 
         $sql = "SELECT * FROM t_questions WHERE task_id = ?";
-        $info['data'] = $this->locator->db->getAll($sql, $id);
+        $data = $this->locator->db->getAll($sql, $id);
+        if ($data) {
+           foreach ($data as $key => $row) {
+               $question = array();
+               foreach ($row as $ke => $value) {
+                   if (!preg_match("/question_[abcdef]{1}$/i", $ke)) {
+                       continue;
+                   }
+                   if ($value) {
+                       $ke = preg_replace("/^question_/i", '', $ke);
+                       $question[$ke] = $value;
+                   }
+               }
+
+               $data[$key]['question'] = $question;
+           }
+        }
+        $info['data'] = $data;
 
         return array(
             'info' => $info,
