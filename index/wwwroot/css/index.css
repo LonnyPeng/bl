@@ -626,8 +626,8 @@ a.eval_title span.fr i{font-size: 14px;}
 .twtj_btn{display: block;margin: 20px auto;width: 280px;line-height: 40px;background: #ff7c00;font-size: 16px;color: #fff;text-align: center;border-radius: 5px;}
 .twtj_btn.on{background: #eee;color: #313639;}
 /*积分任务阅读详情*/
-.answer_wt{background: #eee;padding: 10px 20px;border-top: 1px solid #bbb;border-bottom: 1px solid #ddd;}
-.answer_wt p{font-size: 14px;color: #313639;margin-bottom: 10px;}
+.answer_wt{background: #eee;border-top: 1px solid #bbb;border-bottom: 1px solid #ddd;}
+.answer_wt p{font-size: 14px;color: #313639;margin-bottom: 10px; padding: 10px 20px;}
 .answer_wt p:last-child{margin-bottom: 0;}
 .answer_xz.weui-cells{margin-top: 0;}
 .answer_xz .weui-cell:before{left: 0;}
@@ -646,9 +646,6 @@ a.eval_title span.fr i{font-size: 14px;}
 .dl_btn:before{content: " ";position: absolute;left: 0;top: 0;right: 0;height: 1px;background: #bdbfcc;transform: scaleY(.5);}
 .dl_btn:first-child:after{content: " ";position: absolute;top: 1px;bottom: 0;right: 0;width: 1px;background: #bdbfcc;transform: scaleX(.5);}
 .dl_btn:last-child{color: #ff7c00;}
-.answer_wt .img {
-	padding: -10px -20px;border: none;
-} 
 
 /*积分任务答题详情*/
 .dial{width: 100%;background: url(images/dial_bg.jpg) no-repeat center;background-size: 100% 100%;}
