@@ -46,8 +46,8 @@
 	
 	$(this).ready(function () {
 		$('.answer_xq .answer_wt>p').each(function() {
-			console.log($(this).find('img'));
-			if ($(this).find('img') == 'undefind') {
+			console.log($(this).find('img').length);
+			if (!$(this).find('img').length) {
 				$('.answer_xq p').addClass('p');
 			} else {
 				$('.answer_xq p').addClass('img');
