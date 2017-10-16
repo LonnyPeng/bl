@@ -90,11 +90,25 @@ class TaskController extends AbstractActionController
 				if (!$path) {
 					return new JsonModel('error', '缩略图保存失败');
 				}
+				//处理图片
+				$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 140, 140);
+				if (!$result['status']) {
+					return new JsonModel('error', $result['content']);
+				} else {
+					$path = $result['content'];
+				}
 			} else {
 				if (isset($_FILES['file'])) {
 					$path = $this->saveReadImg($_FILES['file']);
 					if (!$path) {
 						return new JsonModel('error', '缩略图保存失败');
+					}
+					//处理图片
+					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 140, 140);
+					if (!$result['status']) {
+						return new JsonModel('error', $result['content']);
+					} else {
+						$path = $result['content'];
 					}
 				}
 			}
