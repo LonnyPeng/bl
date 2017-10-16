@@ -341,7 +341,7 @@ class TaskController extends AbstractActionController
 					'question_e' => trim($_POST['question_e'][$key]),
 					'question_f' => trim($_POST['question_f'][$key]),
 					'question_answer' => trim($_POST['question_answer'][$key]),
-					'question_answer_num' => count(explode(",", trim($_POST['question_answer'][$key]))),
+					'question_type' => trim($_POST['question_type'][$key]),
 				);
 				$set = "question_title = :question_title,
 						question_a = :question_a,
@@ -351,7 +351,7 @@ class TaskController extends AbstractActionController
 						question_e = :question_e,
 						question_f = :question_f,
 						question_answer = :question_answer,
-						question_answer_num = :question_answer_num";
+						question_type = :question_type";
 				if ($value) {
 					$map['question_id'] = $value;
 					

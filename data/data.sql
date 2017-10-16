@@ -559,7 +559,7 @@ CREATE TABLE `t_questions` (
   `question_e` varchar(200) NOT NULL COMMENT '选项E',
   `question_f` varchar(200) NOT NULL COMMENT '选项F',
   `question_answer` varchar(20) NOT NULL COMMENT '答案',
-  `question_answer_num` tinyint(1) NOT NULL DEFAULT '1' COMMENT '答案个数',
+  `question_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '答案类型：1单选；2多选',
   `question_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
   `question_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='题库表';

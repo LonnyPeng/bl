@@ -110,6 +110,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label>问题类型<sup>*</sup></label>
+                            <select class="form-control" name="question_type[]">
+                                <option value="1" <?php echo $this->param('question_type') === '1' ? 'selected' : ''?>>单选</option>
+                                <option value="2" <?php echo $this->param('question_type') === '2' ? 'selected' : ''?>>多选</option>
+                            </select>
+                        </div>
+                    </div>
                     <input type="hidden" name="question_answer[]" value="<?php echo $row['question_answer']?>">
                     <input type="hidden" name="question_id[]" value="<?php echo $row['question_id']?>">
                     <div class="col-12">
@@ -186,6 +195,15 @@
                     <span class="radio-check border-right"><input class="radio" type="checkbox" value="e"/> E</span>
                     <span class="radio-check"><input class="radio" type="checkbox" value="f"/> F</span>
                 </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div class="form-group">
+                <label>问题类型<sup>*</sup></label>
+                <select class="form-control" name="question_type[]">
+                    <option value="1">单选</option>
+                    <option value="2">多选</option>
+                </select>
             </div>
         </div>
         <input type="hidden" name="question_answer[]" value="">

@@ -5,12 +5,12 @@
 	<div class="weui-cells answer_xz">
 		<?php if ($info['data']) : ?>
 			<?php foreach($info['data'] as $key => $row) : ?>
-			  <div class="weui-cell js-row" data-num="<?php echo $row['question_answer_num']?>">
+			  <div class="weui-cell js-row" data-type="<?php echo $row['question_type']?>" data-id="<?php echo $row['question_id']?>">
 			    <div class="weui-cell__bd">
 			      <h5><?php echo sprintf("%d.%s", $key + 1, $row['question_title'])?></h5>
 					<p>
-						<?php foreach($row['question'] as $value) : ?>
-							<span><?php echo $value?></span>
+						<?php foreach($row['question'] as $ke => $value) : ?>
+							<span data-key="<?php echo $ke;?>"><?php echo $value?></span>
 						<?php endforeach;?>
 					</p>
 			    </div>
@@ -19,7 +19,9 @@
 		<?php endif;?>
 	</div>
 </div>
-<a class="twtj_btn answer_btn" href="javascript:;">提交获积分</a>
+
+<a class="twtj_btn answer_btn" id="js-submit" href="javascript:;">提交获积分</a>
+
 <div class="dialog">
 	<h4>恭喜您，获得</h4>
 	<h5><i class="iconfont">&#xe634;</i>100积分</h5>
@@ -37,21 +39,46 @@
 	});
 
 	$(".answer_xz p span").click(function(){
-		var num = $(this).parents('.js-row').data('num');
-		if (num == 1) {
+		var type = $(this).parents('.js-row').data('type');
+		if (type == 1) {
 			$(this).addClass("on").siblings().removeClass("on");
 		} else {
 			$(this).toggleClass('on');
 		}
 	});
 
-	var dltop=$(".dialog").height()/2
-	$(".dialog").css("margin-top",-dltop)
-	$(".answer_btn").click(function(){
-		$(".dialog").fadeIn()
-		$(".mask").fadeIn()
-		$("body").css("overflow-y","hidden")
-	})
+	var dltop=$(".dialog").height()/2;
+	$(".dialog").css("margin-top",-dltop);
+
+	$('js-submit').click(function() {
+		var $$ = $(this);
+		var data = [];
+
+		$('.js-row').each(function(key, value) {
+			var row = [];
+			$(this).find('p span').each(function() {
+				if ($(this).hasClass('on')) {
+					row.push($(this).data('key'));
+				}
+			});
+			data.push({$(this).data('id'): row});
+		});
+
+		$$.removeAttr('href');
+
+		$$.ajaxAuto({
+			type: 'post',
+			data: data,
+			success: function (re) {
+				if (re.status == 'ok') {
+					$(".dialog").fadeIn();
+					$(".mask").fadeIn();
+					$("body").css("overflow-y","hidden");
+				}
+			}
+		});
+	});
+
 	$(".cancel").click(function(){
 		$(".dialog").fadeOut()
 		$(".mask").fadeOut()

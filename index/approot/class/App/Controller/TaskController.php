@@ -75,6 +75,10 @@ class TaskController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('task/score'));
         }
 
+        if ($this->funcs->isAjax()) {
+            print_r($_POST);die;
+        }
+
         $sql = "SELECT * FROM t_questions WHERE task_id = ?";
         $data = $this->locator->db->getAll($sql, $id);
         if ($data) {
