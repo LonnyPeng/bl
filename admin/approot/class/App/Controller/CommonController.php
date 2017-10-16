@@ -31,7 +31,18 @@ class CommonController extends AbstractActionController
     	$callback = $this->param('callback');
 
     	$info = $up->getFileInfo();
-    	$info['url'] = 'sys/' . str_replace(SYS_DIR, '', $info['url']);
+        $path = str_replace(SYS_DIR, '', $info['url']);
+        $url = 'sys/' . $path;
+        //图片处理
+        $fileInfo = $this->funcs->getFileInfo(SYS_DIR . $path);
+        $width = 750;
+        $height = ($width * $fileInfo[1]) / $fileInfo[0];
+        $result = $this->funcs->setImage(SYS_DIR . $url, SYS_DIR, $width, $height);
+        if ($result['status']) {
+            $url = $result['content'];
+        }
+    	$info['url'] = $url;
+
     	/**
     	 * 返回数据
     	 */
