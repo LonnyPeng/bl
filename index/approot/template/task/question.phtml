@@ -20,15 +20,19 @@
 	</div>
 </div>
 
-<a class="twtj_btn answer_btn" id="js-submit" href="javascript:;">提交获积分</a>
+<?php if ($questionCount >= $info['task_num']) : ?>
+	<a class="twtj_btn answer_btn on" href="javascript:;">已参加</a>
+<?php else : ?>
+	<a class="twtj_btn answer_btn" id="js-submit" href="javascript:;">提交获积分</a>
+<?php endif;?>
 
 <div class="dialog">
 	<h4>恭喜您，获得</h4>
 	<h5><i class="iconfont">&#xe634;</i><?php echo $info['task_score']?>积分</h5>
-	<p>奖品已发送到您的账户中，请查收</p>
+	<p>积分已发送到您的账户中，请查收</p>
 	<div class="weui-flex">
 	  <div class="weui-flex__item dl_btn cancel">好的</div>
-	  <div class="weui-flex__item dl_btn fxbtn">分享</div>
+	  <div class="weui-flex__item dl_btn fxbtn">点击屏幕右上角分享</div>
 	</div>
 </div>
 <div class="mask"></div>
@@ -69,7 +73,7 @@
 
 		$$.ajaxAuto({
 			type: 'post',
-			data: data,
+			data: {data},
 			success: function (re) {
 				if (re.status == 'ok') {
 					$(".dialog").fadeIn();
@@ -80,9 +84,11 @@
 		});
 	});
 
-	$(".cancel").click(function(){
-		$(".dialog").fadeOut()
-		$(".mask").fadeOut()
-		$("body").css("overflow-y","auto")
+	$(".cancel, .fxbtn").click(function(){
+		$(".dialog").fadeOut();
+		$(".mask").fadeOut();
+		$("body").css("overflow-y","auto");
+
+		window.location.reload();
 	})
 </script>

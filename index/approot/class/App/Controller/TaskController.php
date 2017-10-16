@@ -4,15 +4,21 @@ namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
 use App\Controller\Plugin\Score;
+use EasyWeChat\Foundation\Application;
 
 class TaskController extends AbstractActionController
 {
 	public $customerId = null;
+    private $app = null;
 
     public function init()
     {
         parent::init();
         $this->customerId = $this->locator->get('Profile')['customer_id'];
+
+        require_once VENDOR_DIR . 'autoload.php';
+
+        $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
     }
 
     public function indexAction()
@@ -59,8 +65,48 @@ class TaskController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('task/score'));
         }
 
+        //判断当天已答题次数
+        $sql = "SELECT COUNT(*) 
+                FROM t_customer_score_log 
+                WHERE customer_id = :customer_id 
+                AND score_type = :score_type 
+                AND score_des = :score_des
+                AND DATE(log_time) = :log_time";
+        $readCount = $this->locator->db->getOne($sql, array(
+            'customer_id' => $this->customerId,
+            'score_type' => 'have',
+            'score_des' => Score::YDJF,
+            'log_time' => date("Y-m-d"),
+        ));
+
+        if ($this->funcs->isAjax()) {
+            if ($readCount >= $info['read_num']) {
+                return new JsonModel('error', '今天阅读已完成，请明天再来！');
+            }
+
+            //获取阅读积分
+            $status = $this->score(array(
+                'type' => 'have', 
+                'des' => Score::YDJF, 
+                'score' => $info['read_score'],
+            ));
+
+            return JsonModel::init('ok', '');
+        }
+
+        $shareInfo = array(
+            'title' => $info['read_title'],
+            'desc' => '',
+            'link' => (string) $this->helpers->url('task/read', array('id' => $id)),
+            'imgUrl' => (string) $this->helpers->uploadUrl($info['read_banner'], 'sys', true),
+            'type' => 'link',
+        );
+
         return array(
+            'js' => $this->app->js,
             'info' => $info,
+            'readCount' => $readCount,
+            'shareInfo' => $shareInfo,
         );
     }
 
@@ -75,8 +121,62 @@ class TaskController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('task/score'));
         }
 
+        //判断当天已答题次数
+        $sql = "SELECT COUNT(*) 
+                FROM t_customer_score_log 
+                WHERE customer_id = :customer_id 
+                AND score_type = :score_type 
+                AND score_des = :score_des
+                AND DATE(log_time) = :log_time";
+        $questionCount = $this->locator->db->getOne($sql, array(
+            'customer_id' => $this->customerId,
+            'score_type' => 'have',
+            'score_des' => Score::DTJF,
+            'log_time' => date("Y-m-d"),
+        ));
+
         if ($this->funcs->isAjax()) {
-            print_r($_POST);die;
+            if ($questionCount >= $info['task_num']) {
+                return new JsonModel('error', '今天答题已完成，请明天再来！');
+            }
+            if (!isset($_POST['data'])) {
+                return new JsonModel('error', '请选择答案');
+            }
+
+            $data = $_POST['data'];
+            $sql = "SELECT * FROM t_questions 
+                    WHERE question_id = ? 
+                    AND question_status = 1";
+            foreach ($data as $key => $row) {
+                $result = $this->locator->db->getRow($sql, $row['id']);
+                if (!$result) {
+                    return new JsonModel('error', '提交失败');
+                }
+
+                //判断答案是否正确
+                if (!isset($row['data'])) {
+                    return new JsonModel('error', sprintf("%d请选择答案", $key + 1));
+                }
+
+                if ($result['question_type'] == 1) {
+                    if (!in_array(implode(",", $row['data']), explode(",", $result['question_answer']))) {
+                        return new JsonModel('error', sprintf("%d答案错误", $key + 1));
+                    }
+                } else {
+                    if (implode(",", $row['data']) != explode(",", $result['question_answer'])) {
+                        return new JsonModel('error', sprintf("%d答案错误", $key + 1));
+                    }
+                }
+            }
+
+            //获取答题积分
+            $status = $this->score(array(
+                'type' => 'have', 
+                'des' => Score::DTJF, 
+                'score' => $info['task_score'],
+            ));
+
+            return JsonModel::init('ok', '');
         }
 
         $sql = "SELECT * FROM t_questions WHERE task_id = ?";
@@ -101,6 +201,7 @@ class TaskController extends AbstractActionController
 
         return array(
             'info' => $info,
+            'questionCount' => $questionCount,
         );
     }
 
