@@ -565,6 +565,20 @@ CREATE TABLE `t_questions` (
   `question_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='题库表';
 
+-- ----------------------------
+-- 用户答题记录表 t_task_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_task_log`;
+CREATE TABLE `t_task_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `key_id` int(4) NOT NULL COMMENT '任务ID',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `log_type` enum('read','question') NOT NULL COMMENT '状态：read阅读；question答题',
+  `log_question_answer` varchar(255) NOT NULL COMMENT '答案',
+  `log_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `log_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='用户答题记录表';
+
 
 -- ----------------------------
 -- 转盘表 t_turntable

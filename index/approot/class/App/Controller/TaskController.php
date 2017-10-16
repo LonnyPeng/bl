@@ -65,23 +65,20 @@ class TaskController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('task/score'));
         }
 
-        //判断当天已答题次数
+        //判断已答题次数
         $sql = "SELECT COUNT(*) 
-                FROM t_customer_score_log 
+                FROM t_task_log 
                 WHERE customer_id = :customer_id 
-                AND score_type = :score_type 
-                AND score_des = :score_des
-                AND DATE(log_time) = :log_time";
+                AND key_id = :key_id 
+                AND log_type = 'read'";
         $readCount = $this->locator->db->getOne($sql, array(
             'customer_id' => $this->customerId,
-            'score_type' => 'have',
-            'score_des' => Score::YDJF,
-            'log_time' => date("Y-m-d"),
+            'key_id' => $id,
         ));
 
         if ($this->funcs->isAjax()) {
             if ($readCount >= $info['read_num']) {
-                return new JsonModel('error', '今天阅读已完成，请明天再来！');
+                return new JsonModel('error', '已参加');
             }
 
             //获取阅读积分
@@ -90,6 +87,14 @@ class TaskController extends AbstractActionController
                 'des' => Score::YDJF, 
                 'score' => $info['read_score'],
             ));
+
+            //记录阅读记录
+            $sql = "INSERT INTO t_task_log 
+                    SET customer_id = ?, 
+                    key_id = ?,
+                    log_type = 'read',
+                    log_question_answer = ''";
+            $this->locator->db->exec($sql, $this->customerId, $id);
 
             return JsonModel::init('ok', '');
         }
@@ -121,18 +126,15 @@ class TaskController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('task/score'));
         }
 
-        //判断当天已答题次数
+        //判断已答题次数
         $sql = "SELECT COUNT(*) 
-                FROM t_customer_score_log 
+                FROM t_task_log 
                 WHERE customer_id = :customer_id 
-                AND score_type = :score_type 
-                AND score_des = :score_des
-                AND DATE(log_time) = :log_time";
+                AND key_id = :key_id 
+                AND log_type = 'question'";
         $questionCount = $this->locator->db->getOne($sql, array(
             'customer_id' => $this->customerId,
-            'score_type' => 'have',
-            'score_des' => Score::DTJF,
-            'log_time' => date("Y-m-d"),
+            'key_id' => $id,
         ));
 
         if ($this->funcs->isAjax()) {
@@ -158,15 +160,17 @@ class TaskController extends AbstractActionController
                     return new JsonModel('error', sprintf("%d请选择答案", $key + 1));
                 }
 
-                if ($result['question_type'] == 1) {
-                    if (!in_array(implode(",", $row['data']), explode(",", $result['question_answer']))) {
-                        return new JsonModel('error', sprintf("%d答案错误", $key + 1));
-                    }
-                } else {
-                    if (implode(",", $row['data']) != explode(",", $result['question_answer'])) {
-                        return new JsonModel('error', sprintf("%d答案错误", $key + 1));
-                    }
-                }
+                // if ($result['question_type'] == 1) {
+                //     if (!in_array(implode(",", $row['data']), explode(",", $result['question_answer']))) {
+                //         return new JsonModel('error', sprintf("%d答案错误", $key + 1));
+                //     }
+                // } else {
+                //     if (implode(",", $row['data']) != explode(",", $result['question_answer'])) {
+                //         return new JsonModel('error', sprintf("%d答案错误", $key + 1));
+                //     }
+                // }
+                
+                //
             }
 
             //获取答题积分
@@ -175,6 +179,14 @@ class TaskController extends AbstractActionController
                 'des' => Score::DTJF, 
                 'score' => $info['task_score'],
             ));
+
+            //记录阅读记录
+            $sql = "INSERT INTO t_task_log 
+                    SET customer_id = ?, 
+                    key_id = ?,
+                    log_type = 'read',
+                    log_question_answer = ?";
+            $this->locator->db->exec($sql, $this->customerId, $id, serialize($data));
 
             return JsonModel::init('ok', '');
         }
