@@ -34,8 +34,8 @@ class TaskController extends AbstractActionController
 
         //获取答题列表
         $sql = "SELECT *, 'question' AS type FROM t_task_questions 
-                WHERE question_status = 1 
-                ORDER BY question_id DESC";
+                WHERE task_status = 1 
+                ORDER BY task_id DESC";
         $questionList = (array) $this->locator->db->getAll($sql);
 
         $list = array_merge($readList, $questionList);
@@ -68,13 +68,15 @@ class TaskController extends AbstractActionController
     {
         $this->layout->title = '答题详情';
         $id = trim($this->param('id'));
-        $sql = "SELECT * FROM t_task_questions 
-                WHERE question_id = ? 
-                AND question_status = 1";
-        $info = $this->locator->db->getRow($sql, $id);
+
+        $sql = "SELECT * FROM $this->name WHERE task_id = ?";
+        $info = (array) $this->locator->db->getRow($sql, $id);
         if (!$info) {
             $this->funcs->redirect($this->helpers->url('task/score'));
         }
+
+        $sql = "SELECT * FROM t_questions WHERE task_id = ?";
+        $info['data'] = $this->locator->db->getAll($sql, $id);
 
         return array(
             'info' => $info,

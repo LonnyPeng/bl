@@ -13,11 +13,11 @@
                   </div>
                 </a>
             <?php else :?>
-                <a class="weui-cell weui-cell_access" href="<?php echo $this->url('task/question', array('id' => $row['question_id']))?>">
-                  <div class="weui-cell__hd img"><img src="<?php echo $this->uploadUrl($row['question_banner'], 'sys')?>"></div>
+                <a class="weui-cell weui-cell_access" href="<?php echo $this->url('task/question', array('id' => $row['task_id']))?>">
+                  <div class="weui-cell__hd img"><img src="<?php echo $this->uploadUrl($row['task_banner'], 'sys')?>"></div>
                   <div class="weui-cell__bd">
-                    <h5 class="lr2"><?php echo $row['question_title']?></h5>
-                    <p>+<?php echo $row['question_score']?>积分</p>
+                    <h5 class="lr2"><?php echo $row['task_title']?></h5>
+                    <p>+<?php echo $row['task_score']?>积分</p>
                   </div>
                   <div class="weui-cell__ft">
                   </div>
