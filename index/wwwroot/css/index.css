@@ -627,8 +627,8 @@ a.eval_title span.fr i{font-size: 14px;}
 .twtj_btn.on{background: #eee;color: #313639;}
 /*积分任务阅读详情*/
 .answer_wt{background: #eee;border-top: 1px solid #bbb;border-bottom: 1px solid #ddd;}
-.answer_wt p{font-size: 14px;color: #313639;margin-bottom: 10px; padding: 10px 20px;}
-.answer_wt p:last-child{margin-bottom: 0;}
+.answer_wt .p{font-size: 14px;color: #313639;margin-bottom: 10px; padding: 10px 20px;}
+.answer_wt .p:last-child{margin-bottom: 0;}
 .answer_xz.weui-cells{margin-top: 0;}
 .answer_xz .weui-cell:before{left: 0;}
 .answer_xz.weui-cells:before{opacity: 0;}
