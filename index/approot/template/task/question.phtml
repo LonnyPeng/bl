@@ -5,7 +5,7 @@
 	<div class="weui-cells answer_xz">
 		<?php if ($info['data']) : ?>
 			<?php foreach($info['data'] as $key => $row) : ?>
-			  <div class="weui-cell">
+			  <div class="weui-cell js-row" data-num="<?php echo $row['question_answer_num']?>">
 			    <div class="weui-cell__bd">
 			      <h5><?php echo sprintf("%d.%s", $key + 1, $row['question_title'])?></h5>
 					<p>
@@ -35,10 +35,16 @@
 	$(this).ready(function () {
 		$('.answer_xq p img').parent().addClass('img');
 	});
-	
+
 	$(".answer_xz p span").click(function(){
-		$(this).addClass("on").siblings().removeClass("on")
-	})
+		var num = $(this).parents('.js-row').data('num');
+		if (num > 1) {
+			$(this).addClass("on").siblings().removeClass("on");
+		} else {
+			$(this).toggleClass('on');
+		}
+	});
+	
 	var dltop=$(".dialog").height()/2
 	$(".dialog").css("margin-top",-dltop)
 	$(".answer_btn").click(function(){
