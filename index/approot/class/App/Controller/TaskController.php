@@ -139,7 +139,7 @@ class TaskController extends AbstractActionController
 
         if ($this->funcs->isAjax()) {
             if ($questionCount >= $info['task_num']) {
-                return new JsonModel('error', '今天答题已完成，请明天再来！');
+                return new JsonModel('error', '已参加');
             }
             if (!isset($_POST['data'])) {
                 return new JsonModel('error', '请选择答案');
@@ -184,7 +184,7 @@ class TaskController extends AbstractActionController
             $sql = "INSERT INTO t_task_log 
                     SET customer_id = ?, 
                     key_id = ?,
-                    log_type = 'read',
+                    log_type = 'question',
                     log_question_answer = ?";
             $this->locator->db->exec($sql, $this->customerId, $id, serialize($data));
 
@@ -211,9 +211,19 @@ class TaskController extends AbstractActionController
         }
         $info['data'] = $data;
 
+        $shareInfo = array(
+            'title' => $info['task_title'],
+            'desc' => '',
+            'link' => (string) $this->helpers->url('task/question', array('id' => $id)),
+            'imgUrl' => (string) $this->helpers->uploadUrl($info['task_banner'], 'sys', true),
+            'type' => 'link',
+        );
+
         return array(
+            'js' => $this->app->js,
             'info' => $info,
             'questionCount' => $questionCount,
+            'shareInfo' => $shareInfo,
         );
     }
 
