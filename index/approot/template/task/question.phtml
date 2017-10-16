@@ -56,12 +56,13 @@
 
 		$('.js-row').each(function(key, value) {
 			var row = [];
+			var id = $(this).data('id');
 			$(this).find('p span').each(function() {
 				if ($(this).hasClass('on')) {
 					row.push($(this).data('key'));
 				}
 			});
-			data.push({$(this).data('id'): row});
+			data.push({id: row});
 		});
 
 		$$.removeAttr('href');
