@@ -621,6 +621,7 @@ a.eval_title span.fr i{font-size: 14px;}
 .integral_task p{font-size: 16px;color: #ff7c00;}
 /*积分任务*/
 .read_xq .img{margin-bottom: 10px;}
+.read_xq .img img{width: 100%; display: block;}
 .read_xq p{font-size: 14px;color: #313639;line-height: 24px;text-indent: 2em;padding: 0 10px;}
 .twtj_btn{display: block;margin: 20px auto;width: 280px;line-height: 40px;background: #ff7c00;font-size: 16px;color: #fff;text-align: center;border-radius: 5px;}
 .twtj_btn.on{background: #eee;color: #313639;}
