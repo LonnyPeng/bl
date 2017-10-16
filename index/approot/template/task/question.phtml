@@ -38,13 +38,13 @@
 
 	$(".answer_xz p span").click(function(){
 		var num = $(this).parents('.js-row').data('num');
-		if (num > 1) {
+		if (num == 1) {
 			$(this).addClass("on").siblings().removeClass("on");
 		} else {
 			$(this).toggleClass('on');
 		}
 	});
-	
+
 	var dltop=$(".dialog").height()/2
 	$(".dialog").css("margin-top",-dltop)
 	$(".answer_btn").click(function(){
