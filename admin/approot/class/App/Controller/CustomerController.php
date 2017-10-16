@@ -173,7 +173,7 @@ class CustomerController extends AbstractActionController
 
     public function questionAction()
     {
-        $where = array();
+        $where = array("tl.log_type = 'question'");
         $limit = '';
 
         if ($this->param('customer_name')) {
