@@ -57,7 +57,15 @@ return array(
 			'district-list' => '城市设置',
 			'config-list' => '网站配置',
 			'score-level' => '积分级别设置',
-			'prize-list' => '会员奖品',
+			'home-image' => '首页焦点图',
+			'home-recommend' => '首页推荐',
+		),
+	),
+	'admin' => array(
+		'title' => '后台设置',
+		'data' => array(
+			'member-list' => '人员管理',
+			'password-forget' => '修改密码',
 		),
 	),
 );

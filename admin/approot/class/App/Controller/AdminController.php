@@ -202,7 +202,7 @@ class AdminController extends AbstractActionController
                 ));
             }
             
-            return JsonModel::init('ok', '')->setRedirect('reload');
+            return JsonModel::init('ok', '保存成功')->setRedirect('reload');
         }
 
         //perm
