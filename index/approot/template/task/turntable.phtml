@@ -9,7 +9,7 @@
 	</div>
 	<div class="dial_ma">
 		<div class="dial_zp">
-			<img class="ljcj none start" src="<?php echo $this->image('dial_cj.png')?>" id="start"/>
+			<img class="ljcj none <?php echo $config['chance_num'] ? 'start' : ''?>" src="<?php echo $this->image('dial_cj.png')?>" id="start"/>
 			<canvas class="dial_zp_img" id="canvas" width="" height=""></canvas>
 		</div>
 	</div>
