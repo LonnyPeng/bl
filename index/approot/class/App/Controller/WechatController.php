@@ -51,6 +51,7 @@ class WechatController extends AbstractActionController
         }
 
         $result = $this->funcs->curl(array('url' => $original['headimgurl'], 'GET', true));
+        print_r($result);die;
         if ($result['http_code'] != 200) {
             $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
         }
