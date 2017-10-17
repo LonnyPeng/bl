@@ -78,7 +78,9 @@
                 <th class="text-center">发货时间</th>
                 <th class="text-center">到货时间</th>
                 <th class="text-center">订单状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -100,11 +102,13 @@
                         <td class="text-center"><?= $row['order_shipped_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['order_shipped_time'])) : ''?></td>
                         <td class="text-center"><?= $row['order_received_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['order_received_time'])) : ''?></td>
                         <td class="text-center"><?= $filed['order_type'][$row['order_type']]?></td>
-                        <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('order/detail', array('id' => $row['order_id']))?>" title="编辑">
-                                <i class="fa fa-eye"></i>
-                            </a>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                            <td class="text-center action">
+                                <a class="btn btn-xs edit" href="<?= $this->url('order/detail', array('id' => $row['order_id']))?>" title="编辑">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>

@@ -3,14 +3,15 @@
         <a href="<?php echo $this->url('product/list')?>">商品设置</a> / 商品类别列表
     </strong>
 </div>
-
-<div class="table-tool">
-    <span id="fields-wrapper">
-        <a class="btn" href="<?= $this->url('product/attr-edit')?>">
-            <i class="fa fa-plus"></i> 添加商品类别
-        </a>
-    </span>
-</div>
+<?php if ($this->perm->has(PERM_EDIT)) : ?>
+    <div class="table-tool">
+        <span id="fields-wrapper">
+            <a class="btn" href="<?= $this->url('product/attr-edit')?>">
+                <i class="fa fa-plus"></i> 添加商品类别
+            </a>
+        </span>
+    </div>
+<?php endif;?>
 <div class="table-responsive">
     <table class="table" id="data-list">
         <thead>
@@ -18,23 +19,31 @@
                 <th class="text-center">类别名称</th>
                 <th class="text-center">排序</th>
                 <th class="text-center">类别状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($attrList as $key => $row) :?>
                 <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
                     <td class="text-center"><?= $row['attr_name']?></td>
-                    <td class="text-center js-sort" title="双击编辑" data-id="<?php echo $row['attr_id']?>"><?= $row['attr_sort']?></td>
+                    <td class="text-center <?php echo $this->perm->has(PERM_EDIT) : 'js-sort' : ''?>" title="双击编辑" data-id="<?php echo $row['attr_id']?>"><?= $row['attr_sort']?></td>
                     <td class="text-center"><?= $row['attr_status'] ? '有效' : '禁用'?></td>
-                    <td class="text-center action">
-                        <a class="btn btn-xs edit" href="<?= $this->url('product/attr-edit', array('id' => $row['attr_id']))?>" title="编辑">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <span class="btn btn-xs del" data-href="<?= $this->url('product/attr-del', array('id' => $row['attr_id']))?>" title="删除">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                    </td>
+                    <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                        <td class="text-center action">
+                            <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                <a class="btn btn-xs edit" href="<?= $this->url('product/attr-edit', array('id' => $row['attr_id']))?>" title="编辑">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            <?php endif;?>
+                            <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                <span class="btn btn-xs del" data-href="<?= $this->url('product/attr-del', array('id' => $row['attr_id']))?>" title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            <?php endif;?>
+                        </td>
+                    <?php endif;?>
                 </tr>
             <?php endforeach;?>
         </tbody>

@@ -30,6 +30,18 @@ class AccountController extends AbstractActionController
             $_SESSION['login_id'] = intval($member['member_id']);
             $_SESSION['login_name'] = $member['member_name'];
 
+            $sql = "SELECT perm_url, perm_value 
+                    FROM t_perms 
+                    WHERE member_id = ?";
+            $permList = $this->locator->db->getPairs($sql, $member['member_id']);
+            if ($permList) {
+                foreach ($permList as $key => $value) {
+                    $permList[$key] = $this->perm->getPerm($value);
+                }
+            }
+            
+            $_SESSION['member_perm'] = $permList;
+
             // record login time
             $sql = "UPDATE t_member
                     SET member_logtime = NOW(),

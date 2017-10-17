@@ -17,6 +17,8 @@ class OrderController extends AbstractActionController
 
 	public function listAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$where = array();
 		if ($this->param('order_number')) {
 			$where[] = sprintf("o.order_number LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('order_number'))) . '%'));
@@ -93,6 +95,8 @@ class OrderController extends AbstractActionController
 
 	public function groupListAction()
 	{
+		$this->perm->check(PERM_READ);
+		
 		$where = array();
 
 		$count = $this->models->orderGroup->getCount(array('setWhere' => $where));

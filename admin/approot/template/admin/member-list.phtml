@@ -34,13 +34,15 @@
         </div>
     </form>
 </div>
-<div class="table-tool">
-    <span id="fields-wrapper">
-        <a class="btn" href="<?= $this->url('admin/member-edit')?>">
-            <i class="fa fa-plus"></i> 添加新用户
-        </a>
-    </span>
-</div>
+<?php if ($this->perm->has(PERM_EDIT)) : ?>
+    <div class="table-tool">
+        <span id="fields-wrapper">
+            <a class="btn" href="<?= $this->url('admin/member-edit')?>">
+                <i class="fa fa-plus"></i> 添加新用户
+            </a>
+        </span>
+    </div>
+<?php endif;?>
 <div class="table-responsive">
     <table class="table" id="data-list">
         <thead>
@@ -50,7 +52,9 @@
                 <th class="text-center">用户最后登录时间</th>
                 <th class="text-center">注册日期</th>
                 <th class="text-center">用户状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -62,17 +66,23 @@
                         <td class="text-center"><?= $row['member_logtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_logtime'])) : ''?></td>
                         <td class="text-center"><?= $row['member_regtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_regtime'])) : ''?></td>
                         <td class="text-center"><?= $row['member_status'] ? '有效' : '禁用';?></td>
-                        <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('admin/member-perm', array('id' => $row['member_id']))?>" title="权限">
-                                <i class="fa fa-lock"></i>
-                            </a>
-                            <a class="btn btn-xs edit" href="<?= $this->url('admin/member-edit', array('id' => $row['member_id']))?>" title="编辑">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <span class="btn btn-xs del" data-href="<?= $this->url('admin/member-del', array('id' => $row['member_id']))?>" title="删除">
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                            <td class="text-center action">
+                                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                    <a class="btn btn-xs edit" href="<?= $this->url('admin/member-perm', array('id' => $row['member_id']))?>" title="权限">
+                                        <i class="fa fa-lock"></i>
+                                    </a>
+                                    <a class="btn btn-xs edit" href="<?= $this->url('admin/member-edit', array('id' => $row['member_id']))?>" title="编辑">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                <?php endif;?>
+                                <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                    <span class="btn btn-xs del" data-href="<?= $this->url('admin/member-del', array('id' => $row['member_id']))?>" title="删除">
+                                        <i class="fa fa-trash"></i>
+                                    </span>
+                                <?php endif;?>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>

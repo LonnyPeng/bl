@@ -50,7 +50,9 @@
                 <th class="text-center">获赞数量</th>
                 <th class="text-center">评论时间</th>
                 <th class="text-center">评论状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -68,11 +70,13 @@
                         <td class="text-center"><?= $row['review_vote_up']?></td>
                         <td class="text-center"><?= date("Y-m-d", strtotime($row['review_time']))?></td>
                         <td class="text-center"><?= $fileConfig['review_attr'][$row['review_attr']]?></td>
-                        <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('review/detail', array('id' => $row['review_id']))?>" title="详情">
-                                <i class="fa fa fa-eye"></i>
-                            </a>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                            <td class="text-center action">
+                                <a class="btn btn-xs edit" href="<?= $this->url('review/detail', array('id' => $row['review_id']))?>" title="详情">
+                                    <i class="fa fa fa-eye"></i>
+                                </a>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif?>

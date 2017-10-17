@@ -8,15 +8,6 @@ use Framework\Utils\Http;
 
 class AdminController extends AbstractActionController
 {
-    public $perms = array(
-        'product_read' => '读取',
-        'product_export' => '导出',
-        'product_import' => '导入',
-        'product_create' => '创建',
-        'product_update' => '编辑',
-        'product_delete' => '删除',
-    );
-
     public function init() 
     {
         parent::init();
@@ -24,6 +15,8 @@ class AdminController extends AbstractActionController
 
     public function memberListAction()
     {
+        $this->perm->check(PERM_READ);
+
     	$where = array();
     	if ($this->param('member_name')) {
     		$where[] = sprintf("member_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('member_name'))) . '%'));
@@ -84,7 +77,6 @@ class AdminController extends AbstractActionController
                 $sql = "INSERT INTO t_member 
                         SET member_name = :member_name,
                         member_password = :member_password,
-                        member_perms = :member_perms,
                         member_status = :member_status";
             } else {
                 $map = array(
@@ -93,18 +85,9 @@ class AdminController extends AbstractActionController
                 );
 
                 $sql = "UPDATE t_member 
-                        SET member_perms = :member_perms,
-                        member_status = :member_status
+                        SET member_status = :member_status
                         WHERE member_id = :member_id";
             }
-
-            if (isset($_POST['member_perms'])) {
-                $memberPerms = implode(",", array_filter($_POST['member_perms']));
-            } else {
-                $memberPerms = '';
-            }
-            
-            $map['member_perms'] = $memberPerms;
 
             $status = $this->locator->db->exec($sql, $map);
     		if ($status) {
@@ -115,7 +98,6 @@ class AdminController extends AbstractActionController
     	}
     	return array(
     		'memberInfo' => $memberInfo,
-            'perms' => $this->perms,
     	);
     }
 
@@ -144,6 +126,8 @@ class AdminController extends AbstractActionController
 
     public function passwordForgetAction()
     {
+        $this->perm->check(PERM_EDIT);
+        
         if ($this->funcs->isAjax()) {
             $memberName = trim($_POST['member_name']);
             if (!$memberName) {

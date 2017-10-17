@@ -43,23 +43,13 @@ class Perm implements ServiceLocatorAwareInterface
         }
 
         $profile = $this->locator->get('Profile');
-        $perms = explode(',', $profile['member_perm']);
-        foreach (func_get_args() as $perm) {
-            if (in_array($perm, $perms)) {
-                return true;
-            }
-        }
-
-        if (isset($_SESSION['login_name']) 
-            && $profile['member_perm'] == 'admin' 
-            && $_SESSION['login_name'] == 'admin' 
-            && $perm != 'shop') {
+        if (isset($_SESSION['login_name']) && $_SESSION['login_name'] == 'admin') {
             return true;
         }
 
         $helpers = $this->locator->get(HELPER_MANAGER);
-        if (isset($_SESSION['member_admin_perm'][$helpers->pageId()])) {
-            if (in_array($perm, $_SESSION['member_admin_perm'][$helpers->pageId()])) {
+        if (isset($_SESSION['member_perm'][$helpers->pageId()])) {
+            if (in_array($perm, $_SESSION['member_perm'][$helpers->pageId()])) {
                 return true;
             }
         }

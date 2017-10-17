@@ -17,6 +17,8 @@ class ShopController extends AbstractActionController
 
 	public function listAction()
 	{
+		$this->perm->check(PERM_READ);
+		
 		$where = array();
 		if ($this->param('shop_name')) {
 			$where[] = sprintf("s.shop_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('shop_name'))) . '%'));

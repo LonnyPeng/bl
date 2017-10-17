@@ -20,7 +20,8 @@ abstract class AbstractActionController extends ActionController
     {
         // register helper functions
         $this->helpers
-             ->register('funcs', function() {return $this->plugin('funcs');});
+            ->register('funcs', function() {return $this->plugin('funcs');})
+            ->register('perm', function() {return $this->plugin('perm');});
 
         // set default layout
         $this->layout();

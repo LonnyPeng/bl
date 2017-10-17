@@ -13,6 +13,8 @@ class CustomerController extends AbstractActionController
 
     public function listAction()
     {
+        $this->perm->check(PERM_READ);
+
     	$where = array();
     	$limit = '';
     	if ($this->param('customer_name')) {
@@ -122,6 +124,8 @@ class CustomerController extends AbstractActionController
 
     public function feedbackAction()
     {
+        $this->perm->check(PERM_READ);
+
         $where = array();
 
         $count = $this->models->feedback->getCount(array('setWhere' => $where));

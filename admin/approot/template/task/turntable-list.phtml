@@ -75,9 +75,11 @@
                             <a class="btn btn-xs edit" href="<?= $this->url('task/turntable-edit', array('id' => $row['turntablep_id']))?>" title="编辑">
                                 <i class="fa fa-edit"></i>
                             </a>
-                            <span class="btn btn-xs del" data-href="<?= $this->url('task/turntable-del', array('id' => $row['turntablep_id']))?>" title="删除">
-                                <i class="fa fa-trash"></i>
-                            </span>
+                            <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                <span class="btn btn-xs del" data-href="<?= $this->url('task/turntable-del', array('id' => $row['turntablep_id']))?>" title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            <?php endif;?>
                         </td>
                     </tr>
                 <?php endforeach;?>

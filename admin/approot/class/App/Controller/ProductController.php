@@ -15,6 +15,8 @@ class ProductController extends AbstractActionController
 
 	public function listAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$where = array();
 		if ($this->param('product_name')) {
 			$where[] = sprintf("p.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
@@ -452,6 +454,8 @@ class ProductController extends AbstractActionController
 
 	public function attrListAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$sql = "SELECT * FROM t_product_attr 
 				ORDER BY attr_status DESC, attr_sort DESC, attr_id DESC";
 		$attrList = $this->locator->db->getAll($sql);
@@ -561,6 +565,8 @@ class ProductController extends AbstractActionController
 
 	public function hotListAction()
 	{
+		$this->perm->check(PERM_READ);
+		
 		$districtId = $this->param('district_id');
 		if (!$districtId) {
 			$sql = "SELECT district_id FROM t_district WHERE district_name = ?";

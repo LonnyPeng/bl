@@ -17,6 +17,8 @@ class TaskController extends AbstractActionController
 
 	public function readListAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$where = array();
 		if ($this->param('read_title')) {
 			$where[] = sprintf("read_title LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('read_title'))) . '%'));
@@ -182,6 +184,8 @@ class TaskController extends AbstractActionController
 
 	public function questionListAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$where = array();
 		if ($this->param('task_title')) {
 			$where[] = sprintf("task_title LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('task_title'))) . '%'));
@@ -457,6 +461,8 @@ class TaskController extends AbstractActionController
 
 	public function turntableListAction()
 	{
+		$this->perm->check(PERM_EDIT);
+
 		$filed = array(
 			'turntablep_attr' => array('product' => '商品', 'score' => '积分', 'thank' => '谢谢'),
 		);
@@ -682,6 +688,8 @@ class TaskController extends AbstractActionController
 
 	public function prizeListAction()
 	{
+		$this->perm->check(PERM_EDIT);
+		
 		$filed = array(
 			'turntablep_attr' => array('product' => '商品', 'score' => '积分', 'thank' => '谢谢'),
 			'prize_attr' => array('pending' => '未发货', 'shipped' => '已发货', 'received' => '已到货'),

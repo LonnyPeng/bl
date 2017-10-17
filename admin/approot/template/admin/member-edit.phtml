@@ -16,15 +16,6 @@
                 <input class="form-control" type="password" name="member_password" value="<?= isset($memberInfo['member_password']) ? $memberInfo['member_password'] : '';?>" <?php echo $this->param('id') ? 'disabled' : ''?>>
             </div>
             <div class="form-group">
-                <label>权限<sup>*</sup></label>
-                <select class="form-control" name="member_perms[]" multiple="" style="height: 100px;">
-                    <option value="">选择</option>
-                    <?php foreach($perms as $key => $value) : ?>
-                        <option value="<?php echo $key?>" <?php echo isset($memberInfo['member_perms']) && in_array($key, explode(",", $memberInfo['member_perms'])) ? 'selected' : ''?>><?php echo $value?></option>
-                    <?php endforeach;?>
-                </select>
-            </div>
-            <div class="form-group">
                 <label>用户状态<sup>*</sup></label>
                 <select class="form-control" name="member_status">
                     <option value="1" <?= (isset($memberInfo['member_status']) && $memberInfo['member_status'] == 1) ? 'selected' : '' ?>>有效</option>

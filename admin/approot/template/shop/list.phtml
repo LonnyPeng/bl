@@ -45,13 +45,15 @@
         </div>
     </form>
 </div>
-<div class="table-tool">
-    <span id="fields-wrapper">
-        <a class="btn" href="<?= $this->url('shop/edit')?>">
-            <i class="fa fa-plus"></i> 添加新商家
-        </a>
-    </span>
-</div>
+<?php if ($this->perm->has(PERM_EDIT)) : ?>
+    <div class="table-tool">
+        <span id="fields-wrapper">
+            <a class="btn" href="<?= $this->url('shop/edit')?>">
+                <i class="fa fa-plus"></i> 添加新商家
+            </a>
+        </span>
+    </div>
+<?php endif;?>
 <div class="table-responsive">
     <table class="table" id="data-list">
         <thead>
@@ -64,7 +66,9 @@
                 <th class="text-center">特殊说明</th>
                 <th class="text-center">入住时间</th>
                 <th class="text-center">状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -80,14 +84,20 @@
                     <td class="text-center"><?= $row['shop_dec']?></td>
                     <td class="text-center"><?= $row['shop_time'] != '0000-00-00 00:00:00' ? date("Y-m-d", strtotime($row['shop_time'])) : ''?></td>
                     <td class="text-center"><?= $row['shop_status'] ? '上线' : '下线'?></td>
-                    <td class="text-center action">
-                        <a class="btn btn-xs edit" href="<?= $this->url('shop/edit', array('id' => $row['shop_id']))?>" title="编辑">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <span class="btn btn-xs del" data-href="<?= $this->url('shop/del', array('id' => $row['shop_id']))?>" title="删除">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                    </td>
+                    <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                        <td class="text-center action">
+                            <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                <a class="btn btn-xs edit" href="<?= $this->url('shop/edit', array('id' => $row['shop_id']))?>" title="编辑">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            <?php endif;?>
+                            <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                <span class="btn btn-xs del" data-href="<?= $this->url('shop/del', array('id' => $row['shop_id']))?>" title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            <?php endif;?>
+                        </td>
+                    <?php endif;?>
                 </tr>
             <?php endforeach;?>
         </tbody>

@@ -34,13 +34,15 @@
         </div>
     </form>
 </div>
-<div class="table-tool">
-    <span id="fields-wrapper">
-        <a class="btn" href="<?= $this->url('task/read-edit')?>">
-            <i class="fa fa-plus"></i> 添加
-        </a>
-    </span>
-</div>
+<?php if ($this->perm->has(PERM_EDIT)) : ?>
+    <div class="table-tool">
+        <span id="fields-wrapper">
+            <a class="btn" href="<?= $this->url('task/read-edit')?>">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+        </span>
+    </div>
+<?php endif;?>
 <div class="table-responsive">
     <table class="table" id="data-list">
         <thead>
@@ -50,7 +52,9 @@
                 <th class="text-center">每天阅读次数</th>
                 <th class="text-center">阅读奖励积分</th>
                 <th class="text-center">状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -64,14 +68,20 @@
                         <td class="text-center"><?= $row['read_num']?></td>
                         <td class="text-center"><?= $row['read_score']?></td>
                         <td class="text-center"><?= $row['read_status'] ? '上线' : '下线'?></td>
-                        <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('task/read-edit', array('id' => $row['read_id']))?>" title="编辑">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <span class="btn btn-xs del" data-href="<?= $this->url('task/read-del', array('id' => $row['read_id']))?>" title="删除">
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                            <td class="text-center action">
+                                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                    <a class="btn btn-xs edit" href="<?= $this->url('task/read-edit', array('id' => $row['read_id']))?>" title="编辑">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                <?php endif;?>
+                                <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                    <span class="btn btn-xs del" data-href="<?= $this->url('task/read-del', array('id' => $row['read_id']))?>" title="删除">
+                                        <i class="fa fa-trash"></i>
+                                    </span>
+                                <?php endif;?>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>

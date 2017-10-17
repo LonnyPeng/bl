@@ -12,7 +12,9 @@
                 <th class="text-center">组团成员</th>
                 <th class="text-center">组团时间</th>
                 <th class="text-center">组团状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -29,11 +31,13 @@
                         </td>
                         <td class="text-center"><?= $row['group_time']?></td>
                         <td class="text-center"><?php echo $row['group_type']['msg']?></td>
-                        <td class="text-center action">
-                            <span class="btn btn-xs del" data-href="<?= $this->url('order/group-del', array('id' => $row['group_id']))?>" title="删除">
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </td>
+                        <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                            <td class="text-center action">
+                                <span class="btn btn-xs del" data-href="<?= $this->url('order/group-del', array('id' => $row['group_id']))?>" title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>

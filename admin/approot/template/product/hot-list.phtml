@@ -29,13 +29,15 @@
     </form>
 </div>
 
-<div class="table-tool">
-    <span id="fields-wrapper">
-        <a class="btn" href="<?= $this->url('product/hot-edit', array('district_id' => $this->param('district_id')))?>">
-            <i class="fa fa-plus"></i> 添加
-        </a>
-    </span>
-</div>
+<?php if ($this->perm->has(PERM_EDIT)) : ?>
+    <div class="table-tool">
+        <span id="fields-wrapper">
+            <a class="btn" href="<?= $this->url('product/hot-edit', array('district_id' => $this->param('district_id')))?>">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+        </span>
+    </div>
+<?php endif;?>
 <div class="table-responsive">
     <table class="table" id="data-list">
         <thead>
@@ -43,23 +45,31 @@
                 <th class="text-center">商品名称</th>
                 <th class="text-center">商品CODE</th>
                 <th class="text-center">推荐类型</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($hotList as $key => $row) :?>
+            <?php foreach ($hotList as $key => $row) : ?>
                 <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
                     <td class="text-center"><?= $row['product_name']?></td>
                     <td class="text-center"><?= $row['product_code']?></td>
                     <td class="text-center"><?= $row['hot_type'] == 'main' ? '主要推荐' : '次要推荐'?></td>
-                    <td class="text-center action">
-                        <a class="btn btn-xs edit" href="<?= $this->url('product/hot-edit', array('id' => $row['hot_id']))?>" title="编辑">
-                            <i class="fa fa-edit"></i>
-                        </a>
-                        <span class="btn btn-xs del" data-href="<?= $this->url('product/hot-del', array('id' => $row['hot_id']))?>" title="删除">
-                            <i class="fa fa-trash"></i>
-                        </span>
-                    </td>
+                    <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                        <td class="text-center action">
+                            <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                <a class="btn btn-xs edit" href="<?= $this->url('product/hot-edit', array('id' => $row['hot_id']))?>" title="编辑">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            <?php endif;?>
+                            <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                <span class="btn btn-xs del" data-href="<?= $this->url('product/hot-del', array('id' => $row['hot_id']))?>" title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            <?php endif;?>
+                        </td>
+                    <?php endif;?>
                 </tr>
             <?php endforeach;?>
         </tbody>

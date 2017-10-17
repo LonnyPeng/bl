@@ -12,7 +12,9 @@
                 <th class="text-center">反馈内容</th>
                 <th class="text-center">反馈时间</th>
                 <th class="text-center">状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -25,11 +27,13 @@
                         </td>
                         <td class="text-center"><?= $row['feedback_time']?></td>
                         <td class="text-center"><?= $row['feedback_status'] ? '未阅' : '已阅'?></td>
-                        <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('customer/feedback-detail', array('id' => $row['feedback_id']))?>" title="详情">
-                                <i class="fa fa fa-eye"></i>
-                            </a>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                            <td class="text-center action">
+                                <a class="btn btn-xs edit" href="<?= $this->url('customer/feedback-detail', array('id' => $row['feedback_id']))?>" title="详情">
+                                    <i class="fa fa fa-eye"></i>
+                                </a>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif?>

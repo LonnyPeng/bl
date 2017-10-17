@@ -33,7 +33,9 @@
                 <th class="text-center">奖品类型</th>
                 <th class="text-center">获奖时间</th>
                 <th class="text-center">状态</th>
-                <th class="text-center">操作</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>
@@ -45,14 +47,20 @@
                         <td class="text-center"><?= $filed['turntablep_attr'][$row['turntablep_attr']]?></td>
                         <td class="text-center"><?= $row['prize_time']?></td>
                         <td class="text-center"><?= $filed['prize_attr'][$row['prize_attr']]?></td>
-                        <td class="text-center action">
-                            <a class="btn btn-xs edit" href="<?= $this->url('task/prize-detail', array('id' => $row['prize_id']))?>" title="详情">
-                                <i class="fa fa fa-eye"></i>
-                            </a>
-                            <span class="btn btn-xs del" data-href="<?= $this->url('task/prize-del', array('id' => $row['prize_id']))?>" title="删除">
-                                <i class="fa fa-trash"></i>
-                            </span>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                            <td class="text-center action">
+                                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                    <a class="btn btn-xs edit" href="<?= $this->url('task/prize-detail', array('id' => $row['prize_id']))?>" title="详情">
+                                        <i class="fa fa fa-eye"></i>
+                                    </a>
+                                <?php endif;?>
+                                <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                    <span class="btn btn-xs del" data-href="<?= $this->url('task/prize-del', array('id' => $row['prize_id']))?>" title="删除">
+                                        <i class="fa fa-trash"></i>
+                                    </span>
+                                <?php endif;?>
+                            </td>
+                        <?php endif;?>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>

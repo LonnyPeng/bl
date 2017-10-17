@@ -37,7 +37,9 @@
                 <th class="text-center">年龄段</th>
                 <th class="text-center">常住城市</th>
                 <th class="text-center">积分</th>
-                <th class="text-center">状态</th>
+                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                    <th class="text-center">状态</th>
+                <?php endif;?>
                 <th class="text-center">注册时间</th>
                 <th class="text-center">操作</th>
             </tr>
@@ -55,13 +57,15 @@
                         <td class="text-center"><?= $row['customer_age']?></td>
                         <td class="text-center"><?= $row['district_name']?></td>
                         <td class="text-center"><?= $row['customer_score']?></td>
-                        <td class="text-center js-toggle">
-                            <?php if ($row['customer_status']) : ?>
-                                <span style="color: #007DC6; font-size: 18px; cursor: pointer;" title="禁用" data-href="<?=$this->url('customer/edit', array('id' => $row['customer_id'], 'type' => 'off'))?>"><i class="fa fa-toggle-on"></i></span>
-                            <?php else : ?>
-                                <span style="color: #007DC6; font-size: 18px; cursor: pointer;" title="启用" data-href="<?=$this->url('customer/edit', array('id' => $row['customer_id'], 'type' => 'on'))?>"><i class="fa fa-toggle-off"></i></span>
-                            <?php endif;?>
-                        </td>
+                        <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                            <td class="text-center js-toggle">
+                                <?php if ($row['customer_status']) : ?>
+                                    <span style="color: #007DC6; font-size: 18px; cursor: pointer;" title="禁用" data-href="<?=$this->url('customer/edit', array('id' => $row['customer_id'], 'type' => 'off'))?>"><i class="fa fa-toggle-on"></i></span>
+                                <?php else : ?>
+                                    <span style="color: #007DC6; font-size: 18px; cursor: pointer;" title="启用" data-href="<?=$this->url('customer/edit', array('id' => $row['customer_id'], 'type' => 'on'))?>"><i class="fa fa-toggle-off"></i></span>
+                                <?php endif;?>
+                            </td>
+                        <?php endif;?>
                         <td class="text-center"><?= date("Y-m-d", strtotime($row['customer_regtime']))?></td>
                         <td class="text-center action">
                             <a class="btn btn-xs edit" href="<?= $this->url('customer/detail', array('id' => $row['customer_id']))?>" title="详情">

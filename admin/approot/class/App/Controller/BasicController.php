@@ -23,10 +23,14 @@ class BasicController extends AbstractActionController
 	public function init()
 	{
 	    parent::init();
+
+	    $this->perm->check(PERM_READ);
 	}
 
 	public function districtListAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$where = array();
 		if ($this->param('district_name')) {
 			$where[] = sprintf("d.district_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('district_name'))) . '%'));
@@ -135,6 +139,8 @@ class BasicController extends AbstractActionController
 
 	public function configListAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$sql = "SELECT * FROM t_configs ORDER BY config_id DESC";
 		$configList = (array) $this->locator->db->getAll($sql);
 
@@ -223,6 +229,8 @@ class BasicController extends AbstractActionController
 
 	public function homeImageAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$districtId = $this->param('district_id');
 		if (!$districtId) {
 			$sql = "SELECT district_id FROM t_district WHERE district_name = ?";
@@ -422,6 +430,8 @@ class BasicController extends AbstractActionController
 
 	public function homeRecommendAction()
 	{
+		$this->perm->check(PERM_READ);
+		
 		$districtId = $this->param('district_id');
 		if (!$districtId) {
 			$sql = "SELECT district_id FROM t_district WHERE district_name = ?";
@@ -724,6 +734,8 @@ class BasicController extends AbstractActionController
 
 	public function scoreLevelAction()
 	{
+		$this->perm->check(PERM_READ);
+
 		$sql = "SELECT * FROM t_customer_score_level 
 				WHERE level_status = 1 
 				ORDER BY level_score ASC";

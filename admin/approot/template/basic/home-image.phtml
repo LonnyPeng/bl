@@ -28,14 +28,15 @@
         </div>
     </form>
 </div>
-
-<div class="row top-tool">
-    <div class="col-48" style="text-align: right;">
-        <a class="btn" href="<?php echo $this->url('basic/home-image-edit', array('district_id' => $this->param('district_id')))?>">
-            <i class="fa fa-plus"></i> 上传图片
-        </a>
+<?php if ($this->perm->has(PERM_EDIT)) : ?>
+    <div class="row top-tool">
+        <div class="col-48" style="text-align: right;">
+            <a class="btn" href="<?php echo $this->url('basic/home-image-edit', array('district_id' => $this->param('district_id')))?>">
+                <i class="fa fa-plus"></i> 上传图片
+            </a>
+        </div>
     </div>
-</div>
+<?php endif;?>
 <div class="row">
     <?php if ($imageList) : ?>
         <ul class="sortable">
@@ -47,10 +48,14 @@
                         </div>
                         <div class="action">
                             <span class="time"><?php echo date('Y-m-d',strtotime($row['image_time']))?></span>
-                            <a class="edit" href="<?php echo $this->url('basic/home-image-edit', array('id' => $row['image_id']))?>">
-                                <i class="fa fa-edit"></i>
-                            </a>
-                            <span data-href="<?php echo $this->url('basic/del-image', array('id' => $row['image_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
+                            <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                <a class="edit" href="<?php echo $this->url('basic/home-image-edit', array('id' => $row['image_id']))?>">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            <?php endif;?>
+                            <?php if ( $this->perm->has(PERM_DELETE)) : ?>
+                                <span data-href="<?php echo $this->url('basic/del-image', array('id' => $row['image_id']))?>" class="delete js-ajax"><i class="fa fa-trash"></i></span>
+                            <?php endif;?>
                         </div>
                     </div>
                 </li>
