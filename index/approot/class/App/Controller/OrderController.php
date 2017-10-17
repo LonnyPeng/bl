@@ -168,7 +168,7 @@ class OrderController extends AbstractActionController
                 'district_id' => $this->districtId,
                 'district_name' => $this->locator->get('Profile')['city'],
                 'user_address' => '',
-                'user_tel' => $this->locator->get('Profile')['customer_tel'],
+                'user_tel' => $this->locator->get('Profile')['customer_tel'] ?: '',
             );
         }
 
