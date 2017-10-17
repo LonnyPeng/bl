@@ -171,4 +171,50 @@ class AdminController extends AbstractActionController
 
         return array();
     }
+
+    public function memberPermAction()
+    {
+        $allPerms = array(1 => '查看', 2 => '编辑', 4 => '删除', 8 => '导出', 16 => '导入');
+
+        $memberId = $this->param('id');
+        $sql = "SELECT * FROM t_member WHERE member_id = ?";
+        $memberInfo = $this->locator->db->getRow($sql, $memberId);
+        if (!$memberInfo) {
+            $this->funcs->redirect($this->helpers->url('admin/member-list'));
+        }
+
+        $menuArr = include(CONFIG_DIR . 'menu.php');
+
+        if ($this->funcs->isAjax()) {
+            $sql = "DELETE FROM t_perms WHERE member_id = ?";
+            $this->locator->db->exec($sql, $memberInfo['member_id']);
+
+            //insert into
+           $sql = "INSERT INTO t_perms 
+                        SET perm_url = :perm_url, 
+                        perm_value = :perm_value, 
+                        member_id = :member_id";
+            foreach ($_POST as $url => $row) {
+                $this->locator->db->exec($sql, array(
+                    'perm_url' => $url,
+                    'perm_value' => array_sum($row),
+                    'member_id' => $memberInfo['member_id'],
+                ));
+            }
+            
+            return JsonModel::init('ok', '')->setRedirect('reload');
+        }
+
+        //perm
+        $sql = "SELECT perm_url,perm_value FROM t_perms WHERE member_id = ?";
+        $permList = $this->locator->db->getPairs($sql, $memberInfo['member_id']);
+
+        // print_r($permList);die;
+        return array(
+            'memberInfo' => $memberInfo,
+            'menuArr' => $menuArr,
+            'allPerms' =>$allPerms,
+            'permList' => $permList,
+        );
+    }
 }

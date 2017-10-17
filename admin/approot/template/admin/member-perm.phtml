@@ -1,0 +1,50 @@
+<form method='POST' name="perm-add-form" action="">
+    <div class="form-group clearfix" style="text-align: center;">
+        <div style="margin-bottom: 10px; font-weight: bold;">用户名：<?php echo $memberInfo['member_name']?></div>
+        <?php foreach ($menuArr as $controller => $row) :?>
+            <div class="table-box">
+                <table class="table-data">
+                    <thead>
+                        <tr>
+                            <th class="left"><label><?php echo $row['title']; ?>
+                                <input class="js-check-all" type="checkbox"></label>
+                            </th>
+                            <?php foreach ($allPerms as $key => $val) :?>
+                                <th class="center"><?php echo $val?></th>
+                            <?php endforeach; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($row['data'] as $k => $value) :?>
+                            <tr>
+                                <td class="left"><?php echo $value;?></td>
+                                <?php foreach ($allPerms as $key => $val) :?>
+                                <td class="center">
+                                    <input type="checkbox" name="<?php echo $controller . '-' . $k?>[]" <?php echo isset($permList[$controller . '-' . $k]) && $permList[$controller . '-' . $k] & $key ? 'checked' : ''?> value="<?php echo $key?>" />
+                                </td>
+                                <?php endforeach;?>
+                            </tr>
+                        <?php endforeach;?>
+                    </tbody>
+                </table>
+            </div>
+        <?php endforeach;?>
+    </div>
+    <div class="actions m-top-sm clearfix fix" style="text-align: right;">
+        <button type="submit" class="btn">保存</button>
+        <a href="javascript:history.back();" class="btn">返回 »</a>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $('.js-check-all').change(function() {
+        $(this).parents('.table-data').find('input[type="checkbox"]').prop('checked', $(this).is(':checked'));
+    });
+
+    $('form').submit(function () {
+        var $$ = $(this);
+
+        $$.ajaxAuto();
+        return false;
+    });
+</script>

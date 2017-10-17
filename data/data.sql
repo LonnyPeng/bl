@@ -18,6 +18,17 @@ CREATE TABLE `t_member` (
 INSERT INTO `t_member`(`member_perms`, `member_name`, `member_password`) VALUES ('product_read,product_export,product_import,product_create,product_update,product_delete', 'admin', '5f0bcb3a8f4a5b4381a25acb90168d74:30');
 
 -- ----------------------------
+-- Table structure for 
+-- ----------------------------
+DROP TABLE IF EXISTS `t_perms`;
+CREATE TABLE `t_perms` (
+  `perm_id` smallint(5) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `perm_url` varchar(90) NOT NULL COMMENT '路径',
+  `perm_value` int(2) NOT NULL DEFAULT '0' COMMENT '权值',
+  `member_id` smallint(5) NOT NULL COMMENT '人员ID'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='平台权限表';
+
+-- ----------------------------
 -- Table structure for t_district
 -- ----------------------------
 DROP TABLE IF EXISTS `t_district`;
@@ -789,6 +800,7 @@ CREATE TABLE `t_orders` (
   `product_price` float(5,2) NOT NULL DEFAULT '0.00' COMMENT '商品价格',
   `customer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '下单顾客ID',
   `shinging_type` enum('self','logistics') NOT NULL COMMENT '取货方式：self自提；logistics配送',
+  `shop_id` int(4) DEFAULT '0' COMMENT '自提时商家ID',
   `order_customer_name` varchar(16) NOT NULL DEFAULT '' COMMENT '收货人名字',
   `district_id` tinyint(4) NOT NULL DEFAULT '0' COMMENT '收货城市ID',
   `district_name` varchar(255) NOT NULL COMMENT '收货城市名称',

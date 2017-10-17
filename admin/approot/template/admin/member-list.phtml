@@ -63,6 +63,9 @@
                         <td class="text-center"><?= $row['member_regtime'] != '0000-00-00 00:00:00' ? date("Y-m-d H:i:s", strtotime($row['member_regtime'])) : ''?></td>
                         <td class="text-center"><?= $row['member_status'] ? '有效' : '禁用';?></td>
                         <td class="text-center action">
+                            <a class="btn btn-xs edit" href="<?= $this->url('admin/member-perm', array('id' => $row['member_id']))?>" title="权限">
+                                <i class="fa fa-lock"></i>
+                            </a>
                             <a class="btn btn-xs edit" href="<?= $this->url('admin/member-edit', array('id' => $row['member_id']))?>" title="编辑">
                                 <i class="fa fa-edit"></i>
                             </a>

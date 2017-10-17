@@ -448,9 +448,10 @@ class OrderController extends AbstractActionController
         //修改订单状态
         $sql = "UPDATE t_orders 
                 SET order_type = 'shipped', 
-                order_address = ? 
+                order_address = ?,
+                shop_id = ?
                 WHERE order_id = ?";
-        $this->locator->db->exec($sql, $quantityInfo['shop_address'], $orderId);
+        $this->locator->db->exec($sql, $quantityInfo['shop_address'], $quantityInfo['shop_id'], $orderId);
 
         return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('order/info', array('id' => $orderId)));
     }
