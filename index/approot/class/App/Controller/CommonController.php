@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Framework\View\Model\JsonModel;
 use QR\QRcode;
-use Aliyun\Sms;
+use Ihuyi\Sms;
 
 class CommonController extends AbstractActionController
 {
@@ -41,18 +41,14 @@ class CommonController extends AbstractActionController
         }
 
         //调用第三方API发送短信验证码
-        require_once INC_DIR . 'Aliyun/Sms.php';
-        $sms = new Sms(require_once CONFIG_DIR . 'alisms.config.php');
-        $result = $sms->sendSms(
-            "VIP秘书", // 短信签名
-            "SMS_96680058", // 短信模板编号
-            "$phone", // 短信接收者
-            Array(  // 短信模板中字段的值
-                "code" => $code,
-            )
-        );
-        $result = json_decode(json_encode($result), true);
-        if ($result['Code'] == 'OK') {
+        require_once INC_DIR . 'Ihuyisms.php';
+        $sms = new Sms(require_once CONFIG_DIR . 'ihuyisms.config.php');
+        $result = $sms->send(array(
+            'template' => "1", // 短信模板编号
+            'phone' => "$phone", // 短信接收者
+            'code' => "$code", // 验证码
+        ));
+        if ($result['code'] == 2) {
             $sql = "DELETE FROM t_phone_verif WHERE phone_number = ?";
             $this->locator->db->exec($sql, $phone);
 
@@ -63,7 +59,7 @@ class CommonController extends AbstractActionController
 
             return JsonModel::init('ok', '');
         } else {
-            return new JsonModel('error', '发送失败');
+            return new JsonModel('error', $result['msg']);
         }
     }
 }
