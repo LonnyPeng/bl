@@ -50,7 +50,7 @@ class WechatController extends AbstractActionController
             $original['city'] = '上海市';
         }
 
-        $result = $this->funcs->curl(array('url' => $original['headimgurl'], 'GET', true);
+        $result = $this->funcs->curl(array('url' => $original['headimgurl'], 'GET', true));
         if ($result['http_code'] != 200) {
             $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
         }
