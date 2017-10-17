@@ -104,15 +104,15 @@ abstract class AbstractActionController extends ActionController
                     }
 
                     $this->locator->setService('Profile', array_merge($customer, $_SESSION['customer_info']));
+
+                    if (isset($_SESSION['redirect'])) {
+                        $redirect = $_SESSION['redirect'];
+                        unset($_SESSION['redirect']);
+
+                        $this->funcs->redirect($redirect);
+                    }
                 }
             }
-        }
-
-        if (isset($_SESSION['redirect'])) {
-            $redirect = $_SESSION['redirect'];
-            unset($_SESSION['redirect']);
-
-            $this->funcs->redirect($redirect);
         }
     }
 }
