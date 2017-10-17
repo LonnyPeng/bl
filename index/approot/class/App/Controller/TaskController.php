@@ -351,11 +351,12 @@ class TaskController extends AbstractActionController
         	$data['message'] = $prize['turntablep_title'];
         	$data['duration'] = mt_rand(2, 5) * 1000;
         	$data['n'] = mt_rand(3,6);
+            $data['attr'] = $prize['turntablep_attr'];
 
         	return JsonModel::init('ok', '', $data);
         }
 
-        // print_r($config);die;
+        // print_r($this->customerId);die;
         return array(
         	'config' => $config,
         	'list' => $list,
@@ -372,7 +373,7 @@ class TaskController extends AbstractActionController
 
     	//判断当前用户积分是否够用
     	if ($turntableScore > $this->locator->get('Profile')['customer_score']) {
-    		return new JsonModel('error', '你当前积分不够兑换');
+    		return new JsonModel('error', '', array('msg' => '你当前积分不够兑换'));
     	}
 
     	//改变积分
@@ -382,7 +383,7 @@ class TaskController extends AbstractActionController
     		'score' => $turntableScore,
     	));
     	if (!$result) {
-    		return new JsonModel('error', '兑换失败');
+    		return new JsonModel('error', '', array('msg' => '兑换失败'));
     	}
 
     	//增加用户积分兑换的次数
@@ -399,9 +400,9 @@ class TaskController extends AbstractActionController
     	}
 
     	if ($status) {
-    		return JsonModel::init('ok', '兑换成功')->setRedirect($this->helpers->url('task/turntable'));
+    		return JsonModel::init('ok', '');
     	} else {
-    		return new JsonModel('error', '兑换失败');
+    		return new JsonModel('error', '', array('msg' => '兑换失败'));
     	}
     }
 
