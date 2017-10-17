@@ -358,10 +358,20 @@ class TaskController extends AbstractActionController
         	return JsonModel::init('ok', '', $data);
         }
 
+        $shareInfo = array(
+            'title' => '惊喜大转盘',
+            'desc' => '',
+            'link' => (string) $this->helpers->url('task/index'),
+            'imgUrl' => '',
+            'type' => 'link',
+        );
+
         // print_r($this->customerId);die;
         return array(
+            'js' => $this->app->js,
         	'config' => $config,
         	'list' => $list,
+            'shareInfo' => $shareInfo,
         );
     }
 
@@ -449,6 +459,31 @@ class TaskController extends AbstractActionController
             return array(
                 'prizeList' => $prizeList,
             );
+        }
+    }
+
+    public function shareAction()
+    {
+        if (!$this->funcs->isAjax()) {
+            $this->funcs->redirect($this->helpers->url('default/index'));
+        }
+
+        //分享增加一次抽奖机会
+        $sql = "SELECT chance_id FROM t_turntable_chance 
+                WHERE chance_status = 1 AND customer_id = ?";
+        $chanceId = $this->locator->db->getOne($sql, $this->customerId);
+        if ($chanceId) {
+            $sql = "UPDATE t_turntable_chance 
+                    SET chance_num = chance_num + 1 WHERE chance_id = ?";
+        } else {
+            $sql = "INSERT INTO t_turntable_chance SET customer_id = ?, chance_num = 1";
+        }
+        $status = $this->locator->db->exec($sql, $chanceId);
+
+        if ($status) {
+            return JsonModel::init('ok', '分享成功')->setRedirect('reload');
+        } else {
+            return new JsonModel('error', '分享失败');
         }
     }
 }
