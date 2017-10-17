@@ -1,0 +1,20 @@
+<?php if ($prizeList) : ?>
+	<?php foreach($prizeList as $row) : ?>
+	  <a class="weui-cell weui-cell_access pr" href="javascript:void(0);">
+	    <div class="weui-cell__hd img"><img src="<?php echo $this->uploadUrl($row['turntablep_image'], 'sys')?>"></div>
+	    <div class="weui-cell__bd">
+	      <h5 class="lr2"><?php echo $row['turntablep_title']?></h5>
+	      <h6 class="mydate"><?php echo date("Y/m/d H:i:s", strtotime($row['prize_time']))?></h6>
+	    </div>
+	    <div class="mail_zt pa">
+	    	<?php if (!$row['prize_address']) : ?>
+		  		<p class="on js-address" data-href="<?php echo $this->url('customer/address', array('redirect' => $this->SelfUrl(), 'prize_id' => $row['prize_id']))?>">填写收货地址</p>
+		  	<?php elseif ((time() - strtotime($row['prize_time'])) / 86400 < 7) : ?>
+		  		<p class="on">预计7个工作日送达</p>
+		  	<?php else : ?>
+		  		<p>已入账</p>
+		  	<?php endif;?>
+		</div>
+	  </a>
+	<?php endforeach;?>
+<?php endif;?> 

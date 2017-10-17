@@ -27,7 +27,7 @@
 <div class="dialog">
 	<div class="dialog_li dialog_zj jfjiang">
 		<h4>恭喜您，获得</h4>
-		<h5><i class="iconfont">&#xe634;</i>100积分</h5>
+		<h5><i class="iconfont">&#xe634;</i></h5>
 		<p>奖品已发送到您的账户中，请查收</p>
 		<div class="weui-flex">
 		  <div class="weui-flex__item dl_btn cancel">好的</div>
@@ -36,25 +36,25 @@
 	</div>
 	<div class="dialog_li dialog_zj mdjiang">
 		<h4>恭喜您，获得</h4>
-		<h5>脉动一箱</h5>
+		<h5></h5>
 		<p>预计7个工作日送达，请填写收货地址</p>
 		<div class="weui-flex">
 		  <div class="weui-flex__item dl_btn cancel">稍后</div>
-		  <a class="weui-flex__item dl_btn" href="../my/新建地址.html">立即填写</a>
+		  <a class="weui-flex__item dl_btn" href="">立即填写</a>
 		</div>
 	</div>
 	<div class="dialog_li dialog_dh nojiang">
 		<h5>谢谢参与</h5>
 		<div class="weui-flex">
 		  <div class="weui-flex__item dl_btn cancel">好的</div>
-		  <div class="weui-flex__item dl_btn">再来一次</div>
+		  <div class="weui-flex__item dl_btn js-now">再来一次</div>
 		</div>
 	</div>
 	<div class="dialog_li dialog_dh dialog_ok">
 		<h5>兑换成功，获得一次抽奖机会</h5>
 		<div class="weui-flex">
 		  <div class="weui-flex__item dl_btn js-reload">好的</div>
-		  <div class="weui-flex__item dl_btn" id="js-now">立即使用</div>
+		  <div class="weui-flex__item dl_btn js-now" >立即使用</div>
 		</div>
 	</div>
 	<div class="dialog_li dialog_dh dialog_no">
@@ -81,98 +81,6 @@
 
 <?php echo $this->js('jquery.easing.min.js')->wrap();?>
 <?php echo $this->js('jquery.rotate.js')->wrap();?>
-<script type="text/javascript">
-	// //抽奖
-	// $(function(){
-	// 	var windowH=$(window).height();
-		
-	// 	$(".dial").height(windowH);
-	// 	var ww=$(".ljcj").width()-13
-	// 	var hh=$(".ljcj").height()-5
-	// 	$(".ljcj").css("margin-left",-ww/2)
-	// 	$(".ljcj").css("margin-top",-hh/2)
-	// 	$(".ljcj").removeClass('none');
-
-	// 	$(".jfdhcj").click(function(){
-	// 		$(".dialog_jf").show().siblings().hide()
-	// 		$(".dialog").fadeIn()
-	// 		$(".mask").fadeIn()
-	// 	})
-	// 	$(".qdjfdh").click(function(){
-			
-	// 		var jfnum=1;
-	// 		if(jfnum==1){
-	// 			$(".dialog_ok").show().siblings().hide()
-				
-	// 		}else{
-	// 			$(".dialog_no").show().siblings().hide()
-	// 		}
-	// 		 $(".dialog").fadeIn()
-	// 		$(".mask").fadeIn()
-	// 	})
-	// 	$(".dial_top").height($(".dial_top").height())
-
-	// var rotateFunc = function(awards,angle,text){  //awards:奖项，angle:奖项对应的角度
-	//         $('.dial_zp_img').stopRotate();
-	//         $(".dial_zp_img").rotate({
-	//             angle:0, 
-	//             duration: 5000, 
-	//             animateTo: angle+1440, //angle是图片上各奖项对应的角度，1440是我要让指针旋转4圈。所以最后的结束的角度就是这样子^^
-	//             callback:function(){
-	// 				if(awards==3){
-	// 					$(".jfjiang").show().siblings().hide()					
-	// 				}
-	// 				if(awards==2){
-	// 					$(".mdjiang").show().siblings().hide()
-	// 				}
-	// 				if(awards==1){
-	// 					$(".pgjiang").show().siblings().hide()
-	// 				}
-	// 				if(awards==0){
-	// 					$(".nojiang").show().siblings().hide()
-	// 				}
-	//                 $(".dialog").fadeIn()
-	// 				$(".mask").fadeIn()
-	//             }
-	//         }); 
-	//     };
-	// 	$(".ljcj").rotate({
-	// 		bind:{
-	// 			click:function(){
-	// 				 var num = $(".playnum").html();
-	// 	                if(num>0){
-	// 	                	num--;
-		                	
-	// 	                    var data = [1,2,3,0]; //返回的数组
-	// 	                        data = data[Math.floor(Math.random()*data.length)];
-	// 	                    if(data==1){
-	// 	                        rotateFunc(1,157,'苹果')
-	// 	                    }
-	// 	                    if(data==2){
-	// 	                        rotateFunc(2,292,'脉动')
-	// 	                    }
-	// 	                    if(data==3){	                        
-	// 	                        var angle = [22,112,202,337];
-	// 	                            angle = angle[Math.floor(Math.random()*angle.length)]
-	// 	                        	rotateFunc(3,angle,'100积分')
-	// 	                    }
-	// 	                    if(data==0){
-	// 	                        var angle = [247,67];
-	// 	                            angle = angle[Math.floor(Math.random()*angle.length)]
-	// 	                        rotateFunc(0,angle,'谢谢参与')
-	// 	                    }
-	// 	                    $(".playnum").html(num)
-	// 	                    if(num==0){	                    	 
-	// 		                    $(".dial_top h5").fadeIn();
-	// 	        				$(".dial_top p").fadeOut();
-	// 	                    }	                   
-	// 	                }
-	// 			}
-	// 		}
-	// 	});
-
-	// });
-</script>
 
 <script type="text/javascript">
 	$(this).ready(function () {
@@ -219,6 +127,10 @@
 		});
 		$('.js-reload').click(function() {
 			window.location.reload();
+		});
+		$('.js-now').click(function() {
+			$("#start").trigger('click');
+			$(".dialog, .mask").fadeOut();
 		});
 		
 		//设置转盘
@@ -333,7 +245,21 @@
 										
 										$$.addClass('start');
 
-										console.log(value);
+										if (value.attr == 'product') {
+											$(".mdjiang h5").html(value.message);
+											$(".mdjiang a").attr({href: value.href});
+											$(".mdjiang").show().siblings().hide();
+											$(".dialog, .mask").fadeIn();
+										} else if (value.attr == 'score') {
+											$(".jfjiang h5").html(value.message);
+											$(".jfjiang").show().siblings().hide();
+											$(".dialog, .mask").fadeIn();
+										} else {
+											$(".nojiang").show().siblings().hide();
+											$(".dialog, .mask").fadeIn();
+										}
+
+										// console.log(value);
 									}
 								})
 							}

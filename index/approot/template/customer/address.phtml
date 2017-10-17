@@ -22,11 +22,12 @@
 
 <!-- 新建收货地址 -->
 <div class="new_addr pf bgwhite">
-  <a href="<?php echo $this->url('customer/address-edit', array('redirect' => $this->param('redirect')))?>" class="weui-btn weui-btn_orange">新建收货地址</a>
+  <a href="<?php echo $this->url('customer/address-edit', array('redirect' => $this->param('redirect'), 'prize_id' => $this->param('prize_id')))?>" class="weui-btn weui-btn_orange">新建收货地址</a>
 </div>
 
 <script type="text/javascript">
     var redirect = '<?php echo $this->param('redirect')?>';
+    var prizeId = <?php echo $this->param('prize_id')?>;
 
     // 点击删除
     $(".my_addr_list").find('.delete').on('click', function(event) {
@@ -53,7 +54,7 @@
         $$.removeAttr('href');
         $$.ajaxAuto({
             url: '<?php echo $this->url('customer/address-default')?>',
-            data: {id: id, redirect: redirect},
+            data: {id: id, redirect: redirect, prize_id: prizeId},
             success: function (re) {
                 if (re.status == 'ok') {
                     $$.children('i').removeClass('weui-icon-circle').addClass('weui-icon-success');

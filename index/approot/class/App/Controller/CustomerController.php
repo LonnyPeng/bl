@@ -580,7 +580,7 @@ class CustomerController extends AbstractActionController
 
             $status = $this->locator->db->exec($sql, $map);
             if ($status) {
-                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address', array('redirect' => $this->param('redirect'))));
+                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address', array('redirect' => $this->param('redirect'), 'prize_id' => $this->param('prize_id'))));
             } else {
                 return new JsonModel('error', '提交失败');
             }
@@ -661,7 +661,9 @@ class CustomerController extends AbstractActionController
         }
 
         $id = trim($this->param('id'));
-        $sql = "SELECT * FROM t_customer_address WHERE address_id = ?";
+        $sql = "SELECT * FROM t_customer_address c 
+                LEFT JOIN t_district d ON d.district_id = c.district_id 
+                WHERE address_id = ?";
         $info = $this->locator->db->getRow($sql, $id);
         if (!$info) {
             return new JsonModel('error', '地址不存在');
@@ -673,6 +675,24 @@ class CustomerController extends AbstractActionController
                 WHERE customer_id = ?";
         $status = $this->locator->db->exec($sql, $id, $this->customerId);
         if ($status) {
+            //判断是否为奖品地址
+            if ($this->param('prize_id')) {
+                $sql = "UPDATE t_prizes 
+                        SET prize_customer_name = :prize_customer_name, 
+                        district_id = :district_id,
+                        district_name = :district_name,
+                        prize_address = :prize_address,
+                        prize_tel = :prize_tel
+                        WHERE prize_id = :prize_id";
+                $this->locator->db->exec($sql, array(
+                    'prize_customer_name' => $info['user_name'],
+                    'district_id' => $info['district_id'],
+                    'district_name' => $info['district_name'],
+                    'prize_address' => $info['user_address'],
+                    'prize_tel' => $info['user_tel'],
+                    'prize_id' => trim($this->param('prize_id')),
+                ));
+            }
             $redirect = $this->param('redirect');
             if ($redirect) {
                 $redirect = str_replace("&amp;", "&", $redirect);

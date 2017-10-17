@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Framework\View\Model\ViewModel;
 use Framework\View\Model\JsonModel;
 use App\Controller\Plugin\Score;
 use EasyWeChat\Foundation\Application;
@@ -352,6 +353,7 @@ class TaskController extends AbstractActionController
         	$data['duration'] = mt_rand(2, 5) * 1000;
         	$data['n'] = mt_rand(3,6);
             $data['attr'] = $prize['turntablep_attr'];
+            $data['href'] = (string) $this->helpers->url('customer/address', array('redirect' => $this->helpers->SelfUrl(), 'prize_id' => $prizeId));
 
         	return JsonModel::init('ok', '', $data);
         }
@@ -410,6 +412,43 @@ class TaskController extends AbstractActionController
     {
         $this->layout->title = '我的奖品';
 
-        return array();
+        $where = array(
+            "t.turntablep_attr = 'product'",
+            sprintf("p.customer_id = %d", $this->customerId),
+            "prize_status = 1",
+        );
+
+        $join = array(
+            "LEFT JOIN t_turntable_products t ON t.turntablep_id = p.turntablep_id"
+        );
+
+        $limit = array(0, 6);
+
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            $limit[0] = $this->param('pageSize') * $limit[1];
+        }
+
+        $files = 't.*, p.*';
+        $sqlInfo = array(
+            'setJoin' => $join,
+            'setWhere' => $where,
+            'setLimit' => $limit,
+            'setOrderBy' => 'prize_id DESC',
+        );
+
+        $prizeList = $this->models->prize->getPrize($files, $sqlInfo);
+
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            if ($prizeList) {
+                $viewModel = new ViewModel(array('prizeList' => $prizeList), 'task/chance-list-ajax');
+                return JsonModel::init('ok', '', array('list' => $this->view->render($viewModel)));
+            } else {
+                return new JsonModel('error', '');
+            }
+        } else {
+            return array(
+                'prizeList' => $prizeList,
+            );
+        }
     }
 }

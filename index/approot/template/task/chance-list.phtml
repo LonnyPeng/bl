@@ -1,40 +1,51 @@
-  	<div class="integral_task myprize">
-  		<div class="weui-cells">
-			  <a class="weui-cell weui-cell_access pr" href="">
-			    <div class="weui-cell__hd img"><img src="images/integral_img.jpg"></div>
-			    <div class="weui-cell__bd">
-			      <h5 class="lr2">山东红富士苹果（两粒装）买一送一</h5>
-			      <h6 class="mydate"><span>2017/10/21</span><span>16:54:34</span></h6>
-			    </div>
-			    <div class="mail_zt pa">
-				  	<p class="on">预计7个工作日送达</p>
-				</div>
-			  </a>
-			  
-			  <a class="weui-cell weui-cell_access pr" href="../my/新建地址.html">
-			    <div class="weui-cell__hd img"><img src="images/integral_img.jpg"></div>
-			    <div class="weui-cell__bd">
-			      <h5 class="lr2">山东红富士苹果（两粒装）买一送一</h5>
-			      <h6 class="mydate"><span>2017/10/21</span><span>16:54:34</span></h6>
-			    </div>
-			    <div class="mail_zt pa">
-				  	<p class="on">填写收货地址</p>
-				</div>
-			  </a>
-			  
-			  <a class="weui-cell weui-cell_access pr" href="">
-			    <div class="weui-cell__hd img"><img src="images/integral_img.jpg"></div>
-			    <div class="weui-cell__bd">
-			      <h5 class="lr2">山东红富士苹果（两粒装）买一送一</h5>
-			      <h6 class="mydate"><span>2017/10/21</span><span>16:54:34</span></h6>
-			    </div>
-			    <div class="mail_zt pa">
-				  	<p>已入账</p>
-				</div>
-			  </a>
-			  
-			</div>
-  		</div>
-		<div class="myprize_ts">
-			<p>地址填写成功，请等待配送</p>
-		</div>
+<div class="integral_task myprize">
+	<div class="weui-cells" id="m_pro">
+		<?php echo $this->render('task/chance-list-ajax', array('prizeList' => $prizeList))?> 
+	</div>
+</div>
+
+<div class="mask"></div>
+
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
+<script type="text/javascript">
+	init();
+
+	var pageSize = 1;
+	var loading = false;  //状态标记
+	$(document.body).infinite().on("infinite", function() {
+	    if (loading) {
+	        return false;
+	    } else {
+	        $('.weui-loadmore').fadeIn();
+	        loading = true;
+	    }
+	    
+	    $(this).ajaxAuto({
+	        data: {type: 'page', pageSize: pageSize},
+	        success: function (re) {
+	            var ali="";
+	            if (re.status == 'ok') {
+	                pageSize++;
+
+	                ali+= re.data.list;
+	            }
+
+	            $("#m_pro").append(ali);
+	            init();
+	            
+	            $('.weui-loadmore').fadeOut();
+	            loading = false;
+	        }
+	    });
+	});
+
+	function init() {
+	    $('.js-address').click(function () {
+	    	window.location.href = $(this).data('href');
+	    });
+	}
+</script>
