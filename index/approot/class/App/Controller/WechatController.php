@@ -38,7 +38,6 @@ class WechatController extends AbstractActionController
         $user = $oauth->user();
         $userInfo = $user->toArray();
         $original = $userInfo['original'];
-        print_r($original);die;
 
         $sql = "SELECT d.district_name
                 FROM t_customers c 
@@ -50,6 +49,9 @@ class WechatController extends AbstractActionController
         } elseif (!$original['city']) {
             $original['city'] = '上海市';
         }
+
+        $result = $this->funcs->curl(array('url' => $original['headimgurl']), 'GET', true);
+        print_r($result);die;
 
         $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
 
