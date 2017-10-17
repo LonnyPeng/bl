@@ -38,6 +38,7 @@ class WechatController extends AbstractActionController
         $user = $oauth->user();
         $userInfo = $user->toArray();
         $original = $userInfo['original'];
+        print_r($original);die;
 
         $sql = "SELECT d.district_name
                 FROM t_customers c 
