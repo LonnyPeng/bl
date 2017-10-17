@@ -249,15 +249,15 @@
 											$(".mdjiang h5").html(value.message);
 											$(".mdjiang a").attr({href: value.href});
 											$(".mdjiang").show().siblings().hide();
-											$(".dialog, .mask").fadeIn();
 										} else if (value.attr == 'score') {
 											$(".jfjiang h5").html(value.message);
 											$(".jfjiang").show().siblings().hide();
-											$(".dialog, .mask").fadeIn();
 										} else {
 											$(".nojiang").show().siblings().hide();
-											$(".dialog, .mask").fadeIn();
 										}
+										setTimeout(function () {
+											$(".dialog, .mask").fadeIn();
+										}, 1000);
 
 										// console.log(value);
 									}
