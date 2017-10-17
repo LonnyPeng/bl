@@ -50,8 +50,7 @@ class WechatController extends AbstractActionController
             $original['city'] = '上海市';
         }
 
-        print_r($original);die;
-        if ($result['http_code'] != 200) {
+        if (!preg_match("/^http:\/\/wx\.qlogo\.cn/i", $original['headimgurl'])) {
             $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
         }
 
