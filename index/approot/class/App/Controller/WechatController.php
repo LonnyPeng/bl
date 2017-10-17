@@ -50,11 +50,10 @@ class WechatController extends AbstractActionController
             $original['city'] = '上海市';
         }
 
-        $result = $this->funcs->curl(array('url' => (string) $this->helpers->image('head_img.jpg', true)), 'GET', true);
-        // if ($result['http_code'] != 200) {
-        //     $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
-        // }
-        print_r($result);die;
+        $result = $this->funcs->curl(array('url' => $original['headimgurl'], 'GET', true);
+        if ($result['http_code'] != 200) {
+            $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
+        }
 
         $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
 
