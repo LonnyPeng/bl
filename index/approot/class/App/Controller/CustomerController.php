@@ -759,6 +759,7 @@ class CustomerController extends AbstractActionController
             $info['status'] = 'error';
         }
 
+        print_r($info);die;
         //在规定时间内组团成功，系统自动下单
         if ($info['time'] > 0 && $info['status'] == 'success') {
             $sql = "SELECT * FROM t_orders 
