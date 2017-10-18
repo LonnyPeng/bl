@@ -11,7 +11,7 @@
       
       <div class="hy_top_tit">
         <h4><?php echo $this->locator->get('Profile')['username']?> <a href="<?php echo $this->url('customer/level')?>"><label style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>"><span><?php echo $this->locator->get('Profile')['level_name']?></span>
-          <i class="iconfont">&#xe6db;</i></label></a></h4>
+          <i class="iconfont"><?php echo $levelIcon[$this->locator->get('Profile')['level_id']]?></i></label></a></h4>
         <h5><span><i class="iconfont">&#xe6ce;</i>积分:<?php echo $this->locator->get('Profile')['customer_score']?></span></h5>
       </div>
     </div>

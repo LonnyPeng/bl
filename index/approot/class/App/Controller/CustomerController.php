@@ -53,6 +53,7 @@ class CustomerController extends AbstractActionController
         // print_r($receiveNum);die;
         return array(
             'levelColor' => $this->levelColor,
+            'levelIcon' => $this->levelIcon,
             'receiveNum' => $receiveNum,
             'groupNum' => $groupNum,
             'reviewNum' => $reviewNum,
