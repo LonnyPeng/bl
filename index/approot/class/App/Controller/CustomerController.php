@@ -768,6 +768,7 @@ class CustomerController extends AbstractActionController
                     AND product_id = ?";
             $sql = sprintf($sql, $info['customers']);
             $orders = $this->locator->db->getAll($sql, $info['product_id']);
+            print_r($orders);die;
             if ($orders) {
                 $sql = "UPDATE t_orders 
                         SET order_type = 'pending', 
