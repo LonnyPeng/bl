@@ -33,7 +33,9 @@ class ShopModel extends CommonModel
 
 	public function getShopById($id)
 	{
-	    $sql = "SELECT * FROM $this->name WHERE shop_id = ?";
+	    $sql = "SELECT * FROM $this->name 
+	    		LEFT JOIN t_shop_users su ON su.shop_id = s.shop_id
+	    		WHERE s.shop_id = ?";
 	    return $this->locator->db->getRow($sql, $id);
 	}
 

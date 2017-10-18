@@ -20,6 +20,16 @@
                 
                 <input class="form-control" type="file" name="file" value="">
             </div>
+            <?php if (!$this->param('id')) : ?>
+                <div class="form-group">
+                    <label>后台登录用户名<sup>*</sup></label>
+                    <input class="form-control" type="text" name="suser_name" value="">
+                </div>
+                <div class="form-group">
+                    <label>后台登录密码<sup>*</sup></label>
+                    <input class="form-control" type="text" name="suser_password" value="">
+                </div>
+            <?php endif;?>
             <div class="form-group">
                 <label>所在城市<sup>*</sup></label>
                 <select class="form-control" name="district_id" title="如没有要选的城市，请先开通该城市。">

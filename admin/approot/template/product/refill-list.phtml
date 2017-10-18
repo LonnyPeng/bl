@@ -1,0 +1,97 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/list')?>">商品设置</a> / 补货列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商家名称</label>
+                    <input class="form-control" type="text" name="shop_name" size="20" value="<?= $this->param('shop_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品名称</label>
+                    <input class="form-control" type="text" name="product_name" value="<?= $this->param('product_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">商品名称</th>
+                <th class="text-center">商品CODE</th>
+                <th class="text-center">商家名称</th>
+                <th class="text-center">商家剩余库存</th>
+                <th class="text-center">时间</th>
+                <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($refillList as $key => $row) : ?>
+                <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                    <td class="text-center"><?= $row['product_name']?></td>
+                    <td class="text-center"><?= $row['product_code']?></td>
+                    <td class="text-center"><?= $row['shop_name']?></td>
+                    <td class="text-center"><?= $row['quantity_num']?></td>
+                    <td class="text-center"><?= $row['refill_time']?></td>
+                    <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
+                        <td class="text-center action">
+                            <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                                <a class="btn btn-xs edit" href="<?= $this->url('product/refill-edit', array('id' => $row['refill_id']))?>" title="补货">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                            <?php endif;?>
+                            <?php if ($this->perm->has(PERM_DELETE)) : ?>
+                                <span class="btn btn-xs del" data-href="<?= $this->url('product/refill-del', array('id' => $row['refill_id']))?>" title="删除">
+                                    <i class="fa fa-trash"></i>
+                                </span>
+                            <?php endif;?>
+                        </td>
+                    <?php endif;?>
+                </tr>
+            <?php endforeach;?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
+
+<script>
+    $('.action .del').click(function() {
+        var $$ = $(this);
+
+        $.confirm('请确认是否要删除？', function() {
+            $$.ajaxAuto({
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents('tr').remove();
+                    }
+                }
+            });
+            return false;
+        }, {
+            title: '信息确认'
+        });
+    });
+</script>

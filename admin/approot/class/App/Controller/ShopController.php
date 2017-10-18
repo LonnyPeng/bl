@@ -34,9 +34,13 @@ class ShopController extends AbstractActionController
 		$this->helpers->paginator($count, 10);
 		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
 
-		$files = array('s.*', 'd.district_name');
+		$files = array('s.*', 'd.district_name', 'su.suser_name');
+		$join = array(
+			'LEFT JOIN t_district d ON s.district_id = d.district_id',
+			'LEFT JOIN t_shop_users su ON su.shop_id = s.shop_id',
+		);
 		$sqlInfo = array(
-			'setJoin' => 'LEFT JOIN t_district d ON s.district_id = d.district_id',
+			'setJoin' => $join,
 			'setWhere' => $where,
 			'setLimit' => $limit,
 			'setOrderBy' => 'shop_id DESC',
@@ -71,6 +75,18 @@ class ShopController extends AbstractActionController
 					return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
 				} elseif ($_FILES['file']['size'] > $this->imgMaxSize) {
 					return new JsonModel('error', '请选择小于4M的图片');
+				}
+
+				if (!$_POST['suser_name']) {
+					return new JsonModel('error', '请输入后台登录用户名');
+				}
+				$sql = "SELECT COUNT(*) FROM t_shop_users WHERE suser_name = ?";
+				if ($this->locator->db->getOne($sql, trim($_POST['suser_name']))) {
+					return new JsonModel('error', '后台登录用户名已存在');
+				}
+
+				if (!$_POST['suser_password']) {
+					return new JsonModel('error', '请输入后台登录密码');
 				}
 			} else {
 				if (isset($_FILES['file'])) {
@@ -171,16 +187,29 @@ class ShopController extends AbstractActionController
 				$sql = "UPDATE t_shops SET $set
 						WHERE shop_id = :shop_id";
 			}
-			
+
 			$status = $this->locator->db->exec($sql, $map);
-			if ($status) {
-				if ($id && isset($_FILES['file'])) {
-					$this->delImage(SHOP_DIR . $pathOld);
-				}
-				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('shop/list'));
-			} else {
+			if (!$status) {
 				return new JsonModel('error', '失败');
 			}
+
+			if (!$id) {
+				//保存商户登录信息
+				$sql = "INSERT INTO t_shop_users 
+						SET shop_id = :shop_id, 
+						suser_name = :suser_name, 
+						suser_password = :suser_password";
+				$this->locator->db->exec($sql, array(
+					'shop_id' => $this->locator->db->lastInsertId(),
+					'suser_name' => trim($_POST['suser_name']),
+					'suser_password' => $this->password->encrypt(trim($_POST['suser_password'])),
+				));
+			}
+
+			if ($id && isset($_FILES['file'])) {
+				$this->delImage(SHOP_DIR . $pathOld);
+			}
+			return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('shop/list'));
 		}
 		return array(
 			'info' => $info,
@@ -200,12 +229,14 @@ class ShopController extends AbstractActionController
 		
 		$sql = "DELETE FROM t_shops WHERE shop_id = ?";
 		$status = $this->locator->db->exec($sql, $id);
-		if ($status) {
-			$this->delImage(SHOP_DIR . $path);
-			return JsonModel::init('ok', '删除成功');
-		} else {
+		if (!$status) {
 			return new JsonModel('error', '删除失败');
 		}
+		$sql = "DELETE FROM t_shop_users WHERE shop_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+
+		$this->delImage(SHOP_DIR . $path);
+		return JsonModel::init('ok', '删除成功');
 	}
 
 	protected function saveShopImg($row = array())

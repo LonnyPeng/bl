@@ -1,0 +1,46 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/refill-list')?>">补货列表</a> / 补货
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>商品名称</label>
+                <span class="form-control" style="background-color: #eee;"><?php echo $info['product_name']?></span>
+            </div>
+            <div class="form-group">
+                <label>商品CODE</label>
+                <span class="form-control" style="background-color: #eee;"><?php echo $info['product_code']?></span>
+            </div>
+            <div class="form-group">
+                <label>商家名称</label>
+                <span class="form-control" style="background-color: #eee;"><?php echo $info['shop_name']?></span>
+            </div>
+            <div class="form-group">
+                <label>最大补货数量</label>
+                <span class="form-control" style="background-color: #eee;"><?php echo $info['max_num']?></span>
+            </div>
+            <div class="form-group">
+                <label>补货数量<sup>*</sup></label>
+                <input class="form-control" type="number" name="quantity_num" value="" />
+            </div>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("form").submit(function() {
+        $.check(!this.quantity_num.value, '请输入补货数量', this.quantity_num) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>
+
+

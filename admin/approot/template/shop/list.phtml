@@ -60,6 +60,7 @@
             <tr>
                 <th class="text-center">商家名称</th>
                 <th class="text-center">商家头像</th>
+                <th class="text-center">后台登录用户</th>
                 <th class="text-center">所在城市</th>
                 <th class="text-center">联系电话</th>
                 <th class="text-center">地址</th>
@@ -78,6 +79,7 @@
                     <td class="text-center">
                         <img src="<?php echo $this->uploadUrl($row['shop_headimg'], 'shop')?>" style="border: 1px solid #ddd; padding: 2px; width: 70px;">
                     </td>
+                    <td class="text-center"><?= $row['suser_name']?></td>
                     <td class="text-center"><?= $row['district_name']?></td>
                     <td class="text-center"><?= $row['shop_tel']?></td>
                     <td class="text-center"><?= $row['shop_address']?></td>

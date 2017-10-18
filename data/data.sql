@@ -665,6 +665,22 @@ CREATE TABLE `t_shops` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商家';
 
 -- ----------------------------
+-- 商家登录表 t_shop_users
+-- ----------------------------
+DROP TABLE IF EXISTS `t_shop_users`;
+CREATE TABLE `t_shop_users` (
+  `suser_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `shop_id` int(11) NOT NULL COMMENT '商家ID',
+  `suser_name` varchar(90) NOT NULL UNIQUE KEY COMMENT '用户名',
+  `suser_password` char(35) NOT NULL COMMENT '密码',
+  `suser_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
+  `suser_logtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后一次登录时间',
+  `suser_logip` char(15) NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
+  `suser_lognum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '登录次数',
+  `suser_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商家登录表';
+
+-- ----------------------------
 -- Table structure for t_products
 -- ----------------------------
 DROP TABLE IF EXISTS `t_products`;
@@ -725,6 +741,18 @@ CREATE TABLE `t_product_quantity` (
   `shop_id` int(11) NOT NULL COMMENT '商家ID',
   `quantity_num` smallint(6) NOT NULL DEFAULT '0' COMMENT '商家库存数量'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='商品库存分配表';
+
+-- ----------------------------
+-- Table structure for t_product_refill
+-- ----------------------------
+DROP TABLE IF EXISTS `t_product_refill`;
+CREATE TABLE `t_product_refill` (
+  `refill_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT 'ID',
+  `product_id` int(11) NOT NULL COMMENT '商品ID',
+  `shop_id` int(11) NOT NULL COMMENT '商家ID',
+  `refill_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `refill_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='补货通知表';
 
 -- ----------------------------
 -- Table structure for t_hot_products

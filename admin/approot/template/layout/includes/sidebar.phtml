@@ -33,6 +33,11 @@
                         <span class="hidden-sm">热门推荐</span>
                     </a>
                 </li>
+                <li class="<?php echo in_array($this->action(), array('refill-list', 'refill-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('product/refill-list');?>">
+                        <span class="hidden-sm">补货设置</span>
+                    </a>
+                </li>
             </ul>
         </li>
         <li class="<?php echo $this->controller() =='customer' ? 'active' : ''?>">

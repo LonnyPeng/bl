@@ -665,4 +665,131 @@ class ProductController extends AbstractActionController
 			return new JsonModel('error', '删除失败');
 		}
 	}
+
+	public function refillListAction()
+	{
+		$this->perm->check(PERM_READ);
+		
+		$where = array("pr.refill_status = 1");
+		if ($this->param('product_name')) {
+			$where[] = sprintf("p.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
+		}
+		if ($this->param('shop_name')) {
+			$where[] = sprintf("s.shop_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('shop_name'))) . '%'));
+		}
+
+		$sql = "SELECT COUNT(*) FROM t_product_refill pr
+				LEFT JOIN t_shops s ON s.shop_id = pr.shop_id
+				LEFT JOIN t_products p ON p.product_id = pr.product_id
+				WHERE " . implode(" AND ", $where);
+		$count = $this->locator->db->getOne($sql);
+		$this->helpers->paginator($count, 10);
+		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
+
+		$sql = "SELECT * FROM t_product_refill pr
+				LEFT JOIN t_shops s ON s.shop_id = pr.shop_id
+				LEFT JOIN t_products p ON p.product_id = pr.product_id
+				LEFT JOIN t_product_quantity pq ON pq.shop_id = pr.shop_id AND pq.product_id = pr.product_id
+				WHERE " . implode(" AND ", $where) . " 
+				ORDER BY pr.refill_id DESC
+				LIMIT " . implode(",", $limit);
+		$refillList = $this->locator->db->getAll($sql);
+
+		// print_r($refillList);die;
+		return array(
+			'refillList' => $refillList,
+		);
+	}
+
+	public function refillEditAction()
+	{
+		$id = $this->param('id');
+		$sql = "SELECT * FROM t_product_refill pr
+				LEFT JOIN t_shops s ON s.shop_id = pr.shop_id
+				LEFT JOIN t_products p ON p.product_id = pr.product_id
+				LEFT JOIN t_product_quantity pq ON pq.shop_id = pr.shop_id AND pq.product_id = pr.product_id
+				WHERE pr.refill_status = 1
+				AND refill_id = ?";
+		$info = $this->locator->db->getRow($sql, $id);
+		if (!$info) {
+			$this->funcs->redirect($this->helpers->url('product/refill'));
+		}
+
+		//可以补货的数量
+		$productNum = $info['product_quantity'];
+
+		$sql = "SELECT SUM(quantity_num) FROM t_product_quantity WHERE product_id = ?";
+		$shopQ = (int) $this->locator->db->getOne($sql, $info['product_id']);
+
+		$info['max_num'] = $productNum - $shopQ;
+
+		if ($this->funcs->isAjax()) {
+			$quantityNum = (int) trim($_POST['quantity_num']);
+			if (!$quantityNum) {
+				return new JsonModel('error', '请输入补货数量');
+			}
+			if ($quantityNum < 1) {
+				return new JsonModel('error', '补货数量不能小于0');
+			}
+			if ($quantityNum > $info['max_num']) {
+				return new JsonModel('error', sprintf('补货数量不能大于%d', $info['max_num']));
+			}
+
+			//保存库存分配
+			$sql = "SELECT quantity_id FROM t_product_quantity WHERE product_id = ? AND shop_id = ?";
+			$quantityId = $this->locator->db->getOne($sql, $info['product_id'], $info['shop_id']);
+
+			$insertSql = "INSERT INTO t_product_quantity 
+					SET product_id = :product_id, 
+					shop_id = :shop_id, 
+					quantity_num = :quantity_num";
+
+			if ($quantityId) {
+				$sql = "UPDATE t_product_quantity 
+						SET quantity_num = quantity_num + ?
+						WHERE quantity_id = ?";
+				$status = $this->locator->db->exec($sql, $quantityNum, $quantityId);
+			} else {
+				$sql = "INSERT INTO t_product_quantity 
+						SET product_id = :product_id, 
+						shop_id = :shop_id, 
+						quantity_num = :quantity_num";
+				$status = $this->locator->db->exec($sql, array(
+					'product_id' => $info['product_id'],
+					'shop_id' => $info['shop_id'],
+					'quantity_num' => $quantityNum,
+				));		
+			}
+
+			if (!$status) {
+				return new JsonModel('error', '补货失败');
+			}
+
+			$sql = "DELETE FROM t_product_refill WHERE refill_id = ?";
+			$this->locator->db->exec($sql, $id);
+
+			return JsonModel::init('ok', '补货成功')->setRedirect($this->helpers->url('product/refill-list'));
+		}
+
+		// print_r($info);die;
+		return array(
+			'info' => $info,
+		);
+	}
+
+	public function refillDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "DELETE FROM t_product_refill WHERE refill_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
 }
