@@ -28,7 +28,7 @@
             <?php foreach ($attrList as $key => $row) :?>
                 <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
                     <td class="text-center"><?= $row['attr_name']?></td>
-                    <td class="text-center <?php echo $this->perm->has(PERM_EDIT) : 'js-sort' : ''?>" title="双击编辑" data-id="<?php echo $row['attr_id']?>"><?= $row['attr_sort']?></td>
+                    <td class="text-center <?php echo $this->perm->has(PERM_EDIT) ? 'js-sort' : ''?>" title="双击编辑" data-id="<?php echo $row['attr_id']?>"><?= $row['attr_sort']?></td>
                     <td class="text-center"><?= $row['attr_status'] ? '有效' : '禁用'?></td>
                     <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
                         <td class="text-center action">
