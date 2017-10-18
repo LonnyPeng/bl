@@ -23,8 +23,6 @@ class BasicController extends AbstractActionController
 	public function init()
 	{
 	    parent::init();
-
-	    $this->perm->check(PERM_READ);
 	}
 
 	public function districtListAction()
