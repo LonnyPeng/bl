@@ -357,9 +357,9 @@ class CustomerController extends AbstractActionController
 
     public function scoreAction()
     {
-        $type = trim($this->param('type'));
-        if (!in_array($type, array('have', 'buy'))) {
-            $this->funcs->redirect($this->helpers->url('customer/score', array('type' => 'have')));
+        $status = trim($this->param('status'));
+        if (!in_array($status, array('have', 'buy'))) {
+            $this->funcs->redirect($this->helpers->url('customer/score', array('status' => 'have')));
         }
 
         $this->layout->title = '我的积分';
@@ -367,7 +367,7 @@ class CustomerController extends AbstractActionController
         $limit = array(0, 11);
         $where = array(
             sprintf("customer_id = %d", $this->customerId),
-            sprintf("score_type = '%s'", $type),
+            sprintf("score_type = '%s'", $status),
         );
 
         if ($this->funcs->isAjax() && $this->param('type') == 'page') {
@@ -390,7 +390,7 @@ class CustomerController extends AbstractActionController
                         }
                     }
 
-                    $scoreList[$key]['score_quantity'] = $type == 'buy' ? (0 - $row['score_quantity']) : $row['score_quantity'];
+                    $scoreList[$key]['score_quantity'] = $status == 'buy' ? (0 - $row['score_quantity']) : $row['score_quantity'];
                 }
 
                 return JsonModel::init('ok', '', $scoreList);

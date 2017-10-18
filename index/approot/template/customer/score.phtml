@@ -6,10 +6,10 @@
 	</div>
 <div class="jifen_tlt">
 	<div class="clearfix title">
-		<a href="<?php echo $this->url('customer/score', array('type' => 'have'))?>" class="fl tlt_l <?php echo $this->param('type') == 'have' ? 'on' : ''?>">
+		<a href="<?php echo $this->url('customer/score', array('status' => 'have'))?>" class="fl tlt_l <?php echo $this->param('status') == 'have' ? 'on' : ''?>">
 			积分获取记录
 		</a>
-		<a href="<?php echo $this->url('customer/score', array('type' => 'buy'))?>" class="fr tlt_l <?php echo $this->param('type') == 'buy' ? 'on' : ''?>">
+		<a href="<?php echo $this->url('customer/score', array('status' => 'buy'))?>" class="fr tlt_l <?php echo $this->param('status') == 'buy' ? 'on' : ''?>">
 			积分消费记录
 		</a>
 	</div>
