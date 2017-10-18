@@ -38,7 +38,9 @@ abstract class AbstractActionController extends ActionController
 
             if (true) {
                 if ($this->helpers->controller() != 'wechat') {
-                    $_SESSION['redirect'] = $this->helpers->selfUrl(null, false);
+                    if (!isset($_SESSION['redirect'])) {
+                        $_SESSION['redirect'] = $this->helpers->selfUrl(null, false);
+                    }
                     $this->funcs->redirect($this->helpers->url('wechat/index'));
                 }
             } else {
