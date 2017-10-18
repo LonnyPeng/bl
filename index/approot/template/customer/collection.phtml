@@ -43,11 +43,11 @@
                     pageSize++;
 
                     $(re.data).each(function (key, row) {
-                        ali +='<div class="collect_li clearfix wrap pr"><div class="img fl"><img src="' + row.data.image_path + '"></div><h4>' + row.data.product_name + '</h4><p><span class="orange">' + row.data.product_price + '积分</span></p>';
-                        if (row.data.order_num) {
+                        ali +='<div class="collect_li clearfix wrap pr"><div class="img fl"><img src="' + row.image_path + '"></div><h4>' + row.product_name + '</h4><p><span class="orange">' + row.product_price + '积分</span></p>';
+                        if (row.order_num) {
                             ali += '<a href="javascript:;" class="btn pa btn_no">去领取</a>';
                         } else {
-                            ali += '<a href="' + row.data.url + '" class="btn pa">去领取</a>';
+                            ali += '<a href="' + row.url + '" class="btn pa">去领取</a>';
                         }
 
                         ali += '</div>';
