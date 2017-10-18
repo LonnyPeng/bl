@@ -6,6 +6,12 @@ class AccountController extends AbstractActionController
 {
     public function registerAction()
     {
+        $where = sprintf("customer_openid = '%s'", addslashes($_SESSION['openid']));
+        $customer = $this->models->customer->getCustomerInfo($where);
+        if ($customer) {
+            $this->funcs->redirect($this->helpers->url('default/index'));
+        }
+        
         //自动注册新用户
         //保存头像
         $dir = USER_DIR;
