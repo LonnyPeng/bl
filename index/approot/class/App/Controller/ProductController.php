@@ -289,8 +289,8 @@ class ProductController extends AbstractActionController
 			$reviewId = $this->locator->db->lastInsertId();
 
 			//保存图片
-			if (isset($_FILES['file'])) {
-				$images = $this->saveReviewImg($_FILES['file']);
+			if (isset($_FILES)) {
+				$images = $this->saveReviewImg($_FILES);
 				foreach ($images as $key => $row) {
 					//处理图片
 					$result = $this->funcs->setImage(REVIEW_DIR . $row['image_path'], REVIEW_DIR, 100, 100);
@@ -337,20 +337,20 @@ class ProductController extends AbstractActionController
 	{
 		$dir = REVIEW_DIR;
 		$data = array();
-		foreach ($files['name'] as $key => $value) {
-			if ($files['error'][$key] || !in_array($files['type'][$key], $this->imgType) || $files['size'][$key] > $this->imgMaxSize) {
+		foreach ($files as $row) {
+			if ($row['error'] || !in_array($row['type'], $this->imgType) || $row['size'] > $this->imgMaxSize) {
 				continue;
 			}
 
-			$filename = $files['tmp_name'][$key];
+			$filename = $row['tmp_name'];
 			$upFileName = date('Ymd') . '/';
 			$this->funcs->makeFile($dir . $upFileName);
 
-			$ext = pathinfo($value, PATHINFO_EXTENSION);
-			$fileName = md5($value . $this->funcs->rand());
+			$ext = pathinfo($row['name'], PATHINFO_EXTENSION);
+			$fileName = md5($row['name'] . $this->funcs->rand());
 			for($i=0;; $i++) {
 				if (file_exists($dir . $upFileName . $fileName . '.' . $ext)) {
-					$fileName = md5($value . $this->funcs->rand());
+					$fileName = md5($row['name'] . $this->funcs->rand());
 				} else {
 					break;
 				}
@@ -358,7 +358,7 @@ class ProductController extends AbstractActionController
 
 			$uploadFile = $upFileName . $fileName . '.' . $ext;
 			$uploadFilePath = $dir . $uploadFile;
-			if (move_uploaded_file($files['tmp_name'][$key], $uploadFilePath)) {
+			if (move_uploaded_file($row['tmp_name'], $uploadFilePath)) {
 				$data[] = array(
 					'image_path' => $uploadFile,
 				);
