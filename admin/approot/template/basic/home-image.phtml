@@ -53,7 +53,7 @@
                         <div class="action">
                             <span class="time"><?php echo date('Y-m-d',strtotime($row['image_time']))?></span>
                             <?php if ($this->perm->has(PERM_EDIT)) : ?>
-                                <a class="edit" href="<?php echo $this->url('basic/home-image-edit', array('id' => $row['image_id']))?>">
+                                <a class="edit" href="<?php echo $this->url('basic/home-image-edit', array('id' => $row['image_id'], 'district_id' => $this->param('district_id')))?>">
                                     <i class="fa fa-edit"></i>
                                 </a>
                             <?php endif;?>
