@@ -415,6 +415,8 @@ class OrderController extends AbstractActionController
             return false;
         }
 
+        $orderId = trim($this->param('order_id'));
+
         return JsonModel::init('ok', '')->setRedirect($this->helpers->url('order/info', array('id' => $orderId)));
 
         // $orderId = trim($this->param('order_id'));
