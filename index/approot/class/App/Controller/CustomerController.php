@@ -764,11 +764,10 @@ class CustomerController extends AbstractActionController
             $sql = "SELECT * FROM t_orders 
                     WHERE order_type = 'group'
                     AND order_status = 1
-                    AND customer_id IN (?)
+                    AND customer_id IN (%s)
                     AND product_id = ?";
-            $orders = $this->locator->db->getAll($sql, $info['customers'], $info['product_id']);
-            print_r($sql);
-            print_r(array($info['customers'], $info['product_id']));die;
+            $sql = sprintf($sql, $info['customers']);
+            $orders = $this->locator->db->getAll($sql, $info['product_id']);
             if ($orders) {
                 $sql = "UPDATE t_orders 
                         SET order_type = 'pending', 
