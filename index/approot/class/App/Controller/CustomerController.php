@@ -393,7 +393,6 @@ class CustomerController extends AbstractActionController
                     $scoreList[$key]['score_quantity'] = $status == 'buy' ? (0 - $row['score_quantity']) : $row['score_quantity'];
                 }
 
-                print_r($scoreList);die;
                 return JsonModel::init('ok', '', $scoreList);
             } else {
                 return new JsonModel('error', '');
