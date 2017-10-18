@@ -16,7 +16,7 @@
 	<div class="dial_fo">
 		<h5>
 			<button class="jfdhcj">积分兑换抽奖机会</button>
-			<button>分享增加抽奖机会</button>
+			<button class="js-share">分享增加抽奖机会</button>
 		</h5>
 		<p style="color: #ffffff;">
 			<?php echo sprintf('当前您等级为%s，每天有%d次免费抽奖机会', $this->locator->get('Profile')['level_name'], $config['turntable_num'])?>
@@ -148,6 +148,9 @@
 		$('.js-now').click(function() {
 			$("#start").trigger('click');
 			$(".dialog, .mask").fadeOut();
+		});
+		$('.js-share').click(function() {
+			$.toast("请点击右上角分享按钮进行分享", "text");
 		});
 		
 		//设置转盘

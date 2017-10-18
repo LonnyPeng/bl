@@ -696,3 +696,6 @@ a.eval_title span.fr i{font-size: 14px;}
 .star-5 {
 	width:100%;
 }
+
+/*角标*/
+.unclaimed_num{width: 16px;height: 16px;border-radius: 50%;background: #f00;font-size: 12px;color: #fff; text-align: center;line-height: 16px;position: absolute;right:50%;top: 3px;margin-right: -20px;}

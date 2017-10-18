@@ -40,16 +40,25 @@
 </div>
 <div class="hy_nav weui-flex">
    <a class="weui-flex__item" href="<?php echo $this->url('order/index', array('status' => 'picke'))?>">
-    <i class="iconfont" data-num="<?php echo $receiveNum?>">&#xe622;</i>
+    <i class="iconfont">&#xe622;</i>
     <p>待领取</p>
+    <?php if ($receiveNum) : ?>
+        <span class="unclaimed_num"><?php echo $receiveNum?></span>
+    <?php endif;?>
    </a>
    <a class="weui-flex__item" href="<?php echo $this->url('order/index', array('status' => 'group'))?>">
-    <i class="iconfont" data-num="<?php echo $groupNum?>">&#xe603;</i>
+    <i class="iconfont">&#xe603;</i>
     <p>组团中</p>
+    <?php if ($groupNum) : ?>
+        <span class="unclaimed_num"><?php echo $groupNum?></span>
+    <?php endif;?>
    </a>
    <a class="weui-flex__item" href="<?php echo $this->url('order/index', array('status' => 'review'))?>">
-    <i class="iconfont" data-num="<?php echo $reviewNum?>">&#xe61a;</i>
+    <i class="iconfont">&#xe61a;</i>
     <p>待评价</p>
+    <?php if ($reviewNum) : ?>
+        <span class="unclaimed_num"><?php echo $reviewNum?></span>
+    <?php endif;?>
    </a>
 </div>
 <div class="hs_border"></div>
