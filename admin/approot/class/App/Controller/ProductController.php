@@ -69,7 +69,7 @@ class ProductController extends AbstractActionController
 
 		return array(
 			'attrList' => $this->models->product->getAttrPair(),
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 			'productList' => $productList,
 		);
 	}
@@ -354,7 +354,7 @@ class ProductController extends AbstractActionController
 		return array(
 			'info' => $info,
 			'attrList' => $this->models->product->getAttrPair(),
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 			'shopPair' => $this->models->shop->getShopGoupByDistrict(),
 		);
 	}
@@ -586,7 +586,7 @@ class ProductController extends AbstractActionController
 
 		return array(
 			'hotList' => $hotList,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 

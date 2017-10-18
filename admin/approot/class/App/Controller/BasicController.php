@@ -249,7 +249,7 @@ class BasicController extends AbstractActionController
 
 		return array(
 			'imageList' => $imageList,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 
@@ -376,7 +376,7 @@ class BasicController extends AbstractActionController
 
 		return array(
 			'info' => $info,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 
@@ -450,7 +450,7 @@ class BasicController extends AbstractActionController
 
 		return array(
 			'imageList' => $imageList,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 
@@ -621,7 +621,7 @@ class BasicController extends AbstractActionController
 
 		return array(
 			'info' => $info,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 

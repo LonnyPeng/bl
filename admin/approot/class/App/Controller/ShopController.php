@@ -51,7 +51,7 @@ class ShopController extends AbstractActionController
 		// print_r($shopList);die;
 		return array(
 			'shopList' => $shopList,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 
@@ -213,7 +213,7 @@ class ShopController extends AbstractActionController
 		}
 		return array(
 			'info' => $info,
-			'districtList' => $this->models->district->getDistrictPair('district_status = 1'),
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
 		);
 	}
 

@@ -51,7 +51,8 @@
                 <th class="text-center">城市名</th>
                 <th class="text-center">城市状态</th>
                 <?php if ($this->perm->has(PERM_EDIT) || $this->perm->has(PERM_DELETE)) : ?>
-                <th class="text-center">操作</th>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
             </tr>
         </thead>
         <tbody>

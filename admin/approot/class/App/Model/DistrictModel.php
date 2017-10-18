@@ -45,4 +45,25 @@ class DistrictModel extends CommonModel
 
 		return $this->locator->db->getPairs($sql);
 	}
+
+	public function getDistrictSelect($where = array())
+	{
+		$sql = "SELECT * FROM $this->name";
+		$sql = $this->setWhere($sql, $where);
+		$sql .= " ORDER BY CONVERT(district_name USING GBK) ASC";
+
+		$result = $this->locator->db->getAll($sql);
+		$data = array();
+		if ($result) {
+			foreach ($result as $key => $row) {
+				if (isset($data[$row['district_initial']])) {
+					$data[$row['district_initial']][] = $row;
+				} else {
+					$data[$row['district_initial']] = array($row);
+				}
+			}
+		}
+
+		return $data;
+	}
 }
