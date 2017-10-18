@@ -415,44 +415,46 @@ class OrderController extends AbstractActionController
             return false;
         }
 
-        $orderId = trim($this->param('order_id'));
-        $where = sprintf("order_id = %d", $orderId);
-        $info = $this->models->order->getOrderInfo($where);
-        if (!$info) {
-            return new JsonModel('error', '订单不存在');
-        }
-        if ($info['shinging_type'] != 'self') {
-            return new JsonModel('error', '订单不是自提');
-        }
-        if ($info['order_type'] != 'pending') {
-            return new JsonModel('error', '订单状态错误');
-        }
+        return JsonModel::init('ok', '')->setRedirect($this->helpers->url('order/info', array('id' => $orderId)));
 
-        //库存
-        $quantityId = trim($this->param('quantity_id'));
-        $sql = "SELECT pq.*, s.shop_address
-                FROM t_product_quantity pq 
-                LEFT JOIN t_shops s ON pq.shop_id = s.shop_id
-                WHERE quantity_id = ?";
-        $quantityInfo = $this->locator->db->getRow($sql, $quantityId);
-        if ($quantityInfo['quantity_num'] < 1) {
-            return new JsonModel('error', '库存不足');
-        }
+        // $orderId = trim($this->param('order_id'));
+        // $where = sprintf("order_id = %d", $orderId);
+        // $info = $this->models->order->getOrderInfo($where);
+        // if (!$info) {
+        //     return new JsonModel('error', '订单不存在');
+        // }
+        // if ($info['shinging_type'] != 'self') {
+        //     return new JsonModel('error', '订单不是自提');
+        // }
+        // if ($info['order_type'] != 'pending') {
+        //     return new JsonModel('error', '订单状态错误');
+        // }
 
-        //修改库存
-        $sql = "UPDATE t_product_quantity 
-                SET quantity_num = quantity_num - 1 
-                WHERE quantity_id";
-        $this->locator->db->exec($sql, $quantityId);
+        // //库存
+        // $quantityId = trim($this->param('quantity_id'));
+        // $sql = "SELECT pq.*, s.shop_address
+        //         FROM t_product_quantity pq 
+        //         LEFT JOIN t_shops s ON pq.shop_id = s.shop_id
+        //         WHERE quantity_id = ?";
+        // $quantityInfo = $this->locator->db->getRow($sql, $quantityId);
+        // if ($quantityInfo['quantity_num'] < 1) {
+        //     return new JsonModel('error', '库存不足');
+        // }
 
-        //修改订单状态
-        $sql = "UPDATE t_orders 
-                SET order_type = 'shipped', 
-                order_address = ?,
-                shop_id = ?
-                WHERE order_id = ?";
-        $this->locator->db->exec($sql, $quantityInfo['shop_address'], $quantityInfo['shop_id'], $orderId);
+        // //修改库存
+        // $sql = "UPDATE t_product_quantity 
+        //         SET quantity_num = quantity_num - 1 
+        //         WHERE quantity_id";
+        // $this->locator->db->exec($sql, $quantityId);
 
-        return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('order/info', array('id' => $orderId)));
+        // //修改订单状态
+        // $sql = "UPDATE t_orders 
+        //         SET order_type = 'shipped', 
+        //         order_address = ?,
+        //         shop_id = ?
+        //         WHERE order_id = ?";
+        // $this->locator->db->exec($sql, $quantityInfo['shop_address'], $quantityInfo['shop_id'], $orderId);
+
+        // return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('order/info', array('id' => $orderId)));
     }
 }
