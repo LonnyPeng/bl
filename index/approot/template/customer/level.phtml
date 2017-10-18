@@ -4,7 +4,7 @@
       <img src="<?php echo $this->uploadUrl($this->locator->get('Profile')['customer_headimg'], 'user')?>"/>
     </div>
     <div class="level_wen">
-      <p><span><?php echo $this->locator->get('Profile')['level_name']?><i class="iconfont" style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>">&#xe60e;</i></p>
+      <p><span style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>"><?php echo $this->locator->get('Profile')['level_name']?><i class="iconfont" style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>">&#xe60e;</i></p>
       <h5>小领结数：<?php echo $historyScore?></h5>
       <?php if ($nextScore) : ?>
             <h6><?php echo sprintf("距离%s还差%d个小领结", $nextScore['name'], $nextScore['score'])?></h6>
