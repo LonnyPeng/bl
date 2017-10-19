@@ -863,7 +863,7 @@ class CustomerController extends AbstractActionController
         $shareInfo = array(
             'title' => '和我一起来组团',
             'desc' => $productInfo['product_desc'],
-            'link' => HTTP_SERVER . BASE_PATH . "cart/index?id=" . $info['product_id'] . "&group_id=" . $info['group_id'];
+            'link' => HTTP_SERVER . BASE_PATH . "cart/index?id=" . $info['product_id'] . "&group_id=" . $info['group_id'],
             'imgUrl' => (string) $this->helpers->uploadUrl($productInfo['images']['banner'][0]['image_path'], 'product', true),
             'type' => 'link',
         );
