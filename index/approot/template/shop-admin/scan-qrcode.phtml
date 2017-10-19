@@ -4,6 +4,8 @@
 	<button id="js-ship" data-href="">确认派送</button>
 </div>
 
+<button id="js-ship-123" data-href="<?php echo $this->url('shop-admin/self-edit', array('id' => 10))?>">确认派送(123)</button>
+
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
 	wx.config(<?php echo $js->config(array('scanQRCode'), false) ?>);
@@ -31,7 +33,7 @@
 	});
 
 	//发货
-	$('#js-ship').click(function() {
+	$('#js-ship-123').click(function() {
 		var $$ = $(this);
 
 		$$.ajaxAuto();
