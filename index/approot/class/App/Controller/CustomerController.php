@@ -732,6 +732,10 @@ class CustomerController extends AbstractActionController
 
     public function groupDetailAction()
     {
+        require_once VENDOR_DIR . 'autoload.php';
+
+        $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
+
         $id = trim($this->param('id'));
         $info = $this->models->orderGroup->getOrderGroupById($id);
         if (!$info) {
@@ -855,10 +859,21 @@ class CustomerController extends AbstractActionController
             }
         }
 
+        $productInfo = $this->models->product->getProductById($info['product_id']);
+        $shareInfo = array(
+            'title' => '和我一起来组团',
+            'desc' => $productInfo['product_desc'],
+            'link' => $key,
+            'imgUrl' => (string) $this->helpers->uploadUrl($productInfo['images']['banner'][0]['image_path'], 'product', true),
+            'type' => 'link',
+        );
+
         // print_r($info);die;
         return array(
             'order' => $order,
             'info' => $info,
+            'shareInfo' => $shareInfo,
+            'js' => $this->app->js,
         );
     }
 

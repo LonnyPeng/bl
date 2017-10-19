@@ -59,7 +59,13 @@
 
 </div>
 
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
+    wx.config(<?php echo $js->config(array('onMenuShareAppMessage'), false) ?>);
+    wx.ready(function() {
+      wx.onMenuShareAppMessage(<?php echo json_encode($shareInfo)?>);
+    });
+    
     $(".cluster_li .img").height($(".cluster_li .img").width());
 
     setInterval(function () {
