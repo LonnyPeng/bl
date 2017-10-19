@@ -69,7 +69,7 @@ class OrderController extends AbstractActionController
                         $orderList[$key]['status'] = '待自提';
                     }
                 } elseif ($row['order_type'] == 'shipped') {
-                    $orderList[$key]['status'] = '待领取';
+                    $orderList[$key]['status'] = '待收货';
                 } elseif ($row['order_type'] == 'group') {
                     $sql = "SELECT group_id FROM t_order_groups WHERE customer_id IN (?) AND product_id = ?";
                     $groupId = $this->locator->db->getOne($sql, $this->customerId, $row['product_id']);
