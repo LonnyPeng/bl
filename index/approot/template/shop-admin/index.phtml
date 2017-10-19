@@ -3,5 +3,9 @@
 商家地址：<?php echo $shopInfo['shop_address']?>
 <br>
 
+<a href="<?php echo $this->url('shop-admin/scan-qrcode')?>">扫一扫</a>
+<a href="<?php echo $this->url('shop-admin/set-up')?>">设置</a>
+<a href="<?php echo $this->url('shop-admin/product-list')?>">商品管理</a>
+
 <a href="<?php echo $this->url('shop-admin/list')?>">更多</a>
 <?php print_r($list)?>
