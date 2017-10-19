@@ -167,8 +167,8 @@ class ShopController extends AbstractActionController
 	    	    return new JsonModel('error', '密码错误');
 	    	}
 
-	    	$_SESSION['login_id'] = intval($info['suser_id']);
-	    	$_SESSION['login_name'] = $info['suser_name'];
+	    	$_SESSION['shop_login_id'] = intval($info['suser_id']);
+	    	$_SESSION['shop_login_name'] = $info['suser_name'];
 
 	    	// record login time
 	    	$sql = "UPDATE t_shop_users

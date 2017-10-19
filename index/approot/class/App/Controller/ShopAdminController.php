@@ -15,8 +15,7 @@ class ShopAdminController extends AbstractActionController
     {
         parent::init();
 
-        print_r($_SESSION);die;
-        if (!isset($_SESSION['login_id']) || !isset($_SESSION['login_name'])) {
+        if (!isset($_SESSION['shop_login_id']) || !isset($_SESSION['shop_login_name'])) {
             $this->funcs->redirect($this->helpers->url('shop/login', array(
                 'redirect' => $this->helpers->selfUrl(null, false)
             )));
@@ -24,7 +23,7 @@ class ShopAdminController extends AbstractActionController
             $sql = "SELECT * FROM t_shop_users su 
                     LEFT JOIN t_shops s ON s.shop_id = su.shop_id
                     WHERE su.suser_id = ? AND su.suser_name = ?";
-            $shopInfo = $this->locator->db->getRow($sql, $_SESSION['login_id'], $_SESSION['login_name']);
+            $shopInfo = $this->locator->db->getRow($sql, $_SESSION['shop_login_id'], $_SESSION['shop_login_name']);
             if (!$shopInfo) {
                 Http::headerStatus(403);
             }
