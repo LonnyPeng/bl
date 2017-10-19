@@ -108,7 +108,7 @@
 <?php if (strtotime($info['product_end']) < time()) : ?>
     <div class="pf pro_foot clearfix">
       <a href="javascript:void(0);" class="sc fl js-collection <?php echo $info['collection_id'] ? 'on' : ''?>" style="color: <?php echo $info['collection_id'] ? '#ff7c00;' : '#999;'?>" data-id="<?php echo $info['product_id']?>"><i class="iconfont">&#xe614;</i><span>收藏</span></a>
-      <a href="#" class="fr lq" style="color: #fff; background-color: #999;">已过领取时间</a>
+      <a href="#" class="fr lq" style="color: #fff; background-color: #f3f3f3;">已过领取时间</a>
     </div>
 <?php elseif ($info['product_quantity'] < 1) : ?>
     <div class="pf pro_foot clearfix">
