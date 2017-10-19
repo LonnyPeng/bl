@@ -8,7 +8,7 @@ class OrderController extends AbstractActionController
 {
 	public $filed = array(
 		'shinging_type' => array('self' => '自提', 'logistics' => '配送'),
-		'order_type' => array('group' => '组团中', 'pending' => '发货中', 'shipped' => '已发货', 'received' => '已到货', 'review' => '已评论'),
+		'order_type' => array('group' => '组团中', 'pending' => '待发货', 'shipped' => '已发货', 'received' => '已到货', 'review' => '已评论'),
 	);
 
 	public function init() {
