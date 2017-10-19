@@ -284,8 +284,8 @@ class ShopAdminController extends AbstractActionController
 
     public function logoutAction()
     {
-        unset($_SESSION['login_id']);
-        unset($_SESSION['login_name']);
+        unset($_SESSION['shop_login_id']);
+        unset($_SESSION['shop_login_name']);
 
         $this->funcs->redirect($this->helpers->url('shop/login'));
     }
