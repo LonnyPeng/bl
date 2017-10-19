@@ -1,0 +1,17 @@
+<?php foreach($list as $row) : ?>
+	<div>
+		<p><?php echo $row['product']['product_name']?></p>
+		<img src="<?php echo $this->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product')?>">
+		<p>剩余库存<?php echo $row['quantity_num']?></p>
+		<p class="js-product" data-href="<?php echo $this->url('shop-admin/product-list', array('id' => $row['product_id']))?>">我要补货</p>
+	</div>
+<?php endforeach;?>
+
+<script type="text/javascript">
+	$('.js-product').click(function() {
+		var $$ = $(this);
+
+		$$.ajaxAuto();
+		return false;
+	});
+</script>

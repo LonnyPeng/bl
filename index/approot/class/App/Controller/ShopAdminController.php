@@ -36,9 +36,119 @@ class ShopAdminController extends AbstractActionController
     {
         $this->layout->title = '商家主页';
 
+        //商品领用记录
+        $where = array(
+            sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
+            "o.order_type = 'shipped'",
+        );
+        $limit = array(0, 10);
+        $list = $this->list($where, $limit);
 
-        print_r($this->shopInfo);die;
-        return array();
+        //近30天派送
+        $where['start'] = sprintf("o.order_shipped_time > '%s'", date("Y-m-d 00:00:00", strtotime("- 30 days")));
+        $where['end'] = sprintf("o.order_shipped_time <= '%s'", date("Y-m-d H:i:s"));
+        $count_30 = count($this->list($where));
+
+        //近7天派送
+        $where['start'] = sprintf("o.order_shipped_time > '%s'", date("Y-m-d 00:00:00", strtotime("- 7 days")));
+        $where['end'] = sprintf("o.order_shipped_time <= '%s'", date("Y-m-d H:i:s"));
+        $count_7 = count($this->list($where));
+
+        //昨天派送
+        $where['start'] = sprintf("o.order_shipped_time > '%s'", date("Y-m-d 00:00:00", strtotime("- 1 days")));
+        $where['end'] = sprintf("o.order_shipped_time <= '%s'", date("Y-m-d 23:59:59", strtotime("- 1 days")));
+        $count_1 = count($this->list($where));
+
+        // print_r($where);die;
+        return array(
+            'shopInfo' => $this->shopInfo,
+            'list' => $list,
+            'count_30' => $count_30,
+            'count_7' => $count_7,
+            'count_1' => $count_1,
+        );
+    }
+
+    public function listAction()
+    {
+        $this->layout->title = '领用数据';
+
+        $where = array(
+            sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
+            "o.order_type = 'shipped'",
+        );
+
+        if ($this->param('statr')) {
+            $where['start'] = sprintf("o.order_shipped_time > '%s'", date("Y-m-d 00:00:00", strtotime(trim($this->param('statr')))));
+        }
+        if ($this->param('end')) {
+            $where['start'] = sprintf("o.order_shipped_time <= '%s'", date("Y-m-d 23:59:59", strtotime(trim($this->param('end')))));
+        }
+
+        $limit = array(0, 10);
+        $list = $this->list($where, $limit);
+
+        return array(
+            'list' => $list,
+        );
+    }
+
+    protected function list($where = array(), $limit = array())
+    {
+        $sql = "SELECT o.*, c.customer_name FROM t_orders o
+                LEFT JOIN t_customers c ON c.customer_id = o.customer_id";
+
+        if (is_array($where) && count($where) > 0) {
+            $sql .= ' WHERE ' . implode(' AND ', $where);
+        } elseif (is_string($where) && '' != $where) {
+            $sql .= ' WHERE ' . $where;
+        }
+        $sql .= " ORDER BY o.order_id DESC";
+        if (is_array($limit) && count($limit) > 0 && count($limit) < 3) {
+            $sql .= ' LIMIT ' . implode(',', $limit);
+        } elseif (is_string($limit) && '' != $limit) {
+            $sql .= ' LIMIT ' . $limit;
+        }
+
+        // print_r($sql);die;
+        return (array) $this->locator->db->getAll($sql);
+    }
+
+    public function productListAction()
+    {
+        $this->layout->title = '商品管理';
+
+        if ($this->funcs->isAjax()) { //补货
+            $productId = trim($this->param('id'));
+            $sql = "SELECT COUNT(*) 
+                    FROM t_product_refill 
+                    WHERE product_id = ? 
+                    AND shop_id = ?";
+            if ($this->locator->db->getOne($sql, $productId, $this->shopInfo['shop_id'])) {
+                return new JsonModel('error', '你已提交，请等待');
+            }
+
+            $sql = "INSERT INTO t_product_refill 
+                    SET product_id = ?, 
+                    shop_id = ?";
+            $status = $this->locator->db->exec($sql, $productId, $this->shopInfo['shop_id']);
+            if ($status) {
+                return JsonModel::init('ok', '提交成功');
+            } else {
+                return JsonModel::init('error', '提交失败');
+            }
+        }
+
+        //获取库存商品
+        $sql = "SELECT * FROM t_product_quantity  pq WHERE pq.shop_id = ?";
+        $list = (array) $this->locator->db->getAll($sql, $this->shopInfo['shop_id']);
+        foreach ($list as $key => $row) {
+            $list[$key]['product'] = $this->models->product->getProductById($row['product_id']);
+        }
+
+        return array(
+            'list' => $list,
+        );
     }
 
     public function scanQrcodeAction()
