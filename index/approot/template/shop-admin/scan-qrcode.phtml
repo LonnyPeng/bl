@@ -1,6 +1,10 @@
 <div id="js-qrcode">扫一扫</div>
 
-<div id="text"></div>
+<div id="text" class="none">
+	<span></span>
+	<img src="">
+	<button id="js-ship" data-href="">确认派送</button>
+</div>
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
@@ -12,12 +16,29 @@
 				    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
 				    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 				    success: function (res) {
-				    	var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+				    	$(this).ajaxAuto({
+				    		url: '<?php echo $this->url('shop/self')?>',
+				    		type: 'post',
+				    		data: {key: res.resultStr},
+				    		success: function (re) {
+				    			if (re.status == 'ok') {
+				    				$('#text span').html(re.data.product_name);
+				    				$('#text img').attr({src: re.data.src});
+				    				$('#js-ship').data('href', re.data.href);
 
-				    	$('#text').html(result);
+				    				$('#text').fadeIn();
+				    			}
+				    		}
+				    	});
 					}
 				});
 			}
 		});
+	});
+
+	//发货
+	$('#js-ship').click(function() {
+		$(this).ajaxAuto();
+		return false;
 	});
 </script>
