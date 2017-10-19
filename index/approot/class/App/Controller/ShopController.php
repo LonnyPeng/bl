@@ -5,6 +5,7 @@ namespace App\Controller;
 use EasyWeChat\Foundation\Application;
 use Framework\View\Model\JsonModel;
 use Framework\View\Model\ViewModel;
+use Framework\Utils\Http;
 
 class ShopController extends AbstractActionController
 {
@@ -147,5 +148,49 @@ class ShopController extends AbstractActionController
 		return array(
 			'shopList' => $shopList,
 		);
+	}
+
+	public function loginAction()
+	{
+	    $this->layout->title = '商户登录';
+
+	    if ($this->funcs->isAjax()) {
+	    	$userName = trim($_POST['suser_name']);
+	    	$userPassword = trim($_POST['suser_password']);
+
+	    	$sql = "SELECT * FROM t_shop_users WHERE suser_name = ?";
+	    	$info = $this->locator->db->getRow($sql, $userName);
+	    	if (!$info) {
+	    	    return new JsonModel('error', '用户名错误');
+	    	}
+	    	if (!$this->password->validate($userPassword, $info['suser_password'])) {
+	    	    return new JsonModel('error', '密码错误');
+	    	}
+
+	    	$_SESSION['login_id'] = intval($info['suser_id']);
+	    	$_SESSION['login_name'] = $info['suser_name'];
+
+	    	// record login time
+	    	$sql = "UPDATE t_shop_users
+	    	        SET suser_logtime = NOW(),
+	    	            suser_logip = ?,
+	    	            suser_lognum = suser_lognum + 1
+	    	        WHERE suser_id = ?";
+	    	$this->locator->db->exec($sql, Http::getIp(), $info['suser_id']);
+
+	    	// get redirect url
+	    	$redirect = null;
+	    	if (!empty($_POST['redirect'])) {
+	    	    $redirect = $_POST['redirect'];
+	    	}
+	    	if (!$redirect) {
+	    	    $redirect = $this->helpers->url();
+	    	}
+	    	$model = new JsonModel('ok');
+	    	$model->setRedirect($redirect);
+	    	return $model;
+	    }
+
+	    return array();
 	}
 }

@@ -134,13 +134,4 @@ class OrderController extends AbstractActionController
 			return new JsonModel('error', '删除失败');
 		}
 	}
-
-	public function selfAction()
-	{
-		$orderNumber = trim($this->param('key'));
-		$info = $this->models->order->getOrderByNumber($orderNumber);
-
-		print_r($info);
-		die;
-	}
 }
