@@ -1,5 +1,3 @@
-<div id="js-qrcode">扫一扫</div>
-
 <div id="text" class="none">
 	<span></span>
 	<img src="">
@@ -10,30 +8,24 @@
 <script type="text/javascript">
 	wx.config(<?php echo $js->config(array('scanQRCode'), false) ?>);
 	wx.ready(function() {
-		$('#js-qrcode').trigger('click');
-		
-		$('#js-qrcode').click(function() {
-			 {
-				wx.scanQRCode({
-				    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-				    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-				    success: function (res) {
-				    	$(this).ajaxAuto({
-				    		url: '<?php echo $this->url('shop-admin/self')?>',
-				    		type: 'post',
-				    		data: {key: res.resultStr},
-				    		success: function (re) {
-				    			if (re.status == 'ok') {
-				    				$('#text span').html(re.data.product_name);
-				    				$('#text img').attr({src: re.data.src});
-				    				$('#js-ship').data('href', re.data.href);
+		wx.scanQRCode({
+		    needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+		    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+		    success: function (res) {
+		    	$(this).ajaxAuto({
+		    		url: '<?php echo $this->url('shop-admin/self')?>',
+		    		type: 'post',
+		    		data: {key: res.resultStr},
+		    		success: function (re) {
+		    			if (re.status == 'ok') {
+		    				$('#text span').html(re.data.product_name);
+		    				$('#text img').attr({src: re.data.src});
+		    				$('#js-ship').data('href', re.data.href);
 
-				    				$('#text').fadeIn();
-				    			}
-				    		}
-				    	});
-					}
-				});
+		    				$('#text').fadeIn();
+		    			}
+		    		}
+		    	});
 			}
 		});
 	});
