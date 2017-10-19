@@ -62,7 +62,7 @@ class ShopAdminController extends AbstractActionController
 
         $key = trim($_POST['key']);
         $orderNumber = $this->funcs->encrypt($key, 'D', QRCODE_KEY);
-        $where = sprintf("order_number = '%s'", $id),;
+        $where = sprintf("order_number = '%s'", $id);
         $info = $this->models->order->getOrderInfo($where);
 
         if (!$info) {
