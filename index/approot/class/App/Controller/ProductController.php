@@ -227,6 +227,8 @@ class ProductController extends AbstractActionController
 
 	public function reviewDetailAction()
 	{
+		$this->layout->title = "评论详情";
+
 		$id = trim($this->param('id'));
 		$info = $this->models->review->getReviewById($id);
 		if (!$info) {
@@ -261,6 +263,9 @@ class ProductController extends AbstractActionController
 
 	public function reviewAddAction()
 	{
+		$this->layout->title = "添加评论";
+		$this->layout->style = "background:#FFF;";
+		
 		$id = trim($this->param('id'));
 		$where = array(
 			sprintf("order_id = %d", $id),
