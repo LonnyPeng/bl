@@ -34,7 +34,8 @@
 	$('#js-ship').click(function() {
 		var $$ = $(this);
 
-		$$.removeAttr('href');
+		$.toast($$.data('href'));
+		
 		$$.ajaxAuto();
 		return false;
 	});
