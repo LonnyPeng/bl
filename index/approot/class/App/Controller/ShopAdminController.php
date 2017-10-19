@@ -250,7 +250,7 @@ class ShopAdminController extends AbstractActionController
                 AND shop_id = ?";
         $this->locator->db->exec($sql, $info['product_id'], $this->shopInfo['shop_id']);
 
-        return new JsonModel('error', '派送成功');
+        return JsonModel::init('error', '派送成功')->setRedirect($this->helpers->url('shop-admin/index'));
     }
 
     public function passwordForgetAction()
