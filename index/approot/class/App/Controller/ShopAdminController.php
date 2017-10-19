@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use EasyWeChat\Foundation\Application;
 use Framework\View\Model\JsonModel;
 use Framework\Utils\Http;
 
