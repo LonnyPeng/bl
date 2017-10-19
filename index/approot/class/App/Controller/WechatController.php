@@ -21,9 +21,9 @@ class WechatController extends AbstractActionController
 
     public function indexAction()
     {
-        //设置测试账号的菜单
-        // $this->menu();
-        // die;
+        // 设置测试账号的菜单
+        $this->menu();
+        die;
 
         $oauth = $this->app->oauth;
         
@@ -87,13 +87,13 @@ class WechatController extends AbstractActionController
     {
         $menu = $this->app->menu;
 
-        $urlPath = "http://bltest.txapp.cn/index/";
+        $urlPath = HTTP_SERVER . BASE_PATH;
 
         $buttons = [
             [
                 "type" => "view",
-                "name" => "粉丝福利",
-                "url" => $urlPath . "default/index",
+                "name" => "商户登录",
+                "url" => $urlPath . "shop/login",
             ],
             [
                 "type" => "view",
