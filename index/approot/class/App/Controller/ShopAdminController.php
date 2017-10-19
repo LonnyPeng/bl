@@ -233,10 +233,11 @@ class ShopAdminController extends AbstractActionController
                 order_shipped_time = now(), 
                 shop_id = :shop_id, 
                 user_address = :user_address 
-                WHERE order_id = ?";
+                WHERE order_id = :order_id";
         $status = $this->locator->db->exec($sql, array(
             'shop_id' => $this->shopInfo['shop_id'],
             'user_address' => $this->shopInfo['shop_address'],
+            'order_id' => $id,
         ));
         if (!$status) {
             return new JsonModel('error', '派送失败');
