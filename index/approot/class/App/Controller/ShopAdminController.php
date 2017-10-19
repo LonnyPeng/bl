@@ -62,7 +62,8 @@ class ShopAdminController extends AbstractActionController
 
         $key = trim($_POST['key']);
         $orderNumber = $this->funcs->encrypt($key, 'D', QRCODE_KEY);
-        $info = $this->models->order->getOrderByNumber($orderNumber);
+        $where = sprintf("order_number = '%s'", $id),;
+        $info = $this->models->order->getOrderInfo($where);
 
         if (!$info) {
             return new JsonModel('error', '订单不存在');
