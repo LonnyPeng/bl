@@ -56,7 +56,6 @@ class ShopAdminController extends AbstractActionController
 
     public function selfAction()
     {
-        var_dump($this->funcs->isAjax());die;
         if (!$this->funcs->isAjax()) {
             $this->funcs->redirect($this->helpers->url('default/index'));
         }
@@ -94,7 +93,7 @@ class ShopAdminController extends AbstractActionController
         }
 
         return JsonModel::init('ok', '', array(
-            'href' => (string) $this->helpers->url('shop/self-edit', array('id' => $info['order_id'])),
+            'href' => (string) $this->helpers->url('shop-admin/self-edit', array('id' => $info['order_id'])),
             'name' => $info['product_name'],
             'src' => (string) $this->helpers->uploadUrl($product['images']['banner'][0]['image_path'], 'product'),
         ));

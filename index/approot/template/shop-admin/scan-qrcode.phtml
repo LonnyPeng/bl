@@ -17,7 +17,7 @@
 				    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
 				    success: function (res) {
 				    	$(this).ajaxAuto({
-				    		url: '<?php echo $this->url('shop/self')?>',
+				    		url: '<?php echo $this->url('shop-admin/self')?>',
 				    		type: 'post',
 				    		data: {key: res.resultStr},
 				    		success: function (re) {
@@ -34,21 +34,6 @@
 				});
 			}
 		});
-	});
-
-	$(this).ajaxAuto({
-		url: '<?php echo $this->url('shop/self')?>',
-		type: 'post',
-		data: {key: '<?php echo $this->param('key')?>'},
-		success: function (re) {
-			if (re.status == 'ok') {
-				$('#text span').html(re.data.product_name);
-				$('#text img').attr({src: re.data.src});
-				$('#js-ship').data('href', re.data.href);
-
-				$('#text').fadeIn();
-			}
-		}
 	});
 
 	//发货
