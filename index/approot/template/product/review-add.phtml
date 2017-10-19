@@ -89,8 +89,9 @@
 				$('form').submit(function() {
 						var $$  = $(this);
 
-						if ($.check(!this.review_content.value, '请填写你的评价')) {
-								return true;
+						if ($.check(!this.review_score.value, '请选择你的评分') 
+							&& $.check(!this.review_content.value, '请填写你的评价')) {
+							return true;
 						} else {
 								return false;
 						}
