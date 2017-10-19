@@ -41,6 +41,19 @@ class ShopAdminController extends AbstractActionController
         return array();
     }
 
+    public function scanQrcodeAction()
+    {
+        require_once VENDOR_DIR . 'autoload.php';
+
+        $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
+
+        $this->layout->title = '扫一扫';
+
+        return array(
+            'js' => $this->app->js,
+        );
+    }
+
     public function selfAction()
     {
         require_once VENDOR_DIR . 'autoload.php';

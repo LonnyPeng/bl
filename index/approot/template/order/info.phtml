@@ -28,7 +28,7 @@
           <div class="weui-cell__ft orange"><?php echo $info['shinging_type'] == 'logistics' ? '配送' : '自提'?></div>
         </div>
       </div>
-      <?php if ($info['shinging_type'] == 'self' && $time > 0) : ?>
+      <?php if ($info['shinging_type'] == 'self') : ?>
           <div class="ewmcode ewmcode_01 tac">  
             <h4 class="orange">取货点：<?php echo $info['order_address']?></h4>
             <p class="gray">我的领取码</p>
