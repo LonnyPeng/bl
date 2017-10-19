@@ -152,6 +152,10 @@ class ShopController extends AbstractActionController
 
 	public function loginAction()
 	{
+		if (isset($_SESSION['shop_login_id']) && isset($_SESSION['shop_login_name'])) {
+		    $this->funcs->redirect($this->helpers->url('shop-admin/index'));
+		}
+		
 	    $this->layout->title = '商户登录';
 
 	    if ($this->funcs->isAjax()) {
