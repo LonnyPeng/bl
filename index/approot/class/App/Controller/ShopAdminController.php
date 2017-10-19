@@ -229,7 +229,7 @@ class ShopAdminController extends AbstractActionController
         }
 
         $sql = "UPDATE t_orders 
-                SET order_type = 'shipped', 
+                SET order_type = 'received', 
                 order_shipped_time = now(), 
                 shop_id = :shop_id, 
                 order_address = :order_address 
