@@ -356,7 +356,7 @@ class OrderController extends AbstractActionController
         $qrcodeDay = $this->locator->db->getOne($sql, $info['product_id']);
         $time = strtotime($info['order_time']) + $qrcodeDay * 86400 - time();
         
-        $key = $orderNum;
+        $key = $this->funcs->encrypt($orderNum, 'E', QRCODE_KEY);
         
         return array(
             'key' => $key,
@@ -399,7 +399,7 @@ class OrderController extends AbstractActionController
         $qrcodeDay = $this->locator->db->getOne($sql, $info['product_id']);
         $time = strtotime($info['order_time']) + $qrcodeDay * 86400 - time();
 
-        $key = $info['order_number'];
+        $key = $this->funcs->encrypt($info['order_number'], 'E', QRCODE_KEY);
 
     	// print_r($key);die;
         return array(
