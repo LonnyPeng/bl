@@ -142,11 +142,47 @@ class ShopAdminController extends AbstractActionController
         return new JsonModel('error', '派送成功');
     }
 
+    public function passwordForgetAction()
+    {
+        if ($this->funcs->isAjax()) {
+            $passwordOld = trim($_POST['suser_password_old']);
+            if (!$passwordOld) {
+                return new JsonModel('error', '输入原始密码');
+            }
+
+            if (!$this->password->validate($passwordOld, $this->shopInfo['suser_password'])) {
+                return new JsonModel('error', '密码错误');
+            }
+
+            $password = trim($_POST['suser_password']);
+            if ($password != trim($_POST['suser_password_r'])) {
+                return new JsonModel('error', '两次密码不一样');
+            }
+
+            $sql = "UPDATE t_shop_users SET suser_password = ? WHERE suser_id = ?";
+            $status = $this->locator->db->exec($sql, $this->password->encrypt($password), $this->shopInfo['suser_id']);
+            if ($status) {
+                return JsonModel::init('ok', '修改成功')->setRedirect($this->helpers->url('shop-admin/logout'));
+            } else {
+                return new JsonModel('error', '修改失败');
+            }
+        }
+
+        return array();
+    }
+
     public function logoutAction()
     {
         unset($_SESSION['login_id']);
         unset($_SESSION['login_name']);
 
         $this->funcs->redirect($this->helpers->url('shop/login'));
+    }
+
+    public function setUpAction()
+    {
+        $this->layout->title = "设置";
+
+        return array();
     }
 }

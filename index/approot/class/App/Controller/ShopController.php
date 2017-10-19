@@ -179,12 +179,10 @@ class ShopController extends AbstractActionController
 	    	$this->locator->db->exec($sql, Http::getIp(), $info['suser_id']);
 
 	    	// get redirect url
-	    	$redirect = null;
-	    	if (!empty($_POST['redirect'])) {
+	    	if ($_POST['redirect']) {
 	    	    $redirect = $_POST['redirect'];
-	    	}
-	    	if (!$redirect) {
-	    	    $redirect = $this->helpers->url();
+	    	} else {
+	    		$redirect = $this->helpers->url('shop-admin/index');
 	    	}
 	    	$model = new JsonModel('ok');
 	    	$model->setRedirect($redirect);
