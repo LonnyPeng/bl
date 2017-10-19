@@ -56,6 +56,7 @@ class ShopAdminController extends AbstractActionController
 
     public function selfAction()
     {
+        var_dump($this->funcs->isAjax());die;
         if (!$this->funcs->isAjax()) {
             $this->funcs->redirect($this->helpers->url('default/index'));
         }
