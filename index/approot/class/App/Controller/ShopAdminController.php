@@ -15,6 +15,7 @@ class ShopAdminController extends AbstractActionController
     {
         parent::init();
 
+        print_r($_SESSION);die;
         if (!isset($_SESSION['login_id']) || !isset($_SESSION['login_name'])) {
             $this->funcs->redirect($this->helpers->url('shop/login', array(
                 'redirect' => $this->helpers->selfUrl(null, false)
