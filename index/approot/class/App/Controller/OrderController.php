@@ -194,6 +194,11 @@ class OrderController extends AbstractActionController
                 if (!$customers) {
                     return new JsonModel('error', '成团不存在');
                 }
+                
+                if ($productInfo['product_group_num'] <= count(explode(",", $customers))) {
+                    return new JsonModel('error', '该团已满员');
+                }
+
                 if (in_array($this->customerId, explode(",", $customers))) {
                     return new JsonModel('error', '你已加入该团');
                 }
