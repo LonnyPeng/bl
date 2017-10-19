@@ -32,7 +32,10 @@
 
 	//发货
 	$('#js-ship').click(function() {
-		$(this).ajaxAuto();
+		var $$ = $(this);
+
+		$$.removeAttr('href');
+		$$.ajaxAuto();
 		return false;
 	});
 </script>
