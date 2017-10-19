@@ -36,6 +36,21 @@
 		});
 	});
 
+	$(this).ajaxAuto({
+		url: '<?php echo $this->url('shop/self')?>',
+		type: 'post',
+		data: {key: '<?php echo $this->param('key')?>'},
+		success: function (re) {
+			if (re.status == 'ok') {
+				$('#text span').html(re.data.product_name);
+				$('#text img').attr({src: re.data.src});
+				$('#js-ship').data('href', re.data.href);
+
+				$('#text').fadeIn();
+			}
+		}
+	});
+
 	//发货
 	$('#js-ship').click(function() {
 		$(this).ajaxAuto();
