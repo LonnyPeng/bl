@@ -3,35 +3,35 @@
 <?= $this->render('includes/nav', array('attrList' => $attrList))?>
 
 <!-- 分类列表 -->
+<?php if ($productList) : ?>
 <div id="m_pro" class='demos-content-padded mt98'>
-    <?php if ($productList) : ?>
-        <?php foreach($productList as $row) : ?>
-            <div class="prod_list">
-                <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
-                <div class="info wrap pr">
-                    <h4 class="lr1"><?php echo $row['product_name']?></h4>
-                    <span class="jg pa">[<?php echo sprintf("%.2f", $row['product_virtual_price'])?>]</span>
-                    <span class="pa orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span>
-                </div>
-                <div class="info info_click wrap clearfix">
-                    <a href="javascript:void(0);" class="fl tac js-collection <?php echo $row['collection_id'] ? 'on' : ''?>" data-id="<?php echo $row['product_id']?>">
-                        <i class="iconfont">&#xe60b;</i>
-                        <span><?php echo $row['collection_num']?></span>
-                    </a>
-                    <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="fr tac">
-                        <i class="iconfont ling">&#xe605;</i><span><?php echo $row['product_type'] == 2 ? '组团领' : '立即白领'?></span>
-                    </a>
-                </div>
+    <?php foreach($productList as $row) : ?>
+        <div class="prod_list">
+            <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
+            <div class="info wrap pr">
+                <h4 class="lr1"><?php echo $row['product_name']?></h4>
+                <span class="jg pa">[<?php echo sprintf("%.2f", $row['product_virtual_price'])?>]</span>
+                <span class="pa orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span>
             </div>
-        <?php endforeach;?>
-    <?php else : ?>
-        <div class="noproduct">
-          <p class="tac">
-            暂无商品！
-          </p>
+            <div class="info info_click wrap clearfix">
+                <a href="javascript:void(0);" class="fl tac js-collection <?php echo $row['collection_id'] ? 'on' : ''?>" data-id="<?php echo $row['product_id']?>">
+                    <i class="iconfont">&#xe60b;</i>
+                    <span><?php echo $row['collection_num']?></span>
+                </a>
+                <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="fr tac">
+                    <i class="iconfont ling">&#xe605;</i><span><?php echo $row['product_type'] == 2 ? '组团领' : '立即白领'?></span>
+                </a>
+            </div>
         </div>
-    <?php endif;?>
+    <?php endforeach;?>
 </div>
+<?php else : ?>
+    <div class="noproduct">
+      <p class="tac">
+        暂无商品！
+      </p>
+    </div>
+<?php endif;?>
 
 <div class="mask"></div>
 
