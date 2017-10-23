@@ -629,6 +629,17 @@ CREATE TABLE `t_turntable_chance` (
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='积分兑换抽奖机会';
 
 -- ----------------------------
+-- 分享日志表 t_share_log
+-- ----------------------------
+DROP TABLE IF EXISTS `t_share_log`;
+CREATE TABLE `t_share_log` (
+  `share_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
+  `customer_id` int(11) NOT NULL COMMENT '会员ID',
+  `share_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',
+  `share_status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态'
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='分享日志';
+
+-- ----------------------------
 -- 会员奖品表 t_prizes
 -- ----------------------------
 DROP TABLE IF EXISTS `t_prizes`;

@@ -468,6 +468,13 @@ class TaskController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('default/index'));
         }
 
+        //分享次数
+        $sql = "SELECT COUNT(*) FROM t_share_log WHERE customer_id = ? AND DATE(share_time) = ?";
+        $shareCount = $this->locator->db->getOne($sql, $this->customerId, date("Y-m-d"));
+        if ($shareCount > 2) {
+            return new JsonModel('error', '你今天已分享2次，请明天再来分享！');
+        }
+
         //分享增加一次抽奖机会
         $sql = "SELECT chance_id FROM t_turntable_chance 
                 WHERE chance_status = 1 AND customer_id = ?";
@@ -480,10 +487,14 @@ class TaskController extends AbstractActionController
         }
         $status = $this->locator->db->exec($sql, $chanceId);
 
-        if ($status) {
-            return JsonModel::init('ok', '分享成功')->setRedirect('reload');
-        } else {
+        if(!$status) {
             return new JsonModel('error', '分享失败');
         }
+
+        //分享日志
+        $sql = "INSERT INTO t_share_log SET customer_id = ?";
+        $this->locator->db->exec($sql, $this->customerId);
+
+        return JsonModel::init('ok', '分享成功')->setRedirect('reload');
     }
 }
