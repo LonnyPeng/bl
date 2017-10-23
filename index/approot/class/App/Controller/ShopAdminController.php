@@ -229,23 +229,23 @@ class ShopAdminController extends AbstractActionController
         $info = $this->models->order->getOrderInfo($where);
 
         if (!$info) {
-            return new JsonModel('error', '订单不存在');
+            return new JsonModel('error', '', array('msg' => '订单不存在'));
         }
         if ($info['order_type'] != 'pending') {
-            return new JsonModel('error', '商品已派送');
+            return new JsonModel('error', '', array('msg' => '商品已派送'));
         }
         if ($info['shinging_type'] != 'self') {
-            return new JsonModel('error', '商品非自提');
+            return new JsonModel('error', '', array('msg' => '商品非自提'));
         }
 
         //获取订单商品
         $product = $this->models->product->getProductById($info['product_id']);
         if (!$product) {
-            return new JsonModel('error', '商品不存在');
+            return new JsonModel('error', '', array('msg' => '商品不存在'));
         }
         $time = strtotime($info['order_time']) + $product['product_qr_code_day'] * 86400 - time();
         if ($time < 0) {
-            return new JsonModel('error', '二维码已过期');
+            return new JsonModel('error', '', array('msg' => '二维码已过期'));
         }
 
         $sql = "SELECT quantity_num 
@@ -253,7 +253,7 @@ class ShopAdminController extends AbstractActionController
                 WHERE product_id = ? 
                 AND shop_id = ?";
         if ($this->locator->db->getOne($sql, $info['product_id'], $this->shopInfo['shop_id']) < 1) {
-            return new JsonModel('error', '库存不足');
+            return new JsonModel('error', '', array('msg' => '库存不足'));
         }
 
         return JsonModel::init('ok', '', array(
