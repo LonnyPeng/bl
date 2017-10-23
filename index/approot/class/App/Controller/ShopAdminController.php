@@ -39,7 +39,7 @@ class ShopAdminController extends AbstractActionController
         //商品领用记录
         $where = array(
             sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
-            "o.order_type = 'shipped'",
+            "o.order_type = 'received'",
         );
         $limit = array(0, 8);
         $list = $this->list($where, $limit);
