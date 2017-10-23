@@ -76,7 +76,7 @@ class ShopAdminController extends AbstractActionController
 
         $where = array(
             sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
-            "o.order_type = 'shipped'",
+            "o.order_type = 'received'",
         );
 
         if ($this->param('statr')) {
