@@ -256,7 +256,7 @@
 									animateTo: value.n * 360 + value.angle,//一共转动多少角度
 									easing: eval(effect[Math.floor(Math.random() * effect.length)]),//转动动画扩展
 									callback: function(re) {//结束时的回调函数
-										console.log(re);
+										console.log(value);
 										
 										var num = $('#chance-num').text() - 1;
 										$('#chance-num').html(num);
