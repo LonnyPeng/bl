@@ -24,7 +24,13 @@
 
 		    				$('#text').fadeIn();
 		    			} else {
-		    				console.log(re);
+		    				$.alert({
+	    					  title: '提示',
+	    					  text: re.msg,
+	    					  onOK: function () { //点击确认
+	    					    history.back(-1);
+	    					  }
+	    					});
 		    				return false;
 		    			}
 		    		}
