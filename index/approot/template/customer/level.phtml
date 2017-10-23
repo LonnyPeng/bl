@@ -1,46 +1,46 @@
 <div class="level">
-  <div class="level_t">
-    <div class="level_pic">
-      <img src="<?php echo $this->uploadUrl($this->locator->get('Profile')['customer_headimg'], 'user')?>"/>
-    </div>
-    <div class="level_wen">
-      <p><span style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>"><?php echo $this->locator->get('Profile')['level_name']?><i class="iconfont" style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>">&#xe60e;</i></p>
-      <h5>小领结数：<?php echo $historyScore?></h5>
-      <?php if ($nextScore) : ?>
-            <h6><?php echo sprintf("距离%s还差%d个小领结", $nextScore['name'], $nextScore['score'])?></h6>
-        <?php endif;?>
-    </div>
-    <div class="level_jd">
-      <div class="level_xian">
-        <em></em>
-        <span></span>
-      </div>
-      <?php if ($list) : ?>
-          <div class="level_jdul">
-            <?php foreach($list as $key => $row) : ?>
-                <div class="level_jdli">
-                  <span><i class="iconfont"><?php echo $levelIcon[$row['level_id']]?></i></span>           
-                  <p><?php echo $row['level_name']?></p>
-                </div>
-            <?php endforeach;?>
-          </div>
-      <?php endif;?>        
-    </div>
-  </div>
-  <div class="level_d">
-    <div class="level_tit">
-      <span style="background: url(images/level_titbg1.png) no-repeat center;background-size: 100% 100%;"></span>会员等级对照表<span style="background: url(images/level_titbg2.png) no-repeat center;background-size: 100% 100%;"></span>
-    </div>
-    <?php if ($list) : ?>
-        <div class="level_dzb">
-            <?php foreach($list as $key => $row) : ?>
-              <div class="level_item">
-                <h6><i class="iconfont"><?php echo $levelIcon[$row['level_id']]?></i></h6>
-                <p><?php echo $row['level_name']?></p>
-                <h5>小领结数：<?php echo isset($list[$key + 1]) ? ($row['level_score'] . '-' . $list[$key + 1]['level_score']) : $row['level_score'] . '以上'?></h5>
-              </div>
-            <?php endforeach;?>
-        </div>
-    <?php endif;?>
-  </div>
+	<div class="level_t">
+		<div class="level_pic">
+			<img src="<?php echo $this->uploadUrl($this->locator->get('Profile')['customer_headimg'], 'user')?>"/>
+		</div>
+		<div class="level_wen">
+			<p><span style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>"><?php echo $this->locator->get('Profile')['level_name']?><i class="iconfont" style="color: <?php echo $levelColor[$this->locator->get('Profile')['level_id']]?>">&#xe60e;</i></p>
+			<h5>小领结数：<?php echo $historyScore?></h5>
+			<?php if ($nextScore) : ?>
+						<h6><?php echo sprintf("距离%s还差%d个小领结", $nextScore['name'], $nextScore['score'])?></h6>
+				<?php endif;?>
+		</div>
+		<div class="level_jd">
+			<div class="level_xian">
+				<em></em>
+				<span></span>
+			</div>
+			<?php if ($list) : ?>
+					<div class="level_jdul">
+						<?php foreach($list as $key => $row) : ?>
+								<div class="level_jdli">
+									<span><i class="iconfont"><?php echo $levelIcon[$row['level_id']]?></i></span>           
+									<p><?php echo $row['level_name']?></p>
+								</div>
+						<?php endforeach;?>
+					</div>
+			<?php endif;?>        
+		</div>
+	</div>
+	<div class="level_d">
+		<div class="level_tit">
+			<span style="background: url(<?php echo $this->image('level_titbg1.png')?>) no-repeat center;background-size: 100% 100%;"></span>会员等级对照表<span style="background: url(<?php echo $this->image('level_titbg2.png')?>) no-repeat center;background-size: 100% 100%;"></span>
+		</div>
+		<?php if ($list) : ?>
+				<div class="level_dzb">
+						<?php foreach($list as $key => $row) : ?>
+							<div class="level_item">
+								<h6><i class="iconfont"><?php echo $levelIcon[$row['level_id']]?></i></h6>
+								<p><?php echo $row['level_name']?></p>
+								<h5>小领结数：<?php echo isset($list[$key + 1]) ? ($row['level_score'] . '-' . $list[$key + 1]['level_score']) : $row['level_score'] . '以上'?></h5>
+							</div>
+						<?php endforeach;?>
+				</div>
+		<?php endif;?>
+	</div>
 </div>  
