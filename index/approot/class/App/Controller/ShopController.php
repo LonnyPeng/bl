@@ -156,7 +156,7 @@ class ShopController extends AbstractActionController
 		    $this->funcs->redirect($this->helpers->url('shop-admin/index'));
 		}
 		
-	    $this->layout->title = '商户登录';
+	    $this->layout->title = '商户端登录';
 
 	    if ($this->funcs->isAjax()) {
 	    	$userName = trim($_POST['suser_name']);

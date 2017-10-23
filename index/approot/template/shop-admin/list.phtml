@@ -1,1 +1,106 @@
-<?php print_r($list)?>
+<form>
+	<div class="sh_jlt clearfix border_bt">
+	  <div class="fl inl tac w20">
+	    <p id="js-submit">查询</p>
+	  </div>
+	  <div class="fl inl inm tac w40 pr_jlt pr">
+	    <p>
+	    	<input class="weui-input" id="time" name="start" type="text" value="<?php echo $this->param('start')?>" placeholder="选择下单时间"><i class="iconfont pa">&#xe61b;</i>
+	    </p>
+	  </div>
+	  <div class="fr inl tac w40 pr_jlt pr">
+	    <p>
+	    	<input class="weui-input" id="time2" name="end" type="text" value="<?php echo $this->param('end')?>" placeholder="选择结束时间"><i class="iconfont pa">&#xe61b;</i>
+	    </p>
+	  </div>
+	</div>
+</form>
+
+<div class="lq_main" id="m_pro">
+  <div class="weui-flex wrap ltt_ul border_bt">
+    <div class="weui-flex__item lqw_30 tac">
+      <p>商品名称</p>
+    </div>
+    <div class="weui-flex__item lqw_30 tac">
+      <p>领取会员名称</p>
+    </div>
+    <div class="weui-flex__item tac">
+      <p>领取时间</p>
+    </div>
+  </div>
+
+	<?php if($list) : ?>
+	  	<?php foreach($list as $row) : ?>
+		  <div class="weui-flex wrap ltt_li border_bt">
+		    <div class="weui-flex__item tac">
+		      <p><?php echo $row['product_name']?></p>
+		    </div>
+		    <div class="weui-flex__item tac">
+		      <p><?php echo $row['customer_name']?></p>
+		    </div>
+		    <div class="weui-flex__item tac">
+		      <p><?php echo date("Y.m.d H:i:s", strtotime($row['order_titme']))?></p>
+		    </div>
+		  </div>
+		<?php endforeach;?>
+	<?php endif;?>
+</div>
+
+<div class="leave_lq">
+   <h4 class="tac">共<?php echo $count?>条派送记录</h4>
+</div>
+
+<div class="mask"></div>
+
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
+<script type="text/javascript">
+	$('#js-submit').click(function() {
+		$('form').trigger('submit');
+	});
+
+	$("#time, #time2").calendar({
+		onOpen: function () {
+			$('.mask').fadeIn();
+		},
+	    onChange: function (p, values, displayValues) {
+	      // console.log(values, displayValues);
+	    },
+	    onClose: function () {
+	    	$('.mask').fadeOut();
+	    }
+	});
+
+	var pageSize = 1;
+	var loading = false;  //状态标记
+	$(document.body).infinite().on("infinite", function() {
+	    if (loading) {
+	        return false;
+	    } else {
+	        $('.weui-loadmore').fadeIn();
+	        loading = true;
+	    }
+	    
+	    $(this).ajaxAuto({
+	        data: {type: 'page', pageSize: pageSize},
+	        success: function (re) {
+	            var ali="";
+	            if (re.status == 'ok') {
+	                pageSize++;
+
+	                $(re.data).each(function (key, row) {
+	                    ali +='<div class="weui-flex wrap ltt_li border_bt"><div class="weui-flex__item tac"><p>' + row.product_name + '</p></div><div class="weui-flex__item tac"><p>' + row.customer_name + '</p></div><div class="weui-flex__item tac"><p>' + row.order_titme + '</p></div></div>';
+	                });
+	            }
+
+	            $("#m_pro").append(ali);
+	            
+	            $('.weui-loadmore').fadeOut();
+	            loading = false;
+	        }
+	    });
+	});
+</script>

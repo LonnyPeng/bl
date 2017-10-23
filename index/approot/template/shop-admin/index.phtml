@@ -1,11 +1,92 @@
-商家名字：<?php echo $shopInfo['shop_name']?>
-<br>
-商家地址：<?php echo $shopInfo['shop_address']?>
-<br>
+<div class="shoper_t">
+	<h3>商家主页</h3>
+	<a class="sz" href="<?php echo $this->url('shop-admin/set-up')?>"><i class="iconfont">&#xe61c;</i></a>
+	<a class="sm" href="<?php echo $this->url('shop-admin/scan-qrcode')?>"><i class="iconfont">&#xe637;</i></a>
+</div>
 
-<a href="<?php echo $this->url('shop-admin/scan-qrcode')?>">扫一扫</a>
-<a href="<?php echo $this->url('shop-admin/set-up')?>">设置</a>
-<a href="<?php echo $this->url('shop-admin/product-list')?>">商品管理</a>
+<div class="shop_tlt clearfix">
+	<div class="fl sj_l">
+	  <div class="info tac">
+	    <i class="iconfont">&#xe658;</i>
+	    <p>商家名称</p>
+	  </div>
+	</div>
+	<div class="fl sj_m">
+	  <div class="info">
+	    <p class="lr1"><?php echo $shopInfo['shop_name']?></p>
+	    <p class="lr2">地址：<?php echo $shopInfo['shop_address']?></p>
+	  </div>
+	</div>
+	<div class="fr sj_l">
+		<a href="<?php echo $this->url('shop-admin/product-list')?>">
+			<div class="info tac">
+			  <i class="iconfont">&#xe995;</i>
+			  <p>商品管理</p>
+			</div>
+		</a>
+	</div>
+</div>
 
-<a href="<?php echo $this->url('shop-admin/list')?>">更多</a>
-<?php print_r($list)?>
+<div class="gray_bg"></div>
+
+<div class="sh_jlt clearfix">
+	<div class="fl inl tac">
+	  <p>近30天派送</p>
+	  <h4><?php echo $count_30?></h4>
+	</div>
+	<div class="fl inl inm tac">
+	  <p>近7天派送</p>
+	  <h4><?php echo $count_7?></h4>
+	</div>
+	<div class="fr inl tac">
+	  <p>昨日派送</p>
+	  <h4><?php echo $count_1?></h4>
+	</div>
+</div>
+
+<div class="weui-cells lqjl">
+	<a href="<?php echo $this->url('shop-admin/list')?>" class="weui-cell">
+	  <div class="weui-cell__bd">
+	    <p>领用记录</p>
+	  </div>
+	  <div class="weui-cell__ft">更多数据>></div>
+	</a>
+</div>
+<div class="lq_main">
+	<div class="weui-flex wrap ltt_ul border_bt">
+	  <div class="weui-flex__item lqw_30 tac">
+	    <p>商品名称</p>
+	  </div>
+	  <div class="weui-flex__item lqw_30 tac">
+	    <p>领取会员名称</p>
+	  </div>
+	  <div class="weui-flex__item tac">
+	    <p>领取时间</p>
+	  </div>
+	</div>
+
+	<?php if ($list) : ?>
+		<?php foreach($list as $row) : ?>
+			<div class="weui-flex wrap ltt_li border_bt">
+			  <div class="weui-flex__item tac">
+			    <p><?php echo $row['product_name']?></p>
+			  </div>
+			  <div class="weui-flex__item tac">
+			    <p><?php echo $row['customer_name']?></p>
+			  </div>
+			  <div class="weui-flex__item tac">
+			    <p><?php echo date("Y.m.d H:i:s", strtotime($row['order_titme']))?></p>
+			  </div>
+			</div>
+		<?php endforeach;?>
+	<?php endif;?>
+</div>
+
+<div class="leave_lq">
+	<a href="<?php echo $this->url('shop-admin/logout')?>" class="weui-btn weui-btn_primary">退出登录</a>
+</div>
+
+<script type="text/javascript">
+	var ww = $(window).width();
+	$(".shop_tlt .sj_m").width(ww - 182);
+</script>

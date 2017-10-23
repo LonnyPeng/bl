@@ -1,17 +1,68 @@
-<?php foreach($list as $row) : ?>
-	<div>
-		<p><?php echo $row['product']['product_name']?></p>
-		<img src="<?php echo $this->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product')?>">
-		<p>剩余库存<?php echo $row['quantity_num']?></p>
-		<p class="js-product" data-href="<?php echo $this->url('shop-admin/product-list', array('id' => $row['product_id']))?>">我要补货</p>
-	</div>
-<?php endforeach;?>
+<div class="shop_list" id="m_pro">
+	<?php foreach($list as $row) : ?>
+		<div class="weui-cell">
+		  <div class="weui-cell__hd">
+		  	<img src="<?php echo $this->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product')?>"/>
+		  </div>
+		  <div class="weui-cell__bd">
+		    <h5 class="lr2"><?php echo $row['product']['product_name']?></h5>
+		    <h6>价值 &yen;<b><?php echo $row['product']['product_virtual_price']?></b></h6>
+		    <p>剩余库存<?php echo $row['quantity_num']?>件</p>
+		    <a class="fh_btn js-product" href="javascript:void(0);" data-href="<?php echo $this->url('shop-admin/product-list', array('id' => $row['product_id']))?>">我要补货</a>
+		  </div>
+		</div>
+	<?php endforeach;?>
+</div>
+
+<div class="mask"></div>
+
+<div class="weui-loadmore none">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
 
 <script type="text/javascript">
-	$('.js-product').click(function() {
-		var $$ = $(this);
+	init();
 
-		$$.ajaxAuto();
-		return false;
+	var pageSize = 1;
+	var loading = false;  //状态标记
+	$(document.body).infinite().on("infinite", function() {
+	    if (loading) {
+	        return false;
+	    } else {
+	        $('.weui-loadmore').fadeIn();
+	        loading = true;
+	    }
+	    
+	    $(this).ajaxAuto({
+	        data: {type: 'page', pageSize: pageSize},
+	        success: function (re) {
+	            var ali="";
+	            if (re.status == 'ok') {
+	                pageSize++;
+
+	                $(re.data).each(function (key, row) {
+	                    ali +='<div class="weui-cell"><div class="weui-cell__hd"><img src="' + row.src + '"/></div><div class="weui-cell__bd"><h5 class="lr2">' + row.product.product_name + '</h5><h6>价值 &yen;<b>' + row.product.product_virtual_price + '</b></h6><p>剩余库存' + row.quantity_num + '件</p><a class="fh_btn js-product" href="javascript:void(0);" data-href="' + row.href + '">我要补货</a></div></div>';
+	                });
+	            }
+
+	            $("#m_pro").append(ali);
+	            
+	            $('.weui-loadmore').fadeOut();
+	            init();
+
+	            loading = false;
+	        }
+	    });
 	});
+
+	function init() {
+		$('.js-product').click(function() {
+			var $$ = $(this);
+
+			$$.removeAttr('href');
+			$$.ajaxAuto();
+			return false;
+		});
+	}
 </script>

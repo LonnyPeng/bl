@@ -41,7 +41,7 @@ class ShopAdminController extends AbstractActionController
             sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
             "o.order_type = 'shipped'",
         );
-        $limit = array(0, 10);
+        $limit = array(0, 8);
         $list = $this->list($where, $limit);
 
         //近30天派送
@@ -72,6 +72,7 @@ class ShopAdminController extends AbstractActionController
     public function listAction()
     {
         $this->layout->title = '领用数据';
+        $this->layout->style = "background: #fff;";
 
         $where = array(
             sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
@@ -85,12 +86,36 @@ class ShopAdminController extends AbstractActionController
             $where['start'] = sprintf("o.order_shipped_time <= '%s'", date("Y-m-d 23:59:59", strtotime(trim($this->param('end')))));
         }
 
-        $limit = array(0, 10);
+        $count = count($this->list($where));
+
+        $limit = array(0, 18);
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            $limit[0] = $this->param('pageSize') * $limit[1];
+        }
         $list = $this->list($where, $limit);
 
-        return array(
-            'list' => $list,
-        );
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            if ($list) {
+                foreach ($list as $key => $row) {
+                    foreach ($row as $ke => $value) {
+                        if (!$value) {
+                            $list[$key][$ke] = '';
+                        }
+                    }
+
+                    $list[$key]['order_titme'] = date("Y.m.d H:i:s", strtotime($row['order_titme']));
+                }
+
+                return JsonModel::init('ok', '', $list);
+            } else {
+                return new JsonModel('error', '');
+            }
+        } else {
+            return array(
+                'list' => $list,
+                'count' => $count,
+            );
+        }
     }
 
     protected function list($where = array(), $limit = array())
@@ -117,8 +142,14 @@ class ShopAdminController extends AbstractActionController
     public function productListAction()
     {
         $this->layout->title = '商品管理';
+        $this->layout->style = "background: #fff;";
 
-        if ($this->funcs->isAjax()) { //补货
+        $limit = array(0, 6);
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            $limit[0] = $this->param('pageSize') * $limit[1];
+        }
+
+        if ($this->funcs->isAjax() && $this->param('type') != 'page') { //补货
             $productId = trim($this->param('id'));
             $sql = "SELECT COUNT(*) 
                     FROM t_product_refill 
@@ -140,15 +171,37 @@ class ShopAdminController extends AbstractActionController
         }
 
         //获取库存商品
-        $sql = "SELECT * FROM t_product_quantity  pq WHERE pq.shop_id = ?";
+        $sql = "SELECT * 
+                FROM t_product_quantity pq 
+                WHERE pq.shop_id = ? 
+                LIMIT " . implode(",", $limit);
         $list = (array) $this->locator->db->getAll($sql, $this->shopInfo['shop_id']);
         foreach ($list as $key => $row) {
             $list[$key]['product'] = $this->models->product->getProductById($row['product_id']);
         }
 
-        return array(
-            'list' => $list,
-        );
+        if ($this->funcs->isAjax() && $this->param('type') == 'page') {
+            if ($list) {
+                foreach ($list as $key => $row) {
+                    foreach ($row as $ke => $value) {
+                        if (!$value) {
+                            $list[$key][$ke] = '';
+                        }
+                    }
+
+                    $list[$key]['src'] = (string) $this->helpers->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product');
+                    $list[$key]['href'] = (string) $this->helpers->url('shop-admin/product-list', array('id' => $row['product_id']));
+                }
+
+                return JsonModel::init('ok', '', $list);
+            } else {
+                return new JsonModel('error', '');
+            }
+        } else {
+            return array(
+                'list' => $list,
+            );
+        }
     }
 
     public function scanQrcodeAction()
@@ -255,6 +308,9 @@ class ShopAdminController extends AbstractActionController
 
     public function passwordForgetAction()
     {
+        $this->layout->title = "修改密码";
+        $this->layout->style = "background: #fff;";
+
         if ($this->funcs->isAjax()) {
             $passwordOld = trim($_POST['suser_password_old']);
             if (!$passwordOld) {
@@ -293,6 +349,7 @@ class ShopAdminController extends AbstractActionController
     public function setUpAction()
     {
         $this->layout->title = "设置";
+        $this->layout->style = "background: #fff;";
 
         return array();
     }

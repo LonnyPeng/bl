@@ -1,12 +1,41 @@
 <form method="post">
-	<input type="text" name="suser_name" value="" placeholder="用户名" />
-	<input type="password" name="suser_password" value="" placeholder="密码" />
-
-	<input type="hidden" name="redirect" value="<?php echo $this->param('redirect')?>" />
-	<button type="submit">登录</button>
+	<div class="slogin">
+		<div class="slogin_pat">
+			<div class="slogin_logo">
+				<img src="<?php echo $this->image('slogin_logo.png')?>"/>
+			</div>
+			<div class="slogin_ma">
+				<div class="weui-cells">
+				  <div class="weui-cell">
+				    <div class="weui-cell__hd"><i class="iconfont">&#xe793;</i></div>
+				    <div class="weui-cell__bd">
+				      <input type="text" name="suser_name" value="" placeholder="账号"/>
+				    </div>
+				  </div>
+				  <div class="weui-cell">
+				    <div class="weui-cell__hd"><i class="iconfont">&#xe618;</i></div>
+				    <div class="weui-cell__bd">
+				      <input type="password" name="suser_password" value="" placeholder="密码"/>
+				    </div>
+				  </div>
+				</div>
+			</div>
+			<input type="hidden" name="redirect" value="<?php echo $this->param('redirect')?>" />
+			<a class="twtj_btn" id="js-submit" href="javascript:;">立即登录</a>
+		</div>
+	</div>
 </form>
 
 <script type="text/javascript">
+	$(function(){
+		var windowH=$(window).height();
+		$(".slogin").height(windowH);
+	});
+
+	$('#js-submit').click(function() {
+		$('form').trigger('submit');
+	});
+
 	$('form').submit(function() {
 		var $$ = $(this);
 
