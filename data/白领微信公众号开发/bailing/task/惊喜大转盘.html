@@ -25,12 +25,21 @@
   		</div>
   		<div class="dial_ma">
   			<div class="dial_zp">
-  				<img class="dial_zp_img" src="images/dial_zp.png"/>
+  				<div class="dial_zp_img">
+					<p class="p1">谢谢参与</p>
+					<p class="p2">100积分</p>
+					<p class="p3">100积分</p>
+					<p class="p4">脉动一箱</p>
+					<p class="p5">谢谢参与</p>
+					<p class="p6">100积分</p>
+					<p class="p7">苹果6s</p>
+					<p class="p8">100积分</p>
+  				</div>
   				<img class="ljcj" src="images/dial_cj.png"/>
   			</div>
   		</div>
   		<div class="dial_fo">
-  			<h5><button class="jfdhcj">积分兑换抽奖机会</button><button>分享增加抽奖机会</button></h5>
+  			<h5><button class="jfdhcj">积分兑换抽奖机会</button><button id='show-toast-text'>分享增加抽奖机会</button></h5>
   			<p>当前您等级为白领，每天有一次免费抽奖机会</p>
   		</div>
   	</div>
@@ -43,7 +52,7 @@
 				  <div class="weui-flex__item dl_btn cancel">好的</div>
 				  <div class="weui-flex__item dl_btn">分享</div>
 				</div>
-  		</div>
+  			</div>
 			<div class="dialog_li dialog_zj pgjiang">
   			<h4>恭喜您，获得</h4>
 				<h5>苹果6s手机一部</h5>
@@ -52,31 +61,31 @@
 				  <div class="weui-flex__item dl_btn cancel">稍后</div>
 				  <a class="weui-flex__item dl_btn" href="../my/新建地址.html">立即填写</a>
 				</div>
-  		</div>
-  		<div class="dialog_li dialog_zj mdjiang">
-  			<h4>恭喜您，获得</h4>
+  			</div>
+  			<div class="dialog_li dialog_zj mdjiang">
+  				<h4>恭喜您，获得</h4>
 				<h5>脉动一箱</h5>
 				<p>预计7个工作日送达，请填写收货地址</p>
 				<div class="weui-flex">
 				  <div class="weui-flex__item dl_btn cancel">稍后</div>
 				  <a class="weui-flex__item dl_btn" href="../my/新建地址.html">立即填写</a>
 				</div>
-  		</div>
-  		<div class="dialog_li dialog_dh nojiang">
+  			</div>
+  			<div class="dialog_li dialog_dh nojiang">
 				<h5>谢谢参与</h5>
 				<div class="weui-flex">
 				  <div class="weui-flex__item dl_btn cancel">好的</div>
 				  <div class="weui-flex__item dl_btn">再来一次</div>
 				</div>
 			</div>
-  		<div class="dialog_li dialog_dh dialog_ok">
+  			<div class="dialog_li dialog_dh dialog_ok">
 				<h5>兑换成功，获得一次抽奖机会</h5>
 				<div class="weui-flex">
 				  <div class="weui-flex__item dl_btn cancel">好的</div>
 				  <div class="weui-flex__item dl_btn">立即使用</div>
 				</div>
 			</div>
-  		<div class="dialog_li dialog_dh dialog_no">
+  			<div class="dialog_li dialog_dh dialog_no">
 				<h5>兑换失败，积分不够哦</h5>
 				<div class="weui-flex">
 				  <div class="weui-flex__item dl_btn cancel">取消</div>
@@ -166,8 +175,17 @@ var rotateFunc = function(awards,angle,text){  //awards:奖项，angle:奖�
 	});
 
 })
-
-		</script>
+// 转盘文字方向
+var zpw=$(".dial_zp_img").width();
+$(".dial_zp_img").height(zpw);
+$(".dial_zp_img p").height(0.25*zpw);
+$(".dial_zp_img p").width(0.5*zpw);
+$(".dial_zp_img p").css('line-height',0.25*zpw+'px');
+$(document)
+  .on("click", "#show-toast-text", function() {
+    $.toast("请点击右上角分享按钮进行分享", "text");
+  })
+</script>
   </body>
 
 </html>

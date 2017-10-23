@@ -48,7 +48,26 @@
 .dial_top p{text-align:center;font-size: 14px;color: #ff7300;margin-top: 60px;}
 .dial_ma{background: url(../images/dial_yy.png) no-repeat center bottom;background-size: 60% auto;padding-bottom: 20px;}
 .dial_zp{position: relative;width: 76%;margin: 0 auto;}
-.dial_zp_img{width: 100%;display: block;}
+
+@media screen and (min-width:320px){html{font-size:14px}}
+@media screen and (min-width:360px){html{font-size:16.5px}}
+@media screen and (min-width:400px){html{font-size:17.5px}}
+@media screen and (min-width:480px){html{font-size:21px}}
+@media screen and (min-width:560px){html{font-size:24.5px}}
+@media screen and (min-width:600px){html{font-size:26.25px}}
+@media screen and (min-width:640px){html{font-size:28px}}
+@media screen and (min-width:750px){html{font-size:32.8125px}}
+.dial_zp_img{width: 100%;display: block;background:url(../images/dial_zp.png) no-repeat center center;background-size: 100% 100%;position: relative;}
+.dial_zp_img p{color: #FFF;position: absolute;font-size:0.78rem;display: inline-block;}
+.dial_zp_img p.p1{right:22%;top:27%;transform:rotate(115deg);}
+.dial_zp_img p.p2{right:16%;top:32%;transform:rotate(160deg);}
+.dial_zp_img p.p3{right:14%;top:41%;transform:rotate(205deg);}
+.dial_zp_img p.p4{right:21%;bottom:28%;transform:rotate(250deg);}
+.dial_zp_img p.p5{left:21%;bottom:26%;transform:rotate(295deg);}
+.dial_zp_img p.p6{left:15%;bottom:32%;transform:rotate(340deg);}
+.dial_zp_img p.p7{left:14%;top:34%;transform:rotate(25deg);}
+.dial_zp_img p.p8{left:20%;top:27%;transform:rotate(70deg);}
+
 .ljcj{position: absolute;top:50%;width:36%;left: 50%;}
 .dial_fo h5{padding:0 30px;display: flex;justify-content:space-between;position: absolute;bottom: 15%;width: 100%;box-sizing: border-box;}
 .dial_fo h5 button{width: 45%;line-height: 36px;background: #fff;border-radius: 5px;font-size: 14px;color: #f00a38;text-align: center;border: 0;box-shadow: 0 2px 1px #91001d;}

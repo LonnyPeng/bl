@@ -1,0 +1,92 @@
+.shoper_t{height: 50px;background: #ff7b00;color: #FFF;position: relative;}
+.shoper_t h3{line-height: 50px;text-align: center;}
+.shoper_t a{display: inline-block;height: 50px;line-height: 50px;color: #FFF;position: absolute;padding: 0 20px;z-index: 2}
+.shoper_t a i{font-size: 26px;}
+.shoper_t a.sz{left: 0;top: 0;}
+.shoper_t a.sm{right: 0;top: 0;}
+.wrap{padding: 0 10px;}
+.tac{text-align: center;}
+.pr{position: relative;}
+.pa{position: absolute;}
+.pf{position: fixed;}
+.shop_tlt{padding:0 10px;border-bottom: 1px solid #d9d9d9;}
+.shop_tlt p{font-size: 14px;color: #666;}
+.shop_tlt .sj_l{width: 80px;}
+.shop_tlt .info{padding: 10px 5px;}
+.shop_tlt .sj_m{border-right: 1px solid #d9d9d9;border-left: 1px solid #d9d9d9;height: 86px;}
+
+.shop_tlt .sj_l i{font-size: 34px;line-height: 46px;color: #ff7f00;}
+.shop_tlt .sj_l p{font-size: 12px;color: #999;}
+.gray_bg{height: 10px;background: #f2f1f1;}
+.sh_jlt{padding: 10px;border-top: 1px solid #d9d9d9;/*border-bottom: 1px solid #d9d9d9;*/}
+.sh_jlt .inl{width: 33%;}
+.sh_jlt .inm{border-left: 1px solid #d9d9d9;border-right: 1px solid #d9d9d9;}
+.sh_jlt p{color: #333}
+.sh_jlt h4{color: #ff7b00}
+.lqjl{margin-top: 0;}
+.lqjl a p{color: #333;}
+.ltt_ul{padding: 10px;}
+.ltt_ul p{font-size: 14px;}
+.border_bt{border-bottom: 1px solid #d9d9d9;}
+.ltt_li{padding: 6px 10px;}
+.ltt_li p{font-size: 12px;color: #888;}
+.lq_main{padding-bottom:70px;}
+.leave_lq{position: fixed;z-index: 9;bottom: 0;left: 0;width:100%;padding: 10px 0;background: #FFF}
+.leave_lq a{width: 80%;margin: auto;background: #ff7b00;}
+
+.border_bt .w20{width: 19%;}
+.border_bt .w40{width: 40%;}
+.sh_jlt p i{font-size: 18px;left: 50%;margin-left: 45px;}
+.leave_lq h4{font-size: 12px;color: #CCC;}
+.pr_jlt p input{text-align: center;}
+
+.pr_jlt p input::-webkit-input-placeholder {
+        color: #333;
+ }
+
+.img img{width: 100%;display: block;}
+.pr{position: relative;}
+.pa{position: absolute;}
+/*设置*/
+.weui-cells{margin: 0;}
+.weui-cell_access .weui-cell__ft:after{width: 8px;height: 8px;border-width: 1px 1px 0 0;}
+.weui-cell:before{left: 0;border-top: 1px solid #ddd;}
+.weui-cells:after{bottom: 1px;border-bottom:1px solid #ddd;}
+.setul .weui-cells:first-child:before{display: none;}
+.setul .weui-cells:nth-child(2){margin:3px 0;}
+.setul .weui-cell{line-height: 28px;}
+.twtj_btn{display: block;margin: 40px auto;width: 280px;line-height: 40px;background: #ff7c00;font-size: 16px;color: #fff;text-align: center;border-radius: 5px;}
+.setul .weui-cell__ft{font-weight: 100;}
+/*修改密码*/
+.setpass{padding: 0 15px;}
+.setpass .weui-cell{padding:10px 0 5px;}
+.setpass .weui-cell i.iconfont{font-size: 24px;color: #ff7b00;position: relative;top: -1px;}
+.setpass .weui-cell input{line-height: 32px;outline: none;margin-left: 5px;border: 0;color: #666;width: 100%}
+.setpass .weui-cell:before{border-top: 1px solid #cfc9bb;}
+/*商品管理*/
+.shop_list .weui-cells:before,.shop_list .weui-cells:after{display: none;}
+.shop_list .weui-cell{margin-bottom: 5px;}
+.shop_list .weui-cell:after{content:"";position: absolute;left: 0;bottom: 0;right: 0;height: 1px;border-bottom: 1px solid #ddd;transform-origin: 0 0;transform:scaleY(.5);}
+.shop_list .weui-cell__hd{width: 100px;height: 100px;border-radius: 5px;}
+.shop_list .weui-cell__hd img{width: 100%;display: block;}
+.shop_list .weui-cell__bd{padding-left: 10px;position: relative;}
+.shop_list h5{font-size: 16px;color: #333;margin-bottom: 5px;}
+.shop_list h6{font-size: 12px;color: #ff7b00;margin-bottom: 5px;}
+.shop_list h6 b{font-weight: normal;font-size: 18px;text-decoration: line-through;}
+.shop_list p{font-size: 12px;color: #999;}
+.fh_btn{position: absolute;width: 80px;line-height: 26px;letter-spacing: 2px;font-size: 14px;color: #fff;background: #ff7b00;border-radius: 5px;right: 10px;bottom: 0;text-align:center;}
+/*登录*/
+.slogin{background: url(../images/slogin_bg.png) no-repeat left top;background-size: cover;}
+.slogin_pat{padding-top: 80px;}
+.slogin_logo{width: 120px;margin:0 auto 80px;}
+.slogin_logo img{width: 100%;display: block;}
+.slogin_ma{width: 70%;margin: 0 auto;border-radius: 10px;border: 1px solid #ff7b00;overflow: hidden;box-shadow:0 0px 3px #ff7b00 inset;background:rgba(255,255,255,.7);}
+.slogin_ma .weui-cells{background: none;}
+.slogin_ma .weui-cells:before,.slogin_ma .weui-cells:after{display: none;}
+.slogin_ma .weui-cell{padding:2px 10px;}
+.slogin_ma i.iconfont{font-size: 28px;color: #ff7b00;}
+.slogin_ma input{line-height: 28px;border: 0;border-left: 1px solid #ff7b00;padding-left: 10px;margin-left: 10px;background: none;outline: none;}
+.slogin .twtj_btn{width: 70%;margin-top: 20px;line-height: 44px;}
+
+
+
