@@ -43,4 +43,27 @@
 				</div>
 		<?php endif;?>
 	</div>
-</div>  
+</div>
+
+<script type="text/javascript">
+	var jdli = $('.level_jdli span');
+	var xian = $('.level_xian');
+	var L = xian.width();
+	var xianSpan = xian.find('span');
+	var xianEm = xian.find('em');
+	var jdliW = jdli.width();
+	var xianSpanW = xianSpan.width();
+
+	jdli.height(jdliW).css({lineHeight: jdliW + 'px'});
+
+	<?php if (!isset($jd['n'])) : ?>
+		var jd = "100%";
+	<?php else : ?>
+		var l = (L - jdliW) / <?php echo $jd['count']?>;
+		var jd = (jdliW / 2 + <?php echo $jd['n']?> * l + l * ((<?php echo $historyScore - $jd['min']?>) / (<?php echo $jd['max'] - $jd['min']?>))) / L * 100 + "%";
+	<?php endif;?>
+	
+	// console.log(jd);
+	xianSpan.css({left: jd, marginTop: 0 - (xianSpanW / 2 + 3) + "px"}).height(xianSpanW);
+	xianEm.css({width: jd});
+</script>

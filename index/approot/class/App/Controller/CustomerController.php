@@ -882,6 +882,7 @@ class CustomerController extends AbstractActionController
         $this->layout->title = '123';
 
         $nextScore = array();
+        $jd = array();
         $historyScore = $this->models->customer->historyScore($this->customerId);
 
         $sql = "SELECT * FROM t_customer_score_level 
@@ -889,23 +890,30 @@ class CustomerController extends AbstractActionController
                 ORDER BY level_score ASC";
         $list = $this->locator->db->getAll($sql);
         if ($list) {
+            $jd['count'] = count($list) - 1;
+            $jd['score'] = (int) $historyScore;
             foreach ($list as $key => $row) {
                 if ($row['level_id'] == $this->locator->get('Profile')['level_id']) {
                     if (isset($list[$key + 1])) {
                         $nextScore['score'] = $list[$key + 1]['level_score'] - $historyScore;
                         $nextScore['name'] = $list[$key + 1]['level_name'];
+
+                        $jd['min'] = $row['level_score'];
+                        $jd['max'] = $list[$key + 1]['level_score'];
+                        $jd['n'] = $key;
                     }
                 }
             }
         }
 
-        // print_r($list);die;
+        // print_r($jd);die;
         return array(
             'historyScore' => $historyScore,
             'nextScore' => $nextScore,
             'list' => $list,
             'levelColor' => $this->levelColor,
             'levelIcon' => $this->levelIcon,
+            'jd' => $jd,
         );
     }
 }
