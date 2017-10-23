@@ -18,6 +18,9 @@
     <?php echo $this->css('common.css')->wrap();?>
     <?php echo $this->css('index.css')->wrap();?>
 
+    <?php echo $this->css($this->controller() . '.css', true)->wrap();?>
+    <?php echo $this->css($this->pageId() . '.css', true)->wrap();?>
+
     <?php echo $this->js('jquery-2.1.4.js')->wrap();?>
     <?php echo $this->js('fastclick.js')->wrap();?>
     <script type="text/javascript">
