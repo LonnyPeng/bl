@@ -44,8 +44,8 @@
 <div class="row">
     <?php if ($imageList) : ?>
         <ul class="sortable">
-            <?php foreach($imageList as $key => $row):?>
-                <li class="col-8 col-x-12 col-xs-16 col-m-48 js-image" data-id="<?php echo $row['recommend_id']?>", data-sort="<?php echo $row['image_sort']?>">
+            <?php foreach($imageList as $key => $row) : ?>
+                <li class="col-8 col-x-12 col-xs-16 col-m-48 js-image" data-id="<?php echo $row['recommend_id']?>", data-sort="<?php echo $row['recommend_sort']?>">
                     <div class="album-list">
                         <div class="pic-wrap">
                             <img src="<?php echo $this->uploadUrl($row['recommend_path'], 'sys');?>">

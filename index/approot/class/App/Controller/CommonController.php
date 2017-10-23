@@ -25,6 +25,8 @@ class CommonController extends AbstractActionController
 
 
         QRcode::png($value, false, $errorCorrectionLevel, $matrixPointSize);
+
+        return false;
     }
 
     public function phoneCodeAction()
