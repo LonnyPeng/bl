@@ -28,6 +28,8 @@ class WechatController extends AbstractActionController
         $oauth = $this->app->oauth;
         
         $oauth->redirect()->send();
+
+        return false;
     }
 
     public function callbackAction()
