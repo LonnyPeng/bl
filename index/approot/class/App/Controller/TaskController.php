@@ -345,9 +345,9 @@ class TaskController extends AbstractActionController
         	$angle = $angle[0];
         	$angle_arr = explode('-',$angle);
 
-        	$min = $angle_arr[0];
-        	$max = $angle_arr[1];
-        	$angle = mt_rand($min,$max);
+        	$min = $angle_arr[0] + $l / 4;
+        	$max = $angle_arr[1] - $l / 4;
+        	$angle = mt_rand($min, $max);
         	$data['angle'] = $angle;
         	$data['message'] = $prize['turntablep_title'];
         	$data['duration'] = mt_rand(2, 5) * 1000;
