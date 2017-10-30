@@ -17,6 +17,10 @@
             </div>
           </div>
       <?php endforeach;?>
+    <?php else : ?>
+      <script type="text/javascript">
+        window.location.href = '<?php echo $this->url('customer/address-edit', array('redirect' => $this->param('redirect'), 'prize_id' => $this->param('prize_id')))?>';
+      </script>
     <?php endif;?>
 </div>
 
