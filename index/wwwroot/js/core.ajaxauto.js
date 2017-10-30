@@ -344,8 +344,9 @@ $.fn.ajaxForm = function(settings) {
         return false;
     }
 
+    var background = formBtn.css('background');
     var disableBtn = function() {formBtn.addClass('disabled').css({'background': '#ddd'});};
-    var enableBtn = function() {formBtn.removeClass('disabled').css({'background': '#d4b275'});};
+    var enableBtn = function() {formBtn.removeClass('disabled').css({'background': background});};
     if (settings.context) {
         context = settings.context;
     }

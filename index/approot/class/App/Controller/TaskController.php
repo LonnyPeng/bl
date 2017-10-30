@@ -422,6 +422,30 @@ class TaskController extends AbstractActionController
     {
         $this->layout->title = '我的奖品';
 
+        if ($this->param('address')) {
+            $sql = "SELECT * FROM t_customer_address c 
+                    LEFT JOIN t_district d ON d.district_id = c.district_id 
+                    WHERE address_id = ?";
+            $info = $this->locator->db->getRow($sql, trim($this->param('address_id')));
+            if ($info) {
+                $sql = "UPDATE t_prizes 
+                        SET prize_customer_name = :prize_customer_name, 
+                        district_id = :district_id,
+                        district_name = :district_name,
+                        prize_address = :prize_address,
+                        prize_tel = :prize_tel
+                        WHERE prize_id = :prize_id";
+                $this->locator->db->exec($sql, array(
+                    'prize_customer_name' => $info['user_name'],
+                    'district_id' => $info['district_id'],
+                    'district_name' => $info['district_name'],
+                    'prize_address' => $info['user_address'],
+                    'prize_tel' => $info['user_tel'],
+                    'prize_id' => trim($this->param('prize_id')),
+                ));
+            }
+        }
+
         $where = array(
             "t.turntablep_attr = 'product'",
             sprintf("p.customer_id = %d", $this->customerId),

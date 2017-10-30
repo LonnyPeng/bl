@@ -28,11 +28,16 @@ class CartController extends AbstractActionController
         $this->layout->title = '确认订单';
 
         $addressInfo = array();
-        //用户默认地址
-        $customerInfo = $this->models->customer->getCustomerInfo(sprintf("customer_id = %d", $this->customerId));
-        if ($customerInfo['customer_default_address_id']) {
+        if ($this->param('address_id')) {
             $sql = "SELECT * FROM t_customer_address WHERE address_id = ?";
-            $addressInfo = $this->locator->db->getRow($sql, $customerInfo['customer_default_address_id']);
+            $addressInfo = $this->locator->db->getRow($sql, trim($this->param('address_id')));
+        } else {
+            //用户默认地址
+            $customerInfo = $this->models->customer->getCustomerInfo(sprintf("customer_id = %d", $this->customerId));
+            if ($customerInfo['customer_default_address_id']) {
+                $sql = "SELECT * FROM t_customer_address WHERE address_id = ?";
+                $addressInfo = $this->locator->db->getRow($sql, $customerInfo['customer_default_address_id']);
+            }
         }
         
         // print_r($addressInfo);die;

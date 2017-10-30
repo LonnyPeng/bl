@@ -2,10 +2,20 @@
     <?php if ($addressList) : ?>
         <?php foreach($addressList as $row) : ?>
           <div class="my_addr_list mb15 bgwhite">
-            <div class="wrap m_info">
-              <h4><?php echo $row['user_name']?><span><?php echo $row['user_tel']?></span></h4>
-              <p><?php echo $row['user_address']?></p>
-            </div>
+            <?php if ($redirect) : ?>
+              <?php $url = $redirect; $url['params']['address_id'] = $row['address_id'];?>
+              <a href="<?php echo $this->funcs->urlInit($url);?>">
+                <div class="wrap m_info">
+                  <h4 style="color: #666;"><?php echo $row['user_name']?><span><?php echo $row['user_tel']?></span></h4>
+                  <p><?php echo $row['user_address']?></p>
+                </div>
+              </a>
+            <?php else : ?>
+              <div class="wrap m_info">
+                <h4><?php echo $row['user_name']?><span><?php echo $row['user_tel']?></span></h4>
+                <p><?php echo $row['user_address']?></p>
+              </div>
+            <?php endif;?>
             <div class="wrap m_edit pr">
               <a class="moren" href="javascript:;" data-id="<?php echo $row['address_id']?>">
                   <i class="<?php echo $info['customer_default_address_id'] == $row['address_id'] ? 'weui-icon-success' : 'weui-icon-circle'?>"></i>设为默认地址
@@ -38,16 +48,20 @@
         var $$ = $(this);
         var id = $$.data('id');
 
-        $$.removeAttr('href');
-        $$.ajaxAuto({
-            url: '<?php echo $this->url('customer/address-del')?>',
-            data: {id: id},
-            success: function (re) {
-                if (re.status == 'ok') {
-                    $$.parents(".my_addr_list").remove();
+        $.confirm("确定删除地址吗?", "", function() {
+            $$.removeAttr('href');
+            $$.ajaxAuto({
+                url: '<?php echo $this->url('customer/address-del')?>',
+                data: {id: id},
+                success: function (re) {
+                    if (re.status == 'ok') {
+                        $$.parents(".my_addr_list").remove();
+                    }
                 }
-            }
-        });      
+            });
+        }, function() {
+            //取消操作
+        });
     });
 
     //默认地址

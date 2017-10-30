@@ -519,10 +519,21 @@ class CustomerController extends AbstractActionController
             }
         }
 
+        $redirect = $this->param('redirect');
+        if ($redirect) {
+            $redirect = str_replace("&amp;", "&", $redirect);
+            $redirect = $this->funcs->getUrl($redirect);
+            $redirect['params']['address'] = true;
+            if (preg_match("/\/index\/task\/chance-list/i", $redirect['url'])) {
+                $redirect['params']['prize_id'] = trim($this->param('prize_id'));
+            }
+        }
+
         // print_r($addressList);die;
         return array(
             'addressList' => $addressList,
             'info' => $info,
+            'redirect' => $redirect,
         );
     }
 
@@ -580,7 +591,21 @@ class CustomerController extends AbstractActionController
 
             $status = $this->locator->db->exec($sql, $map);
             if ($status) {
-                return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address', array('redirect' => $this->param('redirect'), 'prize_id' => $this->param('prize_id'))));
+                $redirect = $this->param('redirect');
+                if (!$info && $redirect) {
+                    $redirect = str_replace("&amp;", "&", $redirect);
+                    $redirect = $this->funcs->getUrl($redirect);
+                    $redirect['params']['address_id'] = $this->locator->db->lastInsertId();
+                    $redirect['params']['address'] = true;
+                    if (preg_match("/\/index\/task\/chance-list/i", $redirect['url'])) {
+                        $redirect['params']['prize_id'] = $this->param('prize_id');
+                    }
+                    
+                    $redirect = $this->funcs->urlInit($redirect);
+                    return JsonModel::init('ok', '成功')->setRedirect($redirect);
+                } else {
+                    return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('customer/address', array('redirect' => $this->param('redirect'), 'prize_id' => $this->param('prize_id'))));
+                }
             } else {
                 return new JsonModel('error', '提交失败');
             }
@@ -693,16 +718,18 @@ class CustomerController extends AbstractActionController
                     'prize_id' => trim($this->param('prize_id')),
                 ));
             }
-            $redirect = $this->param('redirect');
-            if ($redirect) {
-                $redirect = str_replace("&amp;", "&", $redirect);
-                $redirect = $this->funcs->getUrl($redirect);
-                $redirect['params']['address'] = true;
-                $redirect = $this->funcs->urlInit($redirect);
-                return JsonModel::init('ok', '')->setRedirect($redirect);
-            } else {
-                return JsonModel::init('ok', '');
-            }
+            // $redirect = $this->param('redirect');
+            // if ($redirect) {
+            //     $redirect = str_replace("&amp;", "&", $redirect);
+            //     $redirect = $this->funcs->getUrl($redirect);
+            //     $redirect['params']['address'] = true;
+            //     $redirect = $this->funcs->urlInit($redirect);
+            //     return JsonModel::init('ok', '')->setRedirect($redirect);
+            // } else {
+            //     return JsonModel::init('ok', '');
+            // }
+
+            return JsonModel::init('ok', '');
         } else {
             return new JsonModel('error', '修改失败');
         }
