@@ -126,10 +126,17 @@ class ProductController extends AbstractActionController
 			}
 		}
 
+		$sql = "SELECT COUNT(*) 
+				FROM t_reviews 
+				WHERE review_attr <> 'unread' 
+				AND product_id = ?";
+		$reviewCount = $this->locator->db->getOne($sql, $id);
+
 		// print_r($info);die;
 		return array(
 			'info' => $info,
 			'reviewList' => $reviewList,
+			'reviewCount' => $reviewCount,
 		);
 	}
 
