@@ -32,7 +32,7 @@
 				</div>
 				<h3 class="lr1"><?php echo $row['recommend_title']?></h3>
 				<?php if ($row['product_id']) : ?>
-					<a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+					<a class="m_btn" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
 						<?php echo $row['product_type'] == 2 ? '组团领' : '立即领取'?>
 					</a>
 				<?php endif;?>
