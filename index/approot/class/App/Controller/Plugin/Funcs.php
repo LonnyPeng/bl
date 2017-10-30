@@ -398,7 +398,7 @@ class Funcs implements ServiceLocatorAwareInterface
         $str = '';
         foreach ($init as $key => $row) {
             $num = floor($time / $row[0]);
-            if (!$num) {
+            if ($key != 'second' && !$num) {
                 continue;
             }
             
