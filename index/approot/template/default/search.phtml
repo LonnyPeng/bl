@@ -16,7 +16,7 @@
 
 <?php if ($productList) : ?>
     <?php foreach($productList as $row) : ?>
-        <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+        <div class="js-row" data-href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
             <div class="search_hot search_hh">
                 <div class="search_list clearfix pr">
                     <div class="img fl">
@@ -29,7 +29,7 @@
                     </a>
                 </div>
             </div>
-        </a>
+        </div>
     <?php endforeach?>
 <?php endif;?>
 
@@ -85,5 +85,9 @@
         if (!$(this).val()) {
             $('form').trigger('submit');
         }
+    });
+
+    $('.js-row').click(function() {
+        window.location.href = $(this).data('href');
     });
 </script>
