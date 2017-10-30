@@ -15,38 +15,38 @@
         <div class="weui-cell weui-cell_access" >
            <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
             <div class="weui-cell__bd">
-               <input class="weui-input openmk" id="inline" type="text" value="<?php echo $info['customer_gender'] ?: ''?>" name="customer_gender" placeholder="未选择">
+               <input class="weui-input openmk" id="inline" type="text" value="<?php echo $info['customer_gender'] ?: '未选择'?>" name="customer_gender" placeholder="" style="color: #000;">
             </div>
             <div class="weui-cell__ft">
             </div>
-            <div class="bg_wen">填写送10积分</div>
+            <div class="bg_wen <?php echo $info['customer_gender'] ? 'none' : ''?>">填写送10积分</div>
         </div>
         <a class="weui-cell weui-cell_access" href="<?php echo $this->url('customer/city')?>">
            <div class="weui-cell__hd"><label class="weui-label">常驻地</label></div>
             <div class="weui-cell__bd">
-              <h5><?php echo $info['district_name'] ?: '未选择'?></h5>
+              <h5 style="color: #000;"><?php echo $info['district_name'] ?: '未选择'?></h5>
             </div>
             <div class="weui-cell__ft">
             </div>
-            <div class="bg_wen">填写送10积分</div>
+            <div class="bg_wen <?php echo $info['district_name'] ? 'none' : ''?>">填写送10积分</div>
         </a>
         <div class="weui-cell weui-cell_access" >
            <div class="weui-cell__hd"><label class="weui-label">选择年龄段</label></div>
             <div class="weui-cell__bd">
-               <input class="weui-input openmk" id="inline1" type="text" value="<?php echo $info['customer_age'] ?: ''?>" name="customer_age" placeholder="未选择">
+               <input class="weui-input openmk" id="inline1" type="text" value="<?php echo $info['customer_age'] ?: '未选择'?>" name="customer_age" placeholder="" style="color: #000;">
             </div>
             <div class="weui-cell__ft">
             </div>
-            <div class="bg_wen">填写送10积分</div>
+            <div class="bg_wen <?php echo $info['customer_age'] ? 'none' : ''?>">填写送10积分</div>
         </div>
         <a class="weui-cell weui-cell_access" href="<?php echo $this->url('customer/phone')?>">
            <div class="weui-cell__hd"><label class="weui-label">绑定手机号</label></div>
             <div class="weui-cell__bd">
-              <h5><?php echo $info['customer_tel'] ?: '未绑定'?></h5>
+              <h5 style="color: #000;"><?php echo $info['customer_tel'] ?: '未绑定'?></h5>
             </div>
             <div class="weui-cell__ft">
             </div>
-            <div class="bg_wen">填写送10积分</div>
+            <div class="bg_wen <?php echo $info['customer_tel'] ? 'none' : ''?>">填写送10积分</div>
         </a>
       </div>
 

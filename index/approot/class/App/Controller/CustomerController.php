@@ -292,6 +292,7 @@ class CustomerController extends AbstractActionController
             $scoreNext = (($i + 2) * 1) > 5 ? 5 : (($i + 2) * 1);
         }
 
+        $score = ($i + 1) * 1 > 5 ? 5 : ($i + 1) * 1;
         if ($this->funcs->isAjax()) {
             //签到
             if ($checkDay) {
@@ -299,7 +300,6 @@ class CustomerController extends AbstractActionController
             }
 
             //改变积分
-            $score = ($i + 1) * 1 > 5 ? 5 : ($i + 1) * 1;
             $status = $this->score(array(
                 'type' => 'have', 
                 'des' => Score::YHQD, 
@@ -320,6 +320,8 @@ class CustomerController extends AbstractActionController
             'days' => $i,
             'scoreNext' => $scoreNext,
             'checkList' => $checkList,
+            'checkDay' => $checkDay,
+            'score' => $score,
         );
     }
 
@@ -632,7 +634,7 @@ class CustomerController extends AbstractActionController
     {
         $this->layout->title = '我的收藏';
 
-        $limit = array(0, 6);
+        $limit = array(0, 7);
         $where = array(
             sprintf("customer_id = %d", $this->customerId),
         );
@@ -665,7 +667,7 @@ class CustomerController extends AbstractActionController
 
                     $collectionList[$key]['image_path'] = (string) $this->helpers->uploadUrl($row['images']['banner'][0]['image_path'], 'product');
                     $collectionList[$key]['product_price'] = $this->funcs->showValue($row['product_price']);
-                    $collectionList[$key]['url'] = (string) $this->url('product/detail', array('id' => $row['product_id']));
+                    $collectionList[$key]['url'] = (string) $this->helpers->url('product/detail', array('id' => $row['product_id']));
                 }
 
                 return JsonModel::init('ok', '', $collectionList);

@@ -3,10 +3,18 @@
 </div>
 
 <div class="qd_ts">
-  <p>你已连续签到<?php echo $days?>天，明天继续签到可获得<?php echo $scoreNext?>个积分</p>
+    <?php if ($checkDay) : ?>
+        <p>你已连续签到<?php echo $days?>天，明天继续签到可获得<?php echo $scoreNext?>个积分</p>
+    <?php else : ?>
+        <p>你已连续签到<?php echo $days?>天，今天完成签到可获得<?php echo $score?>个积分</p>
+    <?php endif;?>
 </div>
 
-<button class="btn-qiandao" id="js-check">签到</button>
+<?php if ($checkDay) : ?>
+    <button class="btn-qiandao" style="background: #ddd; color: #fe850d;">已签到</button>
+<?php else : ?>
+    <button class="btn-qiandao" id="js-check">签到</button>
+<?php endif;?>
 
 <div class="maskbox"></div>
 <div class="qdbox">

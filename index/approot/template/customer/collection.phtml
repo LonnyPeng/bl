@@ -1,19 +1,27 @@
 <div class="my_collect" id="m_pro">
     <?php if ($collectionList) : ?>
         <?php foreach($collectionList as $row) : ?>
-              <div class="collect_li clearfix wrap pr">
-                <div class="img fl">
-                  <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>">
+            <a href="<?php echo $row['order_num'] ? 'javascript:void(0);' : $this->url('product/detail', array('id' => $row['product_id']))?>">
+                <div class="collect_li clearfix wrap pr">
+                  <div class="img fl">
+                    <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>">
+                  </div>
+                  <h4 style="color: #000;"><?php echo $row['product_name']?></h4>
+                  <p><span class="orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span></p>
+                  <?php if ($row['order_num']) : ?>
+                      <a href="javascript:;" class="btn pa btn_no">去领取</a>
+                  <?php else : ?>
+                      <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="btn pa">去领取</a>
+                  <?php endif;?>
                 </div>
-                <h4><?php echo $row['product_name']?></h4>
-                <p><span class="orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span></p>
-                <?php if ($row['order_num']) : ?>
-                    <a href="javascript:;" class="btn pa btn_no">去领取</a>
-                <?php else : ?>
-                    <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="btn pa">去领取</a>
-                <?php endif;?>
-              </div>
+            </a>
         <?php endforeach;?>
+    <?php else : ?>
+        <div class="noproduct">
+          <p class="tac">
+            当前暂无收藏记录
+          </p>
+        </div>
     <?php endif;?>
 </div>
 
@@ -25,6 +33,11 @@
 </div>
 
 <script type="text/javascript">
+    var wh=$(window).height();
+    var ww=$(window).width();
+    $(".noproduct").height(wh-100);
+    $(".noproduct").width(ww);
+
     var pageSize = 1;
     var loading = false;  //状态标记
     $(document.body).infinite().on("infinite", function() {
@@ -43,14 +56,19 @@
                     pageSize++;
 
                     $(re.data).each(function (key, row) {
-                        ali +='<div class="collect_li clearfix wrap pr"><div class="img fl"><img src="' + row.image_path + '"></div><h4>' + row.product_name + '</h4><p><span class="orange">' + row.product_price + '积分</span></p>';
+                        if (row.order_num) {
+                            ali += '<a href="javascript:void(0);">';
+                        } else {
+                            ali += '<a href="' + row.url + '">';
+                        }
+                        ali +='<div class="collect_li clearfix wrap pr"><div class="img fl"><img src="' + row.image_path + '"></div><h4 style="color: #000;">' + row.product_name + '</h4><p><span class="orange">' + row.product_price + '积分</span></p>';
                         if (row.order_num) {
                             ali += '<a href="javascript:;" class="btn pa btn_no">去领取</a>';
                         } else {
                             ali += '<a href="' + row.url + '" class="btn pa">去领取</a>';
                         }
 
-                        ali += '</div>';
+                        ali += '</div></a>';
                     });
                 }
 

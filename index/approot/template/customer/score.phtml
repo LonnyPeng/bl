@@ -29,6 +29,12 @@
 				</div>
 			</div>
 		<?php endforeach;?>
+	<?php else : ?>
+		<div class="noproduct">
+		  <p class="tac">
+		    当前暂无<?php echo $this->param('status') == 'have' ? '获取' : '消费'?>记录噢
+		  </p>
+		</div>
 	<?php endif;?>
 </div>
 
@@ -40,6 +46,11 @@
 </div>
 
 <script type="text/javascript">
+	var wh=$(window).height();
+	var ww=$(window).width();
+	$(".noproduct").height(wh-100);
+	$(".noproduct").width(ww);
+
 	var pageSize = 1;
 	var loading = false;  //状态标记
 	$(document.body).infinite().on("infinite", function() {
