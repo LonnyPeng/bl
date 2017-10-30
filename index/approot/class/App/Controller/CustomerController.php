@@ -838,7 +838,7 @@ class CustomerController extends AbstractActionController
                                 SET customer_score = customer_score + :customer_score 
                                 WHERE customer_id = :customer_id";
                         $this->locator->db->exec($sql, array(
-                            'customer_score' => '50',
+                            'customer_score' => '10',
                             'customer_id' => $row['customer_id'],
                         ));
 
@@ -852,7 +852,7 @@ class CustomerController extends AbstractActionController
                             'customer_id' => $row['customer_id'],
                             'score_type' => 'have',
                             'score_des' => Score::ZTCG,
-                            'score_quantity' => '50',
+                            'score_quantity' => '10',
                         ));
                     }
                 }

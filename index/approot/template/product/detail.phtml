@@ -49,7 +49,7 @@
       <b class="fl">组团说明</b>
       </a>
       <div class="wrap info">
-          <p><?php echo $info['product_group_num']?>人以上才可参加组团东西好价钱实惠，服务态度超级棒欢迎下次继续光临本店.</p>
+          <p>该产品组团才可以领，<?php echo $info['product_group_num']?>人成团。参团者均可免费获得该产品，组长可额外获得10积分，赶紧组团领吧。</p>
       </div>
   </div>
 <?php endif;?>
@@ -121,7 +121,7 @@
         <?php if ($info['order_num']) : ?>
             <a href="javascript:void(0);" class="fr lq" style="color: #fff; background-color: #999;">每人限领取一份</a>
         <?php else : ?>
-            <a href="<?php echo $this->url('cart/index', array('id' => $info['product_id']))?>" class="fr lq">立即组团领</a>
+            <a href="<?php echo $this->url('cart/index', array('id' => $info['product_id']))?>" class="fr lq">我要组团</a>
         <?php endif;?>
     </div>
 <?php else : ?>

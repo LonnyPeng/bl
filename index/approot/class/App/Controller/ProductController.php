@@ -298,7 +298,7 @@ class ProductController extends AbstractActionController
 				$images = $this->saveReviewImg($_FILES);
 				foreach ($images as $key => $row) {
 					//处理图片
-					$result = $this->funcs->setImage(REVIEW_DIR . $row['image_path'], REVIEW_DIR, 100, 100);
+					$result = $this->funcs->setImage(REVIEW_DIR . $row['image_path'], REVIEW_DIR, 800, 800);
 					if (!$result['status']) {
 						return new JsonModel('error', $result['content']);
 					} else {

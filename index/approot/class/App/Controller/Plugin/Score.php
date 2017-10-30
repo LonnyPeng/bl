@@ -17,7 +17,7 @@ class Score implements ServiceLocatorAwareInterface
     const XZNLD = '选择年龄段'; //10
     const BDSJ = '绑定手机'; //10
     const YQHY = '邀请好友'; //50
-    const ZTCG = '组团成功'; //50
+    const ZTCG = '组团成功'; //10
     const DTJF = '答题积分';
 	const YDJF = '阅读积分';
 
