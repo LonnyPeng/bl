@@ -133,6 +133,7 @@ class DefaultController extends AbstractActionController
     public function searchAction()
     {
         $this->layout->title = '搜索';
+        $this->layout->style = 'background: #fff';
 
         $searchList = $productMain = $productMinor = $productList = array();
 

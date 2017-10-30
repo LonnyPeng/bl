@@ -16,18 +16,20 @@
 
 <?php if ($productList) : ?>
     <?php foreach($productList as $row) : ?>
-        <div class="search_hot search_hh">
-            <div class="search_list clearfix pr">
-                <div class="img fl">
-                    <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>" >
+        <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+            <div class="search_hot search_hh">
+                <div class="search_list clearfix pr">
+                    <div class="img fl">
+                        <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>" >
+                    </div>
+                    <h4><?php echo $row['product_name']?></h4>
+                    <p><?php echo $this->funcs->showValue($row['product_price'])?>积分</p>
+                    <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+                        <?php echo $row['product_type'] == 1 ? '立即白领' : '组团领'?>
+                    </a>
                 </div>
-                <h4><?php echo $row['product_name']?></h4>
-                <p><?php echo $this->funcs->showValue($row['product_price'])?>积分</p>
-                <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
-                    <?php echo $row['product_type'] == 1 ? '立即白领' : '组团领'?>
-                </a>
             </div>
-        </div>
+        </a>
     <?php endforeach?>
 <?php endif;?>
 
