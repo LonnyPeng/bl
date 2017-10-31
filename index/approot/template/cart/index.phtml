@@ -80,50 +80,50 @@
 </div>
 
 <script type="text/javascript">
-        // 选择取货方式弹出
-        $('.qh_xz').on('click',function(event) {
-                $(this).find('i').removeClass('weui-icon-circle');
-                $(this).find('i').addClass('weui-icon-success');
-                $(this).siblings('.qh_xz').find('i').addClass('weui-icon-circle');
-                $(this).siblings('.qh_xz').find('i').removeClass('weui-icon-success');
-                
-                var qhl=$(this).find('p').text();
-                var type = $(this).find('p').data('type');
-                
-                if (type == 'logistics') { //配送
-                        $('#js-address, #js-address-detail').fadeIn();
-                } else { //自提
-                        $('#js-address, #js-address-detail').fadeOut();
-                }
+    // 选择取货方式弹出
+    $('.qh_xz').on('click',function(event) {
+            $(this).find('i').removeClass('weui-icon-circle');
+            $(this).find('i').addClass('weui-icon-success');
+            $(this).siblings('.qh_xz').find('i').addClass('weui-icon-circle');
+            $(this).siblings('.qh_xz').find('i').removeClass('weui-icon-success');
+            
+            var qhl=$(this).find('p').text();
+            var type = $(this).find('p').data('type');
+            
+            if (type == 'logistics') { //配送
+                    $('#js-address, #js-address-detail').fadeIn();
+            } else { //自提
+                    $('#js-address, #js-address-detail').fadeOut();
+            }
 
-                $('#js-submit').data('type', type);
-                $("#half").children('.weui-cell__ft').text(qhl)
-                $(".order_qh").find('.qh_ch').html(qhl);
+            $('#js-submit').data('type', type);
+            $("#half").children('.weui-cell__ft').text(qhl)
+            $(".order_qh").find('.qh_ch').html(qhl);
+    });
+
+    <?php if ($this->param('address')) : ?>
+        $('.qh_xz p[data-type="logistics"]').parents('.qh_xz').trigger('click');
+    <?php endif;?>
+
+    var groupId = '<?php echo $this->param('group_id')?>';
+    $('#js-submit').click(function() {
+        var $$ = $(this);
+        var type = $$.data('type');
+        
+        var href = '<?php echo $this->url('order/create', array('id' => $info['product_id']))?>';
+
+        if (type != 'self') {
+                if (!$('#js-address-detail').length) {
+                        window.location.href =  $('#js-address').attr('href');
+                } 
+        }
+
+        $$.removeAttr('href');
+
+        $$.ajaxAuto({
+            url: href + '&type=' + type + '&group_id=' + groupId
         });
-
-        <?php if ($this->param('address')) : ?>
-                $('.qh_xz p[data-type="logistics"]').parents('.qh_xz').trigger('click');
-        <?php endif;?>
-
-        var groupId = '<?php echo $this->param('group_id')?>';
-        $('#js-submit').click(function() {
-                var $$ = $(this);
-                var type = $$.data('type');
-                
-                var href = '<?php echo $this->url('order/create', array('id' => $info['product_id']))?>';
-
-                if (type != 'self') {
-                        if (!$('#js-address-detail').length) {
-                                window.location.href =  $('#js-address').attr('href');
-                        } 
-                }
-
-                $$.removeAttr('href');
-
-                $$.ajaxAuto({
-                    url: href + '&type=' + type + '&group_id=' + groupId
-                });
-                
-                return false;
-        });
+        
+        return false;
+    });
 </script>

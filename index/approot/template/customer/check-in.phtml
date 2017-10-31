@@ -13,7 +13,7 @@
 <?php if ($checkDay) : ?>
     <button class="btn-qiandao" style="background: #ddd; color: #fe850d;">已签到</button>
 <?php else : ?>
-    <button class="btn-qiandao" id="js-check">签到</button>
+    <button class="btn-qiandao js-button-igonre" id="js-check">签到</button>
 <?php endif;?>
 
 <div class="maskbox"></div>
@@ -25,6 +25,7 @@
 <script type="text/javascript">
     var calUtil_url = '<?php echo $this->url('customer/check-history')?>';
 </script>
+<?php echo $this->js('ignore-history.js')->wrap();?>
 <?php echo $this->js('calendar.js')->wrap();?>
 <script type="text/javascript">
   $(function(){
