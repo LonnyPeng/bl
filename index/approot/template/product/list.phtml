@@ -102,9 +102,11 @@
                         if (type == 'del') {
                             $$.removeClass('on');
                             $$.find('span').html(num - 1);
+                            $$.find('i').html("&#xe60b;");
                         } else {
                             $$.addClass('on');
                             $$.find('span').html(num + 1);
+                            $$.find('i').html("&#xe614;");
                         }
                     }
                 }
