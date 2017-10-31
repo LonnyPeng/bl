@@ -415,6 +415,38 @@ class ProductController extends AbstractActionController
 		}
 	}
 
+	public function reviewDownAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+
+		//判断是否赞过评论
+		$sql = "SELECT log_id 
+				FROM t_review_logs 
+				WHERE review_id = ? 
+				AND customer_id = ?";
+		$logId = $this->locator->db->getOne($sql, $id, $this->customerId);
+		if (!$logId) {
+			return new JsonModel('error', '你还没赞过该评论');
+		}
+
+		$sql = "UPDATE t_reviews 
+				SET review_vote_up = review_vote_up - 1 
+				WHERE review_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			$sql = "DELETE FROM t_review_logs 
+					WHERE log_id = ?";
+			$this->locator->db->exec($sql, $logId);
+			return JsonModel::init('ok', '');
+		} else {
+			return new JsonModel('error', '失败');
+		}
+	}
+
 	protected function getStarNum($value = '')
 	{
 	    $number = 0; 

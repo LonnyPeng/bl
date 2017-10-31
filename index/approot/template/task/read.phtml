@@ -5,7 +5,7 @@
 <?php if ($readCount >= $info['read_num']) : ?>
 	<a class="twtj_btn read_btn on" href="javascript:;">已参加</a>
 <?php else : ?>
-	<a class="twtj_btn read_btn on" id="js-submit" href="javascript:;">5</a>
+	<a class="twtj_btn read_btn on" id="js-submit" href="javascript:;">提交换积分（<span id="time">5</span>）</a>
 <?php endif;?>
 
 <div class="dialog">
@@ -59,7 +59,7 @@
   	window.location.reload();
   });
 
-  settime($('#js-submit'));
+  settime($('#time'));
   var countdown = 5; 
   function settime(val) {
     if (countdown == 0) { 

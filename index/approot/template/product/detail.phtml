@@ -241,25 +241,35 @@
         //赞
         $('.js-up').click(function() {
             var $$ = $(this);
-            if ($$.hasClass('on')) {
-                return false;
-            }
-
             var id = $$.data('id');
             var num = parseInt($$.find('span').text());
 
             $$.removeAttr('href');
 
-            $$.ajaxAuto({
-                url: '<?php echo $this->url('product/review-up')?>',
-                data: {id: id},
-                success: function (re) {
-                    if (re.status == 'ok') {
-                        $$.addClass('on');
-                        $$.find('span').html(num + 1);
+            if ($$.hasClass('on')) {
+                $$.ajaxAuto({
+                    url: '<?php echo $this->url('product/review-down')?>',
+                    data: {id: id},
+                    success: function (re) {
+                        if (re.status == 'ok') {
+                            $$.removeClass('on');
+                            $$.find('span').html(num - 1);
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                $$.ajaxAuto({
+                    url: '<?php echo $this->url('product/review-up')?>',
+                    data: {id: id},
+                    success: function (re) {
+                        if (re.status == 'ok') {
+                            $$.addClass('on');
+                            $$.find('span').html(num + 1);
+                        }
+                    }
+                });
+            }
+
             return false;
         });
     }
