@@ -79,7 +79,11 @@ class ProductModel extends CommonModel
 	    	$productInfo['order_num'] = $this->locator->db->getOne($sql, $id, $this->locator->get('Profile')['customer_id']);
 	    }
 
-	    return $productInfo;
+	    if (count($productInfo) == 1 && !reset($productInfo)) {
+	    	return false;
+	    } else {
+	    	return $productInfo;
+	    }
 	}
 
 	public function getAttrPair()
