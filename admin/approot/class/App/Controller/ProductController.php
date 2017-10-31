@@ -359,6 +359,36 @@ class ProductController extends AbstractActionController
 		);
 	}
 
+	public function delAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "DELETE FROM t_products WHERE product_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if (!$status) {
+			return new JsonModel('error', '删除失败');
+		}
+
+		//删除图片
+		$sql = "SELECT image_path FROM t_product_images WHERE product_id = ?";
+		$images = (array) $this->locator->db->getColumn($sql, $id);
+		foreach ($images as $key => $value) {
+			@unlink(PRODUCT_DIR . $value);
+		}
+
+		$sql = "DELETE FROM t_product_images WHERE product_id = ?";
+		$this->locator->db->exec($sql, $id);
+
+		//删除库存
+		$sql = "DELETE FROM t_product_quantity WHERE product_id = ?";
+		$this->locator->db->exec($sql, $id);
+		
+		return JsonModel::init('ok', '删除成功');
+	}
+
 	public function productEditSortAction()
 	{
 		if (!$this->funcs->isAjax()) {
