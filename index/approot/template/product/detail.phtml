@@ -33,7 +33,7 @@
         <h4><?php echo $info['product_name']?></h4>
         <div class="jg clearfix">
             <span class="fl">
-                免费领取<b>[<?php echo sprintf("%.2f", $info['product_virtual_price'])?>]</b>
+                <?php echo $info['product_price'] ? $info['product_price'] . '积分' : '免费领取'?><b>[<?php echo sprintf("%.2f", $info['product_virtual_price'])?>]</b>
             </span>
             <span class="fr">
                 每人限领取一份<?php echo $info['product_shaping_status'] ? '&nbsp;|&nbsp;支持配送' : ''?>
