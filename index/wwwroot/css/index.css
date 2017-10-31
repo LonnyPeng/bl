@@ -88,8 +88,8 @@ a.eval_title span.fr i{font-size: 14px;}
 .peo_photo .img{width: 60px;height: 60px;border-radius: 50%;overflow: hidden;margin-right: 10px;}
 .peo_photo .img img{max-width: 110%;max-height: 110%;min-width: 100%;min-height: 100%;}
 .peo_photo .pa{line-height: 60px;right: 10px;top: 0;color: #aaa;font-size: 16px;}
-.peo_photo p{display: inline-block;height: 20px;width: 120px;background: url(images/star_01.png) no-repeat top left;background-size: 100% 100%;margin-top: 5px;}
-.peo_photo p span{display: inline-block;height: 20px;background: url(images/star_02.png) no-repeat top left;background-size:120px 20px;}
+.peo_photo p{display: inline-block;height: 18px;width: 108px;background: url(images/star_01.png) no-repeat top left;background-size: 100% 100%;margin-top: 5px;}
+.peo_photo p span{display: inline-block;height: 18px;background: url(images/star_02.png) no-repeat top left;background-size:108px 18px;}
 .pj_img img{display: block;margin: 10px 15px 5px 0;width: 100px;height: 100px;}
 
 .weui-photo-browser-modal{background:#2c2c2c;z-index: 99}
@@ -100,13 +100,16 @@ a.eval_title span.fr i{font-size: 14px;}
 .eval a.jb{display: block;padding: 2px 15px;border:1px solid #e5e5e5;color: #999;font-size: 14px;border-radius: 3px;}
 .eval_box{border-bottom: 1px solid #e5e5e5;padding-bottom: 15px;}
 .eval_box a.pjxq{display: block;}
-.eval_box h3{color: #333;}
+.eval_box h3{color: #333;font-size: 18px;}
 .eval_box p{color: #666}
 .eval_box .jubao a.fr{font-size:.8rem;color: #999;}
 .eval_box .jubao a.fr.on{color: #fd8b2e;}
 .eval_box .jubao a.fr i{font-size: 20px;margin-right: 5px;}
 .dt_pic{padding: 10px 0 53px;}
 .dt_pic img{display: block;margin: 0;width: 100%;}
+
+/*举报修改*/
+.weui-dialog--visible .weui-dialog__btn.primary{color: #ff7c00;}
 
 .pro_foot{z-index: 22;bottom: 0;left: 0;background: #f3f3f3;border-top: 1px solid #e5e5e5;height: 52px;width: 100%;}
 .pro_foot a.sc{display: block;width: 30%;height: 52px;text-align: center;color: #ff7c00;}
