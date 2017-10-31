@@ -377,6 +377,8 @@
 
     $('.album-list .delete').click(function() {
         var $$ = $(this);
+
+        $.check($$.parents('ul').find('li').length < 2, '你至少需要保留一张图片') &&
         $$.ajaxAuto({
             success: function (re) {
                 if (re.status == 'ok') {
