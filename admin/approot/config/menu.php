@@ -19,7 +19,8 @@ return array(
 			'list' => '商品列表',
 			'attr-list' => '商品类别',
 			'hot-list' => '热门推荐',
-			'refill-list' => '补货设置',
+			'shop-refill-list' => '商家库存',
+			'refill-list' => '补货通知',
 		),
 	),
 	'customer' => array(

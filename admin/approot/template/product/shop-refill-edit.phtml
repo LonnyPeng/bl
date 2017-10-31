@@ -1,0 +1,141 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('product/shop-refill-list')?>">库存列表</a> / <?php echo $this->param('id') ? '编辑' : '添加'?>
+    </strong>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <form method="post" enctype="multipart/form-data">
+
+            <?php if ($this->param('id')) : ?>
+                <div class="form-group">
+                    <label>城市<sup>*</sup></label>
+                    <span class="form-control" style="background-color: #eee;"><?php echo $info['district_name']?></span>
+                </div>
+                <div class="form-group">
+                    <label>商家名称</label>
+                    <span class="form-control" style="background-color: #eee;"><?php echo $info['shop_name']?></span>
+                </div>
+                <div class="form-group">
+                    <label>商品名称<sup>*</sup></label>
+                    <span class="form-control" style="background-color: #eee;"><?php echo $info['product_name']?></span>
+                </div>
+                <div class="form-group">
+                    <label>商品CODE</label>
+                    <span class="form-control" style="background-color: #eee;"><?php echo $info['product_code']?></span>
+                </div>
+                <div class="form-group">
+                    <label>最大库存数量</label>
+                    <span class="form-control" style="background-color: #eee;" id="num"><?php echo $info['num']?></span>
+                </div>
+                <div class="form-group">
+                    <label>库存数量<sup>*</sup></label>
+                    <input class="form-control" type="number" name="quantity_num" value="<?php echo $info['quantity_num']?>" />
+                </div>
+            <?php else : ?>
+                <div class="form-group">
+                    <label>城市<sup>*</sup></label>
+                    <select class="form-control" name="district_id">
+                        <option value="">全部</option>
+                        <?php foreach($districtList as $key => $rows) : ?>
+                            <optgroup label="<?php echo strtoupper($key)?>">
+                                <?php foreach($rows as $row) : ?>
+                                    <option value="<?php echo $row['district_id']?>" <?php echo isset($info['district_id']) && $info['district_id'] == $row['district_id'] ? 'selected' : ''?>><?php echo $row['district_name']?></option>
+                                <?php endforeach;?>
+                            </optgroup>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>商家名称<sup>*</sup></label>
+                    <select class="form-control" name="shop_id">
+                        <option value="">全部</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>商品名称<sup>*</sup></label>
+                    <select class="form-control" name="product_id">
+                        <option value="">全部</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>商品CODE</label>
+                    <span class="form-control" style="background-color: #eee;" id="product_code"><?php echo $info['product_code']?></span>
+                </div>
+                <div class="form-group">
+                    <label>最大库存数量</label>
+                    <span class="form-control" style="background-color: #eee;" id="num"><?php echo $info['num']?></span>
+                </div>
+                <div class="form-group">
+                    <label>库存数量<sup>*</sup></label>
+                    <input class="form-control" type="number" name="quantity_num" value="" />
+                </div>
+            <?php endif;?>
+            <div>
+                <button type="submit">提交</button>
+                <a href="javascript:history.back();" class="btn">返回 »</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var productPair = <?php echo json_encode($productPair)?>;
+    var shopPair = <?php echo json_encode($shopPair)?>;
+
+    $('select[name="district_id"]').change(function() {
+        var districtId = $(this).val();
+        if (!districtId) {
+            $.warning('选择所在城市');
+            return false;
+        }
+
+        var strShop = '<option value="">全部</option>';
+        var strProduct = '<option value="">全部</option>';
+        $(shopPair[districtId]).each(function (key, row) {
+            strShop += '<option value="' + row.shop_id + '">' + row.shop_name + '</option>';
+        });
+        $(productPair[districtId]).each(function (key, row) {
+            strProduct += '<option value="' + row.product_id + '">' + row.product_name + '</option>';
+        });
+        $('select[name="shop_id"]').html(strShop);
+        $('select[name="product_id"]').html(strProduct);
+
+        init();
+    });
+
+    function init() {
+        $('select[name="product_id"]').change(function() {
+            var districtId = $('select[name="district_id"]').val();
+            var productId = $(this).val();
+            if (productId) {
+                $(this).ajaxAuto({
+                    url: '<?php echo $this->url('product/get-max-num')?>',
+                    data: {id: productId},
+                    success: function (re) {
+                        $("#num").html(re.data.num);
+                    }
+                });
+
+                $('#product_code').html(productPair[districtId][productId].product_code);
+            } else {
+                $('#product_code,#num').html('');
+            }
+        });
+    }
+
+    $("form").submit(function() {
+        <?php if (!$this->param('id')) : ?>
+            $.check(!this.district_id.value, '请选择城市', this.district_id) &&
+            $.check(!this.shop_id.value, '请选择商家名称', this.shop_id) &&
+            $.check(!this.product_id.value, '请选择商品名称', this.product_id) &&
+        <?php endif;?>
+        $.check(!this.quantity_num.value, '请输入库存数量', this.quantity_num) &&
+        $.check(this.quantity_num.value > parseInt($('#num').text()), '请输入库存数量不能大于最大库存数量', this.quantity_num) &&
+        $(this).ajaxAuto();
+        return false;
+    });
+</script>
+
+

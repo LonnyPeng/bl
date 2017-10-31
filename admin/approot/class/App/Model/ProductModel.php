@@ -75,4 +75,22 @@ class ProductModel extends CommonModel
 
 		return $this->locator->db->getPairs($sql);
 	}
+
+	public function getProductGoupByDistrict()
+	{
+		$data = array();
+		$sql = "SELECT product_id,product_name,product_code,district_id FROM $this->name WHERE product_status = 1";
+		$products = $this->locator->db->getAll($sql);
+		if ($products) {
+			foreach ($products as $key => $row) {
+				if (isset($data[$row['district_id']])) {
+					$data[$row['district_id']][] = $row;
+				} else {
+					$data[$row['district_id']] = array($row);
+				}
+			}
+		}
+		
+		return $data;
+	}
 }

@@ -792,4 +792,174 @@ class ProductController extends AbstractActionController
 			return new JsonModel('error', '删除失败');
 		}
 	}
+
+	public function shopRefillListAction()
+	{
+		$this->perm->check(PERM_READ);
+		
+		$where = array();
+		if ($this->param('district_id')) {
+			$where[] = sprintf("s.district_id = %d", trim($this->param('district_id')));
+		}
+		if ($this->param('product_name')) {
+			$where[] = sprintf("p.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
+		}
+		if ($this->param('shop_name')) {
+			$where[] = sprintf("s.shop_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('shop_name'))) . '%'));
+		}
+
+		$sql = "SELECT COUNT(*) FROM t_product_quantity pq
+				LEFT JOIN t_shops s ON s.shop_id = pq.shop_id
+				LEFT JOIN t_products p ON p.product_id = pq.product_id";
+		if ($where) {
+			$sql .= " WHERE " . implode(" AND ", $where);
+		}
+		$count = $this->locator->db->getOne($sql);
+		$this->helpers->paginator($count, 10);
+		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
+
+		$sql = "SELECT d.district_name,s.shop_name,p.product_name,p.product_code,pq.quantity_num,pq.quantity_id FROM t_product_quantity pq
+				LEFT JOIN t_shops s ON s.shop_id = pq.shop_id
+				LEFT JOIN t_products p ON p.product_id = pq.product_id
+				LEFT JOIN t_district d ON d.district_id = s.district_id";
+		if ($where) {
+			$sql .= " WHERE " . implode(" AND ", $where);
+		}
+		$sql .= " ORDER BY CONVERT(d.district_name USING GBK) ASC, s.shop_id DESC, p.product_id DESC
+				LIMIT " . implode(",", $limit);
+		$refillList = $this->locator->db->getAll($sql);
+
+		// print_r($refillList);die;
+		return array(
+			'refillList' => $refillList,
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
+		);
+	}
+
+	public function shopRefillEditAction()
+	{
+		$id = $this->param('id');
+		$sql = "SELECT * FROM t_product_quantity pq
+				LEFT JOIN t_shops s ON s.shop_id = pq.shop_id
+				LEFT JOIN t_products p ON p.product_id = pq.product_id
+				LEFT JOIN t_district d ON d.district_id = s.district_id
+				WHERE quantity_id = ?";
+		$info = $this->locator->db->getRow($sql, $id);
+		if ($id && !$info) {
+			$this->funcs->redirect($this->helpers->url('product/shop-refill-list'));
+		}
+		$info['num'] = $this->getMaxNum($info['product_id']) + $info['quantity_num'];
+
+		if ($this->funcs->isAjax()) {
+			if (!$id) {
+				if (!$_POST['district_id']) {
+					return new JsonModel('error', '请选择城市');
+				}
+				if (!$_POST['shop_id']) {
+					return new JsonModel('error', '请选择商家名称');
+				}
+				if (!$_POST['product_id']) {
+					return new JsonModel('error', '请选择商品名称');
+				}
+
+				$num = $this->getMaxNum($_POST['product_id']);
+			} else {
+				$num = $info['num'];
+			}
+
+			$quantityNum = (int) trim($_POST['quantity_num']);
+			if (!$quantityNum) {
+				return new JsonModel('error', '请输入库存数量');
+			}
+			if ($quantityNum < 1) {
+				return new JsonModel('error', '补货数量不能小于0');
+			}
+			if ($quantityNum > $num) {
+				return new JsonModel('error', sprintf('补货数量不能大于%d', $num));
+			}
+
+			if (!$id) {
+				//保存库存分配
+				$sql = "SELECT quantity_id FROM t_product_quantity WHERE product_id = ? AND shop_id = ?";
+				$quantityId = $this->locator->db->getOne($sql, trim($_POST['product_id']), trim($_POST['shop_id']));
+				if ($quantityId) {
+					return new JsonModel('error', '库存记录已存在');
+				}
+			}
+
+			if ($id) {
+				$sql = "UPDATE t_product_quantity 
+						SET quantity_num = ?
+						WHERE quantity_id = ?";
+				$status = $this->locator->db->exec($sql, $quantityNum, $id);
+			} else {
+				$sql = "INSERT INTO t_product_quantity 
+						SET product_id = :product_id, 
+						shop_id = :shop_id, 
+						quantity_num = :quantity_num";
+				$status = $this->locator->db->exec($sql, array(
+					'product_id' => trim($_POST['product_id']),
+					'shop_id' => trim($_POST['shop_id']),
+					'quantity_num' => $quantityNum,
+				));		
+			}
+
+			if (!$status) {
+				return new JsonModel('error', '失败');
+			} else {
+				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('product/shop-refill-list'));
+			}
+		}
+
+		// print_r($info);die;
+		return array(
+			'info' => $info,
+			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
+			'shopPair' => $this->models->shop->getShopGoupByDistrict(),
+			'productPair' => $this->models->product->getProductGoupByDistrict(),
+		);
+	}
+
+	public function shopRefillDelAction()
+	{
+		if (!$this->funcs->isAjax()) {
+			$this->funcs->redirect($this->helpers->url('default/index'));
+		}
+
+		$id = $this->param('id');
+		$sql = "DELETE FROM t_product_quantity WHERE quantity_id = ?";
+		$status = $this->locator->db->exec($sql, $id);
+		if ($status) {
+			return JsonModel::init('ok', '删除成功');
+		} else {
+			return new JsonModel('error', '删除失败');
+		}
+	}
+
+	public function getMaxNumAction()
+	{
+		$id = trim($this->param('id'));
+		//可以补货的数量
+		$maxNum = $this->getMaxNum($id);
+
+		if ($this->funcs->isAjax()) {
+			return JsonModel::init('ok', '', array('num' => $maxNum));
+		} else {
+			return array(
+				'num' => $maxNum,
+			);
+		}
+	}
+
+	public function getMaxNum($id)
+	{
+		//可以补货的数量
+		$sql = "SELECT product_quantity FROM t_products WHERE product_id = ?";
+		$productNum = (int) $this->locator->db->getOne($sql, $id);
+
+		$sql = "SELECT SUM(quantity_num) FROM t_product_quantity WHERE product_id = ?";
+		$shopQ = (int) $this->locator->db->getOne($sql, $id);
+
+		return $productNum - $shopQ;
+	}
 }

@@ -33,9 +33,14 @@
                         <span class="hidden-sm">热门推荐</span>
                     </a>
                 </li>
+                <li class="<?php echo in_array($this->action(), array('shop-refill-list', 'shop-refill-edit')) ? 'active' : ''?>">
+                    <a href="<?php echo $this->url('product/shop-refill-list');?>">
+                        <span class="hidden-sm">商家库存</span>
+                    </a>
+                </li>
                 <li class="<?php echo in_array($this->action(), array('refill-list', 'refill-edit')) ? 'active' : ''?>">
                     <a href="<?php echo $this->url('product/refill-list');?>">
-                        <span class="hidden-sm">补货设置</span>
+                        <span class="hidden-sm">补货通知</span>
                     </a>
                 </li>
             </ul>
