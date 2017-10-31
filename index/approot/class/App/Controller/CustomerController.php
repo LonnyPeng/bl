@@ -448,7 +448,7 @@ class CustomerController extends AbstractActionController
                     'title' => '和我一起来白领',
                     'desc' => '白领商品的地方',
                     'link' => $key,
-                    'imgUrl' => (string) $this->helpers->image('head_img.jpg', true),
+                    'imgUrl' => (string) $this->helpers->image('logo.png', true),
                     'type' => 'link',
                 );
 
@@ -468,7 +468,7 @@ class CustomerController extends AbstractActionController
                 'title' => '和我一起来白领',
                 'desc' => '白领商品的地方',
                 'link' => $key,
-                'imgUrl' => (string) $this->helpers->image('head_img.jpg', true),
+                'imgUrl' => (string) $this->helpers->image('logo.png', true),
                 'type' => 'link',
             );
         } else {

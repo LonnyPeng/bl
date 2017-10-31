@@ -362,7 +362,7 @@ class TaskController extends AbstractActionController
             'title' => '惊喜大转盘',
             'desc' => '',
             'link' => (string) $this->helpers->url('task/index'),
-            'imgUrl' => '',
+            'imgUrl' => (string) $this->helpers->image('logo.png', true),
             'type' => 'link',
         );
 
