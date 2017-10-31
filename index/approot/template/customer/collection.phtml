@@ -1,20 +1,22 @@
 <div class="my_collect" id="m_pro">
     <?php if ($collectionList) : ?>
         <?php foreach($collectionList as $row) : ?>
-            <a href="<?php echo $row['order_num'] ? 'javascript:void(0);' : $this->url('product/detail', array('id' => $row['product_id']))?>">
-                <div class="collect_li clearfix wrap pr">
-                  <div class="img fl">
-                    <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>">
-                  </div>
-                  <h4 style="color: #000;"><?php echo $row['product_name']?></h4>
-                  <p><span class="orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span></p>
-                  <?php if ($row['order_num']) : ?>
-                      <a href="javascript:;" class="btn pa btn_no">去领取</a>
-                  <?php else : ?>
-                      <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="btn pa">去领取</a>
-                  <?php endif;?>
-                </div>
-            </a>
+            <?php if (isset($row['product_name'])) : ?>
+                <a href="<?php echo $row['order_num'] ? 'javascript:void(0);' : $this->url('product/detail', array('id' => $row['product_id']))?>">
+                    <div class="collect_li clearfix wrap pr">
+                      <div class="img fl">
+                        <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>">
+                      </div>
+                      <h4 style="color: #000;"><?php echo $row['product_name']?></h4>
+                      <p><span class="orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span></p>
+                      <?php if ($row['order_num']) : ?>
+                          <a href="javascript:;" class="btn pa btn_no">去领取</a>
+                      <?php else : ?>
+                          <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" class="btn pa">去领取</a>
+                      <?php endif;?>
+                    </div>
+                </a>
+            <?php endif;?>
         <?php endforeach;?>
     <?php else : ?>
         <div class="noproduct">

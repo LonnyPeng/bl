@@ -1,5 +1,6 @@
 <?php if ($orderList) : ?>
   <?php foreach($orderList as $row) : ?>
+    <?php if (isset($row['product'])) : ?>
       <div class="collect_li">
           <div class="weui-cells">
             <div class="weui-cell">
@@ -39,6 +40,7 @@
               <?php endif;?>
           </div>
       </div>
+    <?php endif;?>
   <?php endforeach;?>
 <?php else : ?>
   <div class="noproduct">
