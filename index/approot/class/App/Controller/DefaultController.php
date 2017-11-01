@@ -67,7 +67,6 @@ class DefaultController extends AbstractActionController
                 LEFT JOIN t_district d ON d.district_id = c.district_id
                 WHERE c.customer_id = ?
                 LIMIT 0, 5";
-        print_r($this->customerId);die;
         $logList = $this->locator->db->getAll($sql, $this->customerId);
         
         //获取城市
