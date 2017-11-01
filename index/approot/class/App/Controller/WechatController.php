@@ -71,15 +71,10 @@ class WechatController extends AbstractActionController
 
     public function latlngAction()
     {
-        if (isset($_SESSION['get_latlng'])) {
-            $_SESSION['get_latlng']++;
-        }
-
         if ($this->funcs->isAjax()) {
             $_SESSION['customer_info']['lat'] = $this->param('lat');
             $_SESSION['customer_info']['lng'] = $this->param('lng');
 
-            print_r($this->param('lat'));die;
             return JsonModel::init('ok', '')->setRedirect($this->helpers->url('default/index'));
         }
 

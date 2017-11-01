@@ -69,17 +69,7 @@ abstract class AbstractActionController extends ActionController
             //获取用户位置
             if (!isset($_SESSION['customer_info']['lat'])) {
                 if ($this->helpers->pageId() != 'wechat-latlng') {
-                    if (!isset($_SESSION['get_latlng'])) {
-                        $_SESSION['get_latlng'] = 0;
-                    }
-                    
-                    if ($_SESSION['get_latlng'] < 1) {
-                        $this->funcs->redirect($this->helpers->url('wechat/latlng'));
-                    } else {
-                        $_SESSION['customer_info']['lat'] = 31.236176;
-                        $_SESSION['customer_info']['lng'] = 121.481689;
-                        $this->funcs->redirect($this->helpers->url('default/index'));
-                    } 
+                    $this->funcs->redirect($this->helpers->url('wechat/latlng')); 
                 }
             } else {
                 //判断是否是新用户
