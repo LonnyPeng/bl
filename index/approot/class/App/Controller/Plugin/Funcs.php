@@ -623,7 +623,7 @@ class Funcs implements ServiceLocatorAwareInterface
         if ($int < $float) {
             return $float;
         } else {
-            return $int ?: '';
+            return $int ?: '0';
         }
     }
 
