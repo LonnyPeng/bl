@@ -7,7 +7,9 @@
 <div id="m_pro" class='demos-content-padded mt98'>
     <?php foreach($productList as $row) : ?>
         <div class="prod_list">
-            <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
+            <a href="javascript:void(0);" class="fl tac js-collection <?php echo $row['collection_id'] ? 'on' : ''?>" data-id="<?php echo $row['product_id']?>">
+                <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
+            </a>
             <div class="info wrap pr">
                 <h4 class="lr1"><?php echo $row['product_name']?></h4>
                 <span class="jg pa">[<?php echo sprintf("%.2f", $row['product_virtual_price'])?>]</span>
