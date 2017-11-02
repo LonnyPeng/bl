@@ -24,10 +24,71 @@ class WechatController extends AbstractActionController
         // 设置测试账号的菜单
         // $this->menu();
         // die;
-
-        $oauth = $this->app->oauth;
         
-        $oauth->redirect()->send();
+        //获取code
+        $urlInfo = array(
+            'url' => "https://open.weixin.qq.com/connect/oauth2/authorize",
+            'params' => array(
+                'appid' => $this->app->config->app_id,
+                'redirect_uri' => urlencode($this->helpers->url('wechat/subscribe', '', '', true)),
+                'response_type' => 'code',
+                'scope' => 'snsapi_base',
+                'state' => 'STATE#wechat_redirect',
+            ),
+        );
+        $this->funcs->curl($urlInfo);
+
+        return false;
+    }
+
+    public function subscribeAction()
+    {
+        //获取openid
+        $code = $this->param('code');
+        $urlInfo = array(
+            'url' => "https://api.weixin.qq.com/sns/oauth2/access_token",
+            'params' => array(
+                'appid' => $this->app->config->app_id,
+                'secret' => $this->app->config->secret,
+                'code' => $code,
+                'grant_type' => 'authorization_code',
+            ),
+        );
+        $result = $this->funcs->curl($urlInfo);
+        $result = json_decode($result);
+        $openid = $result->openid;
+
+        //获取token
+        $urlInfo = array(
+            'url' => "https://api.weixin.qq.com/cgi-bin/token",
+            'params' => array(
+                'grant_type' => "client_credential",
+                'appid' => $this->app->config->app_id,
+                'secret' => $this->app->config->secret,
+            ),
+        );
+        $result = curl($urlInfo);
+        $result = json_decode($result);
+        $token = $result->access_token;
+
+        $urlInfo = array(
+            'url' => "https://api.weixin.qq.com/cgi-bin/user/info",
+            'params' => array(
+                'access_token' => $token,
+                'openid' => $openid,
+                'lang' => "zh_CN",
+            ),
+        );
+        $result = curl($urlInfo);
+        $result = json_decode($result);
+        //判断用户是否关注公众号
+        if ($result->subscribe) {
+            die('还没关注公众号');
+        } else {
+            $oauth = $this->app->oauth;
+            
+            $oauth->redirect()->send();
+        }
 
         return false;
     }
