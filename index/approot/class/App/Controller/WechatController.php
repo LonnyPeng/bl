@@ -37,12 +37,6 @@ class WechatController extends AbstractActionController
             ),
         );
         $this->funcs->redirect($this->funcs->urlInit($urlInfo));
-        print_r($url);die;
-        $this->funcs->curl($urlInfo);
-
-        $oauth = $this->app->oauth;
-        
-        $oauth->redirect()->send();
 
         return false;
     }
@@ -73,7 +67,7 @@ class WechatController extends AbstractActionController
                 'secret' => $this->app->config->secret,
             ),
         );
-        $result = curl($urlInfo);
+        $result = $this->funcs->curl($urlInfo);
         $result = json_decode($result);
         $token = $result->access_token;
 
@@ -85,7 +79,7 @@ class WechatController extends AbstractActionController
                 'lang' => "zh_CN",
             ),
         );
-        $result = curl($urlInfo);
+        $result = $this->funcs->curl($urlInfo);
         $result = json_decode($result);
         //判断用户是否关注公众号
         if ($result->subscribe) {
