@@ -8,7 +8,7 @@ CREATE TABLE `t_member` (
   `member_name` varchar(90) NOT NULL UNIQUE KEY COMMENT '用户名',
   `member_password` char(35) NOT NULL COMMENT '密码',
   `member_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-  `member_logtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后一次登录时间',
+  `member_logtime` timestamp COMMENT '最后一次登录时间',
   `member_logip` char(15) NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
   `member_lognum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '登录次数',
   `member_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
@@ -685,7 +685,7 @@ CREATE TABLE `t_shop_users` (
   `suser_name` varchar(90) NOT NULL UNIQUE KEY COMMENT '用户名',
   `suser_password` char(35) NOT NULL COMMENT '密码',
   `suser_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
-  `suser_logtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后一次登录时间',
+  `suser_logtime` timestamp COMMENT '最后一次登录时间',
   `suser_logip` char(15) NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
   `suser_lognum` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '登录次数',
   `suser_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
@@ -847,8 +847,8 @@ CREATE TABLE `t_orders` (
   `order_tel` varchar(32) NOT NULL DEFAULT '' COMMENT '联系电话',
   `order_desc` varchar(200) COMMENT '特殊说明',
   `order_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '下单时间',
-  `order_shipped_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '发货时间',
-  `order_received_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '收货时间',
+  `order_shipped_time` timestamp COMMENT '发货时间',
+  `order_received_time` timestamp COMMENT '收货时间',
   `order_type` enum('group','pending','shipped','received', 'review') NOT NULL DEFAULT 'pending' COMMENT '订单状态：group组团中；pending正在发货；shipped已发货；received已收货；review已评论',
   `order_status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态'
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT='订单表';

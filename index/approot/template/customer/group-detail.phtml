@@ -68,6 +68,21 @@
     
     $(".cluster_li .img").height($(".cluster_li .img").width());
 
+    window.onload = function () {
+        var W = $('.cluster_ul').width(),
+            w = $('.cluster_li').width();
+        var n = $('.cluster_li').length,
+            l = (W - n * w) / n;
+
+        $('.cluster_li').each(function (key, value) {
+            if (key) {
+                $(this).css({marginLeft: (l / 2 + n * (w + l)) + 'px'});
+            } else {
+                $(this).css({marginLeft: l / 2 + 'px'});
+            }
+        });
+    }
+
     setInterval(function () {
         var $$ = $('#time');
         var time = parseInt($$.data('time'));
