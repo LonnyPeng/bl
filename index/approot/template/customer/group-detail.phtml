@@ -74,13 +74,10 @@
         var n = $('.cluster_li').length,
             l = parseInt((W - n * w) / n);
 
-        $('.cluster_li').each(function (key, value) {
-            if (key) {
-                $(this).css({display: 'inline-block', left: parseInt((l / 2 + key * (w + l))) + 'px'});
-            } else {
-                $(this).css({display: 'inline-block', left: parseInt(l / 2) + 'px'});
-            }
-        });
+        if (n = 2) {
+            $('.cluster_li').eq(0).css({marginLeft: parseInt(l / 2) + 'px'});
+            $('.cluster_li').eq(1).css({marginRight: parseInt(l / 2) + 'px'});
+        }
     }
 
     setInterval(function () {
