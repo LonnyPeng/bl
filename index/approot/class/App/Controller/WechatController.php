@@ -26,17 +26,21 @@ class WechatController extends AbstractActionController
         // die;
         
         //获取code
-        $urlInfo = array(
-            'url' => "https://open.weixin.qq.com/connect/oauth2/authorize",
-            'params' => array(
-                'appid' => $this->app->config->app_id,
-                'redirect_uri' => urlencode($this->helpers->url('wechat/subscribe', '', '', true)),
-                'response_type' => 'code',
-                'scope' => 'snsapi_base',
-                'state' => 'STATE#wechat_redirect',
-            ),
-        );
-        $this->funcs->curl($urlInfo);
+        // $urlInfo = array(
+        //     'url' => "https://open.weixin.qq.com/connect/oauth2/authorize",
+        //     'params' => array(
+        //         'appid' => $this->app->config->app_id,
+        //         'redirect_uri' => urlencode($this->helpers->url('wechat/subscribe', '', '', true)),
+        //         'response_type' => 'code',
+        //         'scope' => 'snsapi_base',
+        //         'state' => 'STATE#wechat_redirect',
+        //     ),
+        // );
+        // $this->funcs->curl($urlInfo);
+
+        $oauth = $this->app->oauth;
+        
+        $oauth->redirect()->send();
 
         return false;
     }
