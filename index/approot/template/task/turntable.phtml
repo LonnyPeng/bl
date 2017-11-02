@@ -1,8 +1,8 @@
 <div class="dial">
 	<div class="dial_top">
 		<h4>
-			<a href="<?php echo $this->url('task/chance-list')?>">我的奖品</a>
-			<a href="<?php echo $this->url('help/protocol', array('status' => 'yxgz'))?>">游戏规则</a>
+			<a href="<?php echo $this->url('task/chance-list')?>" class="igonre-no">我的奖品</a>
+			<a href="<?php echo $this->url('help/protocol', array('status' => 'yxgz'))?>" class="igonre-no">游戏规则</a>
 		</h4>
 		<h5 style="display: block; margin-top: 60px;">机会已用完，去获取更多机会吧.</h5>
 		<p>还有<span class="playnum" id="chance-num"><?php echo (int) $config['chance_num']?></span>次抽奖机会</p>

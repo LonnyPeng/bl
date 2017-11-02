@@ -7,13 +7,19 @@
 <div id="m_pro" class='demos-content-padded mt98'>
     <?php foreach($productList as $row) : ?>
         <div class="prod_list">
-            <a href="javascript:void(0);" class="fl tac js-collection <?php echo $row['collection_id'] ? 'on' : ''?>" data-id="<?php echo $row['product_id']?>">
+            <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
                 <img src="<?php echo $this->uploadUrl($row['images']['home'][0]['image_path'], 'product')?>">
             </a>
             <div class="info wrap pr">
                 <h4 class="lr1"><?php echo $row['product_name']?></h4>
                 <span class="jg pa">[<?php echo sprintf("%.2f", $row['product_virtual_price'])?>]</span>
-                <span class="pa orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span>
+                <span class="pa orange">
+                    <?php if ($row['product_price']) : ?>
+                        <?php echo $this->funcs->showValue($row['product_price'])?>积分
+                    <?php else : ?>
+                        免费领取
+                    <?php endif;?>
+                </span>
             </div>
             <div class="info info_click wrap clearfix">
                 <a href="javascript:void(0);" class="fl tac js-collection <?php echo $row['collection_id'] ? 'on' : ''?>" data-id="<?php echo $row['product_id']?>">
@@ -73,7 +79,7 @@
                     pageSize++;
 
                     $(re.data).each(function (key, row) {
-                        ali +='<div class="prod_list"><img src="' + row.image_path + '"><div class="info wrap pr"><h4 class="lr1">' + row.product_name + '</h4><span class="jg pa">[' + row.product_virtual_price + ']</span><span class="pa orange">' + row.product_price + '积分</span></div><div class="info info_click wrap clearfix"><a href="javascript:void(0);" class="fl tac js-collection ' + row.collection_status + '" data-id="' + row.product_id + '"><i class="iconfont">&#xe60b;</i><span>' + row.collection_num + '</span></a><a href="' + row.href + '" class="fr tac"><i class="iconfont ling">&#xe605;</i><span>' + row.button + '</span></a></div></div>';
+                        ali +='<div class="prod_list"><a href="' + row.href + '"><img src="' + row.image_path + '"></a><div class="info wrap pr"><h4 class="lr1">' + row.product_name + '</h4><span class="jg pa">[' + row.product_virtual_price + ']</span><span class="pa orange">' + row.product_price + '积分</span></div><div class="info info_click wrap clearfix"><a href="javascript:void(0);" class="fl tac js-collection ' + row.collection_status + '" data-id="' + row.product_id + '"><i class="iconfont">&#xe60b;</i><span>' + row.collection_num + '</span></a><a href="' + row.href + '" class="fr tac"><i class="iconfont ling">&#xe605;</i><span>' + row.button + '</span></a></div></div>';
                     });
                 }
 

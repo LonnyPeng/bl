@@ -43,10 +43,23 @@
 	<?php endforeach;?>
 <?php endif;?>
 
+<?php if (!$imageList && !$recommendList) : ?>
+	<div class="noproduct">
+	  <p class="tac">
+	    你所在的城市暂无商品，先去参互互动赚积分吧
+	  </p>
+	</div>
+<?php endif;?>
+
 <!-- 搜索按钮 -->
 <a class="search_btn pf" href="<?php echo $this->url('default/search')?>"><i class="iconfont">&#xe60a;</i></a>
 
 <script type="text/javascript">
+	var wh=$(window).height();
+	var ww=$(window).width();
+	$(".noproduct").height(wh-50);
+	$(".noproduct").width(ww);
+	
 	$(function(){
 		$(".m_nav").find('.swiper-slide').on('tap', function() {
 			$(this).siblings().removeClass('on');

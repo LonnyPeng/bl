@@ -68,21 +68,23 @@ window.onload = function () {
     });
 
     $('a, .js-button-igonre').click(function (event) {
-        if (event && event.preventDefault) {
-            event.preventDefault();
-        }
-
-        var link = this.href;
-
-        if (link && /^#|javascript/i.test(link) === false) {
-            if (history.replaceState) {
-                history.replaceState(null, document.title, link.split('#')[0] + '#');
-                location.replace('');
-            } else {
-                location.replace(link);
+        if (!$(this).hasClass('igonre-no')) {
+            if (event && event.preventDefault) {
+                event.preventDefault();
             }
-        }
 
-        return false;
+            var link = this.href;
+
+            if (link && /^#|javascript/i.test(link) === false) {
+                if (history.replaceState) {
+                    history.replaceState(null, document.title, link.split('#')[0] + '#');
+                    location.replace('');
+                } else {
+                    location.replace(link);
+                }
+            }
+
+            return false;
+        }
     });
 }

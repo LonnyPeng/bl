@@ -1,8 +1,16 @@
-<div class="integral_task myprize">
-	<div class="weui-cells" id="m_pro">
-		<?php echo $this->render('task/chance-list-ajax', array('prizeList' => $prizeList))?> 
+<?php if ($prizeList) : ?>
+	<div class="integral_task myprize">
+		<div class="weui-cells" id="m_pro">
+			<?php echo $this->render('task/chance-list-ajax', array('prizeList' => $prizeList))?> 
+		</div>
 	</div>
-</div>
+<?php else : ?>
+	<div class="noproduct">
+	  <p class="tac">
+	    你还没有奖品噢，赶紧去抽奖吧
+	  </p>
+	</div>
+<?php endif;?>
 
 <div class="mask"></div>
 
@@ -12,6 +20,11 @@
 </div>
 
 <script type="text/javascript">
+	var wh=$(window).height();
+	var ww=$(window).width();
+	$(".noproduct").height(wh-50);
+	$(".noproduct").width(ww);
+	
 	init();
 
 	var pageSize = 1;

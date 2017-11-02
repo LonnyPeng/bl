@@ -34,8 +34,7 @@ class DefaultController extends AbstractActionController
         //获取首页推荐商品
         $sql = "SELECT * FROM t_recommends 
                 WHERE district_id = ? 
-                ORDER BY recommend_sort DESC, recommend_id DESC
-                LIMIT 0, 2";
+                ORDER BY recommend_sort DESC, recommend_id DESC";
         $recommendList = $this->locator->db->getAll($sql, $this->districtId);
         if ($recommendList) {
             foreach ($recommendList as $key => $row) {

@@ -37,6 +37,9 @@
             </div>
           </div>
           <div class="ck_dt clearfix">
+            <?php if ($info['group_id']) : ?>
+                <a href="<?php echo $this->url('customer/group-detail', array('id' => $info['group_id']))?>" class="btn btn_01">组团详情</a>
+            <?php endif;?>
             <?php if ($info['order_type'] == 'received') : ?>
               <a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
             <?php else : ?>

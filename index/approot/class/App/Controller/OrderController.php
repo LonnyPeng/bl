@@ -62,17 +62,30 @@ class OrderController extends AbstractActionController
         if ($orderList) {
             foreach ($orderList as $key => $row) {
                 $orderList[$key]['product'] = $this->models->product->getProductById($row['product_id']);
+
+                //团购ID
+                $sql = "SELECT group_id 
+                        FROM t_order_groups 
+                        WHERE FIND_IN_SET(?, customer_id) 
+                        AND product_id = ?";
+                $groupId = $this->locator->db->getOne($sql, $this->customerId, $row['product_id']);
+                $orderList[$key]['group_id'] = $groupId;
+
                 if ($row['order_type'] == 'pending') {
-                    if ($row['shinging_type'] == 'logistics') {
-                        $orderList[$key]['status'] = '待配送';
+                    if ($groupId) {
+                        $str = '组团成功，';
                     } else {
-                        $orderList[$key]['status'] = '待自提';
+                        $str = '';
+                    }
+
+                    if ($row['shinging_type'] == 'logistics') {
+                        $orderList[$key]['status'] = $str . '待配送';
+                    } else {
+                        $orderList[$key]['status'] = $str . '待自提';
                     }
                 } elseif ($row['order_type'] == 'shipped') {
                     $orderList[$key]['status'] = '待收货';
                 } elseif ($row['order_type'] == 'group') {
-                    $sql = "SELECT group_id FROM t_order_groups WHERE customer_id IN (?) AND product_id = ?";
-                    $groupId = $this->locator->db->getOne($sql, $this->customerId, $row['product_id']);
                     $result = $this->models->orderGroup->getOrderGroupById($groupId);
                     $orderList[$key]['status'] = $result['group_type']['msg'];
                     $orderList[$key]['group_id'] = $groupId;
@@ -284,6 +297,7 @@ class OrderController extends AbstractActionController
                     district_id = :district_id,
                     district_name = :district_name,
                     order_address = :order_address,
+                    order_type = 'shipped',
                     order_tel = :order_tel";
             $status = $this->locator->db->exec($sql, $map);
             if (!$status) {
@@ -378,18 +392,30 @@ class OrderController extends AbstractActionController
             $this->funcs->redirect($this->helpers->url('default/index'));
         }
 
+        //团购ID
+        $sql = "SELECT group_id 
+                FROM t_order_groups 
+                WHERE FIND_IN_SET(?, customer_id) 
+                AND product_id = ?";
+        $groupId = $this->locator->db->getOne($sql, $this->customerId, $info['product_id']);
+        $info['group_id'] = $groupId;
+
         $info['product'] = $this->models->product->getProductById($info['product_id']);
         if ($info['order_type'] == 'pending') {
-            if ($info['shinging_type'] == 'logistics') {
-                $info['status'] = '待配送';
+            if ($groupId) {
+                $str = '组团成功，';
             } else {
-                $info['status'] = '待自提';
+                $str = '';
+            }
+
+            if ($info['shinging_type'] == 'logistics') {
+                $info['status'] = $str . '待配送';
+            } else {
+                $info['status'] = $str . '待自提';
             }
         } elseif ($info['order_type'] == 'shipped') {
             $info['status'] = '待领取';
         } elseif ($info['order_type'] == 'group') {
-            $sql = "SELECT group_id FROM t_order_groups WHERE customer_id IN (?) AND product_id = ?";
-            $groupId = $this->locator->db->getOne($sql, $this->customerId, $info['product_id']);
             $result = $this->models->orderGroup->getOrderGroupById($groupId);
             $info['status'] = $result['msg'];
         } elseif ($info['order_type'] == 'received') {

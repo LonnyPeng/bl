@@ -128,4 +128,6 @@ Autoloader::register();
 $GLOBALS['locator'] = new ServiceLocator(include CONFIG_DIR . 'services.php');
 
 // render page via utf8 charset
+Http::cache(false);
 Http::mimeType('html', 'utf-8');
+

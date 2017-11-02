@@ -10,33 +10,35 @@
               <div class="weui-cell__ft orange"><?php echo $row['status']?></div>
             </div>
           </div>
-          <div class="clearfix wrap inf pr">
-            <div class="img fl">
-              <img src="<?php echo $this->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product')?>">
+          <div class="js-detail" data-href="<?php echo $this->url('order/info', array('id' => $row['order_id']))?>">
+              <div class="clearfix wrap inf pr">
+                <div class="img fl">
+                  <img src="<?php echo $this->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product')?>">
+                </div>
+                <h4 class="lr2"><?php echo $row['product']['product_name']?></h4>
+                <p><span class="gray"><?php echo $row['product']['product_weight']?></span></p>
+                <div class="pa jif"><?php echo $this->funcs->showValue($row['product']['product_price'])?>积分</div>
+                <div class="pa time"><?php echo date("Y-m-d", strtotime($row['order_time']))?></div>
+              </div>
             </div>
-            <h4 class="lr2"><?php echo $row['product']['product_name']?></h4>
-            <p><span class="gray"><?php echo $row['product']['product_weight']?></span></p>
-            <div class="pa jif"><?php echo $this->funcs->showValue($row['product']['product_price'])?>积分</div>
-            <div class="pa time"><?php echo date("Y-m-d", strtotime($row['order_time']))?></div>
-          </div>
           
           <div class="ck_dt clearfix">
               <?php if ($row['order_type'] == 'pending') : ?>
                   <?php if ($row['shinging_type'] == 'self') : ?>
-                      <a href="<?php echo $this->url('order/qrcode', array('order_number' => $row['order_number']))?>" class="btn btn_01">领取码</a>
-                      <a href="<?php echo $this->url('shop/index', array('order_id' => $row['order_id']))?>" class="btn btn_02">取货点</a>
+                      <a href="<?php echo $this->url('order/qrcode', array('order_number' => $row['order_number']))?>" class="btn btn_01 igonre-no">领取码</a>
+                      <a href="<?php echo $this->url('shop/index', array('order_id' => $row['order_id']))?>" class="btn btn_02 igonre-no">取货点</a>
                   <?php else : ?>
                       <a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">确认收货</a>
                   <?php endif;?>
               <?php elseif ($row['order_type'] == 'shipped') : ?>
                   <a href="javascript:void(0);" class="btn btn_01 js-receipt" data-id="<?php echo $row['order_id']?>">确认收货</a>
               <?php elseif ($row['order_type'] == 'group') : ?>
-                  <a href="<?php echo $this->url('customer/group-detail', array('id' => $row['group_id']))?>" class="btn btn_01">组团详情</a>
+                  <a href="<?php echo $this->url('customer/group-detail', array('id' => $row['group_id']))?>" class="btn btn_01 igonre-no">组团详情</a>
               <?php elseif ($row['order_type'] == 'received') : ?>
-                  <a href="<?php echo $this->url('order/info', array('id' => $row['order_id']))?>" class="btn btn_01">查看详情</a>
+                  <a href="<?php echo $this->url('order/info', array('id' => $row['order_id']))?>" class="btn btn_01 igonre-no">查看详情</a>
                   <a href="<?php echo $this->url('product/review-add', array('id' => $row['order_id']))?>" class="btn btn_01">去评价</a>
               <?php else : ?>
-                <a href="<?php echo $this->url('order/info', array('id' => $row['order_id']))?>" class="btn btn_01">查看详情</a>
+                <a href="<?php echo $this->url('order/info', array('id' => $row['order_id']))?>" class="btn btn_01 igonre-no">查看详情</a>
               <?php endif;?>
           </div>
       </div>
@@ -49,10 +51,3 @@
     </p>
   </div>
 <?php endif;?>
-
-<script type="text/javascript">
-  var wh=$(window).height();
-  var ww=$(window).width();
-  $(".noproduct").height(wh-50);
-  $(".noproduct").width(ww);
-</script>

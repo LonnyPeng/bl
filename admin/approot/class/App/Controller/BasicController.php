@@ -296,7 +296,8 @@ class BasicController extends AbstractActionController
 				//产品code
 				$sql = "SELECT product_id FROM t_products WHERE product_code = ?";
 				$productId = $this->locator->db->getOne($sql, $key);
-				$imageHref = (string) $this->helpers->url('product/list', array('id' => $productId), true);
+				$imageHref = (string) $this->helpers->url('product/list', array('id' => $productId), '', true);
+				$imageHref = str_replace(HTTP_SERVER . BASE_PATH, HTTP_SERVER . "/index/", $imageHref);
 			} elseif ($key) {
 				return new JsonModel('error', '链接错误');
 			}

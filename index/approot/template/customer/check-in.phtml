@@ -44,6 +44,10 @@
 
                     $('#add-score').html(re.data.score);
                     $('#js-day').html(re.data.i);
+
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 2000);
                 }
             }
         });

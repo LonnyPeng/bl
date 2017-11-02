@@ -69,6 +69,11 @@ if (!ENV_PRODUCTION) {
  */
 !defined('LIB_DIR') && define('LIB_DIR', ROOT_DIR . '/../library/');
 
+/**#@+
+ * host information
+ */
+!defined('SSL_ENABLED') && define('SSL_ENABLED', false);
+!defined('HTTP_SERVER') && define('HTTP_SERVER', (SSL_ENABLED ? 'https://' : 'http://') . $_SERVER["HTTP_HOST"]);
 
 /**#@+
  * database information
