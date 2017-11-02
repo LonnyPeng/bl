@@ -41,22 +41,23 @@ class WechatController extends AbstractActionController
         $userInfo = $user->toArray();
         $original = $userInfo['original'];
 
-        $sql = "SELECT d.district_name
-                FROM t_customers c 
-                LEFT JOIN t_district d ON d.district_id = c.district_id 
-                WHERE c.customer_openid = ?";
-        $userCity = $this->locator->db->getOne($sql, $original['openid']);
-        if ($userCity) {
-            $original['city'] = $userCity;
-        } elseif (!$original['city']) {
-            $original['city'] = '上海市';
+        $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
+        if (!$districtInfo) {
+            $sql = "SELECT d.district_name
+                    FROM t_customers c 
+                    LEFT JOIN t_district d ON d.district_id = c.district_id 
+                    WHERE c.customer_openid = ?";
+            $userCity = $this->locator->db->getOne($sql, $original['openid']);
+            if ($userCity) {
+                $original['city'] = $userCity;
+            } elseif (!$original['city']) {
+                $original['city'] = '上海市';
+            }
         }
 
         if (!preg_match("/^http:\/\/wx\.qlogo\.cn/i", $original['headimgurl'])) {
             $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
         }
-
-        $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
 
         $_SESSION['openid'] = $original['openid'];
         $_SESSION['customer_info'] = array(
