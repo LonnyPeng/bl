@@ -76,9 +76,9 @@
 
         $('.cluster_li').each(function (key, value) {
             if (key) {
-                $(this).css({position: 'absolute', left: parseInt((l / 2 + key * (w + l))) + 'px'});
+                $(this).css({display: 'inline-block', left: parseInt((l / 2 + key * (w + l))) + 'px'});
             } else {
-                $(this).css({position: 'absolute', left: parseInt(l / 2) + 'px'});
+                $(this).css({display: 'inline-block', left: parseInt(l / 2) + 'px'});
             }
         });
     }
