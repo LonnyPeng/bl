@@ -34,10 +34,6 @@ class WechatController extends AbstractActionController
 
     public function callbackAction()
     {
-        $code= $_GET['code'];//前端传来的code值
-
-        print_r($code);die;
-        
         $oauth = $this->app->oauth;
 
         // 获取 OAuth 授权结果用户信息
