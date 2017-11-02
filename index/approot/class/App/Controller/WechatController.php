@@ -39,6 +39,7 @@ class WechatController extends AbstractActionController
         // 获取 OAuth 授权结果用户信息
         $user = $oauth->user();
         $userInfo = $user->toArray();
+        print_r($userInfo);die;
         $original = $userInfo['original'];
 
         $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
