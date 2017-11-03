@@ -162,12 +162,12 @@ class ShopController extends AbstractActionController
 
 		$data = array(
 			'from' => array(
-				'lat' => '39.984009',
-				'lng' => '116.307535',
+				'lat' => $this->param('form-lat'),
+				'lng' => $this->param('form-lng'),
 			),
 			'to' => array(
-				'lat' => '39.984092',
-				'lng' => '116.496105',
+				'lat' => $this->param('to-lat'),
+				'lng' => $this->param('to-lng'),
 			),
 		);
 
