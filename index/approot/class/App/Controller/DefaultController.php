@@ -62,13 +62,23 @@ class DefaultController extends AbstractActionController
         $this->layout->title = '选择城市';
 
         //获取最近访问的城市
-        $sql = "SELECT DISTINCT(c.district_id), d.district_name, d.district_status FROM t_customer_login_log c 
+        $sql = "SELECT c.district_id, d.district_name, d.district_status FROM t_customer_login_log c 
                 LEFT JOIN t_district d ON d.district_id = c.district_id
                 WHERE c.customer_id = ?
                 ORDER BY c.log_id DESC
                 LIMIT 0, 5";
         $logList = $this->locator->db->getAll($sql, $this->customerId);
-        // print_r($logList);die;
+        if ($logList) {
+            foreach ($logList as $row) {
+                $temp[] = implode(',', $row);
+            }
+            $temp = array_unique($temp);
+            foreach ($temp as $key => $value){
+                $temp[$key] = explode(',', $value);
+            }
+
+            $logList = $temp;
+        }
         
         //获取城市
         $sqlInfo = array(
