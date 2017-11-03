@@ -106,6 +106,7 @@
     <?php endif;?>
 
     var groupId = '<?php echo $this->param('group_id')?>';
+    var addressId = '<?php echo $this->param('address_id')?>';
     $('#js-submit').click(function() {
         var $$ = $(this);
         var type = $$.data('type');
@@ -121,7 +122,7 @@
         $$.removeAttr('href');
 
         $$.ajaxAuto({
-            url: href + '&type=' + type + '&group_id=' + groupId
+            url: href + '&type=' + type + '&group_id=' + groupId + '&address_id=' + addressId
         });
         
         return false;

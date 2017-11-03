@@ -162,8 +162,11 @@ class OrderController extends AbstractActionController
             if (!$productInfo['product_shaping_status']) {
                 return new JsonModel('error', '商品不支持配送');
             }
-            $addressId = $this->locator->get('Profile')['customer_default_address_id'];
-            if (!$addressId) {
+            if ($this->param('address_id')) {
+                $addressId = trim($this->param('address_id'));
+            } elseif ($this->locator->get('Profile')['customer_default_address_id']) {
+                $addressId = $this->locator->get('Profile')['customer_default_address_id'];
+            } else {
                 return new JsonModel('error', '请填写你的收获地址');
             }
 
