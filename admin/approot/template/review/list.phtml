@@ -9,23 +9,14 @@
         <div class="row">
             <div class="col-8">
                 <div class="form-group">
-                    <label>用户名</label>
-                    <input class="form-control" type="text" name="customer_name" value="<?= $this->param('customer_name')?>">
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="form-group">
                     <label>商品名称</label>
                     <input class="form-control" type="text" name="product_name" value="<?= $this->param('product_name')?>">
                 </div>
             </div>
             <div class="col-8">
                 <div class="form-group">
-                    <label>状态</label>
-                    <select class="form-control" name="review_attr">
-                        <option value="">全部</option>
-                        <option value="pending" <?= $this->param('review_attr') == 'pending' ? 'selected' : '' ?>>举报</option>
-                    </select>
+                    <label>商品CODE</label>
+                    <input class="form-control" type="text" name="product_code" value="<?= $this->param('product_code')?>">
                 </div>
             </div>
             <div class="col-8">
@@ -43,40 +34,46 @@
     <table class="table" id="data-list">
         <thead>
             <tr>
-                <th class="text-center">用户名</th>
                 <th class="text-center">商品名称</th>
-                <th class="text-center">评论内容</th>
-                <th class="text-center">评论得分</th>
-                <th class="text-center">获赞数量</th>
-                <th class="text-center">评论时间</th>
-                <th class="text-center">评论状态</th>
-                <?php if ($this->perm->has(PERM_EDIT)) : ?>
-                    <th class="text-center">操作</th>
-                <?php endif;?>
+                <th class="text-center">商品CODE</th>
+                <th class="text-center">商品类别</th>
+                <th class="text-center">商品状态</th>
+                <th class="text-center">评论总次数</th>
+                <th class="text-center">平均得分</th>
+                <th class="text-center">1星次数</th>
+                <th class="text-center">2星次数</th>
+                <th class="text-center">3星次数</th>
+                <th class="text-center">4星次数</th>
+                <th class="text-center">5星次数</th>
             </tr>
         </thead>
         <tbody>
-            <?php if ($reviewList) : ?>
-                <?php foreach ($reviewList as $key => $row) :?>
+            <?php if ($productList) : ?>
+                <?php foreach ($productList as $key => $row) :?>
                     <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
-                        <td class="text-center"><?= $row['customer_name']?></td>
                         <td class="text-center"><?= $row['product_name']?></td>
-                        <td class="text-center" title="<?= $row['review_content']?>"><?= $this->funcs->mbSubString($row['review_content'], 0, 15)?></td>
+                        <td class="text-center"><?= $row['product_code']?></td>
+                        <td class="text-center"><?= $row['attr_name']?></td>
+                        <td class="text-center"><?= $row['product_status'] ? '有效' : '禁用'?></td>
                         <td class="text-center">
-                            <span title="<?php echo $row['review_score'];?>">
-                                <i class="stars <?php echo "star-" . str_replace('.', '-', $row['review_score']);?>"></i>
+                            <?php if($row['reviewCount']) : ?>
+                                <a href="<?= $this->url('review/row', array('id' => $row['product_id']))?>">
+                                    <?php echo $row['reviewCount']?>
+                                </a>
+                            <?php else : ?>
+                                0
+                            <?php endif;?>
+                        </td>
+                        <td class="text-center">
+                            <span title="<?php echo sprintf("%.2f", $row['reviewAve']);?>">
+                                <i class="stars <?php echo "star-" . str_replace('.', '-', $row['reviewAveStar']);?>"></i>
                             </span>
                         </td>
-                        <td class="text-center"><?= $row['review_vote_up']?></td>
-                        <td class="text-center"><?= date("Y-m-d", strtotime($row['review_time']))?></td>
-                        <td class="text-center"><?= $fileConfig['review_attr'][$row['review_attr']]?></td>
-                        <?php if ($this->perm->has(PERM_EDIT)) : ?>
-                            <td class="text-center action">
-                                <a class="btn btn-xs edit" href="<?= $this->url('review/detail', array('id' => $row['review_id']))?>" title="详情">
-                                    <i class="fa fa fa-eye"></i>
-                                </a>
-                            </td>
-                        <?php endif;?>
+                        <td class="text-center"><?= $row['reviewCount1']?></td>
+                        <td class="text-center"><?= $row['reviewCount2']?></td>
+                        <td class="text-center"><?= $row['reviewCount3']?></td>
+                        <td class="text-center"><?= $row['reviewCount4']?></td>
+                        <td class="text-center"><?= $row['reviewCount5']?></td>
                     </tr>
                 <?php endforeach;?>
             <?php endif?>
@@ -87,16 +84,3 @@
 <div id="paginator" class="row">
     <?= $this->render("includes/paginator"); ?>
 </div>
-
-<script type="text/javascript">
-    $('.js-toggle span').click(function() {
-        var $$ = $(this);
-
-        $.confirm('确认更改会员状态？', function() {
-            $$.ajaxAuto();
-            return false;
-        }, {
-            title: '信息确认'
-        });
-    });
-</script>

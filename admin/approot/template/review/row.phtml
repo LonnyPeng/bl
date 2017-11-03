@@ -1,0 +1,81 @@
+<div class="bread">
+    <strong>
+        <a href="<?php echo $this->url('review/list')?>">商品列表</a> / 详细列表
+    </strong>
+</div>
+
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input class="form-control" type="text" name="customer_name" value="<?= $this->param('customer_name')?>">
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>状态</label>
+                    <select class="form-control" name="review_attr">
+                        <option value="">全部</option>
+                        <option value="pending" <?= $this->param('review_attr') == 'pending' ? 'selected' : '' ?>>举报</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="table-responsive">
+    <table class="table" id="data-list">
+        <thead>
+            <tr>
+                <th class="text-center">用户名</th>
+                <th class="text-center">评论内容</th>
+                <th class="text-center">评论得分</th>
+                <th class="text-center">获赞数量</th>
+                <th class="text-center">评论时间</th>
+                <th class="text-center">评论状态</th>
+                <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                    <th class="text-center">操作</th>
+                <?php endif;?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($reviewList) : ?>
+                <?php foreach ($reviewList as $key => $row) :?>
+                    <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
+                        <td class="text-center"><?= $row['customer_name']?></td>
+                        <td class="text-center" title="<?= $row['review_content']?>"><?= $this->funcs->mbSubString($row['review_content'], 0, 15)?></td>
+                        <td class="text-center">
+                            <span title="<?php echo $row['review_score'];?>">
+                                <i class="stars <?php echo "star-" . str_replace('.', '-', $row['review_score']);?>"></i>
+                            </span>
+                        </td>
+                        <td class="text-center"><?= $row['review_vote_up']?></td>
+                        <td class="text-center"><?= date("Y-m-d", strtotime($row['review_time']))?></td>
+                        <td class="text-center"><?= $fileConfig['review_attr'][$row['review_attr']]?></td>
+                        <?php if ($this->perm->has(PERM_EDIT)) : ?>
+                            <td class="text-center action">
+                                <a class="btn btn-xs edit" href="<?= $this->url('review/detail', array('id' => $row['review_id'], 'product_id' => $this->param('id')))?>" title="详情">
+                                    <i class="fa fa fa-eye"></i>
+                                </a>
+                            </td>
+                        <?php endif;?>
+                    </tr>
+                <?php endforeach;?>
+            <?php endif?>
+        </tbody>
+    </table>
+</div>
+
+<div id="paginator" class="row">
+    <?= $this->render("includes/paginator"); ?>
+</div>
