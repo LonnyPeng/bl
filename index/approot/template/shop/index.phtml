@@ -1,5 +1,5 @@
 <div class="weui-search-bar" id="searchBar">
-  <form class="weui-search-bar__form" action="<?php echo $this->url('shop/search')?>" id="js-submit-ignore">
+  <form class="weui-search-bar__form" action="<?php echo $this->url('shop/search')?>">
     <div class="weui-search-bar__box">
       <i class="weui-icon-search"></i>
       <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="" name="address_name">
@@ -40,7 +40,6 @@
     <?php endif;?>
 </div>
 
-<?php echo $this->js('ignore-history.js')->wrap();?>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
     wx.config(<?php echo $js->config(array('getLocation'), false) ?>);

@@ -1,5 +1,5 @@
 <div class="weui-search-bar" id="searchBar">
-  <form class="weui-search-bar__form" id="js-submit-ignore">
+  <form class="weui-search-bar__form">
     <div class="weui-search-bar__box">
       <i class="weui-icon-search"></i>
       <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="" name="address_name" value="<?php echo $this->param('address_name')?>">
@@ -48,7 +48,6 @@
     </div>
 <?php endif;?>
 
-<?php echo $this->js('ignore-history.js')->wrap();?>
 <script type="text/javascript">
     var wh=$(window).height();
     var ww=$(window).width();
