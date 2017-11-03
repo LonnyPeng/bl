@@ -12,6 +12,7 @@ class ShopController extends AbstractActionController
 	public $districtId = null;
 	public $customerId = null;
 	private $app = null;
+	private $AK = "lDB8Dene7Ed8hencvraYogDp7L3P8pUZ";
 
 	public function init()
 	{
@@ -49,7 +50,7 @@ class ShopController extends AbstractActionController
 		$urlInfo = array(
 			'url' => "http://api.map.baidu.com/geocoder/v2/",
 			'params' => array(
-				'ak' => "se0o5ZCif8WBlePtDwnpOmfL",
+				'ak' => $this->AK,
 				'location' => $lat . "," . $lng,
 				'output' => 'json',
 				'pois' => '0',
@@ -123,7 +124,7 @@ class ShopController extends AbstractActionController
 				'output' => "js",
 				'address' => $address,
 				'output' => 'json',
-				'ak' => "se0o5ZCif8WBlePtDwnpOmfL",
+				'ak' => $this->AK,
 			),
 		);
 		$result = $this->funcs->curl($urlInfo);
