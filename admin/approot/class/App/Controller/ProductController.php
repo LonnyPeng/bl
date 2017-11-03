@@ -24,8 +24,8 @@ class ProductController extends AbstractActionController
 		if ($this->param('district_id')) {
 			$where[] = sprintf("p.district_id = %d", trim($this->param('district_id')));
 		}
-		if ($this->param('attr_id')) {
-			$where[] = sprintf("p.attr_id = %d", trim($this->param('attr_id')));
+		if ($this->param('product_attr_id')) {
+			$where[] = sprintf("p.attr_id = %d", trim($this->param('product_attr_id')));
 		}
 		if ($this->param('product_quantity_min')) {
 			$where[] = sprintf("p.product_quantity >= %d", trim($this->param('product_quantity_min')));
@@ -40,10 +40,10 @@ class ProductController extends AbstractActionController
 			$where[] = sprintf("p.product_price <= %.2f", trim($this->param('product_price_max')));
 		}
 		if ($this->param('product_start')) {
-			$where[] = sprintf("p.product_start >= %s", date("Y-m-d 00:00:00", strtotime(trim($this->param('product_start')))));
+			$where[] = sprintf("p.product_start >= '%s'", date("Y-m-d 00:00:00", strtotime(trim($this->param('product_start')))));
 		}
 		if ($this->param('product_end')) {
-			$where[] = sprintf("p.product_end <= %s", date("Y-m-d 23:59:59", strtotime(trim($this->param('product_end')))));
+			$where[] = sprintf("p.product_end <= '%s'", date("Y-m-d 23:59:59", strtotime(trim($this->param('product_end')))));
 		}
 		if ($this->param('product_status') === '0' || $this->param('product_status') === '1') {
 			$where[] = sprintf("p.product_status = %d", $this->param('product_status'));
