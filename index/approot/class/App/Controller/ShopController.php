@@ -118,19 +118,20 @@ class ShopController extends AbstractActionController
 		}
 
 		$urlInfo = array(
-			'url' => "http://maps.google.com/maps",
+			'url' => "http://api.map.baidu.com/geocoder/v2/",
 			'params' => array(
 				'output' => "js",
-				'q' => rawurlencode($address),
+				'address' => $address,
+				'output' => 'json',
+				'ak' => "se0o5ZCif8WBlePtDwnpOmfL",
 			),
 		);
 		$result = $this->funcs->curl($urlInfo);
-		if (strpos($result,'errortips') > 1 || strpos($result,'Did you mean:') !== false) {
-			$form = array('lat' => $this->locator->get('Profile')['lat'], 'lng' => $this->locator->get('Profile')['lng']);
-		} else {
-			preg_match('!center:\s*{lat:\s*(-?\d+\.\d+),lng:\s*(-?\d+\.\d+)}!U', $result, $match);
-			$form = array('lat' => $match[1], 'lng' => $match[2]);
-		}
+		$result = json_decode($result, true);
+		$result = $result['result']['location'];
+		$lat = $result['lat'];
+		$lng = $result['lng'];
+		$form = array('lat' => $lat, 'lng' => $lng);
 
 		$field = array(
 		    's.*, pq.quantity_num, pq.quantity_id',
