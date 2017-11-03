@@ -420,7 +420,7 @@ class OrderController extends AbstractActionController
             $info['status'] = '待领取';
         } elseif ($info['order_type'] == 'group') {
             $result = $this->models->orderGroup->getOrderGroupById($groupId);
-            $info['status'] = $result['msg'];
+            $info['status'] = $result['group_type']['msg'];
         } elseif ($info['order_type'] == 'received') {
             $info['status'] = '已收货';
         } else {
