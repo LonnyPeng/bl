@@ -15,7 +15,7 @@
         <div class="weui-cell weui-cell_access" >
            <div class="weui-cell__hd"><label class="weui-label">性别</label></div>
             <div class="weui-cell__bd">
-               <input class="weui-input openmk" id="inline" type="text" value="<?php echo $info['customer_gender'] ?: '未选择'?>" name="customer_gender" placeholder="" style="color: #000;">
+               <input class="weui-input openmk" id="inline" type="text" value="<?php echo $info['customer_gender'] ?: ''?>" name="customer_gender" placeholder="未选择" style="color: #000;">
             </div>
             <div class="weui-cell__ft">
             </div>
@@ -24,7 +24,11 @@
         <a class="weui-cell weui-cell_access" href="<?php echo $this->url('customer/city')?>">
            <div class="weui-cell__hd"><label class="weui-label">常驻地</label></div>
             <div class="weui-cell__bd">
-              <h5 style="color: #000;"><?php echo $info['district_name'] ?: '未选择'?></h5>
+                <?php if ($info['district_name']) : ?>
+                    <h5 style="color: #000;"><?php echo $info['district_name']?></h5>
+                <?php else : ?>
+                    <h5>未选择</h5>
+                <?php endif;?>
             </div>
             <div class="weui-cell__ft">
             </div>
@@ -33,7 +37,7 @@
         <div class="weui-cell weui-cell_access" >
            <div class="weui-cell__hd"><label class="weui-label">选择年龄段</label></div>
             <div class="weui-cell__bd">
-               <input class="weui-input openmk" id="inline1" type="text" value="<?php echo $info['customer_age'] ?: '未选择'?>" name="customer_age" placeholder="" style="color: #000;">
+               <input class="weui-input openmk" id="inline1" type="text" value="<?php echo $info['customer_age'] ?: ''?>" name="customer_age" placeholder="未选择" style="color: #000;">
             </div>
             <div class="weui-cell__ft">
             </div>
@@ -42,7 +46,11 @@
         <a class="weui-cell weui-cell_access" href="<?php echo $this->url('customer/phone')?>">
            <div class="weui-cell__hd"><label class="weui-label">绑定手机号</label></div>
             <div class="weui-cell__bd">
-              <h5 style="color: #000;"><?php echo $info['customer_tel'] ?: '未绑定'?></h5>
+                <?php if ($info['customer_tel']) : ?>
+                    <h5 style="color: #000;"><?php echo $info['customer_tel']?></h5>
+                <?php else : ?>
+                    <h5>未绑定</h5>
+                <?php endif;?>
             </div>
             <div class="weui-cell__ft">
             </div>
@@ -54,48 +62,17 @@
     </div>
 </form>
 
-<!-- <div class="head_xz">
-  <div class="head_xz_top">
-    <a href="#" id="js-picture">照片</a>
-    <a href="#" id="js-camera">相机</a>
-  </div>
-  <button class="head_xz_close">取消</button>
-</div>-->
-
 <div class="mask"></div> 
 
 <?php echo $this->js('ignore-history.js')->wrap();?>
 <?php echo $this->js('LocalResizeIMG.js')->wrap();?>
 <script type="text/javascript">
-  // $(".openmk").click(function(){
-  //   $(".mask").fadeIn()
-  // })
-  // $(".mydata .img.openmk").click(function(){
-  //   $(".head_xz").animate({"bottom":0},500)
-  // })
-  // $(".head_xz_close").click(function(){
-  //   $(".head_xz").animate({"bottom":-170},300)
-  //   $(".mask").fadeOut()
-  // })
   
   $('.mydata .img.openmk').click(function() {
       $('#file').trigger('click');
   });
 
   $("input:file").unbind('change').on('change', function() {
-      var $$ = $(this);
-      if (typeof (FileReader) != "undefined") {
-          var upFile = $(this)[0].files[0];
-          var imageHolder = $('#sfzZ');
-
-          var reader = new FileReader();
-          reader.onload = function (e) {
-              var result = e.target.result;
-              imageHolder.attr('src', result);
-          }
-          reader.readAsDataURL(upFile);
-      }
-
       $('form').trigger('submit');
   });
 
