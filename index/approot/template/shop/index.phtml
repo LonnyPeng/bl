@@ -3,6 +3,7 @@
     <div class="weui-search-bar__box">
       <i class="weui-icon-search"></i>
       <input type="search" class="weui-search-bar__input" id="searchInput" placeholder="输入地址匹配周边的取货点" required="" name="address_name">
+      <input type="hidden" name="order_id" value="<?php echo $this->param('order_id')?>">
       <a href="javascript:" class="weui-icon-clear" id="searchClear"></a>
     </div>
     <label class="weui-search-bar__label" id="searchText">
