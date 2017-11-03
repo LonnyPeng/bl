@@ -5,29 +5,11 @@
 </div>
 
 <div class="row">
-    <div class="col-24">
+    <div class="col-12">
         <form method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>标题<sup>*</sup></label>
                 <input class="form-control" type="text" name="recommend_title" value="<?= isset($info['recommend_title']) ? $info['recommend_title'] : '';?>">
-            </div>
-            <div class="form-group">
-                <label>图片<sup>*</sup></label>
-                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF ) 750 * 393</p>
-                <div style="display: <?php echo !isset($info['recommend_path']) ? 'none' : ''?>; text-align: center;">
-                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 150px; height: 79px;" src="<?php echo isset($info['recommend_path']) && $info['recommend_path'] ? $this->uploadUrl($info['recommend_path'], 'sys') : ''?>">
-                </div>
-                
-                <input class="form-control" type="file" name="recommend_path" value="">
-            </div>
-            <div class="form-group">
-                <label>品牌Logo<sup>*</sup></label>
-                <p class="format-tip">( 图片类型: JPG, JPEG, PNG, GIF ) 70 * 70</p>
-                <div style="display: <?php echo !isset($info['recommend_logo']) ? 'none' : ''?>; text-align: center;">
-                    <img class="js-image" style="border: 1px solid #ddd; padding: 2px; width: 70px; height: 70px;" src="<?php echo isset($info['recommend_logo']) && $info['recommend_logo'] ? $this->uploadUrl($info['recommend_logo'], 'sys') : ''?>">
-                </div>
-                
-                <input class="form-control" type="file" name="recommend_logo" value="">
             </div>
             <div class="form-group">
                 <label>城市<sup>*</sup></label>
@@ -42,7 +24,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>商品CODE</label>
+                <label>商品CODE<sup>*</sup></label>
                 <input class="form-control" type="text" name="product_code" value="<?= isset($info['product_code']) ? $info['product_code'] : '';?>">
             </div>
             <div class="form-group">
@@ -61,23 +43,9 @@
     $("form").submit(function() {
         $.check(!this.recommend_title.value, '请输入标题', this.recommend_title) &&
         $.check(!this.district_id.value, '请选择城市', this.district_id) &&
+        $.check(!this.product_code.value, '请输入商品CODE', this.product_code) &&
         $(this).ajaxAuto();
         return false;
-    });
-
-    $("input:file").unbind('change').on('change', function() {
-        var imageHolder = $(this).parents('.form-group').find('.js-image');
-        if (typeof (FileReader) != "undefined") {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-               var result = e.target.result;
-               imageHolder.attr('src', result);
-           }
-           var upFile = $(this)[0].files[0];
-           reader.readAsDataURL(upFile);
-
-           imageHolder.parent().show();
-        }
     });
 </script>
 

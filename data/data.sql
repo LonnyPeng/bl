@@ -507,8 +507,6 @@ CREATE TABLE `t_recommends` (
   `recommend_id` int(11) unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY COMMENT '',
   `recommend_title` varchar(32) NOT NULL COMMENT '标题',
   `district_id` tinyint(4) NOT NULL COMMENT '城市ID',
-  `recommend_path` varchar(45) NOT NULL COMMENT '图片路径',
-  `recommend_logo` varchar(45) COMMENT '品牌logo',
   `product_code` varchar(200) COMMENT '商品CODE',
   `recommend_sort` int(5) NOT NULL DEFAULT '0' COMMENT '排序',
   `recommend_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '时间',

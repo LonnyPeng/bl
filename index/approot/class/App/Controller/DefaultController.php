@@ -38,14 +38,14 @@ class DefaultController extends AbstractActionController
         $recommendList = $this->locator->db->getAll($sql, $this->districtId);
         if ($recommendList) {
             foreach ($recommendList as $key => $row) {
-                if ($row['product_code']) {
-                    $recommendList[$key]['product_id'] = $this->models->product->getProductId(sprintf("product_code = '%s'", $row['product_code']));
-
-                    $sql = "SELECT product_type FROM t_products WHERE product_code = ?";
-                    $recommendList[$key]['product_type'] = $this->locator->db->getOne($sql, $row['product_code']);
-                } else {
-                    $recommendList[$key]['product_id'] = '';
+                $sql = "SELECT product_id FROM t_products WHERE product_code = ?";
+                $productId = $this->locator->db->getOne($sql, $row['product_code']);
+                if (!$productId) {
+                    continue;
                 }
+
+                $recommendList[$key]['product_id'] = $productId;
+                $recommendList[$key]['product'] = $this->models->product->getProductById($productId);
             }
         }
 

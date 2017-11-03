@@ -446,7 +446,19 @@ class BasicController extends AbstractActionController
 				WHERE district_id = ? 
 				ORDER BY recommend_sort DESC, recommend_id DESC";
 		$imageList = $this->locator->db->getAll($sql, $districtId);
+		if ($imageList) {
+			foreach ($imageList as $key => $row) {
+				$sql = "SELECT product_id FROM t_products WHERE product_code = ?";
+				$productId = $this->locator->db->getOne($sql, $row['product_code']);
+				if (!$productId) {
+					continue;
+				}
 
+				$imageList[$key]['product'] = $this->models->product->getProductById($productId);
+			}
+		}
+
+		// print_r($imageList);die;
 		return array(
 			'imageList' => $imageList,
 			'districtList' => $this->models->district->getDistrictSelect('district_status = 1'),
@@ -467,103 +479,20 @@ class BasicController extends AbstractActionController
 				return new JsonModel('error', '请输入标题');
 			}
 
-			if (!$id) {
-				if (!isset($_FILES['recommend_path'])) {
-					return new JsonModel('error', '请上传图片');
-				} elseif (!in_array($_FILES['recommend_path']['type'], $this->imgType)) {
-					return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
-				} elseif ($_FILES['recommend_path']['size'] > $this->imgMaxSize) {
-					return new JsonModel('error', '请选择小于4M的图片');
-				}
-
-				if (isset($_FILES['recommend_logo'])) {
-					if (!in_array($_FILES['recommend_logo']['type'], $this->imgType)) {
-						return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
-					} elseif ($_FILES['recommend_logo']['size'] > $this->imgMaxSize) {
-						return new JsonModel('error', '请选择小于4M的图片');
-					}
-				} else {
-					return new JsonModel('error', '品牌Logo');
-				}
-			} else {
-				if (isset($_FILES['recommend_path'])) {
-					if (!in_array($_FILES['recommend_path']['type'], $this->imgType)) {
-						return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
-					} elseif ($_FILES['recommend_path']['size'] > $this->imgMaxSize) {
-						return new JsonModel('error', '请选择小于4M的图片');
-					}
-				}
-
-				if (isset($_FILES['recommend_logo'])) {
-					if (!in_array($_FILES['recommend_logo']['type'], $this->imgType)) {
-						return new JsonModel('error', '请上传图片类型为 JPG, JPEG, PNG, GIF');
-					} elseif ($_FILES['recommend_logo']['size'] > $this->imgMaxSize) {
-						return new JsonModel('error', '请选择小于4M的图片');
-					}
-				}
-			}
-
 			if (!$_POST['district_id']) {
 				return new JsonModel('error', '请选择城市');
 			}
 
 			$code = trim($_POST['product_code']);
-			if ($code) {
-				if (!preg_match("/^sp[\d]{6}/i", $code)) {
-					return new JsonModel('error', '商品CODE错误');
-				} 
+			if (!$code) {
+				return new JsonModel('error', '请输入商品CODE');
 			}
-
-			$logo = '';
-			if (!$id) {
-				$path = $this->imageUpdate($_FILES['recommend_path']);
-				if (!$path) {
-					return new JsonModel('error', '图片保存失败');
-				} else {
-					//处理图片
-					$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 750, 393);
-					if (!$result['status']) {
-						return new JsonModel('error', $result['content']);
-					} else {
-						$path = $result['content'];
-					}
-				}
-
-				if (isset($_FILES['recommend_logo'])) {
-					$logo = $this->imageUpdate($_FILES['recommend_logo']);
-					//处理图片
-					$result = $this->funcs->setImage(SYS_DIR . $logo, SYS_DIR, 70, 70);
-					if (!$result['status']) {
-						return new JsonModel('error', $result['content']);
-					} else {
-						$logo = $result['content'];
-					}
-				}
-			} else {
-				if (isset($_FILES['recommend_path'])) {
-					$path = $this->imageUpdate($_FILES['recommend_path']);
-					if (!$path) {
-						return new JsonModel('error', '图片保存失败');
-					} else {
-						//处理图片
-						$result = $this->funcs->setImage(SYS_DIR . $path, SYS_DIR, 750, 393);
-						if (!$result['status']) {
-							return new JsonModel('error', $result['content']);
-						} else {
-							$path = $result['content'];
-						}
-					}
-				}
-
-				if (isset($_FILES['recommend_logo'])) {
-					$logo = $this->imageUpdate($_FILES['recommend_logo']);
-					$result = $this->funcs->setImage(SYS_DIR . $logo, SYS_DIR, 70, 70);
-					if (!$result['status']) {
-						return new JsonModel('error', $result['content']);
-					} else {
-						$logo = $result['content'];
-					}
-				}
+			if ($code && !preg_match("/^sp[\d]{6}/i", $code)) {
+				return new JsonModel('error', '商品CODE错误');
+			}
+			$sql = "SELECT COUNT(*) FROM t_products WHERE district_id = ? AND product_code = ?";
+			if (!$this->locator->db->getOne($sql, trim($_POST['district_id']), $code)) {
+				return new JsonModel('error', '该商品不属于当前城市');
 			}
 
 			$map = array(
@@ -578,40 +507,15 @@ class BasicController extends AbstractActionController
 					recommend_sort = :recommend_sort";
 
 			if (!$id) {
-				$map['recommend_path'] = $path;
-				$map['recommend_logo'] = $logo;
-				$set .= ",recommend_path = :recommend_path, recommend_logo = :recommend_logo";
-
 				$sql = "INSERT INTO t_recommends SET $set";
 			} else {
 				$map['recommend_id'] = $id;
-				if (isset($_FILES['recommend_path'])) {
-					$sql = "SELECT recommend_path FROM t_recommends WHERE recommend_id = ?";
-					$pathOld = $this->locator->db->getOne($sql, $id);
-
-					$map['recommend_path'] = $path;
-					$set .= ",recommend_path = :recommend_path";
-				}
-				if (isset($_FILES['recommend_logo'])) {
-					$sql = "SELECT recommend_logo FROM t_recommends WHERE recommend_id = ?";
-					$logoOld = $this->locator->db->getOne($sql, $id);
-
-					$map['recommend_logo'] = $logo;
-					$set .= ",recommend_logo = :recommend_logo";
-				}
-				
 				$sql = "UPDATE t_recommends SET $set
 						WHERE recommend_id = :recommend_id";
 			}
 
 			$status = $this->locator->db->exec($sql, $map);
 			if ($status) {
-				if ($id && isset($_FILES['recommend_path'])) {
-					$this->delImage(SYS_DIR . $pathOld);
-				}
-				if ($id && isset($_FILES['recommend_logo'])) {
-					$this->delImage(SYS_DIR . $logoOld);
-				}
 				return JsonModel::init('ok', '成功')->setRedirect($this->helpers->url('basic/home-recommend'));
 			} else {
 				return new JsonModel('error', '失败');
@@ -631,19 +535,10 @@ class BasicController extends AbstractActionController
 		}
 
 		$id = $this->param('id');
-		$sql = "SELECT recommend_path, recommend_logo FROM t_recommends WHERE recommend_id = ?";
-		$pathInfo = $this->locator->db->getRow($sql, $id);
 		
 		$sql = "DELETE FROM t_recommends WHERE recommend_id = ?";
 		$status = $this->locator->db->exec($sql, $id);
 		if ($status) {
-			foreach ($pathInfo as $value) {
-				$filename = SYS_DIR . $value;
-				if (file_exists($filename)) {
-					@unlink($filename);
-				}
-			}
-
 			return JsonModel::init('ok', '删除成功');
 		} else {
 			return new JsonModel('error', '删除失败');

@@ -48,7 +48,7 @@
                 <li class="col-8 col-x-12 col-xs-16 col-m-48 js-image" data-id="<?php echo $row['recommend_id']?>", data-sort="<?php echo $row['recommend_sort']?>">
                     <div class="album-list">
                         <div class="pic-wrap">
-                            <img src="<?php echo $this->uploadUrl($row['recommend_path'], 'sys');?>">
+                            <img src="<?php echo $this->uploadUrl($row['product']['images']['banner'][0]['image_path'], 'product');?>">
                         </div>
                         <div class="action">
                             <span class="time"><?php echo date('Y-m-d',strtotime($row['recommend_time']))?></span>
