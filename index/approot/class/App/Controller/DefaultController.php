@@ -69,15 +69,7 @@ class DefaultController extends AbstractActionController
                 LIMIT 0, 5";
         $logList = $this->locator->db->getAll($sql, $this->customerId);
         if ($logList) {
-            foreach ($logList as $row) {
-                $temp[] = implode(',', $row);
-            }
-            $temp = array_unique($temp);
-            foreach ($temp as $key => $value){
-                $temp[$key] = explode(',', $value);
-            }
-
-            $logList = $temp;
+            $logList = $this->funcs->arrayUnique($logList);
         }
         
         //获取城市

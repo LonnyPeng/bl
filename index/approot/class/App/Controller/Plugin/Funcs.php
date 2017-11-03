@@ -728,6 +728,29 @@ class Funcs implements ServiceLocatorAwareInterface
         return $url;
     }
 
+    public function arrayUnique($data = array())
+    {
+        foreach ($data as $key => $row){
+            foreach ($row as $k => $value) {
+                $row[$k] = $k . "=" . $value;
+            }
+            $data[$key] = implode('&', $row);
+        }
+        $data = array_unique($data);
+
+        foreach ($data as $key => $row){
+            $row = explode("&", $row);
+            foreach ($row as $k => $value) {
+                $value = explode("=", $value);
+                $row[$value[0]] = $value[1];
+                unset($row[$k]);
+            }
+            $data[$key] = $row;
+        }
+
+        return $data;
+    }
+
     /**
      * Set service locator
      *
