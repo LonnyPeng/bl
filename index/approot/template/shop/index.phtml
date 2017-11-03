@@ -85,7 +85,8 @@
 
             //设置服务请求成功的回调函数
             geocoder.setComplete(function(result) {
-                window.location.href = url + '&address_name=' + $(this).val() + '&shop_lat=' + result.detail.location.lat + '&shop_lng=' + result.detail.location.lng;
+                console.log(result);
+                // window.location.href = url + '&address_name=' + $(this).val() + '&shop_lat=' + result.detail.location.lat + '&shop_lng=' + result.detail.location.lng;
             });
         }
     });

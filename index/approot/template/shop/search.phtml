@@ -68,9 +68,11 @@
             $('input[name="shop_lat"]').val(result.detail.location.lat);
             $('input[name="shop_lng"]').val(result.detail.location.lng);
 
-            $('#searchText').trigger('click');
-            $('input[type="search"]').trigger('blur');
+
         });
+
+        $('#searchText').trigger('click');
+        $('input[type="search"]').trigger('blur');
     <?php endif;?>
     $('input[type="search"]').change(function() {
         if ($(this).val()) {
