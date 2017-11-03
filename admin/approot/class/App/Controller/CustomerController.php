@@ -6,6 +6,11 @@ use Framework\View\Model\JsonModel;
 
 class CustomerController extends AbstractActionController
 {
+    public $filed = array(
+        'customer_gender' => array('1' => '男', '2' => '女'),
+        'customer_age' => array('1' => '20岁以下', '2' => '20-35', '3' => '35-50', '4' => '50岁以上'),
+    );
+
     public function init()
     {
         parent::init();
@@ -20,6 +25,15 @@ class CustomerController extends AbstractActionController
     	if ($this->param('customer_name')) {
     		$where[] = sprintf("customer_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('customer_name'))) . '%'));
     	}
+        if ($this->param('customer_age')) {
+            $where[] = sprintf("customer_age = '%s'", $this->filed['customer_age'][trim($this->param('customer_age'))]);
+        }
+        if ($this->param('customer_gender')) {
+            $where[] = sprintf("customer_gender = '%s'", $this->filed['customer_gender'][trim($this->param('customer_gender'))]);
+        }
+        if ($this->param('district_id')) {
+            $where[] = sprintf("c.district_id = %d", trim($this->param('district_id')));
+        }
 
     	$count = $this->models->customer->getCount(array('setWhere' => $where));
     	$this->helpers->paginator($count, 10);
@@ -43,6 +57,8 @@ class CustomerController extends AbstractActionController
     	// print_r($customerList);die;
     	return array(
     		'customerList' => $customerList,
+            'filed' => $this->filed,
+            'districtList' => $this->models->district->getDistrictSelect(),
     	);
     }
 
@@ -64,6 +80,17 @@ class CustomerController extends AbstractActionController
     			ORDER BY log_id DESC
     			LIMIT 0, 10";
     	$cityList = $this->locator->db->getAll($sql, $id);
+        if ($cityList) {
+            $cityNames = array_column($cityList, 'district_name');
+            $cityNames = array_unique($cityNames);
+            $data = array();
+            foreach ($cityList as $key => $row) {
+                if (isset($cityNames[$key])) {
+                    $data[] = $row;
+                }
+            }
+            $cityList = $data;
+        }
 
     	//历史搜索
     	$sql = "SELECT log_name, log_time FROM t_customer_search_log
@@ -88,12 +115,21 @@ class CustomerController extends AbstractActionController
     		}
     	}
 
-    	// print_r($addressList);die;
+        //积分详情
+        $sql = "SELECT * 
+                FROM t_customer_score_log 
+                WHERE customer_id = ?
+                ORDER BY log_id DESC
+                LIMIT 0, 10";
+        $scoreList = $this->locator->db->getAll($sql, $id);
+
+    	// print_r($scoreList);die;
     	return array(
     		'info' => $info,
     		'cityList' => $cityList,
     		'searchList' => $searchList,
     		'addressList' => $addressList,
+            'scoreList' => $scoreList,
     	);
     }
 

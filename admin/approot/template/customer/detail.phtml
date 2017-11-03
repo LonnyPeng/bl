@@ -31,6 +31,9 @@
 </div>
 <div class="js-tab tab-head">
     <ul class="tab clearfix">
+        <li data-current="4">
+            <span>积分详情</span>
+        </li>
         <li data-current="3">
             <span>收货地址</span>
         </li>
@@ -95,7 +98,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="text-center">登录城市</th>
+                        <th class="text-center">查看城市</th>
                         <th class="text-center">登录时间</th>
                     </tr>
                 </thead>
@@ -161,6 +164,32 @@
                                 <td class="text-center">
                                     <?php echo $info['customer_default_address_id'] == $row['address_id'] ? '默认地址' : ''?>
                                 </td>
+                            </tr>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="js-content none">
+        <div class="table-responsive employee-detail">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">名称</th>
+                        <th class="text-center">类别</th>
+                        <th class="text-center">积分</th>
+                        <th class="text-center">时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if ($scoreList) : ?>
+                        <?php foreach($scoreList as $key => $row) : ?>
+                            <tr class="<?php if (($key + 1) % 2 == 0) : ?>odd<?php endif;?>">
+                                <td class="text-center"><?php echo $row['score_des']?></td>
+                                <td class="text-center"><?php echo $row['score_type'] == 'have' ? '获得' : '使用'?></td>
+                                <td class="text-center"><?php echo $row['score_type'] == 'have' ? $row['score_quantity'] : (0 - $row['score_quantity'])?></td>
+                                <td class="text-center"><?php echo $row['log_time']?></td>
                             </tr>
                         <?php endforeach;?>
                     <?php endif;?>

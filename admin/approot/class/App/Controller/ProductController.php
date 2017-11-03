@@ -721,7 +721,7 @@ class ProductController extends AbstractActionController
 				LEFT JOIN t_products p ON p.product_id = pr.product_id
 				LEFT JOIN t_product_quantity pq ON pq.shop_id = pr.shop_id AND pq.product_id = pr.product_id
 				WHERE " . implode(" AND ", $where) . " 
-				ORDER BY pr.refill_id DESC
+				ORDER BY p.product_id DESC, pr.refill_id DESC
 				LIMIT " . implode(",", $limit);
 		$refillList = $this->locator->db->getAll($sql);
 
