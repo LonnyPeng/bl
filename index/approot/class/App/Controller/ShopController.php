@@ -12,7 +12,7 @@ class ShopController extends AbstractActionController
 	public $districtId = null;
 	public $customerId = null;
 	private $app = null;
-	private $AK = "lDB8Dene7Ed8hencvraYogDp7L3P8pUZ";
+	private $AK = "i5i0RY6UAnlPko8uf668dmOd";
 
 	public function init()
 	{
