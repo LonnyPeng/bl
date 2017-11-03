@@ -11,6 +11,8 @@
     </label>
 
     <input type="hidden" name="order_id" value="<?php echo $this->param('order_id')?>">
+    <input type="hidden" name="shop_lat" value="">
+    <input type="hidden" name="shop_lng" value="">
   </form>
   <a href="javascript:" class="weui-search-bar__cancel-btn" id="searchCancel">取消</a>
 </div>  
@@ -41,11 +43,12 @@
 <?php if (!$shopList) : ?>
     <div class="noproduct">
       <p class="tac">
-        附件暂无取货点
+        附近暂无取货点
       </p>
     </div>
 <?php endif;?>
 
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
 <script type="text/javascript">
     var wh=$(window).height();
     var ww=$(window).width();
@@ -57,11 +60,37 @@
         $('input[type="search"]').trigger('blur');
     <?php endif;?>
     $('input[type="search"]').change(function() {
-        $('form').trigger('submit');
+        if ($(this).val()) {
+            //调用地址解析类
+            geocoder = new qq.maps.Geocoder();
+
+            //通过getLocation();方法获取位置信息值
+            geocoder.getLocation($(this).val());
+
+            //设置服务请求成功的回调函数
+            geocoder.setComplete(function(result) {
+                $('input[name="shop_lat"]').val(result.detail.location.lat);
+                $('input[name="shop_lng"]').val(result.detail.location.lng);
+                $('form').trigger('submit');
+            });
+        } else {
+            $('form').trigger('submit');
+        } 
     });
     $('input[type="search"]').blur(function() {
         if ($(this).val()) {
-            $('form').trigger('submit');
+            //调用地址解析类
+            geocoder = new qq.maps.Geocoder();
+
+            //通过getLocation();方法获取位置信息值
+            geocoder.getLocation($(this).val());
+
+            //设置服务请求成功的回调函数
+            geocoder.setComplete(function(result) {
+                $('input[name="shop_lat"]').val(result.detail.location.lat);
+                $('input[name="shop_lng"]').val(result.detail.location.lng);
+                $('form').trigger('submit');
+            });
         } else {
             window.location.href = '<?php echo $this->url('shop/index', array('order_id' => $this->param('order_id')))?>';
         }

@@ -105,8 +105,8 @@ class ShopController extends AbstractActionController
 
 	public function searchAction()
 	{
-		$lat = $this->locator->get('Profile')['lat'];
-		$lng = $this->locator->get('Profile')['lng'];
+		$lat = $this->param('shop_lat');
+		$lng = $this->param('shop_lng');
 
 		$form = array('lat' => $lat, 'lng' => $lng);
 
@@ -121,6 +121,17 @@ class ShopController extends AbstractActionController
 		if (!$address) {
 		    $this->funcs->redirect($this->helpers->url('shop/index', array('order_id' => $id)));
 		}
+
+		$urlInfo = array(
+			'url' => "http://api.map.baidu.com/geocoder/v2/",
+			'params' => array(
+				'ak' => "se0o5ZCif8WBlePtDwnpOmfL",
+				'location' => $lat . "," . $lng,
+				'output' => 'json',
+				'pois' => '0',
+			),
+		);
+		$result = $this->funcs->curl($urlInfo);
 
 		$field = array(
 		    's.*, pq.quantity_num, pq.quantity_id, s.shop_lat, s.shop_lng',
