@@ -17,7 +17,7 @@
 <div class="qhd_down qhd_radio">
     <?php if ($shopList) : ?>
         <?php foreach($shopList as $row) : ?>
-            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>">
+            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>" data-lat="<?php echo $row['shop_lat']?>" data-lng="<?php echo $row['shop_lng']?>">
                 <div class="qhd_ico">
                     <i class="iconfont">&#xe608;</i>
                     <i class="iconfont">&#xe60c;</i>
@@ -35,6 +35,8 @@
         <?php endforeach;?>
     <?php endif;?>
 </div>
+
+<div class="none" id="js-form" data-lat="<?php echo $form['lat']?>" data-lng="<?php echo $form['lng']?>"></div>
 
 <?php if (!$shopList) : ?>
     <div class="noproduct">
@@ -70,7 +72,13 @@
         $(this).addClass('on');
     });
 
+    var map = '<?php echo $this->url('shop/map')?>';
     $('.js-row').click(function() {
-        $(this).ajaxAuto();
+        var formLat = $('#js-form').data('lat'),
+            formLng = $('#js-form').data('lng'),
+            toLat = $(this).data('lat'),
+            toLng = $(this).data('lng'),
+        window.location.href = map + '?form-lat=' + formLat + '&form-lng=' + formLng + '&to-lat=' + toLat + '&to-lng=' + toLng;
+        // $(this).ajaxAuto();
     });
 </script>

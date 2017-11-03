@@ -20,11 +20,12 @@
         <i class="iconfont">&#xe612;</i>
     </div>
 </div>
+<div class="none" id="js-form" data-lat="<?php echo $form['lat']?>" data-lng="<?php echo $form['lng']?>"></div>
 <div class="qhd_down">
     <h6>附近取货点</h6>
     <?php if ($shopList) : ?>
         <?php foreach($shopList as $row) : ?>
-            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>">
+            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>" data-lat="<?php echo $row['shop_lat']?>" data-lng="<?php echo $row['shop_lng']?>">
                 <div class="qhd_item_l">
                     <h5><?php echo $row['shop_name']?></h5>
                     <p><?php echo $row['shop_address']?></p>
@@ -52,6 +53,8 @@
                         success: function (re) {
                             if (re.status == 'ok') {
                                 $('#js-address').html(re.data.address);
+                                $('#js-form').data('lat', re.data.form.lat);
+                                $('#js-form').data('lng', re.data.form.lng);
                             }
                         }
                     });
@@ -61,8 +64,14 @@
     });
 
     var url = '<?php echo $this->url('shop/search', array('order_id' => $this->param('order_id')))?>';
+    var map = '<?php echo $this->url('shop/map')?>';
     $('.js-row').click(function() {
-        $(this).ajaxAuto();
+        var formLat = $('#js-form').data('lat'),
+            formLng = $('#js-form').data('lng'),
+            toLat = $(this).data('lat'),
+            toLng = $(this).data('lng'),
+        window.location.href = map + '?form-lat=' + formLat + '&form-lng=' + formLng + '&to-lat=' + toLat + '&to-lng=' + toLng;
+        // $(this).ajaxAuto();
     });
 
     $('input[type="search"]').blur(function() {

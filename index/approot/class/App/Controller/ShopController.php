@@ -44,6 +44,8 @@ class ShopController extends AbstractActionController
 			$lng = $this->locator->get('Profile')['lng'];
 		}
 
+		$form = array('lat' => $lat, 'lng' => $lng);
+
 		$urlInfo = array(
 			'url' => "http://api.map.baidu.com/geocoder/v2/",
 			'params' => array(
@@ -62,12 +64,12 @@ class ShopController extends AbstractActionController
 		}
 
 		if ($this->funcs->isAjax()) {
-			return JsonModel::init('ok', '', array('address' => $formattedAddress));
+			return JsonModel::init('ok', '', array('address' => $formattedAddress, 'form' => $form));
 		}
 
 		//获取最近取货点3个
 		$field = array(
-		    's.*, pq.quantity_num, pq.quantity_id',
+		    's.*, pq.quantity_num, pq.quantity_id, s.shop_lat, s.shop_lng',
 		    sprintf("ROUND(
 		        6378.137 * 1000 * 2 * ASIN(
 		            SQRT(
@@ -97,6 +99,7 @@ class ShopController extends AbstractActionController
 			'formattedAddress' => $formattedAddress,
 			'shopList' => $shopList,
 			'js' => $this->app->js,
+			'form' => $form,
 		);
 	}
 
@@ -104,6 +107,8 @@ class ShopController extends AbstractActionController
 	{
 		$lat = $this->locator->get('Profile')['lat'];
 		$lng = $this->locator->get('Profile')['lng'];
+
+		$form = array('lat' => $lat, 'lng' => $lng);
 
 		$id = trim($this->param('order_id'));
 		$where = sprintf("order_id = %d", $id);
@@ -118,7 +123,7 @@ class ShopController extends AbstractActionController
 		}
 
 		$field = array(
-		    's.*, pq.quantity_num, pq.quantity_id',
+		    's.*, pq.quantity_num, pq.quantity_id, s.shop_lat, s.shop_lng',
 		    sprintf("ROUND(
 		        6378.137 * 1000 * 2 * ASIN(
 		            SQRT(
@@ -147,6 +152,27 @@ class ShopController extends AbstractActionController
 		// print_r($shopList);die;
 		return array(
 			'shopList' => $shopList,
+			'form' => $form,
+		);
+	}
+
+	public function mapAction()
+	{
+		$this->layout->title = '地图导航';
+
+		$data = array(
+			'from' => array(
+				'lat' => '39.984009',
+				'lng' => '116.307535',
+			),
+			'to' => array(
+				'lat' => '39.984092',
+				'lng' => '116.496105',
+			),
+		);
+
+		return array(
+			'data' => $data,
 		);
 	}
 

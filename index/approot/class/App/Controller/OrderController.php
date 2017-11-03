@@ -287,6 +287,7 @@ class OrderController extends AbstractActionController
                 'district_name' => $address['district_name'],
                 'order_address' => $address['user_address'],
                 'order_tel' => $address['user_tel'],
+                'order_type' => $type == 'logistics' ? 'shipped' : 'pending',
             );
             $sql = "INSERT INTO t_orders 
                     SET order_number = :order_number,
@@ -300,7 +301,7 @@ class OrderController extends AbstractActionController
                     district_id = :district_id,
                     district_name = :district_name,
                     order_address = :order_address,
-                    order_type = 'shipped',
+                    order_type = :order_type,
                     order_tel = :order_tel";
             $status = $this->locator->db->exec($sql, $map);
             if (!$status) {
