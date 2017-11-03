@@ -47,7 +47,6 @@ class OrderGroupModel extends CommonModel
 	    	$info['group_type'] = $this->getStatus($info);
 	    	$info['customers'] = $info['customer_id'];
 	    	$info['customer_id'] = $this->getCustomer($info['customer_id']);
-	    	$info['group_type'] = $this->getStatus($info);
 	    }
 	    return $info;
 	}
