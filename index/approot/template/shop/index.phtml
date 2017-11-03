@@ -59,13 +59,14 @@
         });
     });
 
+    var url = '<?php echo $this->url('shop/search', array('order_id' => $this->param('order_id')))?>';
     $('.js-row').click(function() {
         $(this).ajaxAuto();
     });
 
     $('input[type="search"]').blur(function() {
         if ($(this).val()) {
-            window.location.href = '<?php echo $this->url('shop/search', array('order_id' => $this->param('order_id')))?>&address_name=' + $(this).val();
+            window.location.href = url + '&address_name=' + $(this).val();
         }
     });
 </script>     
