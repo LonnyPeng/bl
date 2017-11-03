@@ -50,7 +50,7 @@ class ReviewController extends AbstractActionController
 			'setJoin' => $join,
 			'setWhere' => $where,
 			'setLimit' => $limit,
-			'setOrderBy' => 'reviewCount DESC, product_id DESC',
+			'setOrderBy' => 'reviewCount DESC, reviewAve DESC, product_id DESC',
 		);
 
 		$productList = $this->models->product->getProduct($files, $sqlInfo);
