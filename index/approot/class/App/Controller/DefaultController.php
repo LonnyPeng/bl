@@ -185,11 +185,13 @@ class DefaultController extends AbstractActionController
                     LEFT JOIN t_products p ON p.product_id = h.product_id
                     WHERE h.hot_type = 'main'
                     AND h.district_id = ? AND " . implode(" AND ", $where) . "
-                    ORDER BY h.hot_id DESC
-                    LIMIT 0, 1";
-            $productId = $this->locator->db->getOne($sql, $this->districtId);
-            if ($productId) {
-                $productMain = $this->models->product->getProductById($productId);
+                    ORDER BY h.hot_id DESC";
+            $productIds = $this->locator->db->getgetColumn($sql, $this->districtId);
+            if ($productIds) {
+                $productMain = array();
+                foreach ($productIds as $key => $value) {
+                    $productMain[$key] = $this->models->product->getProductById($value);
+                }
             }
 
             //获取次要要推荐
@@ -197,8 +199,7 @@ class DefaultController extends AbstractActionController
                     LEFT JOIN t_products p ON p.product_id = h.product_id
                     WHERE h.hot_type = 'minor'
                     AND h.district_id = ? AND " . implode(" AND ", $where) . "
-                    ORDER BY h.hot_id DESC
-                    LIMIT 0, 10";
+                    ORDER BY h.hot_id DESC";
             $productMinor = $this->locator->db->getAll($sql, $this->districtId);
         }
 

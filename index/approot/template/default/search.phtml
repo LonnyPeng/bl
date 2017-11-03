@@ -53,16 +53,18 @@
     <div class="search_hot">
         <h4>热门推荐</h4>
         <?php if ($productMain) : ?>
-            <div class="search_list clearfix pr">
-                <div class="img fl">
-                    <img src="<?php echo $this->uploadUrl($productMain['images']['banner'][0]['image_path'], 'product')?>" >
+            <?php foreach($productMinor as $row) : ?>
+                <div class="search_list clearfix pr">
+                    <div class="img fl">
+                        <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>" >
+                    </div>
+                    <h4><?php echo $row['product_name']?></h4>
+                    <p><?php echo $this->funcs->showValue($row['product_price'])?>积分</p>
+                    <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+                        <?php echo $row['product_type'] == 1 ? '立即白领' : '组团领'?>
+                    </a>
                 </div>
-                <h4><?php echo $productMain['product_name']?></h4>
-                <p><?php echo $this->funcs->showValue($productMain['product_price'])?>积分</p>
-                <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $productMain['product_id']))?>">
-                    <?php echo $productMain['product_type'] == 1 ? '立即白领' : '组团领'?>
-                </a>
-            </div>
+            <?php endforeach;?>
         <?php endif;?>
         <?php if ($productMinor) : ?>
             <?php foreach($productMinor as $row) : ?>
