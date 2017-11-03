@@ -186,7 +186,7 @@ class DefaultController extends AbstractActionController
                     WHERE h.hot_type = 'main'
                     AND h.district_id = ? AND " . implode(" AND ", $where) . "
                     ORDER BY h.hot_id DESC";
-            $productIds = $this->locator->db->getgetColumn($sql, $this->districtId);
+            $productIds = $this->locator->db->getColumn($sql, $this->districtId);
             if ($productIds) {
                 $productMain = array();
                 foreach ($productIds as $key => $value) {
