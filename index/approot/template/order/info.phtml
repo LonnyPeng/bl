@@ -29,8 +29,10 @@
         </div>
       </div>
       <?php if ($info['shinging_type'] == 'self') : ?>
-          <div class="ewmcode ewmcode_01 tac">  
-            <h4 class="orange">取货点：<?php echo $info['order_address']?></h4>
+          <div class="ewmcode ewmcode_01 tac">
+            <?php if ($info['order_address']) : ?>
+                <h4 class="orange">取货点：<?php echo $info['order_address']?></h4>
+            <?php endif;?>
             <p class="gray">我的领取码</p>
             <div class="img pr">
               <img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
