@@ -53,7 +53,7 @@
     <div class="search_hot">
         <h4>热门推荐</h4>
         <?php if ($productMain) : ?>
-            <?php foreach($productMinor as $row) : ?>
+            <?php foreach($productMain as $row) : ?>
                 <div class="search_list clearfix pr">
                     <div class="img fl">
                         <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>" >
