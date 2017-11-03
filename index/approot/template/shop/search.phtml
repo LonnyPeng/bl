@@ -39,7 +39,7 @@
 <?php if (!$shopList) : ?>
     <div class="noproduct">
       <p class="tac">
-        该商品暂无取货点
+        附件暂无取货点
       </p>
     </div>
 <?php endif;?>
@@ -47,7 +47,7 @@
 <script type="text/javascript">
     var wh=$(window).height();
     var ww=$(window).width();
-    $(".noproduct").height(wh-50);
+    $(".noproduct").height(wh-150);
     $(".noproduct").width(ww);
 
     <?php if ($this->param('address_name')) : ?>
