@@ -105,11 +105,6 @@ class ShopController extends AbstractActionController
 
 	public function searchAction()
 	{
-		$lat = $this->param('shop_lat');
-		$lng = $this->param('shop_lng');
-
-		$form = array('lat' => $lat, 'lng' => $lng);
-
 		$id = trim($this->param('order_id'));
 		$where = sprintf("order_id = %d", $id);
 		$info = $this->models->order->getOrderInfo($where);
@@ -123,15 +118,19 @@ class ShopController extends AbstractActionController
 		}
 
 		$urlInfo = array(
-			'url' => "http://api.map.baidu.com/geocoder/v2/",
+			'url' => "http://maps.google.com/maps",
 			'params' => array(
-				'ak' => "se0o5ZCif8WBlePtDwnpOmfL",
-				'location' => $lat . "," . $lng,
-				'output' => 'json',
-				'pois' => '0',
+				'output' => "js",
+				'q' => rawurlencode($address),
 			),
 		);
 		$result = $this->funcs->curl($urlInfo);
+		if (strpos($result,'errortips') > 1 || strpos($result,'Did you mean:') !== false) {
+			$form = array('lat' => $this->locator->get('Profile')['lat'], 'lng' => $this->locator->get('Profile')['lng']);
+		} else {
+			preg_match('!center:\s*{lat:\s*(-?\d+\.\d+),lng:\s*(-?\d+\.\d+)}!U', $result, $match);
+			$form = array('lat' => $match[1], 'lng' => $match[2]);
+		}
 
 		$field = array(
 		    's.*, pq.quantity_num, pq.quantity_id',
