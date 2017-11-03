@@ -114,7 +114,15 @@
      });
 
   $('form').submit(function() {
-      $(this).ajaxAuto();
+      $(this).ajaxAuto({
+        success: function (re) {
+            if (re.status == 'ok') {
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1000);
+            }
+        }
+      });
       return false;
   });
 </script>

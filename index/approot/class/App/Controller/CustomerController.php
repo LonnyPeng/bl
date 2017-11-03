@@ -102,7 +102,7 @@ class CustomerController extends AbstractActionController
                 }
             }
 
-            if ($_FILES['file']) {
+            if (isset($_FILES['file'])) {
                 $row = $_FILES['file'];
                 if (!$row['error'] && in_array($row['type'], $this->imgType) && $row['size'] <= $this->imgMaxSize) {
                     $dir = USER_DIR;
@@ -141,7 +141,7 @@ class CustomerController extends AbstractActionController
                 }
             }
 
-            return JsonModel::init('ok', '')->setRedirect('reload');
+            return JsonModel::init('ok', '');
         }
 
 
