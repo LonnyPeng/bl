@@ -36,7 +36,7 @@ abstract class AbstractActionController extends ActionController
                 $_SESSION['key'] = $key;
             }
 
-            if (true) {
+            if (false) {
                 if ($this->helpers->controller() != 'wechat') {
                     if (!isset($_SESSION['redirect'])) {
                         $_SESSION['redirect'] = $this->helpers->selfUrl(null, false);

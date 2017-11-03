@@ -65,8 +65,10 @@ class DefaultController extends AbstractActionController
         $sql = "SELECT DISTINCT(c.district_id), d.district_name, d.district_status FROM t_customer_login_log c 
                 LEFT JOIN t_district d ON d.district_id = c.district_id
                 WHERE c.customer_id = ?
+                ORDER BY c.log_id DESC
                 LIMIT 0, 5";
         $logList = $this->locator->db->getAll($sql, $this->customerId);
+        // print_r($logList);die;
         
         //获取城市
         $sqlInfo = array(
