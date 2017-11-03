@@ -4,12 +4,56 @@
     </strong>
 </div>
 
+<div id="search">
+    <form>
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品类别</label>
+                    <select class="form-control" name="product_attr_id">
+                        <option value="">全部</option>
+                        <?php foreach($attrList as $key => $value) : ?>
+                            <option value="<?php echo $key?>" <?php echo $this->param('product_attr_id') == $key ? 'selected' : ''?>><?php echo $value?></option>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <label>商品所属城市</label>
+                    <select class="form-control" name="district_id">
+                        <option value="">全部</option>
+                        <?php foreach($districtList as $key => $rows) : ?>
+                            <optgroup label="<?php echo strtoupper($key)?>">
+                                <?php foreach($rows as $row) : ?>
+                                    <option value="<?php echo $row['district_id']?>" <?php echo $this->param('district_id') == $row['district_id'] ? 'selected' : ''?>><?php echo $row['district_name']?></option>
+                                <?php endforeach;?>
+                            </optgroup>
+                        <?php endforeach;?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group">
+                    <label class="hide"></label>
+                    <div>
+                        <button type="submit">搜索</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="table-responsive">
     <table class="table" id="data-list">
         <thead>
             <tr>
                 <th class="text-center">商品名称</th>
+                <th class="text-center">商品类别</th>
+                <th class="text-center">商品所属城市</th>
                 <th class="text-center">组团成员</th>
+                <th class="text-center">剩余有效时间</th>
                 <th class="text-center">组团时间</th>
                 <th class="text-center">组团状态</th>
                 <?php if ($this->perm->has(PERM_DELETE)) : ?>
@@ -22,6 +66,8 @@
                 <?php foreach ($groupList as $key => $row) :?>
                     <tr class="<?php if (($key + 1) % 2 == 1) : ?>odd-narmal<?php endif;?>">
                         <td class="text-center"><?= $row['product_name']?></td>
+                        <td class="text-center"><?= $row['attr_name']?></td>
+                        <td class="text-center"><?= $row['city_name']?></td>
                         <td class="text-center">
                             <?php $i = 0;?>
                             <?php foreach($row['customer_id'] as $ke => $value) : ?>
@@ -29,6 +75,7 @@
                                 <?php $i++;?>
                             <?php endforeach;?>
                         </td>
+                        <td class="text-center"><?php echo $row['time'] > 0 ? $this->funcs->showTime($row['time']) : ''?></td>
                         <td class="text-center"><?= $row['group_time']?></td>
                         <td class="text-center"><?php echo $row['group_type']['msg']?></td>
                         <?php if ($this->perm->has(PERM_DELETE)) : ?>

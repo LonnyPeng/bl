@@ -26,6 +26,12 @@ class OrderController extends AbstractActionController
 		if ($this->param('product_name')) {
 			$where[] = sprintf("o.product_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('product_name'))) . '%'));
 		}
+		if ($this->param('product_attr_id')) {
+			$where[] = sprintf("p.attr_id = %d", trim($this->param('product_attr_id')));
+		}
+		if ($this->param('district_id')) {
+			$where[] = sprintf("p.district_id = %d", trim($this->param('district_id')));
+		}
 		if ($this->param('customer_name')) {
 			$where[] = sprintf("c.customer_name LIKE '%s'", addslashes('%' . $this->helpers->escape(trim($this->param('customer_name'))) . '%'));
 		}
@@ -42,13 +48,18 @@ class OrderController extends AbstractActionController
 			$where[] = sprintf("o..order_type = '%s'", trim($this->param('order_type')));
 		}
 		
-		$join = "LEFT JOIN t_customers c ON c.customer_id = o.customer_id";
+		$join = array(
+			"LEFT JOIN t_customers c ON c.customer_id = o.customer_id",
+			"LEFT JOIN t_products p ON p.product_id = o.product_id",
+			"LEFT JOIN t_product_attr pa ON pa.attr_id = p.attr_id",
+			"LEFT JOIN t_district d ON d.district_id = p.district_id",
+		);
 
 		$count = $this->models->order->getCount(array('setJoin' => $join, 'setWhere' => $where));
 		$this->helpers->paginator($count, 10);
 		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
 
-		$files = array('o.*', 'c.customer_name');
+		$files = array('o.*', 'c.customer_name', 'pa.attr_name', 'd.district_name AS city_name');
 		$sqlInfo = array(
 			'setJoin' => $join,
 			'setWhere' => $where,
@@ -59,6 +70,8 @@ class OrderController extends AbstractActionController
 		$orderList = $this->models->order->getOrder($files, $sqlInfo);
 
 		return array(
+			'attrList' => $this->models->product->getAttrPair(),
+			'districtList' => $this->models->district->getDistrictSelect(),
 			'orderList' => $orderList,
 			'filed' => $this->filed,
 		);
@@ -98,23 +111,42 @@ class OrderController extends AbstractActionController
 		$this->perm->check(PERM_READ);
 		
 		$where = array();
+		if ($this->param('product_attr_id')) {
+			$where[] = sprintf("p.attr_id = %d", trim($this->param('product_attr_id')));
+		}
+		if ($this->param('district_id')) {
+			$where[] = sprintf("p.district_id = %d", trim($this->param('district_id')));
+		}
 
-		$count = $this->models->orderGroup->getCount(array('setWhere' => $where));
+		$join = array(
+			"LEFT JOIN t_products p ON p.product_id = og.product_id",
+			"LEFT JOIN t_product_attr pa ON pa.attr_id = p.attr_id",
+			"LEFT JOIN t_district d ON d.district_id = p.district_id",
+		);
+
+		$count = $this->models->orderGroup->getCount(array('setJoin' => $join, 'setWhere' => $where));
 		$this->helpers->paginator($count, 10);
 		$limit = array($this->helpers->paginator->getLimitStart(), $this->helpers->paginator->getItemCountPerPage());
 
-		$files = 'og.*, p.product_name';
+		$files = 'og.*, p.product_name, d.district_name AS city_name, pa.attr_name, p.product_group_time';
 		$sqlInfo = array(
-			'setJoin' => 'LEFT JOIN t_products p ON p.product_id = og.product_id',
+			'setJoin' => $join,
 			'setWhere' => $where,
 			'setLimit' => $limit,
 			'setOrderBy' => 'group_id DESC',
 		);
 
 		$groupList = $this->models->orderGroup->getOrderGroup($files, $sqlInfo);
+		if ($groupList) {
+			foreach ($groupList as $key => $row) {
+				$groupList[$key]['time'] = (strtotime($row['group_time']) + $row['product_group_time'] * 86400) - time();
+			}
+		}
 
 		// print_r($groupList);die;
 	    return array(
+	    	'attrList' => $this->models->product->getAttrPair(),
+	    	'districtList' => $this->models->district->getDistrictSelect(),
 	    	'groupList' => $groupList,
 	    );
 	}
