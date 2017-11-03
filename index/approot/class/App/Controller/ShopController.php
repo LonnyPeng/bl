@@ -139,7 +139,6 @@ class ShopController extends AbstractActionController
 			's.shop_status = 1',
 			sprintf("s.district_id = %d", $this->districtId),
 			sprintf("pq.product_id = %d", $info['product_id']),
-			sprintf("s.shop_address LIKE '%%%s%%'", $address),
 		);
 
 		$sql = "SELECT " . implode(",", $field) . " FROM t_shops s 
