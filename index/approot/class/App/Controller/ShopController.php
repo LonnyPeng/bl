@@ -203,7 +203,7 @@ class ShopController extends AbstractActionController
 			'params' => array(
 				'key' => $this->API['key'],
 				'referer' => $this->API['referer'],
-				'back' => "0",
+				'back' => "1",
 				'backurl' => trim($this->param('back-url')),
 			),
 		);
