@@ -181,7 +181,7 @@ class ShopController extends AbstractActionController
 			'spointx' => sprintf("%.6f", trim($this->param('form-lng'))),
 			'spointy' => sprintf("%.6f", trim($this->param('form-lat'))),
 			'footdetail' => "2",
-			'topbar' => "0",
+			'topbar' => "1",
 			'transport' => "0",
 			'editstartbutton' => "1",
 			'transmenu' => "",
