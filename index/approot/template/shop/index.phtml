@@ -25,7 +25,7 @@
     <h6>附近取货点</h6>
     <?php if ($shopList) : ?>
         <?php foreach($shopList as $row) : ?>
-            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>" data-lat="<?php echo $row['shop_lat']?>" data-lng="<?php echo $row['shop_lng']?>">
+            <div class="qhd_item js-row" data-href="<?php echo $this->url('order/self-address', array('order_id' => $this->param('order_id'), 'quantity_id' => $row['quantity_id']))?>" data-lat="<?php echo $row['shop_lat']?>" data-lng="<?php echo $row['shop_lng']?>" data-address="<?php echo $row['shop_address']?>">
                 <div class="qhd_item_l">
                     <h5><?php echo $row['shop_name']?></h5>
                     <p><?php echo $row['shop_address']?></p>
@@ -65,12 +65,15 @@
 
     var url = '<?php echo $this->url('shop/search', array('order_id' => $this->param('order_id')))?>';
     var map = '<?php echo $this->url('shop/map')?>';
+    var backUrl = window.location.href;
     $('.js-row').click(function() {
+        var formAddress = $('#js-address').html(),
+            toAddress = $(this).data('address');
         var formLat = $('#js-form').data('lat'),
             formLng = $('#js-form').data('lng'),
             toLat = $(this).data('lat'),
             toLng = $(this).data('lng');
-        window.location.href = map + '?form-lat=' + formLat + '&form-lng=' + formLng + '&to-lat=' + toLat + '&to-lng=' + toLng;
+        window.location.href = map + '?form-lat=' + formLat + '&form-lng=' + formLng + '&to-lat=' + toLat + '&to-lng=' + toLng + '&form-ddress=' + formAddress + '&to-address=' + toAddress + '&back-url=' + backUrl;
         // $(this).ajaxAuto();
     });
 

@@ -13,6 +13,10 @@ class ShopController extends AbstractActionController
 	public $customerId = null;
 	private $app = null;
 	private $AK = "i5i0RY6UAnlPko8uf668dmOd";
+	private $API = array(
+		'key' => "YC3BZ-QUT6X-LB34N-74GMJ-CM3Z2-S7BFI",
+		'referer' => "MapAPI",
+	);
 
 	public function init()
 	{
@@ -169,22 +173,44 @@ class ShopController extends AbstractActionController
 
 	public function mapAction()
 	{
-		$this->layout->title = '地图导航';
-
 		$data = array(
-			'from' => array(
-				'lat' => $this->param('form-lat'),
-				'lng' => $this->param('form-lng'),
-			),
-			'to' => array(
-				'lat' => $this->param('to-lat'),
-				'lng' => $this->param('to-lng'),
+			'eword' => trim($this->param('to-address')),
+			'epointx' => sprintf("%.6f", trim($this->param('to-lng'))),
+			'epointy' => sprintf("%.6f", trim($this->param('to-lat'))),
+			'sword' => trim($this->param('form-address')),
+			'spointx' => sprintf("%.6f", trim($this->param('form-lng'))),
+			'spointy' => sprintf("%.6f", trim($this->param('form-lat'))),
+			'footdetail' => "2",
+			'topbar' => "0",
+			'transport' => "0",
+			'editstartbutton' => "1",
+			'transmenu' => "",
+			'positionbutton' => "0",
+			'zoombutton' => "1",
+			'trafficbutton' => '0',
+			'coordtype' => '3',
+		);
+		$path = "";
+		foreach ($data as $key => $value) {
+			if ($path) {
+				$path .= "&";
+			}
+			$path .= $key . "=" . $value;
+		}
+
+		$urlInfo = array(
+			'url' => "http://apis.map.qq.com/tools/routeplan/" . $path,
+			'params' => array(
+				'key' => $this->API['key'],
+				'referer' => $this->API['referer'],
+				'back' => "0",
+				'backurl' => trim($this->param('back-url')),
 			),
 		);
 
-		return array(
-			'data' => $data,
-		);
+		$this->funcs->redirect($this->funcs->urlInit($urlInfo));
+
+		return false;
 	}
 
 	public function loginAction()
