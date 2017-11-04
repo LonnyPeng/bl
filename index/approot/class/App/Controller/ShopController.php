@@ -183,7 +183,7 @@ class ShopController extends AbstractActionController
 			'footdetail' => "2",
 			'topbar' => "1",
 			'transport' => "0",
-			'editstartbutton' => "1",
+			'editstartbutton' => "0",
 			'transmenu' => "",
 			'positionbutton' => "0",
 			'zoombutton' => "1",
