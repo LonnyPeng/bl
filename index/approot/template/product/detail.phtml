@@ -1,11 +1,13 @@
 <div class="prod_dt bgwhite mb15">
     <div class="swiper-container m_banner img pr">
         <div class="swiper-wrapper">
-            <?php foreach($info['images']['banner'] as $row) : ?>
-                <div class="swiper-slide">
-                    <img src="<?php echo $this->uploadUrl($row['image_path'], 'product')?>">
-                </div>
-            <?php endforeach;?>
+            <?php if (isset($info['images']['banner'])) : ?>
+                <?php foreach($info['images']['banner'] as $row) : ?>
+                    <div class="swiper-slide">
+                        <img src="<?php echo $this->uploadUrl($row['image_path'], 'product')?>">
+                    </div>
+                <?php endforeach;?>
+            <?php endif;?>
         </div>
         <div class="pa" style="z-index: 10;">
             <p class="lr1">
@@ -105,9 +107,11 @@
   <a href="javascript:;" class="eval_title wrap clearfix">
     <b class="fl">图文详情</b>
   </a>
-    <?php foreach($info['images']['detail'] as $row) : ?>
-        <img src="<?php echo $this->uploadUrl($row['image_path'], 'product')?>" alt="">
-    <?php endforeach;?>
+    <?php if (isset($info['images']['detail'])) : ?>
+        <?php foreach($info['images']['detail'] as $row) : ?>
+            <img src="<?php echo $this->uploadUrl($row['image_path'], 'product')?>" alt="">
+        <?php endforeach;?>
+    <?php endif;?>
 </div>
 
 <!-- footer -->

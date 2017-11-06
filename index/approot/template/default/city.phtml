@@ -3,7 +3,7 @@
     <h4 class="select_city_t">最近访问的城市</h4>
     <div class="wrap near_city">
         <?php foreach($logList as $row) : ?>
-            <?php if ($row['district_name']) : ?>
+            <?php if (isset($row['district_name']) && $row['district_name']) : ?>
                 <a href="<?php echo $this->url('default/change-city', array('id' => $row['district_id']))?>">
                     <?php echo $row['district_name']?>
                 </a>

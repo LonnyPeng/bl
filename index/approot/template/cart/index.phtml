@@ -1,7 +1,9 @@
 <div class="order_top clearfix">
-    <div class="img fl">
-        <img src="<?php echo $this->uploadUrl($info['images']['banner'][0]['image_path'], 'product')?>">
-    </div>
+    <?php if (isset($info['images']['banner'][0]['image_path'])) : ?>
+        <div class="img fl">
+            <img src="<?php echo $this->uploadUrl($info['images']['banner'][0]['image_path'], 'product')?>">
+        </div>
+    <?php endif;?>
     <h4><?php echo $info['product_name']?></h4>
 </div>
 <!-- 取货方式选择 -->

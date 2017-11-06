@@ -361,7 +361,7 @@ CREATE TABLE `t_customers` (
   `customer_openid` varchar(100) NOT NULL DEFAULT '' COMMENT '微信ID',
   `customer_gender` varchar(6) COMMENT '性别',
   `customer_age` varchar(10) COMMENT '年龄段',
-  `customer_name` varchar(100) NOT NULL DEFAULT '' COMMENT '名字',
+  `customer_name` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '名字',
   `customer_headimg` varchar(45) COMMENT '头像',
   `customer_regtime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
   `district_id` int(11) COMMENT '常住城市ID',
