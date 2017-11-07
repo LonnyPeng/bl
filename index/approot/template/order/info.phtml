@@ -1,53 +1,103 @@
 <div class="or_tlt pf">
-  <p><?php echo $info['status']?></p>
+	<p><?php echo $info['status']?></p>
 </div>
  <!-- 导航切换 -->
 <div class="my_collect my_order order_dt">
-  <div class="collect_li">
-    <div class="weui-cells">
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <p>订单号：<?php echo $info['order_number']?></p>
-        </div>
-        <div class="weui-cell__ft gray"><?php echo date("Y/m/d H:i", strtotime($info['order_time']))?></div>
-      </div>
-    </div>
-    <div class="clearfix wrap inf pr">
-      <div class="img fl">
-        <img src="<?php echo $this->uploadUrl($info['product']['images']['banner'][0]['image_path'], 'product')?>">
-      </div>
-      <h4 class="lr2"><?php echo $info['product']['product_name']?></h4>
-      <p><span class="gray"><?php echo $info['product']['product_weight']?></span></p>
-      <div class="pa jif"><?php echo $this->funcs->showValue($info['product']['product_price'])?>积分</div>
-    </div>
-    <div class="weui-cells daipj">
-      <div class="weui-cell">
-        <div class="weui-cell__bd">
-          <p>取货方式</p>
-        </div>
-        <div class="weui-cell__ft orange"><?php echo $info['shinging_type'] == 'logistics' ? '配送' : '自提'?></div>
-      </div>
-    </div>
-    <?php if ($info['shinging_type'] == 'self') : ?>
-        <div class="ewmcode ewmcode_01 tac">
-          <?php if ($info['order_address']) : ?>
-              <h4 class="orange">取货点：<?php echo $info['order_address']?></h4>
-          <?php endif;?>
-          <p class="gray">我的领取码</p>
-          <div class="img pr">
-            <img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
-          </div>
-        </div>
-        <div class="ck_dt clearfix">
-          <?php if ($info['group_id']) : ?>
-              <a href="<?php echo $this->url('customer/group-detail', array('id' => $info['group_id']))?>" class="btn btn_01">组团详情</a>
-          <?php endif;?>
-          <?php if ($info['order_type'] == 'received') : ?>
-            <a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
-          <?php else : ?>
-            <a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">去评价</a>
-          <?php endif;?>
-        </div>
-      <?php endif;?>
+	<div class="collect_li">
+		<div class="weui-cells">
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<p>订单号：<?php echo $info['order_number']?></p>
+				</div>
+				<div class="weui-cell__ft gray"><?php echo date("Y/m/d H:i", strtotime($info['order_time']))?></div>
+			</div>
+		</div>
+		<div class="clearfix wrap inf pr">
+			<div class="img fl">
+				<img src="<?php echo $this->uploadUrl($info['product']['images']['banner'][0]['image_path'], 'product')?>">
+			</div>
+			<h4 class="lr2"><?php echo $info['product']['product_name']?></h4>
+			<p><span class="gray"><?php echo $info['product']['product_weight']?></span></p>
+			<div class="pa jif"><?php echo $this->funcs->showValue($info['product']['product_price'])?>积分</div>
+		</div>
+		<div class="weui-cells daipj">
+			<div class="weui-cell">
+				<div class="weui-cell__bd">
+					<p>取货方式</p>
+				</div>
+				<div class="weui-cell__ft orange"><?php echo $info['shinging_type'] == 'logistics' ? '配送' : '自提'?></div>
+			</div>
+		</div>
+		<?php if ($info['shinging_type'] == 'self') : ?>
+			<div class="ewmcode ewmcode_01 tac">
+				<?php if ($info['order_address']) : ?>
+					<h4 class="orange">取货点：<?php echo $info['order_address']?></h4>
+				<?php endif;?>
+				<?php if ($info['order_type'] != 'group') : ?>
+					<p class="gray">我的领取码</p>
+					<div class="img pr">
+						<img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
+					</div>
+				<?php endif;?>
+			</div>
+			<div class="ck_dt clearfix">
+				<?php if ($info['group_id']) : ?>
+					<a href="<?php echo $this->url('customer/group-detail', array('id' => $info['group_id']))?>" class="btn btn_01">组团详情</a>
+				<?php endif;?>
+				<?php if ($info['order_type'] == 'received') : ?>
+					<a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
+				<?php else : ?>
+					<a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">去评价</a>
+				<?php endif;?>
+			</div>
+		<?php else : ?>
+			<div class="wrap qhfs_b">
+				<p>地址：<?php echo $info['order_address']?></p>
+				<p>联系人：<?php echo $info['order_customer_name']?></p>
+				<p>电话：<?php echo $info['order_tel']?></p>
+			</div>
+			<div class="weui-cells daipj_01">
+				<div class="weui-cell">
+					<div class="weui-cell__bd">
+						<p>配送时间</p>
+					</div>
+					<div class="weui-cell__ft orange">7个工作日送货上门</div>
+				</div>
+			</div>
+			<div class="ck_dt clearfix">
+				<a href="javascript:void(0);" class="btn btn_01 js-receipt" data-id="<?php echo $row['order_id']?>">确认收货</a>
+			</div>
+		<?php endif;?>
+	</div>
+</div>
+
+<!-- 弹窗 -->
+<div class="tc_bg">
+  <div class="pa qr_bg">
+    <h4 class="orange tac">已确认收货感谢您的支持</h4>
+        <a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="pj">立即评价</a>
   </div>
 </div>
+
+<script type="text/javascript">
+	var ww = $(window).width();
+	var wh = $(window).height();
+	$(".tc_bg").css({'width':ww,'height':wh});
+
+	$('.js-receipt').click(function() {
+	    var $$ = $(this);
+
+	    $$.removeAttr('href');
+
+	    $$.ajaxAuto({
+	        data: {id: $$.data('id')},
+	        success: function (re) {
+	        	if (re.status == 'ok') {
+	        		$(".tc_bg").show();
+	        	}
+	        }
+	    });
+
+	    return false;
+	});
+</script>

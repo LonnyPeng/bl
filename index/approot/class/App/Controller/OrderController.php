@@ -430,6 +430,22 @@ class OrderController extends AbstractActionController
 
         $this->layout->title = '我的订单';
 
+        if ($this->funcs->isAjax()) { //确认收货
+            $id = trim($this->param('id'));
+            $sql = "UPDATE t_orders 
+                    SET order_type = 'received', 
+                    order_received_time = now() 
+                    WHERE order_id = ? 
+                    AND order_type = 'shipped'
+                    AND order_status = 1";
+            $status = $this->locator->db->exec($sql, $id);
+            if ($status) {
+                return JsonModel::init('ok', '');
+            } else {
+                return new JsonModel('error', '收货失败');
+            }
+        }
+
         $sql = "SELECT product_qr_code_day FROM t_products WHERE product_id = ?";
         $qrcodeDay = $this->locator->db->getOne($sql, $info['product_id']);
         $time = strtotime($info['order_time']) + $qrcodeDay * 86400 - time();
