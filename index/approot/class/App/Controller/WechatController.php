@@ -34,13 +34,6 @@ class WechatController extends AbstractActionController
 
     public function callbackAction()
     {
-        if ($this->funcs->isAjax()) {
-            $_SESSION['customer_info']['lat'] = $this->param('lat');
-            $_SESSION['customer_info']['lng'] = $this->param('lng');
-
-            return JsonModel::init('ok', '')->setRedirect($this->helpers->url('default/index'));
-        }
-
         $oauth = $this->app->oauth;
 
         // 获取 OAuth 授权结果用户信息
@@ -78,6 +71,18 @@ class WechatController extends AbstractActionController
             'city' => $districtInfo['district_name'],
             'district_id' => $districtInfo['district_id'],
         );
+
+        $this->funcs->redirect($this->helpers->url('wechat/latlng'));
+    }
+
+    public function latlngAction() 
+    {
+        if ($this->funcs->isAjax()) {
+            $_SESSION['customer_info']['lat'] = $this->param('lat');
+            $_SESSION['customer_info']['lng'] = $this->param('lng');
+
+            return JsonModel::init('ok', '')->setRedirect($this->helpers->url('default/index'));
+        }
 
         return array(
             'js' => $this->app->js,

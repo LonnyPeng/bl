@@ -405,7 +405,7 @@ a.eval_title span.fr i{font-size: 14px;}
 .add_pj{padding: 10px;}
 /*评价*/
 .add_pj h4 {height: 30px;}
-.add_pj h4 span{vertical-align: middle;height: 20px;display: inline-block;}
+.add_pj h4 span{vertical-align: middle;height: 20px;display: inline-block;font-size: 18px;}
 .add_pj h4 span.star{width: 120px;background: url(images/star_01.png) no-repeat top left;background-size: 100% 100%;margin-left: 10px;}
 .add_pj h4 b{display: inline-block;height: 20px;background: url(images/star_02.png) no-repeat top left;background-size:120px 20px;}
 .add_pj textarea{width: 96%;resize:none;border:1px solid #eeeeee;padding: 10px 2%;outline: none;margin-top: 10px;border-radius: 5px;margin-bottom:5px;}
