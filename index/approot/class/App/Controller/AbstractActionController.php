@@ -66,43 +66,36 @@ abstract class AbstractActionController extends ActionController
                 $this->funcs->redirect($this->helpers->url('default/index'));
             }
         } else {
-            //获取用户位置
-            if (!isset($_SESSION['customer_info']['lat'])) {
-                if ($this->helpers->pageId() != 'wechat-latlng') {
-                    $this->funcs->redirect($this->helpers->url('wechat/latlng')); 
+            //判断是否是新用户
+            $where = sprintf("customer_openid = '%s'", addslashes($_SESSION['openid']));
+            $customer = $this->models->customer->getCustomerInfo($where);
+            if (!$customer) {
+                if ($this->helpers->pageId() != 'account-register') {
+                    $this->funcs->redirect($this->helpers->url('account/register'));
                 }
             } else {
-                //判断是否是新用户
-                $where = sprintf("customer_openid = '%s'", addslashes($_SESSION['openid']));
-                $customer = $this->models->customer->getCustomerInfo($where);
-                if (!$customer) {
-                    if ($this->helpers->pageId() != 'account-register') {
-                        $this->funcs->redirect($this->helpers->url('account/register'));
-                    }
-                } else {
-                    if (!isset($_SESSION['login'])) {
-                        //记录登录日志
-                        $sql = "INSERT INTO t_customer_login_log 
-                                SET customer_id = :customer_id, 
-                                district_id = :district_id, 
-                                log_ip = :log_ip";
-                        $this->locator->db->exec($sql, array(
-                            'customer_id' => $customer['customer_id'],
-                            'district_id' => $_SESSION['customer_info']['district_id'],
-                            'log_ip' => Http::getIp(),
-                        ));
+                if (!isset($_SESSION['login'])) {
+                    //记录登录日志
+                    $sql = "INSERT INTO t_customer_login_log 
+                            SET customer_id = :customer_id, 
+                            district_id = :district_id, 
+                            log_ip = :log_ip";
+                    $this->locator->db->exec($sql, array(
+                        'customer_id' => $customer['customer_id'],
+                        'district_id' => $_SESSION['customer_info']['district_id'],
+                        'log_ip' => Http::getIp(),
+                    ));
 
-                        $_SESSION['login'] = true;
-                    }
+                    $_SESSION['login'] = true;
+                }
 
-                    $this->locator->setService('Profile', array_merge($customer, $_SESSION['customer_info']));
+                $this->locator->setService('Profile', array_merge($customer, $_SESSION['customer_info']));
 
-                    if (isset($_SESSION['redirect'])) {
-                        $redirect = $_SESSION['redirect'];
-                        unset($_SESSION['redirect']);
+                if (isset($_SESSION['redirect'])) {
+                    $redirect = $_SESSION['redirect'];
+                    unset($_SESSION['redirect']);
 
-                        $this->funcs->redirect($redirect);
-                    }
+                    $this->funcs->redirect($redirect);
                 }
             }
         }

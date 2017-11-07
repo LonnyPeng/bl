@@ -6,13 +6,13 @@
 		    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
 		    success: function (res) {
 		        $(this).ajaxAuto({
-		        	url: '<?php echo $this->url('wechat/latlng')?>',
+		        	url: '<?php echo $this->url('wechat/index')?>',
 		        	data: {lat: res.latitude, lng: res.longitude},
 		        });
 		    },
 		    cancel: function () { //用户拒绝授权获取地理位置
 		    	$(this).ajaxAuto({
-		    		url: '<?php echo $this->url('wechat/latlng')?>',
+		    		url: '<?php echo $this->url('wechat/index')?>',
 		    		data: {lat: 31.236176, lng: 121.481689},
 		    	});
 		    }
