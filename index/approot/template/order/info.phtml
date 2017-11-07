@@ -69,12 +69,10 @@
 					<a href="javascript:void(0);" class="btn btn_01 js-receipt" data-id="<?php echo $info['order_id']?>">确认收货</a>
 				</div>
 			<?php else : ?>
-				<?php if ($info['order_type'] == 'received') : ?>
-					<div class="ck_dt clearfix">
-						<a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
-					</div>
-				<?php endif;?>
 				<div class="ck_dt clearfix">
+					<?php if ($info['order_type'] == 'received') : ?>
+						<a href="<?php echo $this->url('product/review-add', array('id' => $info['order_id']))?>" class="btn btn_01">去评价</a>
+					<?php endif;?>
 					<a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">确认收货</a>
 				</div>
 			<?php endif;?>
