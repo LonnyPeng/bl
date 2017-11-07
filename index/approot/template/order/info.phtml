@@ -56,17 +56,21 @@
 				<p>联系人：<?php echo $info['order_customer_name']?></p>
 				<p>电话：<?php echo $info['order_tel']?></p>
 			</div>
-			<div class="weui-cells daipj_01">
-				<div class="weui-cell">
-					<div class="weui-cell__bd">
-						<p>配送时间</p>
+			<?php if ($info['order_type'] == 'shipped') : ?>
+				<div class="weui-cells daipj_01">
+					<div class="weui-cell">
+						<div class="weui-cell__bd">
+							<p>配送时间</p>
+						</div>
+						<div class="weui-cell__ft orange">7个工作日送货上门</div>
 					</div>
-					<div class="weui-cell__ft orange">7个工作日送货上门</div>
 				</div>
-			</div>
-			<div class="ck_dt clearfix">
-				<a href="javascript:void(0);" class="btn btn_01 js-receipt" data-id="<?php echo $row['order_id']?>">确认收货</a>
-			</div>
+				<div class="ck_dt clearfix">
+					<a href="javascript:void(0);" class="btn btn_01 js-receipt" data-id="<?php echo $row['order_id']?>">确认收货</a>
+				</div>
+			<?php else : ?>
+				<a href="javascript:void(0);" class="btn btn_01" style="background: #dedede;">确认收货</a>
+			<?php endif;?>
 		<?php endif;?>
 	</div>
 </div>
