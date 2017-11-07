@@ -40,6 +40,9 @@ class WechatController extends AbstractActionController
         $user = $oauth->user();
         $userInfo = $user->toArray();
         $original = $userInfo['original'];
+        if (!$original['city']) {
+            $original['city'] = '上海市';
+        }
 
         $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
         if (!$districtInfo) {
@@ -54,6 +57,8 @@ class WechatController extends AbstractActionController
                 $original['city'] = '上海市';
             }
         }
+
+        $districtInfo = $this->models->district->getDistrictInfo(array(sprintf("district_name LIKE'%s%%'", $original['city'])));
 
         if (!preg_match("/^http:\/\/wx\.qlogo\.cn/i", $original['headimgurl'])) {
             $original['headimgurl'] = (string) $this->helpers->image('head_img.jpg', true);
