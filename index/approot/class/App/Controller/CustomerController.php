@@ -804,7 +804,7 @@ class CustomerController extends AbstractActionController
             if ($orders) {
                 foreach ($orders as $row) {
                     $sql = "UPDATE t_orders 
-                            SET order_type = 'pending', 
+                            SET order_type = 'shipped', 
                             order_time = now() 
                             WHERE order_id = ?";
                     $status = $this->locator->db->exec($sql, $row['order_id']);
