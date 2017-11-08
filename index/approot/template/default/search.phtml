@@ -1,5 +1,5 @@
 <!-- 搜索框 -->
-<div class="weui-search-bar" id="searchBar">
+<div class="weui-search-bar <?php echo $this->param('product_name') ? 'weui-search-bar_focusing' : ''?>" id="searchBar">
     <form class="weui-search-bar__form" id="js-submit-ignore">
         <div class="weui-search-bar__box">
             <i class="weui-icon-search"></i>
@@ -31,12 +31,18 @@
             </div>
         </div>
     <?php endforeach?>
+<?php elseif ($this->param('product_name')) : ?>
+    <div class="noproduct">
+      <p class="tac">
+        暂时没有你要搜索的商品
+      </p>
+    </div>
 <?php endif;?>
 
 <!-- 搜索历史 -->
 <?php if ($searchList) : ?>
     <div class="search_history wrap pr" style="padding: 10px;">
-        <a href="<?php echo $this->url('default/search-clear')?>" class="pa delt"><i class="iconfont">&#xe602;</i><span>清空</span></a>
+        <a href="javascript:;" data-href="<?php echo $this->url('default/search-clear')?>" class="pa delt"><i class="iconfont">&#xe602;</i><span>清空</span></a>
         <h4>搜索历史</h4>
         <p>
             <?php foreach($searchList as $row) : ?>
@@ -80,19 +86,32 @@
 
 <?php echo $this->js('ignore-history.js')->wrap();?>
 <script type="text/javascript">
-    <?php if ($this->param('product_name')) : ?>
-        $('#searchText').trigger('click');
-    <?php endif;?>
-    $('input[type="search"]').change(function() {
-        $('form').trigger('submit');
+    var wh = $(window).height(),ww = $(window).width();
+    $(".noproduct").height(wh - 50).width(ww);
+
+    $('#searchClear').click(function() {
+        $('#searchInput').val('').focus();
+    });
+    $('#searchCancel').click(function() {
+        $('#searchBar').removeClass('weui-search-bar_focusing');
+        $('#searchInput').val('').blur();
     });
     $('input[type="search"]').blur(function() {
-        if (!$(this).val()) {
-            $('form').trigger('submit');
-        }
+        $('form').trigger('submit');
     });
 
     $('.js-row').click(function() {
         window.location.href = $(this).data('href');
     });
+
+    $('.delt').click(function() {
+        var $$ = $(this);
+
+        $.confirm("确定情空当前搜索记录？", "", function() {
+            window.location.href = $$.data('href');
+        }, function() {
+            return false;
+        });
+    });
+
 </script>
