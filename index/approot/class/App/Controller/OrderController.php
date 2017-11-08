@@ -71,13 +71,13 @@ class OrderController extends AbstractActionController
                 $groupId = $this->locator->db->getOne($sql, $this->customerId, $row['product_id']);
                 $orderList[$key]['group_id'] = $groupId;
 
-                if ($row['order_type'] == 'pending') {
-                    if ($groupId) {
-                        $str = '组团成功，';
-                    } else {
-                        $str = '';
-                    }
+                if ($groupId) {
+                    $str = '组团成功，';
+                } else {
+                    $str = '';
+                }
 
+                if ($row['order_type'] == 'pending') {
                     if ($row['shinging_type'] == 'logistics') {
                         $orderList[$key]['status'] = $str . '待配送';
                     } else {
