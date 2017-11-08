@@ -77,9 +77,16 @@
         // $(this).ajaxAuto();
     });
 
-    $('input[type="search"]').blur(function() {
-        if ($(this).val()) {
-            window.location.href = url + '&address_name=' + $(this).val();
-        }
+    $('#searchClear').click(function() {
+        $('#searchInput').val('').focus();
+    });
+
+    $('#searchCancel').click(function() {
+        $('#searchBar').removeClass('weui-search-bar_focusing');
+        $('#searchInput').val('').blur();
+    });
+
+    $('#searchInput').blur(function() {
+        $(this).val() && $('form').trigger('submit');
     });
 </script>     
