@@ -61,6 +61,10 @@
         $('.mask').fadeIn();
     });
 
+    $(".fenlei_ul li").click(function() {
+        $(this).find('a').trigger('click');
+    });
+
     $('.mask').click(function(event) {
         $(this).fadeOut();
         $(".fenlei_ul").hide();

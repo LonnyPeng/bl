@@ -60,6 +60,10 @@
     var wh = $(window).height(),ww = $(window).width();
     $(".noproduct").height(wh - 100).width(ww);
 
+    $(".fenlei_ul li").click(function() {
+        $(this).find('a').trigger('click');
+    });
+
     $(".coll_top p.fenlei a").click(function(event) {
         $(this).parent().siblings('.fenlei_ul').slideDown();
         $('.mask').fadeIn();
