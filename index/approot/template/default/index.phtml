@@ -53,19 +53,21 @@
 <a class="search_btn pf" href="<?php echo $this->url('default/search')?>"><i class="iconfont">&#xe60a;</i></a>
 
 <script type="text/javascript">
-	var wh=$(window).height();
-	var ww=$(window).width();
-	$(".noproduct").height(wh-50);
-	$(".noproduct").width(ww);
+	var wh = $(window).height(),ww = $(window).width();
+	$(".noproduct").height(wh - 50).width(ww);
 	
-	$(function(){
-		$(".m_nav").find('.swiper-slide').on('tap', function() {
-			$(this).siblings().removeClass('on');
-			$(this).addClass('on');
-		});
-		$(".m_banner").swiper({
-		    loop: true,
-		    autoplay: 3000
-		});
-	})
+	$(".m_nav .swiper-slide").on('tap', function() {
+		$(this).siblings().removeClass('on');
+		$(this).addClass('on');
+	});
+	<?php if ($imageList) : ?>
+		<?php if (count($imageList) > 1) : ?>
+			$(".m_banner").swiper({
+			    loop: true,
+			    autoplay: 3000
+			});
+		<?php else : ?>
+			$(".m_banner .swiper-slide").css({width: ww + 'px'});
+		<?php endif;?>
+	<?php endif;?>
 </script>

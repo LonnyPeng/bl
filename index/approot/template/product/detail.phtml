@@ -146,10 +146,17 @@
 <?php endif;?>
 
 <script type="text/javascript">
-    $(".m_banner").swiper({
-        loop: true,
-        autoplay: 3000
-    });
+    var ww = $(window).width();
+    <?php if (isset($info['images']['banner'])) : ?>
+        <?php if (count($info['images']['banner']) > 1) : ?>
+            $(".m_banner").swiper({
+                loop: true,
+                autoplay: 3000
+            });
+        <?php else : ?>
+            $(".m_banner .swiper-slide").css({width: ww + 'px'});
+        <?php endif;?>
+    <?php endif;?>
 
     setInterval(function () {
         var $$ = $('#time');
