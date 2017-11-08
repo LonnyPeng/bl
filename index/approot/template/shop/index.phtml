@@ -77,14 +77,23 @@
         // $(this).ajaxAuto();
     });
 
-    $(document).on("click touchstart", ".weui-search-bar__label", function(e) {
-        $(e.target).parents(".weui-search-bar").addClass("weui-search-bar_focusing").find('input').focus();
-    }).on("blur", ".weui-search-bar__input", function(e) {
-        $(this).val() && $('form').trigger('submit');
-    }).on("click", ".weui-search-bar__cancel-btn", function(e) {
+    $('#searchText').click(function() {
+        $('#searchBar').addClass("weui-search-bar_focusing");
+        $('#searchInput').focus();
+    });
+    $('#searchClear').click(function() {
+        $('#searchInput').val('').focus();
+    });
+    $('#searchCancel').click(function() {
         $('#searchBar').removeClass('weui-search-bar_focusing');
         $('#searchInput').val('').blur();
-    }).on("click", ".weui-icon-clear", function(e) {
-        $('#searchInput').val('').focus();
+
+        $('form').trigger('submit');
+    });
+
+    $('form').submit(function() {
+        if (!$('#searchInput').val()) {
+            return false;
+        }
     });
 </script>     
