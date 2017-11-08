@@ -1,4 +1,4 @@
-<div class="weui-search-bar" id="searchBar">
+<div class="weui-search-bar <?php echo $this->param('address_name') ? 'weui-search-bar_focusing' : ''?>" id="searchBar">
   <form class="weui-search-bar__form">
     <div class="weui-search-bar__box">
       <i class="weui-icon-search"></i>
@@ -54,18 +54,22 @@
     $(".noproduct").height(wh-150);
     $(".noproduct").width(ww);
 
-    <?php if ($this->param('address_name')) : ?>
-        var address = "<?php echo $this->param('address_name')?>";
-        $('#searchText').trigger('click');
-        $('input[type="search"]').trigger('blur');
-    <?php endif;?>
-    $('input[type="search"]').change(function() {
+    $('#searchText').click(function() {
+        $('#searchBar').addClass("weui-search-bar_focusing");
+        $('#searchInput').focus();
+    });
+    $('#searchClear').click(function() {
+        $('#searchInput').val('').focus();
+    });
+    $('#searchCancel').click(function() {
+        $('#searchBar').removeClass('weui-search-bar_focusing');
+        $('#searchInput').val('').blur();
+
         $('form').trigger('submit');
     });
-    $('input[type="search"]').blur(function() {
-        if ($(this).val()) {
-            $('form').trigger('submit');
-        } else {
+
+    $('form').submit(function() {
+        if (!$('#searchInput').val()) {
             window.location.href = '<?php echo $this->url('shop/index', array('order_id' => $this->param('order_id')))?>';
         }
     });
