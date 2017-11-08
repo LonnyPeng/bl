@@ -72,7 +72,7 @@ class WechatController extends AbstractActionController
             'district_id' => $districtInfo['district_id'],
         );
 
-        $this->funcs->redirect($this->helpers->url('wechat/latlng'));
+        $this->funcs->redirect($this->helpers->url('default/index'));
     }
 
     public function latlngAction() 
