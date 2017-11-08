@@ -634,19 +634,27 @@ class CustomerController extends AbstractActionController
     {
         $this->layout->title = '我的收藏';
 
+        //获取商品类别
+        $attrList = $this->models->product->getAttrPair();
+
         $limit = array(0, 7);
         $where = array(
-            sprintf("customer_id = %d", $this->customerId),
+            sprintf("cc.customer_id = %d", $this->customerId),
         );
+
+        if ($this->param('attr_id')) {
+            $where[] = sprintf("p.attr_id = %d", trim($this->param('attr_id')));
+        }
 
         if ($this->funcs->isAjax() && $this->param('type') == 'page') {
             $limit[0] = $this->param('pageSize') * $limit[1];
         }
 
-        $sql = "SELECT *
-                FROM t_customer_collections
+        $sql = "SELECT cc.*
+                FROM t_customer_collections cc
+                LEFT JOIN t_products p ON p.product_id = cc.product_id
                 WHERE " . implode(" AND ", $where) . "
-                ORDER BY collection_id DESC
+                ORDER BY cc.collection_id DESC
                 LIMIT " . implode(",", $limit);
         $collectionList = $this->locator->db->getAll($sql);
         if ($collectionList) {
@@ -676,9 +684,60 @@ class CustomerController extends AbstractActionController
             }
         } else {
             return array(
+                'attrList' => $attrList,
                 'collectionList' => $collectionList,
             );
         }
+    }
+
+    public function collectionEditAction()
+    {
+        $this->layout->title = '编辑收藏';
+
+        if ($this->funcs->isAjax()) {
+            $ids = $_POST['ids'];
+            if (!$ids) {
+                return new JsonModel('error', '请选择删除的收藏');
+            }
+
+            $sql = "DELETE FROM t_customer_collections WHERE collection_id IN (%s)";
+            $sql = sprintf($sql, implode(",", $ids));
+            $status = $this->locator->db->exec($sql);
+            if ($status) {
+                return JsonModel::init('ok', '')->setRedirect('reload');
+            } else {
+                return new JsonModel('error', '删除收藏失败');
+            }
+        }
+
+        //获取商品类别
+        $attrList = $this->models->product->getAttrPair();
+
+        $where = array(
+            sprintf("cc.customer_id = %d", $this->customerId),
+        );
+
+        if ($this->param('attr_id')) {
+            $where[] = sprintf("p.attr_id = %d", trim($this->param('attr_id')));
+        }
+
+        $sql = "SELECT cc.*
+                FROM t_customer_collections cc
+                LEFT JOIN t_products p ON p.product_id = cc.product_id
+                WHERE " . implode(" AND ", $where) . "
+                ORDER BY cc.collection_id DESC";
+        $collectionList = $this->locator->db->getAll($sql);
+        if ($collectionList) {
+            foreach ($collectionList as $key => $row) {
+                $collectionList[$key] = $this->models->product->getProductById($row['product_id']);
+            }
+        }
+
+        // print_r($collectionList);die;
+        return array(
+            'attrList' => $attrList,
+            'collectionList' => $collectionList,
+        );
     }
 
     public function addressDefaultAction()

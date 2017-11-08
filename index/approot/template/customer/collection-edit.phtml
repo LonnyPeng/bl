@@ -1,0 +1,110 @@
+<div class="pf coll_top clearfix">
+    <p class="tac fenlei"><a href="javascript:;"><span><?php echo isset($attrList[$this->param('attr_id')]) ? $attrList[$this->param('attr_id')] : '全部分类'?></span> <i class="iconfont">&#xe61b;</i></a></p>
+    <div class="fenlei_ul pf">
+        <ul class="clearfix">
+            <li class="<?php echo !$this->param('attr_id') ? 'on' : ''?>">
+                <a href="<?php echo $this->url('customer/collection-edit')?>">全部分类</a>
+            </li>
+            <?php if ($attrList) : ?>
+                <?php foreach($attrList as $key => $value) : ?>
+                    <li class="<?php echo $this->param('attr_id') == $key ? 'on' : ''?>">
+                        <a href="<?php echo $this->url('customer/collection-edit', array('attr_id' => $key))?>"><?php echo $value;?></a>
+                    </li>
+                <?php endforeach;?>
+            <?php endif;?>
+        </ul>
+    </div>
+</div>
+
+<div class="my_collect" id="m_pro">
+    <?php if ($collectionList) : ?>
+        <?php foreach($collectionList as $row) : ?>
+            <?php if (isset($row['product_name'])) : ?>
+                <div class="collect_li clearfix wrap pr js-row" data-id="<?php echo $row['collection_id']?>">
+                    <i class="weui-icon-circle"></i>
+                  <div class="img fl">
+                    <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>">
+                  </div>
+                  <h4 style="color: #000;"><?php echo $row['product_name']?></h4>
+                  <p><span class="orange"><?php echo $this->funcs->showValue($row['product_price'])?>积分</span></p>
+                </div>
+            <?php endif;?>
+        <?php endforeach;?>
+    <?php else : ?>
+        <div class="noproduct">
+          <p class="tac">
+            当前暂无收藏记录
+          </p>
+        </div>
+    <?php endif;?>
+</div>
+
+<?php if ($collectionList) : ?>
+    <!-- 底部按钮 -->
+    <div class="col_foot pf">
+        <div class="clearfix">
+            <a class="col_fbt col_cancel fl" href="javascript:;" id="js-clear">取消</a>
+            <a class="col_fbt col_delete fr" href="javascript:;" id='show-confirm'>删除</a>
+        </div>
+    </div>
+<?php endif;?>
+
+<div class="mask"></div>
+
+<?php echo $this->js('ignore-history.js')->wrap();?>
+<script type="text/javascript">
+    var wh = $(window).height(),ww = $(window).width();
+    $(".noproduct").height(wh - 100).width(ww);
+
+    $(".coll_top p.fenlei a").click(function(event) {
+        $(this).parent().siblings('.fenlei_ul').slideDown();
+        $('.mask').fadeIn();
+    });
+
+    $('.mask').click(function(event) {
+        $(this).fadeOut();
+        $(".fenlei_ul").hide();
+    });
+
+    $(".collect_li i").click(function() { //选择
+        if($(this).hasClass('weui-icon-circle')){
+            $(this).removeClass('weui-icon-circle').addClass('weui-icon-success');
+        } else {
+            $(this).addClass('weui-icon-circle').removeClass('weui-icon-success');
+        }
+
+        if ($('i.weui-icon-success').length) {
+            $('#js-clear').css({background: '#ff7c00'});
+        } else {
+            $('#js-clear').css({background: '#dadada'});
+        }
+    });
+    // 取消选择
+    $(".col_cancel").on('click', function(event) {
+        $(this).css({background: '#dadada'});
+        $(".collect_li i").addClass('weui-icon-circle').removeClass('weui-icon-success');
+    });
+
+    $('#show-confirm').click(function() {
+        if (!$('i.weui-icon-success').length) {
+            $.alert('请选择删除的收藏');
+            return false;
+        }
+
+        var $$ = $(this);
+
+        $.confirm("确定要删除当前选择收藏？", "", function() {
+            var ids = [];
+            $('i.weui-icon-success').each(function () {
+                ids.push($(this).parents('.js-row').data('id'));
+            });
+
+            $$.removeAttr('href');
+
+            $$.ajaxAuto({
+                data: {ids: ids},
+                type: 'post',
+            });
+        }, function() {});
+    });
+</script>
