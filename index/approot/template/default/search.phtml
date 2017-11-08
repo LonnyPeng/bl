@@ -24,7 +24,7 @@
                     </div>
                     <h4><?php echo $row['product_name']?></h4>
                     <p><?php echo $this->funcs->showValue($row['product_price'])?>积分</p>
-                    <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+                    <a class="pa igonre-no" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
                         <?php echo $row['product_type'] == 1 ? '立即白领' : '组团领'?>
                     </a>
                 </div>
@@ -62,7 +62,7 @@
                     <?php endif;?>
                     <h4><?php echo $row['product_name']?></h4>
                     <p><?php echo $this->funcs->showValue($row['product_price'])?>积分</p>
-                    <a class="pa" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
+                    <a class="pa igonre-no" href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
                         <?php echo $row['product_type'] == 1 ? '立即白领' : '组团领'?>
                     </a>
                 </div>
@@ -70,7 +70,7 @@
         <?php endif;?>
         <?php if ($productMinor) : ?>
             <?php foreach($productMinor as $row) : ?>
-                <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" style="color: #000; margin: 0.5em;">
+                <a href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>" style="color: #000; margin: 0.5em;" class="igonre-no">
                     <p><?php echo $row['product_name']?></p>
                 </a>
             <?php endforeach;?>
