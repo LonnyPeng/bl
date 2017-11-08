@@ -89,7 +89,7 @@ a.eval_title span.fr i{font-size: 14px;}
 .peo_photo .img img{max-width: 110%;max-height: 110%;min-width: 100%;min-height: 100%;}
 .peo_photo .pa{line-height: 60px;right: 10px;top: 0;color: #aaa;font-size: 16px;}
 .peo_photo p{display: inline-block;height: 18px;width: 108px;background: url(images/star_01.png) no-repeat top left;background-size: 100% 100%;margin-top: 5px;}
-.peo_photo p span{display: inline-block;height: 18px;background: url(images/star_02.png) no-repeat top left;background-size:108px 18px;}
+.peo_photo p span{display: inline-block;height: 18px;background: url(images/star_02.png) no-repeat top left;background-size:108px 18px;margin-bottom: 5px;}
 .pj_img img{display: block;margin: 10px 15px 5px 0;width: 100px;height: 100px;}
 
 .weui-photo-browser-modal{background:#2c2c2c;z-index: 99}
