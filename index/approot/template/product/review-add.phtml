@@ -1,105 +1,105 @@
 <form method="post" enctype="multipart/form-data">
-		<div class="wrap add_pj">
-			<h4>
-					<span>评价</span> 
-					<span class="star">
-							<b class="star-0"></b>
-							<input type="hidden" name="review_score" value="0">
-					</span>
-			</h4>
-			<textarea name="review_content" cols="30" rows="10" placeholder="完成评价及可获得10积分"></textarea>
-			<div class="pic clearfix">
-				<div style="display: inline-block; position: relative;" id="js-upload">
-						<img src="<?php echo $this->image('pic_i.png')?>" class="fl xc_btn">
-						<input type="file" style="display: inline-block; position: absolute; left: 0px; top: 0px; width: 100px; height: 80px; z-index: 2; opacity: 0;">
-				</div>
-				<div class="none" id="js-file"></div>
+	<div class="wrap add_pj">
+		<h4>
+			<span>评价</span> 
+			<span class="star">
+				<b class="star-0"></b>
+				<input type="hidden" name="review_score" value="0">
+			</span>
+		</h4>
+		<textarea name="review_content" cols="30" rows="10" placeholder="完成评价及可获得10积分"></textarea>
+		<div class="pic clearfix">
+			<div style="display: inline-block; position: relative;" id="js-upload">
+				<img src="<?php echo $this->image('pic_i.png')?>" class="fl xc_btn">
+				<input type="file" style="display: inline-block; position: absolute; left: 0px; top: 0px; width: 100px; height: 80px; z-index: 2; opacity: 0;">
 			</div>
-			<a href="javascript:;" class="weui-btn weui-btn_primary tj_pri js-submit">提交评价</a>
+			<div class="none" id="js-file"></div>
 		</div>
+		<a href="javascript:;" class="weui-btn weui-btn_primary-review tj_pri js-submit">提交评价</a>
+	</div>
 </form>
 
 <!-- 弹窗 -->
 <div class="tc_bg">
 	<div class="pa qr_bg pj_bg">
 		<h4 class="orange tac">评价成功，感谢您的支持</h4>
-				<a href="/" class="pj">再逛一逛</a>
+			<a href="/" class="pj">再逛一逛</a>
 	</div>
 </div>
 
 <script type="text/javascript">
-		<?php if ($this->param('status') == 'ok') : ?>
-				var ww=$(window).width();
-				var wh=$(window).height();
-				$(".tc_bg").css({'width':ww,'height':wh});
-				$(".tj_pri").on('click',function() {
-					$(".tc_bg").show();
-				});
+	<?php if ($this->param('status') == 'ok') : ?>
+		var ww=$(window).width();
+		var wh=$(window).height();
+		$(".tc_bg").css({'width':ww,'height':wh});
+		$(".tj_pri").on('click',function() {
+			$(".tc_bg").show();
+		});
 
-				$('.tj_pri').trigger('click');
-		<?php else : ?>
-				$('.star').click(function(e) {
-						var w = $(this).width();
-						var step = parseInt(w / 5);
-						var num = Math.ceil(e.offsetX / step);
+		$('.tj_pri').trigger('click');
+	<?php else : ?>
+		$('.star').click(function(e) {
+			var w = $(this).width();
+			var step = parseInt(w / 5);
+			var num = Math.ceil(e.offsetX / step);
 
-						$(this).find('b').removeAttr('class').addClass('star-' + num);
-						$('input[name="review_score"]').val(num);
-				});
+			$(this).find('b').removeAttr('class').addClass('star-' + num);
+			$('input[name="review_score"]').val(num);
+		});
 
-				updateFile();
-				
-				function updateFile() {
-					$("#js-upload input:file").unbind('change').on('change', function() {
-							var $$ = $(this);
-							if (typeof (FileReader) != "undefined") {
-									// $$.parents('.pic div').fadeOut();
+		updateFile();
+		
+		function updateFile() {
+			$("#js-upload input:file").unbind('change').on('change', function() {
+				var $$ = $(this);
+				if (typeof (FileReader) != "undefined") {
+					// $$.parents('.pic div').fadeOut();
 
-									var upFile = $(this)[0].files;
-									$(upFile).each(function(key, file) {
-											var img = '<img src="" class="fl xc_img">';
-											var imageHolder = $(img);
+					var upFile = $(this)[0].files;
+					$(upFile).each(function(key, file) {
+						var img = '<img src="" class="fl xc_img">';
+						var imageHolder = $(img);
 
-											var reader = new FileReader();
-											reader.onload = function (e) {
-													var result = e.target.result;
-													imageHolder.attr('src', result);
-											}
-											reader.readAsDataURL(file);
+						var reader = new FileReader();
+						reader.onload = function (e) {
+								var result = e.target.result;
+								imageHolder.attr('src', result);
+						}
+						reader.readAsDataURL(file);
 
-											$$.parents('.pic').prepend(imageHolder);
-									});
-							}
-
-							$('#js-upload').append('<input type="file" style="display: inline-block; position: absolute; left: 0px; top: 0px; width: 100px; height: 80px; z-index: 2; opacity: 0;">');
-
-							$('#js-file').append($$);
-							$('#js-file input:file').each(function(key, value) {
-								$(this).attr('name', 'file' + key);
-							});
-
-							updateFile();
+						$$.parents('.pic').prepend(imageHolder);
 					});
 				}
 
-				$('.js-submit').click(function() {
-						$('form').trigger('submit');
+				$('#js-upload').append('<input type="file" style="display: inline-block; position: absolute; left: 0px; top: 0px; width: 100px; height: 80px; z-index: 2; opacity: 0;">');
+
+				$('#js-file').append($$);
+				$('#js-file input:file').each(function(key, value) {
+					$(this).attr('name', 'file' + key);
 				});
 
-				$('form').submit(function() {
-					var $$  = $(this);
+				updateFile();
+			});
+		}
 
-					if (!this.review_score.value) {
-						$.toast('请选择你的评分');
-						return false;
-					}
+		$('.js-submit').click(function() {
+				$('form').trigger('submit');
+		});
 
-					if (!this.review_content.value) {
-						$.toast('请填写你的评价');
-						return false;
-					}
+		$('form').submit(function() {
+			var $$  = $(this);
 
-					return true;
-				});
-		<?php endif;?>
+			if (!this.review_score.value) {
+				$.toast('请选择你的评分');
+				return false;
+			}
+
+			if (!this.review_content.value) {
+				$.toast('请填写你的评价');
+				return false;
+			}
+
+			return true;
+		});
+	<?php endif;?>
 </script>

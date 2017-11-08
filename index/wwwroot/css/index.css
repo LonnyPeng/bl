@@ -405,13 +405,13 @@ a.eval_title span.fr i{font-size: 14px;}
 .add_pj{padding: 10px;}
 /*评价*/
 .add_pj h4 {height: 30px;}
-.add_pj h4 span{vertical-align: middle;height: 20px;display: inline-block;font-size: 18px;}
-.add_pj h4 span.star{width: 120px;background: url(images/star_01.png) no-repeat top left;background-size: 100% 100%;margin-left: 10px;}
-.add_pj h4 b{display: inline-block;height: 20px;background: url(images/star_02.png) no-repeat top left;background-size:120px 20px;}
-.add_pj textarea{width: 96%;resize:none;border:1px solid #eeeeee;padding: 10px 2%;outline: none;margin-top: 10px;border-radius: 5px;margin-bottom:5px;font-size: 16px;}
+.add_pj h4 span{vertical-align: middle;height: 20px;display: inline-block;font-size: 20px;}
+.add_pj h4 span.star{width: 120px;background: url(images/star_01.png) no-repeat top left;background-size: 100% 100%;margin-left: 10px;margin-top: 10px;}
+.add_pj h4 b{display: inline-block;height: 20px;background: url(images/star_02.png) no-repeat top left;background-size:120px 20px;margin-bottom: 10px;}
+.add_pj textarea{width: 96%;resize:none;border:1px solid #eeeeee;padding: 10px 2%;outline: none;margin-top: 10px;border-radius: 5px;margin-bottom:5px;font-size: 18px;}
 .add_pj .pic .xc_btn{height: 80px;margin-bottom: 10px;}
 .add_pj .pic .xc_img{height: 78px;height: 78px;margin-right: 10px;border:1px solid #eeeeee;margin-bottom: 10px;}
-.add_pj .weui-btn_primary{background: #ff7c00;margin-top: 40px;}
+.add_pj .weui-btn_primary-review{background: #ff7c00;margin-top: 40px;}
 .pj_bg{width: 260px;height: 237px;background: url(images/pj_bg.png) no-repeat center center;background-size: 100% 100%;left: 50%;top: 50%;margin-left: -130px;margin-top: -118px;}
 
 /*我的邀请码*/
