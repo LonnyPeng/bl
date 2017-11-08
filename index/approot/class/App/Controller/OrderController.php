@@ -84,15 +84,15 @@ class OrderController extends AbstractActionController
                         $orderList[$key]['status'] = $str . '待自提';
                     }
                 } elseif ($row['order_type'] == 'shipped') {
-                    $orderList[$key]['status'] = '待收货';
+                    $orderList[$key]['status'] = $str . '待收货';
                 } elseif ($row['order_type'] == 'group') {
                     $result = $this->models->orderGroup->getOrderGroupById($groupId);
                     $orderList[$key]['status'] = $result['group_type']['msg'];
                     $orderList[$key]['group_id'] = $groupId;
                 } elseif ($row['order_type'] == 'received') {
-                    $orderList[$key]['status'] = '已收货';
+                    $orderList[$key]['status'] = $str . '已收货';
                 } else {
-                    $orderList[$key]['status'] = '已完成';
+                    $orderList[$key]['status'] = $str . '已完成';
                 }
             }
         }
