@@ -800,7 +800,7 @@ a.eval_title span.fr i{font-size: 14px;}
 /*我的收藏添加样式*/
 .coll_top{z-index: 99;height: 40px;background: #FFF;border-bottom: 1px solid #e5e5e5;width: 100%;}
 .coll_top .bianji{display: inline-block;line-height: 40px;color: #333;padding-right: 10px;padding-left: 20px;position: absolute;right: 0;top: 0;}
-.my_collect{padding-top: 40px;}
+.my_collect_collection{padding-top: 40px;}
 .coll_top p.fenlei{line-height: 40px;}
 .coll_top p.fenlei a{display: inline-block;line-height: 40px;padding: 0 60px;color: #333;}
 .fenlei_ul{top: 41px;left: 0;z-index: 99;background: #FFF;border-bottom: 1px solid #e5e5e5;width: 100%;display: none;}
