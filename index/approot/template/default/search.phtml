@@ -96,7 +96,7 @@
         $('#searchBar').removeClass('weui-search-bar_focusing');
         $('#searchInput').val('').blur();
     });
-    $('input[type="search"]').blur(function() {
+    $('#searchInput').blur(function() {
         $('form').trigger('submit');
     });
 
