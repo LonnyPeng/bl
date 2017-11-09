@@ -13,4 +13,15 @@ class DefaultController extends AbstractActionController
     {
         return array();
     }
+
+    public function redisAction()
+    {
+    	$locator = $this->locator;
+    	$cache = $locator->get('Framework\Cache\Redis');
+    	$topMenu = $cache->get('test', function() use($locator) {
+    	    return 'lonny';
+    	}, 100);
+
+    	return false;
+    }
 }
