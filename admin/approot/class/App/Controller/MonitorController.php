@@ -16,6 +16,8 @@ class MonitorController extends ActionController
 			$members[$key] = $cache->getInit($value);
 		}
 
+		$members = array_column($members, "member_name");
+
 		print_r($members);
 		return false;
 	}
