@@ -16,10 +16,9 @@ class DefaultController extends AbstractActionController
 
     public function redisAction()
     {
-    	$locator = $this->locator;
-        $model = $locator->get('Framework\Model\ModelManager');
-    	$cache = $locator->get('Framework\Cache\Redis');
-    	$member = $cache->get('member', function() use($locator, $model) {
+        $model = $this->models;
+    	$cache = $this->locator->get('Framework\Cache\Redis');
+    	$member = $cache->get('member', function() use($model) {
     	    return $model->member->getMemberById($_SESSION['login_id']);
     	}, 600);
 
