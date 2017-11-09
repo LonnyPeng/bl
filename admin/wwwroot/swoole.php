@@ -23,7 +23,7 @@ class Tick
 	public function onStart($server)
 	{
 		echo "Start Success";
-		file_put_contents($thi->filename, $server->master_pid);
+		file_put_contents($this->filename, $server->master_pid);
 		swoole_set_process_name('websocket_client_server');
 	}
 
