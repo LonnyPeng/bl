@@ -99,6 +99,7 @@ if (!ENV_PRODUCTION) {
 !defined('REDIS_HOST') && define('REDIS_HOST', '127.0.0.1');
 !defined('REDIS_PASSWORD') && define('REDIS_PASSWORD', 'redis@123456');
 !defined('REDIS_PORT') && define('REDIS_PORT', '6379');
+!defined('REDIS_DATABASE') && define('REDIS_DATABASE', '1');
 /**#@-*/
 
 /**

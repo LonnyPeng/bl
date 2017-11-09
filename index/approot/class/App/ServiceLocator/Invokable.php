@@ -116,7 +116,7 @@ final class Invokable
                 $redis = new \Redis();
                 $redis->pconnect(REDIS_HOST, REDIS_PORT);
                 $redis->auth(REDIS_PASSWORD); 
-                $redis->select(0);
+                $redis->select(REDIS_DATABASE);
                 $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
                 return $redis;
             }
