@@ -10,7 +10,7 @@ class MonitorController extends ActionController
 	{
 		$locator = $this->locator;
 		$cache = $locator->get('Framework\Cache\Redis');
-		$members = $cache->keys("member_[\d]{1,}");
+		$members = $cache->keys("member_*");
 
 		print_r($members);
 		return false;
