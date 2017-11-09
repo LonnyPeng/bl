@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
-class MonitorController
+use Framework\Controller\AbstractActionController as ActionController;
+
+class MonitorController extends ActionController
 {
 	public function indexAction()
 	{
