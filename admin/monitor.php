@@ -2,7 +2,9 @@
 
 $key = "123";
 
-if (file_get_contents('php://input') != $key) {
+if (!isset($_GET['key'])) {
+	die('403');
+} elseif ($_GET['key'] != $key) {
 	die('403');
 }
 
