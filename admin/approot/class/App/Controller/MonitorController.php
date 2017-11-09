@@ -8,7 +8,8 @@ class MonitorController extends ActionController
 {
 	public function indexAction()
 	{
-		echo "123";
+		echo "qwe";
+
 		return false;
 	}
 }
