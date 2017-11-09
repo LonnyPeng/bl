@@ -13,7 +13,7 @@ class MonitorController extends ActionController
 		$members = $cache->keys("member_*");
 
 		foreach ($members as $key => $value) {
-			$members[$key] = $cache->get($value);
+			$members[$key] = $cache->getInit($value);
 		}
 
 		print_r($members);

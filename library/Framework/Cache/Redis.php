@@ -25,7 +25,7 @@ class Redis implements ServiceLocatorAwareInterface
      * @param int $ttl
      * @return mixed
      */
-    public function get($key, $generator = function () {}, $ttl = 0)
+    public function get($key, $generator, $ttl = 0)
     {
         if ($this->locator->has('Redis') && ($redis = $this->locator->get('Redis'))) {
             if ($redis->exists($key)) {
@@ -38,6 +38,19 @@ class Redis implements ServiceLocatorAwareInterface
         }
 
         return $generator();
+    }
+
+    public function getInit($key)
+    {
+        if ($this->locator->has('Redis') && ($redis = $this->locator->get('Redis'))) {
+            if ($redis->exists($key)) {
+                return $redis->get($key);
+            }
+
+            return false;
+        }
+
+        return false;
     }
 
     /**
