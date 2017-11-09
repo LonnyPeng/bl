@@ -17,14 +17,14 @@ class Tick
 
 	public function onMessage(swoole_websocket_server $server)
 	{
-		
+		$server->push('错误的用户ID');
 	}
 
 	public function onStart($server)
 	{
 		echo "Start Success";
 		file_put_contents($this->filename, $server->master_pid);
-		swoole_set_process_name('websocket_client_server');
+		swoole_set_process_name('socket_server');
 	}
 
 	public function run()
