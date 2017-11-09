@@ -46,14 +46,7 @@ abstract class AbstractActionController extends ActionController
                 )));
             }
         } else {
-            //redis
-            $locator = $this->locator;
-            $cache = $locator->get('Framework\Cache\Redis');
-            $member = $cache->get('member', function() use($locator) {
-                $sql = "SELECT * FROM $this->name WHERE member_id = ?";
-                return $locator->db->getRow($sql, $_SESSION['login_id']);
-            }, 600);
-
+            $member = $this->models->member->getMemberById($_SESSION['login_id']);
             $this->locator->setService('Profile', $member);
         }
     }
