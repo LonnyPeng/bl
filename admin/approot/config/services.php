@@ -11,6 +11,7 @@ return array(
         'Params'    => array('App\ServiceLocator\Invokable', 'getParams'),
         'Db'        => array('App\ServiceLocator\Invokable', 'getDbInstance'),
         'Db2'       => array('App\ServiceLocator\Invokable', 'getDb2Instance'),
+        'Redis'     => array('App\ServiceLocator\Invokable', 'getRedisInstance'),
 
         'FrontController' => 'Framework\Controller\FrontController',
     ),
