@@ -12,6 +12,10 @@ class MonitorController extends ActionController
 		$cache = $locator->get('Framework\Cache\Redis');
 		$members = $cache->keys("member_*");
 
+		foreach ($members as $key => $value) {
+			$members[$key] = $cache->get($value);
+		}
+
 		print_r($members);
 		return false;
 	}
