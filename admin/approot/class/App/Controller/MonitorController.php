@@ -8,8 +8,11 @@ class MonitorController extends ActionController
 {
 	public function indexAction()
 	{
-		echo "qwe";
+		$locator = $this->locator;
+		$cache = $locator->get('Framework\Cache\Redis');
+		$members = $cache->keys("member_[\d]{1,}");
 
+		print_r($members);
 		return false;
 	}
 }

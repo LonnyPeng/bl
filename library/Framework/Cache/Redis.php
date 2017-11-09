@@ -44,15 +44,21 @@ class Redis implements ServiceLocatorAwareInterface
      * Cache and get stored value (Redis cache)
      *
      * @param string $key
-     * @param callable $generator
-     * @param int $ttl
-     * @return mixed
      */
     public function del($key)
     {
         if ($this->locator->has('Redis') && ($redis = $this->locator->get('Redis'))) {
             $redis->delete($key);
         }
+    }
+
+    public function keys($sql)
+    {
+        if ($this->locator->has('Redis') && ($redis = $this->locator->get('Redis'))) {
+            return $redis->keys($sql);
+        }
+
+        return false;
     }
 
     /**
