@@ -19,7 +19,8 @@ class DefaultController extends AbstractActionController
     	$locator = $this->locator;
     	$cache = $locator->get('Framework\Cache\Redis');
     	$member = $cache->get('member', function() use($locator) {
-    	    return $locator->models->member->getMemberById($_SESSION['login_id']);
+            $models = $locator->get('Framework\Model\ModelManager');
+    	    return $models->member->getMemberById($_SESSION['login_id']);
     	}, 600);
 
         print_r($member);
