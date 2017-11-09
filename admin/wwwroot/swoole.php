@@ -5,17 +5,26 @@ error_reporting(E_ALL | E_STRICT);
 
 class Tick
 {
+	public $server;
+
 	private $filename = __DIR__ . '/log/socket.sock';
+
+	private function isInstance()
+	{
+		$this->server = new swoole_websocket_server("0.0.0.0", 9506);
+		$this->server->set([]);
+	}
+
+	public function onStart($server)
+	{
+		echo "Start Success";
+		file_put_contents($thi->filename, $server->master_pid);
+		swoole_set_process_name('websocket_client_server');
+	}
 
 	public function run()
 	{
 		$this->isInstance();
-		$this->server->on('task', [$this, 'onTask']);
-		$this->server->on('finish', [$this, 'onFinish']);
-		$this->server->on('open', [$this, 'onOpen']);
-		$this->server->on('message', [$this, 'onMessage']);
-		$this->server->on('pipeMessage', [$this, 'onPipeMessage']);
-		$this->server->on('close', [$this, 'onClose']);
 		$this->server->on('start', [$this, 'onStart']);
 		$this->server->start();
 	}
