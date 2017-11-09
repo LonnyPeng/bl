@@ -90,6 +90,14 @@ if (!ENV_PRODUCTION) {
 !defined('DB2_PASSWORD') && define('DB2_PASSWORD', '');
 !defined('DB2_DATABASE') && define('DB2_DATABASE', '');
 
+/**#@+
+ * redis
+ */
+!defined('REDIS_ENABLED') && define('REDIS_ENABLED', true);
+!defined('REDIS_HOST') && define('REDIS_HOST', '127.0.0.1');
+!defined('REDIS_PASSWORD') && define('REDIS_PASSWORD', 'redis@123456');
+!defined('REDIS_PORT') && define('REDIS_PORT', '6379');
+
 /**#@-*/
 
 /**
