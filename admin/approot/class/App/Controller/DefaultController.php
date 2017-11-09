@@ -18,10 +18,12 @@ class DefaultController extends AbstractActionController
     {
     	$locator = $this->locator;
     	$cache = $locator->get('Framework\Cache\Redis');
-    	$topMenu = $cache->get('test', function() use($locator) {
-    	    return 'lonny';
-    	}, 100);
+    	$member = $cache->get('member', function() use($locator) {
+            $model = $locator->get('Framework\Model\ModelManager');
+    	    return $model;
+    	}, 600);
 
+        print_r($member);
     	return false;
     }
 }
