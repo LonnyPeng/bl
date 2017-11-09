@@ -72,8 +72,13 @@ class AccountController extends AbstractActionController
 
     public function logoutAction()
     {
+        $locator = $this->locator;
+        $cache = $locator->get('Framework\Cache\Redis');
+        $cache->del('member_' . $_SESSION['login_id']);
+
         session_unset();
         session_destroy();
+
         $this->funcs->redirect($this->helpers->url('account/login'));
     }
 }
