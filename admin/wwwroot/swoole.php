@@ -15,6 +15,11 @@ class Tick
 		$this->server->set([]);
 	}
 
+	public function onMessage(swoole_websocket_server $server)
+	{
+		
+	}
+
 	public function onStart($server)
 	{
 		echo "Start Success";
@@ -25,6 +30,7 @@ class Tick
 	public function run()
 	{
 		$this->isInstance();
+		$this->server->on('message', [$this, 'onMessage']);
 		$this->server->on('start', [$this, 'onStart']);
 		$this->server->start();
 	}
