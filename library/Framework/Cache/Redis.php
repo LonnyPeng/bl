@@ -51,7 +51,7 @@ class Redis implements ServiceLocatorAwareInterface
     public function del($key)
     {
         if ($this->locator->has('Redis') && ($redis = $this->locator->get('Redis'))) {
-            $redis->del($key);
+            $redis->delete($key);
         }
     }
 
