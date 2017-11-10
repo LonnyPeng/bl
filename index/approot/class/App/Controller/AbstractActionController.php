@@ -65,12 +65,11 @@ abstract class AbstractActionController extends ActionController
 
                 $this->funcs->redirect($this->helpers->url('default/index'));
             }
-        } else {
-            if (!isset($_SESSION['customer_info']['lat'])) {
-                if ($this->helpers->pageId() != 'wechat-latlng') {
-                    $this->funcs->redirect($this->helpers->url('wechat/latlng'));
-                }
+        } elseif (!isset($_SESSION['customer_info']['lat'])) {
+            if ($this->helpers->pageId() != 'wechat-latlng') {
+                $this->funcs->redirect($this->helpers->url('wechat/latlng'));
             }
+        } else {
             //判断是否是新用户
             $where = sprintf("customer_openid = '%s'", addslashes($_SESSION['openid']));
             $customer = $this->models->customer->getCustomerInfo($where);
