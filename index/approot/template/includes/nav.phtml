@@ -9,3 +9,34 @@
 		<?php endif;?>
 	</div>
 </div>
+
+<script type="text/javascript">
+	//nav
+	autoNav($('.swiper-wrapper'));
+	function autoNav(row) {
+	    var W = $(window).width();
+	    var l = row.find('.swiper-slide').length;
+	    var n = 0;
+	    var data = {};
+	    row.find('.swiper-slide').each(function (key, value) {
+	        if ($(this).hasClass('on')) {
+	            n = key + 1;
+	        }
+
+	        data[key +1] = $(this).outerWidth();
+	    });
+
+	    var w = 0;
+	    for(key in data) {
+	        if (key <= n) {
+	            w += data[key];
+	        } if (key == n + 1) {
+	             w += data[key] / 2;
+	        }
+	    }
+
+	    if (w > W) {
+	        row.css({'marginLeft': W - w + 'px'});
+	    }
+	}
+</script>
