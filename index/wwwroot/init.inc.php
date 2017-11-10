@@ -95,7 +95,7 @@ if (!ENV_PRODUCTION) {
 /**#@+
  * redis
  */
-!defined('REDIS_ENABLED') && define('REDIS_ENABLED', true);
+!defined('REDIS_ENABLED') && define('REDIS_ENABLED', false);
 !defined('REDIS_HOST') && define('REDIS_HOST', '127.0.0.1');
 !defined('REDIS_PASSWORD') && define('REDIS_PASSWORD', 'redis@123456');
 !defined('REDIS_PORT') && define('REDIS_PORT', '6379');
