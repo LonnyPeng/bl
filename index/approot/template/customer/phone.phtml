@@ -67,7 +67,29 @@
 
 		$.check(!this.customer_tel.value, '请输入手机号码', this.customer_tel) &&
 		$.check(!this.code.value, '请输入验证码', this.code) &&
-		$$.ajaxAuto();
+		$$.ajaxAuto({
+			success: function (re) {
+				if (re.status == 'ok') {
+					$(function (event) {
+						if (event && event.preventDefault) {
+						    event.preventDefault();
+						}
+
+						var link = window.location.href;
+						if (/#/i.test(link) === false) {
+						    if (history.replaceState) {
+						        history.replaceState(null, document.title, link.split('#')[0] + '#');
+						        location.replace('');
+						    } else {
+						        location.replace(link);
+						    }
+						}
+					});
+
+					window.location.href = '<?php echo $this->url('customer/info')?>';
+				}
+			}
+		});
 		return false;
 	});
 

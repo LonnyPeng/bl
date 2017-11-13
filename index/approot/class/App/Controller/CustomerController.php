@@ -249,7 +249,7 @@ class CustomerController extends AbstractActionController
                 ));
             }
 
-            return JsonModel::init('ok', '绑定成功')->setRedirect($this->helpers->url('customer/info'));
+            return JsonModel::init('ok', '绑定成功');
         }
 
         return array();
