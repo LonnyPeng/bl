@@ -219,7 +219,7 @@ class ShopController extends AbstractActionController
 		    $this->funcs->redirect($this->helpers->url('shop-admin/index'));
 		} else {
 			if (isset($_COOKIE['login'])) {
-				$login = $_COOKIE['login'];
+				$login = unserialize($_COOKIE['login']);
 				if (isset($login['user_name']) && isset($login['user_password'])) {
 					$sql = "SELECT * FROM t_shop_users WHERE suser_name = ? AND suser_password = ?";
 					$info = $this->locator->db->getRow($sql, $login['user_name'], $login['user_password']);
@@ -258,7 +258,11 @@ class ShopController extends AbstractActionController
 	    	}
 
 	    	if (isset($_POST['r_password'])) { //记住密码
-	    		setcookie('login', array('user_name' => $userName, 'user_password' => $this->password->encrypt($userPassword)), time() + 7 * 24 * 3600, '/');
+	    		$login = array(
+	    			'user_name' => $userName, 
+	    			'user_password' => $this->password->encrypt($userPassword)
+	    		);
+	    		setcookie('login', serialize($login), time() + 7 * 24 * 3600, '/');
 	    	}
 
 	    	$_SESSION['shop_login_id'] = intval($info['suser_id']);
