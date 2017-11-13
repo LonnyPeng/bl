@@ -179,9 +179,9 @@
         var str = '';
         for(key in init) {
             num = Math.floor(time / init[key][0]);
-            num = num.toString();
             if ($.inArray(key, ['year', 'month', 'day']) != -1) {
                 if (num) {
+                    num = num.toString();
                     if (num.length == 1) {
                         num = '0' + num;
                     }
@@ -190,6 +190,7 @@
                     time -= num * init[key][0];
                 }
             } else {
+                num = num.toString();
                 if (num.length == 1) {
                     num = '0' + num;
                 }
