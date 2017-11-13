@@ -445,8 +445,8 @@ class CustomerController extends AbstractActionController
                 $src = (string) $this->helpers->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)));
 
                 $shareInfo = array(
-                    'title' => '和我一起来白领',
-                    'desc' => '白领商品的地方',
+                    'title' => '白领',
+                    'desc' => '',
                     'link' => $key,
                     'imgUrl' => (string) $this->helpers->image('logo.png', true),
                     'type' => 'link',
