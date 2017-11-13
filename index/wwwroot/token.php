@@ -1,6 +1,6 @@
 <?php
-// //微信认证
-define("TOKEN", "weixin");
+//微信认证
+define("TOKEN", "bailin");
 if (isset($_GET["signature"]) && isset($_GET["timestamp"]) 
 	&& isset($_GET["nonce"]) && isset($_GET["echostr"])) {
 	$signature = $_GET["signature"];
