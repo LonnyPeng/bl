@@ -398,10 +398,11 @@ class Funcs implements ServiceLocatorAwareInterface
         $str = '';
         foreach ($init as $key => $row) {
             $num = floor($time / $row[0]);
-            if ($key != 'second' && !$num) {
+            if (in_array($key, array('year', 'month', 'day')) && !$num) {
                 continue;
             }
             
+            $num = str_pad($num, 2, 0, STR_PAD_LEFT);
             $str .= $num . $row[1];
             $time -= $num * $row[0];
         }

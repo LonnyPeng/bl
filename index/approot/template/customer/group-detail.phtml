@@ -1,122 +1,135 @@
 <div class="cluster <?php echo $info['status'] == 'error' ? 'lose_team' : ''?>">
-  <div class="order_top clearfix">
-    <div class="img fl">
-      <img src="<?php echo $this->uploadUrl($order['product']['images']['banner'][0]['image_path'], 'product')?>">
-    </div>
-    <h4><?php echo $order['product']['product_name']?></h4>
-  </div>
-  <?php if ($info['status'] == 'error') : ?>
-      <div class="cluster_cg">
-          <h5><i class="iconfont">&#xe611;</i>组团失败</h5>
-      </div>
-    <?php elseif ($info['status'] == 'success') : ?>
-        <div class="cluster_cg">
-            <h5><i class="weui-icon-success"></i>组团成功</h5>
-        </div>
-    <?php endif;?>
-  <div class="cluster_ul">
-    <?php foreach($info['customer_id'] as $key => $row) : ?>
-        <?php if (!$key) : ?>
-            <div class="cluster_li">
-              <div class="cluster_big">
-                <em>团长</em>
-                <div class="img">
-                  <img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>"/>
-                </div>
-              </div>        
-              <p><?php echo $row['customer_name']?></p>
-            </div>
-        <?php else :?>
-            <div class="cluster_li">
-              <div class="img">
-                <img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>"/>
-              </div>
-              <p><?php echo $row['customer_name']?></p>
-            </div>
-        <?php endif;?>
-    <?php endforeach;?>
-    <?php for($i=0; $i<($info['group_type']['data']['product_group_num'] - count($info['customer_id'])); $i++) : ?>
-        <div class="cluster_li">
-          <div class="img"></div>
-          <p></p>
-        </div>
-    <?php endfor;?>
-  </div>
-    <?php if ($info['status'] == 'success') : ?>
-    <?php elseif ($info['status'] == 'pending') : ?>
-        <div class="cluster_down">
-          <p>
-              还剩<?php echo $i?>个名额：
-              <span id="time" data-time="<?php echo $info['time']?>"><?php echo $this->funcs->showTime($info['time'])?></span>后结束
-          </p>
-          <a href="<?php echo $this->url('customer/qrcode', array('group_id' => $info['group_id'], 'type' => 'group'))?>" class="feedback_tj weui-btn weui-btn_primary js-share">邀请好友一起组团领</a>
-        </div>
-    <?php else : ?>
-        <div class="cluster_down">
-            <p>仅剩<?php echo $i?>人组团成功，下次记得多多邀请好友</p>
-        </div>
-    <?php endif;?>
+	<div class="order_top clearfix">
+		<div class="img fl">
+			<img src="<?php echo $this->uploadUrl($order['product']['images']['banner'][0]['image_path'], 'product')?>">
+		</div>
+		<h4><?php echo $order['product']['product_name']?></h4>
+	</div>
+	<?php if ($info['status'] == 'error') : ?>
+			<div class="cluster_cg">
+					<h5><i class="iconfont">&#xe611;</i>组团失败</h5>
+			</div>
+		<?php elseif ($info['status'] == 'success') : ?>
+				<div class="cluster_cg">
+						<h5><i class="weui-icon-success"></i>组团成功</h5>
+				</div>
+		<?php endif;?>
+	<div class="cluster_ul">
+		<?php foreach($info['customer_id'] as $key => $row) : ?>
+				<?php if (!$key) : ?>
+						<div class="cluster_li">
+							<div class="cluster_big">
+								<em>团长</em>
+								<div class="img">
+									<img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>"/>
+								</div>
+							</div>        
+							<p><?php echo $row['customer_name']?></p>
+						</div>
+				<?php else :?>
+						<div class="cluster_li">
+							<div class="img">
+								<img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>"/>
+							</div>
+							<p><?php echo $row['customer_name']?></p>
+						</div>
+				<?php endif;?>
+		<?php endforeach;?>
+		<?php for($i=0; $i<($info['group_type']['data']['product_group_num'] - count($info['customer_id'])); $i++) : ?>
+				<div class="cluster_li">
+					<div class="img"></div>
+					<p></p>
+				</div>
+		<?php endfor;?>
+	</div>
+		<?php if ($info['status'] == 'success') : ?>
+		<?php elseif ($info['status'] == 'pending') : ?>
+				<div class="cluster_down">
+					<p>
+							还剩<?php echo $i?>个名额：
+							<span id="time" data-time="<?php echo $info['time']?>"><?php echo $this->funcs->showTime($info['time'])?></span>后结束
+					</p>
+					<a href="<?php echo $this->url('customer/qrcode', array('group_id' => $info['group_id'], 'type' => 'group'))?>" class="feedback_tj weui-btn weui-btn_primary js-share">邀请好友一起组团领</a>
+				</div>
+		<?php else : ?>
+				<div class="cluster_down">
+						<p>仅剩<?php echo $i?>人组团成功，下次记得多多邀请好友</p>
+				</div>
+		<?php endif;?>
 
 </div>
 
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-    wx.config(<?php echo $js->config(array('onMenuShareAppMessage'), false) ?>);
-    wx.ready(function() {
-      wx.onMenuShareAppMessage(<?php echo json_encode($shareInfo)?>);
-    });
-    
-    $(".cluster_li .img").height($(".cluster_li .img").width());
+		wx.config(<?php echo $js->config(array('onMenuShareAppMessage'), false) ?>);
+		wx.ready(function() {
+			wx.onMenuShareAppMessage(<?php echo json_encode($shareInfo)?>);
+		});
+		
+		$(".cluster_li .img").height($(".cluster_li .img").width());
 
-    window.onload = function () {
-        var W = $('.cluster_ul').width(),
-            w = $('.cluster_li').width();
-        var n = $('.cluster_li').length,
-            l = parseInt((W - n * w) / n);
+		window.onload = function () {
+				var W = $('.cluster_ul').width(),
+						w = $('.cluster_li').width();
+				var n = $('.cluster_li').length,
+						l = parseInt((W - n * w) / n);
 
-        if (n == 2) {
-            $('.cluster_li').eq(0).css({marginLeft: parseInt(l / 2) + 'px'});
-            $('.cluster_li').eq(1).css({marginRight: parseInt(l / 2) + 'px'});
-        }
-    }
+				if (n == 2) {
+						$('.cluster_li').eq(0).css({marginLeft: parseInt(l / 2) + 'px'});
+						$('.cluster_li').eq(1).css({marginRight: parseInt(l / 2) + 'px'});
+				}
+		}
 
-    setInterval(function () {
-        var $$ = $('#time');
-        var time = parseInt($$.data('time'));
-        if (time < 0) {
-            time = 0;
+		setInterval(function () {
+			var $$ = $('#time');
+			var time = parseInt($$.data('time'));
+			if (time < 0) {
+					time = 0;
 
-            window.location.reload();
-            return false;
-        }
+					window.location.reload();
+					return false;
+			}
 
-        var init = {
-            'year': [31536000, '年'],
-            'month': [2592000, '月'],
-            'day': [86400, '天'],
-            'hour': [3600, '小时'],
-            'minute': [60, '分'],
-            'second': [1, '秒'],
-        };
-        var str = '';
-        for(key in init) {
-            num = Math.floor(time / init[key][0]);
-            if (num) {
-                str += num + init[key][1];
-                time -= num * init[key][0];
-            }
-        }
+			var init = {
+					'year': [31536000, '年'],
+					'month': [2592000, '月'],
+					'day': [86400, '天'],
+					'hour': [3600, '小时'],
+					'minute': [60, '分'],
+					'second': [1, '秒'],
+			};
+			var str = '';
+			for(key in init) {
+				num = Math.floor(time / init[key][0]);
+				if ($.inArray(key, ['year', 'month', 'day']) != -1) {
+					if (num) {
+						if (num.length == 1) {
+							num = '0' + num;
+						}
 
-        if (!str) {
-            str = '0秒';
-        }
+						str += num + init[key][1];
+						time -= num * init[key][0];
+					}
+				} else {
+					if (num.length == 1) {
+						num = '0' + num;
+					}
 
-        $$.data('time', parseInt($$.data('time')) - 1);
-        $$.html(str);
-    }, 1000);
+					str += num + init[key][1];
+					time -= num * init[key][0];
+				}
+			}
 
-    $('.js-share').click(function() {
-      $.toast("请点击右上角分享按钮进行分享", "text");
-      return false;
-    });
+			if (!str) {
+				str = '0秒';
+			}
+
+			$$.data('time', parseInt($$.data('time')) - 1);
+			$$.html(str);
+		}, 1000);
+
+		$('.js-share').click(function() {
+			$.toast("请点击右上角分享按钮进行分享", "text");
+			return false;
+		});
 </script>
