@@ -257,7 +257,7 @@ class ShopController extends AbstractActionController
 	    	    return new JsonModel('error', '用户名错误');
 	    	}
 	    	if (!$this->password->validate($userPassword, $info['suser_password'])) {
-	    	    // return new JsonModel('error', '密码错误');
+	    	    return new JsonModel('error', '密码错误');
 	    	}
 
 	    	if (isset($_POST['r_password'])) { //记住密码
