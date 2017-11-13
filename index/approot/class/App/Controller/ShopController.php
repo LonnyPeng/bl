@@ -263,7 +263,7 @@ class ShopController extends AbstractActionController
 	    	if (isset($_POST['r_password'])) { //记住密码
 	    		$login = array(
 	    			'user_name' => $userName, 
-	    			'user_password' => $this->funcs->encrypt($userPassword, 'E', QRCODE_KEY);
+	    			'user_password' => $this->funcs->encrypt($userPassword, 'E', QRCODE_KEY),
 	    		);
 	    		setcookie('login', serialize($login), time() + 7 * 24 * 3600, '/');
 	    	}
