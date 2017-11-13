@@ -63,18 +63,6 @@
 	});
 
 	$('form').submit(function(event) {
-		if (event && event.preventDefault) {
-		    event.preventDefault();
-		}
-
-		var link = window.location.href;
-		if (history.replaceState) {
-		    history.replaceState(null, document.title, link.split('#')[0] + '#');
-		    // location.replace('');
-		} else {
-		    // location.replace(link);
-		}
-
 		var $$ = $(this);
 
 		$.check(!this.customer_tel.value, '请输入手机号码', this.customer_tel) &&
