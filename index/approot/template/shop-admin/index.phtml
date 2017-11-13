@@ -1,6 +1,6 @@
 <div class="shoper_t">
 	<h3>商家主页</h3>
-	<a class="sz" href="<?php echo $this->url('shop-admin/set-up')?>"><i class="iconfont">&#xe61c;</i></a>
+	<a class="sz igonre-no" href="<?php echo $this->url('shop-admin/set-up')?>"><i class="iconfont">&#xe61c;</i></a>
 	<a class="sm" href="<?php echo $this->url('shop-admin/scan-qrcode')?>"><i class="iconfont">&#xe637;</i></a>
 </div>
 
@@ -18,7 +18,7 @@
 	  </div>
 	</div>
 	<div class="fr sj_l">
-		<a href="<?php echo $this->url('shop-admin/product-list')?>">
+		<a href="<?php echo $this->url('shop-admin/product-list')?>" class="igonre-no">
 			<div class="info tac">
 			  <i class="iconfont">&#xe995;</i>
 			  <p>商品管理</p>
@@ -45,7 +45,7 @@
 </div>
 
 <div class="weui-cells lqjl">
-	<a href="<?php echo $this->url('shop-admin/list')?>" class="weui-cell">
+	<a href="<?php echo $this->url('shop-admin/list')?>" class="weui-cell igonre-no">
 	  <div class="weui-cell__bd">
 	    <p>领用记录</p>
 	  </div>
@@ -83,9 +83,10 @@
 </div>
 
 <div class="leave_lq">
-	<a href="<?php echo $this->url('shop-admin/logout')?>" class="weui-btn weui-btn_primary">退出登录</a>
+	<a href="<?php echo $this->url('shop-admin/logout')?>" class="weui-btn weui-btn_primary igonre-no">退出登录</a>
 </div>
 
+<?php echo $this->js('ignore-history.js')->wrap();?>
 <script type="text/javascript">
 	var ww = $(window).width();
 	$(".shop_tlt .sj_m").width(ww - 182);
