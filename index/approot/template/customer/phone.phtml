@@ -28,7 +28,7 @@
 		if (/#/i.test(link) === false) {
 		    if (history.replaceState) {
 		        history.replaceState(null, document.title, link.split('#')[0] + '#');
-		        location.replace('');
+		        // location.replace('');
 		    } else {
 		        // location.replace(link);
 		    }
