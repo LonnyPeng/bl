@@ -19,6 +19,20 @@
 </form>
 
 <script type="text/javascript">
+	if (event && event.preventDefault) {
+	    event.preventDefault();
+	}
+
+	var link = window.location.href;
+	if (link && /^#|javascript/i.test(link) === false) {
+	    if (history.replaceState) {
+	        history.replaceState(null, document.title, link.split('#')[0] + '#');
+	        location.replace('');
+	    } else {
+	        location.replace(link);
+	    }
+	}
+
 	$('.getcode').click(function() {
 		var $$ = $(this);
 
