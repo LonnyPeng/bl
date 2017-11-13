@@ -79,8 +79,8 @@ class ShopAdminController extends AbstractActionController
             "o.order_type = 'received'",
         );
 
-        if ($this->param('statr')) {
-            $where['start'] = sprintf("o.order_shipped_time > '%s'", date("Y-m-d 00:00:00", strtotime(trim($this->param('statr')))));
+        if ($this->param('start')) {
+            $where['start'] = sprintf("o.order_shipped_time > '%s'", date("Y-m-d 00:00:00", strtotime(trim($this->param('start')))));
         }
         if ($this->param('end')) {
             $where['start'] = sprintf("o.order_shipped_time <= '%s'", date("Y-m-d 23:59:59", strtotime(trim($this->param('end')))));

@@ -1,6 +1,6 @@
 <div class="dialog">
 	<div class="dialog_li item01">
-		<h4>商品名称</h4>
+		<h4></h4>
 		<div class="hint_ma">
 			<div class="img">
 				<img src=""/>
@@ -39,7 +39,7 @@
 		    		success: function (re) {
 		    			if (re.status == 'ok') {
 		    				$('.item01 .img img').attr({src: re.data.src});
-		    				$('.item01 h4').html(re.data.product_name);
+		    				$('.item01 h4').html(re.data.name);
 		    				$('#js-ship').data('href', re.data.href);
 
 		    				$(".item01").show().siblings().hide();
