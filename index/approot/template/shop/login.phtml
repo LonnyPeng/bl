@@ -20,6 +20,9 @@
 				  </div>
 				</div>
 			</div>
+			<div style="width: 70%; margin: 0 auto; background: rgba(255,255,255,.7); color: #666; padding-left: 10px;">
+				<input type="checkbox" name="r_password" value="1">&nbsp;<span id="r_password">保存密码</span>
+			</div>
 			<input type="hidden" name="redirect" value="<?php echo $this->param('redirect')?>" />
 			<a class="twtj_btn" id="js-submit" href="javascript:;">立即登录</a>
 		</div>
@@ -43,5 +46,13 @@
 		$.check(!this.suser_password.value, '请输入密码') &&
 		$$.ajaxAuto();
 		return false;
+	});
+
+	$('#r_password').click(function() {
+		if ($('input[name="r_password"]').is(':checked')) {
+			$('input[name="r_password"]').prop('checked', false);
+		} else {
+			$('input[name="r_password"]').prop('checked', true);
+		}
 	});
 </script>

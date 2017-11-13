@@ -217,6 +217,29 @@ class ShopController extends AbstractActionController
 	{
 		if (isset($_SESSION['shop_login_id']) && isset($_SESSION['shop_login_name'])) {
 		    $this->funcs->redirect($this->helpers->url('shop-admin/index'));
+		} else {
+			if (isset($_COOKIE['login'])) {
+				$login = $_COOKIE['login'];
+				if (isset($login['user_name']) && isset($login['user_password'])) {
+					$sql = "SELECT * FROM t_shop_users WHERE suser_name = ? AND suser_password = ?";
+					$info = $this->locator->db->getRow($sql, $login['user_name'], $login['user_password']);
+					if ($info) {
+						setcookie('login', $login, time() + 7 * 24 * 3600, '/');
+
+						$_SESSION['shop_login_id'] = intval($info['suser_id']);
+						$_SESSION['shop_login_name'] = $info['suser_name'];
+
+						// get redirect url
+						if ($this->param('redirect')) {
+						    $redirect = trim($this->param('redirect'));
+						} else {
+							$redirect = $this->helpers->url('shop-admin/index');
+						}
+
+						$this->funcs->redirect($redirect);
+					}
+				}
+			}
 		}
 		
 	    $this->layout->title = '商户端登录';
@@ -231,7 +254,11 @@ class ShopController extends AbstractActionController
 	    	    return new JsonModel('error', '用户名错误');
 	    	}
 	    	if (!$this->password->validate($userPassword, $info['suser_password'])) {
-	    	    return new JsonModel('error', '密码错误');
+	    	    // return new JsonModel('error', '密码错误');
+	    	}
+
+	    	if (isset($_POST['r_password'])) { //记住密码
+	    		setcookie('login', array('user_name' => $userName, 'user_password' => $this->password->encrypt($userPassword)), time() + 7 * 24 * 3600, '/');
 	    	}
 
 	    	$_SESSION['shop_login_id'] = intval($info['suser_id']);

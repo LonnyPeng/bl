@@ -616,7 +616,7 @@ a.eval_title span.fr i{font-size: 14px;}
 .integral_task .weui-cell{padding: 15px;}
 .integral_task .weui-cell:before{left: 0;}
 .integral_task .weui-cells:after{bottom: 1px;}
-.weui-cell__hd{width: 24%;margin-right: 10px;}
+.weui-cell__hd{margin-right: 10px;}
 .integral_task .weui-cell_access .weui-cell__ft{margin-left: 5px;}
 .integral_task .weui-cell_access .weui-cell__ft:after{width: 10px;height: 10px;border-width:1px 1px 0 0;}
 .integral_task h5{font-size: 16px;color: #1c1f28;font-weight: normal;margin-bottom: 12px;line-height: 20px;height: 40px;}
