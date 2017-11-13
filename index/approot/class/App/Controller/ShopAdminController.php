@@ -335,7 +335,7 @@ class ShopAdminController extends AbstractActionController
         unset($_SESSION['shop_login_id']);
         unset($_SESSION['shop_login_name']);
 
-        $this->funcs->redirect($this->helpers->url('shop/login'));
+        $this->funcs->redirect($this->helpers->url('/'));
     }
 
     public function setUpAction()
