@@ -221,22 +221,25 @@ class ShopController extends AbstractActionController
 			if (isset($_COOKIE['login'])) {
 				$login = unserialize($_COOKIE['login']);
 				if (isset($login['user_name']) && isset($login['user_password'])) {
-					$sql = "SELECT * FROM t_shop_users WHERE suser_name = ? AND suser_password = ?";
-					$info = $this->locator->db->getRow($sql, $login['user_name'], $login['user_password']);
+					$sql = "SELECT * FROM t_shop_users WHERE suser_name = ?";
+					$info = $this->locator->db->getRow($sql, $login['user_name']);
 					if ($info) {
-						setcookie('login', $login, time() + 7 * 24 * 3600, '/');
+						$userPassword = $this->funcs->encrypt($userPassword, 'D', QRCODE_KEY);
+						if ($this->password->validate($userPassword, $info['suser_password'])) {
+							setcookie('login', $login, time() + 7 * 24 * 3600, '/');
 
-						$_SESSION['shop_login_id'] = intval($info['suser_id']);
-						$_SESSION['shop_login_name'] = $info['suser_name'];
+							$_SESSION['shop_login_id'] = intval($info['suser_id']);
+							$_SESSION['shop_login_name'] = $info['suser_name'];
 
-						// get redirect url
-						if ($this->param('redirect')) {
-						    $redirect = trim($this->param('redirect'));
-						} else {
-							$redirect = $this->helpers->url('shop-admin/index');
+							// get redirect url
+							if ($this->param('redirect')) {
+							    $redirect = trim($this->param('redirect'));
+							} else {
+								$redirect = $this->helpers->url('shop-admin/index');
+							}
+
+							$this->funcs->redirect($redirect);
 						}
-
-						$this->funcs->redirect($redirect);
 					}
 				}
 			}
@@ -260,7 +263,7 @@ class ShopController extends AbstractActionController
 	    	if (isset($_POST['r_password'])) { //记住密码
 	    		$login = array(
 	    			'user_name' => $userName, 
-	    			'user_password' => $this->password->encrypt($userPassword)
+	    			'user_password' => $this->funcs->encrypt($userPassword, 'E', QRCODE_KEY);
 	    		);
 	    		setcookie('login', serialize($login), time() + 7 * 24 * 3600, '/');
 	    	}
