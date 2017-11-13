@@ -224,7 +224,7 @@ class ShopController extends AbstractActionController
 					$sql = "SELECT * FROM t_shop_users WHERE suser_name = ?";
 					$info = $this->locator->db->getRow($sql, $login['user_name']);
 					if ($info) {
-						$userPassword = $this->funcs->encrypt($userPassword, 'D', QRCODE_KEY);
+						$userPassword = $this->funcs->encrypt($login['user_password'], 'D', QRCODE_KEY);
 						if ($this->password->validate($userPassword, $info['suser_password'])) {
 							setcookie('login', $login, time() + 7 * 24 * 3600, '/');
 
