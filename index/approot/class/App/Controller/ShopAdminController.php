@@ -36,6 +36,10 @@ class ShopAdminController extends AbstractActionController
     {
         $this->layout->title = '商家主页';
 
+        require_once VENDOR_DIR . 'autoload.php';
+
+        $this->app = new Application(require_once CONFIG_DIR . 'wechat.config.php');
+
         //商品领用记录
         $where = array(
             sprintf("o.shop_id = %d", $this->shopInfo['shop_id']),
@@ -61,6 +65,7 @@ class ShopAdminController extends AbstractActionController
 
         // print_r($where);die;
         return array(
+            'js' => $this->app->js,
             'shopInfo' => $this->shopInfo,
             'list' => $list,
             'count_30' => $count_30,
