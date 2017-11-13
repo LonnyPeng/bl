@@ -877,7 +877,7 @@ class CustomerController extends AbstractActionController
                         //下单次数
                         $sql = "SELECT COUNT(*) FROM t_orders WHERE customer_id = ?";
                         $orderCount = $this->locator->db->getOne($sql, $row['customer_id']);
-                        if (!$orderCount) {
+                        if ($orderCount == 1) {
                             //给邀请人50积分奖励
                             $sql = "UPDATE t_customers 
                                     SET customer_score = customer_score + :customer_score 
