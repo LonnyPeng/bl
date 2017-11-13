@@ -101,6 +101,7 @@
 			var str = '';
 			for(key in init) {
 				num = Math.floor(time / init[key][0]);
+				num = num.toString();
 				if ($.inArray(key, ['year', 'month', 'day']) != -1) {
 					if (num) {
 						if (num.length == 1) {
