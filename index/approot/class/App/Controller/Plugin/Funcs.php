@@ -407,7 +407,7 @@ class Funcs implements ServiceLocatorAwareInterface
             $time -= $num * $row[0];
         }
 
-        return $str ?: '0秒';
+        return $str ?: '00秒';
     }
 
     public function isMobile()
