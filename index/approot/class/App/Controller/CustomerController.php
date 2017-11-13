@@ -214,26 +214,28 @@ class CustomerController extends AbstractActionController
         $this->layout->title = '绑定手机';
 
         if ($this->funcs->isAjax()) {
-            if (!$_POST['customer_tel']) {
+            $customerTel = trim($this->param('customer_tel'));
+            $code = trim($this->param('code'));
+            if (!$customerTel) {
                 return new JsonModel('error', '请输入手机号码');
-            } elseif (!isPhone($_POST['customer_tel'])) {
+            } elseif (!isPhone($customerTel)) {
                 return new JsonModel('error', '手机号码格式错误');
             }
-            if (!$_POST['code']) {
+            if (!$code) {
                 return new JsonModel('error', '请输入验证码');
             }
             $sql = "SELECT * FROM t_phone_verif WHERE phone_number = ?";
-            $phoneInfo = $this->locator->db->getRow($sql, trim($_POST['customer_tel']));
+            $phoneInfo = $this->locator->db->getRow($sql, trim($customerTel));
             if (!$phoneInfo) {
                 return new JsonModel('error', '验证码错误');
             }
-            if ($phoneInfo['phone_code'] != trim($_POST['code'])) {
+            if ($phoneInfo['phone_code'] != trim($code)) {
                 return new JsonModel('error', '验证码错误');
             }
 
             //绑定手机
             $sql = "UPDATE t_customers SET customer_tel = ? WHERE customer_id = ?";
-            $this->locator->db->exec($sql, trim($_POST['customer_tel']), $this->customerId);
+            $this->locator->db->exec($sql, trim($customerTel), $this->customerId);
 
             $sql = "SELECT COUNT(*) 
                     FROM t_customer_score_log 
