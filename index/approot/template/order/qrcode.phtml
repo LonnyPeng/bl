@@ -2,14 +2,16 @@
 	<div class="lqewm_m">
 		<div class="lqewm_img">
 			<div class="lqewm_mack"></div>
-			<p>领取码</p>
+			<p id="js-title">领取码</p>
 			<img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>"/>
-			<p style="font-size: 12px; margin-bottom: 0px;">
-				剩余时间：
-				<label id="time" data-time="<?php echo $time?>">
-				    <?php echo $this->funcs->showTime($time)?>
-				</label>
-			</p>
+			<?php if ($time > 0) : ?>
+				<p style="font-size: 12px; margin-bottom: 0px;">
+					剩余时间：
+					<label id="time" data-time="<?php echo $time?>">
+					    <?php echo $this->funcs->showTime($time)?>
+					</label>
+				</p>
+			<?php endif;?>
 		</div>		
 	</div>
 </div>	
@@ -18,7 +20,7 @@
 	$(function(){
         $(".lqewm").height($(window).height());
         <?php if ($time <= 0) : ?>
-            $(".lqewm_m p").html("已失效");
+            $("#js-title").html("已失效");
             $(".lqewm_mack").show();
         <?php endif;?>
 	});

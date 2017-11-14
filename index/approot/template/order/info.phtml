@@ -38,12 +38,14 @@
 					<div class="img pr">
 						<img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
 					</div>
-					<p class="gray" style="font-size: 12px;">
-						剩余时间：
-						<label id="time" data-time="<?php echo $time?>">
-						    <?php echo $this->funcs->showTime($time)?>
-						</label>
-					</p>
+					<?php if ($time > 0) : ?>
+						<p class="gray" style="font-size: 12px;">
+							剩余时间：
+							<label id="time" data-time="<?php echo $time?>">
+							    <?php echo $this->funcs->showTime($time)?>
+							</label>
+						</p>
+					<?php endif;?>
 				<?php endif;?>
 			</div>
 			<div class="ck_dt clearfix">
