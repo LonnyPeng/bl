@@ -23,7 +23,7 @@ class UploadUrl
             return $this;
         }
 
-        if ($type == 'user' && !file_exists(USER_DIR . $file)) {
+        if ($type == 'user' && (!file_exists(USER_DIR . $file) || !$file)) {
             $this->url = BASE_PATH . 'image/head_img.jpg';
         } else {
             $this->url = '/index/upload/' . $type . '/' . $file;

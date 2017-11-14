@@ -76,7 +76,7 @@
                     <div class="img fl">
                       <img src="<?php echo $this->uploadUrl($row['customer_headimg'], 'user')?>">
                     </div>
-                    <h3><?php echo $row['customer_name']?></h3>
+                    <h3><?php echo $row['customer_name'] ?: '白领'?></h3>
                     <p><span style="width:<?php echo sprintf("%d%%", $row['review_score'])?>;"></span></p>
                     <div class="pa"><?php echo date("Y-m-d", strtotime($row['review_time']))?></div>
                   </div>
