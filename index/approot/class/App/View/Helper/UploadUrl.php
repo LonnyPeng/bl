@@ -23,7 +23,12 @@ class UploadUrl
             return $this;
         }
 
-        $this->url = '/index/upload/' . $type . '/' . $file;
+        if ($type == 'user' && !file_exists(USER_DIR . $file)) {
+            $this->url = BASE_PATH . 'image/head_img.jpg';
+        } else {
+            $this->url = '/index/upload/' . $type . '/' . $file;
+        }
+        
         if ($forceHost) {
             $this->url = "http://" . $_SERVER['HTTP_HOST'] . $this->url;
         }
