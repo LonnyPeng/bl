@@ -60,7 +60,7 @@
         <h4>热门推荐</h4>
         <?php if ($productMain) : ?>
             <?php foreach($productMain as $row) : ?>
-                <div class="search_list clearfix pr">
+                <div class="search_list clearfix pr js-row" data-href="<?php echo $this->url('product/detail', array('id' => $row['product_id']))?>">
                     <?php if (isset($row['images']['banner'][0]['image_path'])) : ?>
                         <div class="img fl">
                             <img src="<?php echo $this->uploadUrl($row['images']['banner'][0]['image_path'], 'product')?>" >
