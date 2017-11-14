@@ -38,6 +38,12 @@
 					<div class="img pr">
 						<img src="<?php echo $this->url('common/qrcode', array('key' => $this->funcs->encrypt($key, 'E', QRCODE_KEY)))?>">
 					</div>
+					<p class="gray" style="font-size: 12px;">
+						剩余时间：
+						<label id="time" data-time="<?php echo $time?>">
+						    <?php echo $this->funcs->showTime($time)?>
+						</label>
+					</p>
 				<?php endif;?>
 			</div>
 			<div class="ck_dt clearfix">
@@ -106,4 +112,54 @@
 
 	    return false;
 	});
+
+	setInterval(function () {
+	    var $$ = $('#time');
+	    var time = parseInt($$.data('time'));
+	    if (time < 0) {
+	            time = 0;
+
+	            window.location.reload();
+	            return false;
+	    }
+
+	    var init = {
+	            'year': [31536000, '年'],
+	            'month': [2592000, '月'],
+	            'day': [86400, '天'],
+	            'hour': [3600, '小时'],
+	            'minute': [60, '分'],
+	            'second': [1, '秒'],
+	    };
+	    var str = '';
+	    for(key in init) {
+	        num = Math.floor(time / init[key][0]);
+	        if ($.inArray(key, ['year', 'month', 'day']) != -1) {
+	            if (num) {
+	                num = num.toString();
+	                if (num.length == 1) {
+	                    num = '0' + num;
+	                }
+
+	                str += num + init[key][1];
+	                time -= num * init[key][0];
+	            }
+	        } else {
+	            num = num.toString();
+	            if (num.length == 1) {
+	                num = '0' + num;
+	            }
+
+	            str += num + init[key][1];
+	            time -= num * init[key][0];
+	        }
+	    }
+
+	    if (!str) {
+	        str = '00秒';
+	    }
+
+	    $$.data('time', parseInt($$.data('time')) - 1);
+	    $$.html(str);
+	}, 1000);
 </script>
